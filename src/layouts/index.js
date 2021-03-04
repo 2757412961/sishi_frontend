@@ -1,10 +1,14 @@
-import styles from './index.css';
+import styles from './index.less';
+import Header from '@/components/Header/index.js';
+import Footer from '@/components/Footer/index.js';
 
 function BasicLayout(props) {
   return (
     <div className={styles.normal}>
-      <h1 className={styles.title}>Yay! Welcome to umi!</h1>
+      <Header indexUrl={window.location.pathname}/>
+      {/*<h1 className={styles.title}>Yay! Welcome to umi!</h1>*/}
       {props.children}
+      <Footer indexUrl={window.location.pathname}/>
     </div>
   );
 }
