@@ -4,7 +4,7 @@
  * @1183624592@qq.com
  */
 import React, { Component } from 'react';
-import { Menu, Button, Dropdown, Icon, Avatar } from 'antd';
+import { Menu, Button, Dropdown, Icon, Avatar, Row, Col } from 'antd';
 import styles from './index.less';
 import Link from 'umi/link';
 // import Logo from '@images/index/0212.png';
@@ -58,6 +58,51 @@ class Header extends Component {
           <div className={styles.head_logo}>
             <img src={zhedalogo} className={styles.zheda_logo} alt="" />
           </div>
+          <div style={{
+            position: 'absolute',
+            left: '50%',
+            transform: 'translate(-50%)',
+          }}>
+            <Row justify="space-around">
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 党史新学</span>
+              </Col>
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 建设中国</span>
+              </Col>
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 中特之路</span>
+              </Col>
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 改革复兴</span>
+              </Col>
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 文军长征</span>
+              </Col>
+            </Row>
+            <Row justify="space-around">
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 决胜小康</span>
+              </Col>
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 百花齐放</span>
+              </Col>
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 理论学习</span>
+              </Col>
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 微视频学习</span>
+              </Col>
+              <Col className="gutter-row" span={4} className={styles.font_style}>
+                <span>· 我想对党说</span>
+              </Col>
+            </Row>
+          </div>
+          <div>
+            <a href='/management'>
+              <span style={{color:"white", marginRight:"10px"}}>管理页面</span>
+            </a>
+          </div>
 
           {/*{username ? (*/}
           {/*  <Dropdown overlay={menu} trigger={['click']}>*/}
@@ -85,8 +130,44 @@ class Header extends Component {
           {/*  </div>*/}
           {/*)}*/}
         </div>
-        <div className={classnames(styles.header_second)}>
-        </div>
+        {/*<div className={classnames(styles.header_second)}>*/}
+        {/*  <div style={{margin:"0 auto"}}>*/}
+        {/*    <Row justify="space-around">*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>党史新学</span>*/}
+        {/*      </Col>*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>建设中国</span>*/}
+        {/*      </Col>*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>中特之路</span>*/}
+        {/*      </Col>*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>改革复兴</span>*/}
+        {/*      </Col>*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>文军长征</span>*/}
+        {/*      </Col>*/}
+        {/*    </Row>*/}
+        {/*    <Row justify="space-around">*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>决胜小康</span>*/}
+        {/*      </Col>*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>百花齐放</span>*/}
+        {/*      </Col>*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>理论学习</span>*/}
+        {/*      </Col>*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>微视频学习</span>*/}
+        {/*      </Col>*/}
+        {/*      <Col className="gutter-row" span={4} style={{width:"100px", cursor:'default'}}>*/}
+        {/*        <span>我想对党说</span>*/}
+        {/*      </Col>*/}
+        {/*    </Row>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
       </div>
     );
   }

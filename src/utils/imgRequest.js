@@ -64,7 +64,7 @@ export default function imgRequest(options) {
       statusCode = 600;
       msg = error.message || 'Network Error'
     }
-    ApiNotification(statusCode, msg);
+    // ApiNotification(statusCode, msg);
     /* eslint-disable */
     return Promise.resolve({success: false, statusCode, message: msg});
   })
