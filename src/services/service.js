@@ -17,7 +17,7 @@ export function getTGTData() {
     url: '/login/api/cas/v1/tickets',
     method: 'POST',
     data: {
-      username: 'linlin',
+      userName: 'linlin',
       password: '12',
       service: 'http://127.0.0.1:8000/',
     },
@@ -52,17 +52,10 @@ export function registerUser(data) {
 }
 
 // 用户登录
-export function loginUser({ username, password, service, ip, city }) {
+export function loginUser({ userName, password}) {
   return request({
-    url: '/login',
+    url: '/login?userName='+userName+'&password='+password,
     method: 'POST',
-    data: {
-      username,
-      password,
-      // service,
-      // ip,
-      // city,
-    },
   });
 }
 

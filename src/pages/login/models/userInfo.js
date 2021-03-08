@@ -295,7 +295,7 @@ export default {
     // 用户登录
     * userLogin({ payload }, { put, call }) {
       if (payload.autoLogin) {
-        setLoalData({ dataName: 'fuxi-username', dataList: payload.username });
+        setLoalData({ dataName: 'fuxi-username', dataList: payload.userName });
       }
       if (payload.haveAutoLogin && !payload.autoLogin) {
         delLoalData(['fuxi-username']);
@@ -311,10 +311,17 @@ export default {
         yield put({
           type: 'getUserData',
         });
-        setLoalData({dataName: 'rzpj', dataList: response.tgt});
-        setLoalData({dataName: 'userId', dataList: response.userInfo.id});
-        //现在用户权限为NORMAL
-        setAuthority(response.userInfo.status);
+        setLoalData({dataName: 'token', dataList: response.token});
+        setLoalData({dataName: 'userId', dataList: response.userId});
+        setLoalData({dataName: 'userName', dataList: response.userName});
+        if(response.userName!='admin'){
+          setAuthority('NORMAL');
+        }
+        else{
+          setAuthority('admin');
+        }
+        // //现在用户权限为NORMAL
+        // setAuthority(response.userInfo.status);
         //重新鉴权
         reloadAuthorized();
         //重定向到原来页面
@@ -347,14 +354,14 @@ export default {
       // yield call(logoutUser);
       reloadAuthorized();
       const {redirect} = getPageQuery();
-      delLoalData(['rzpj', 'yhbh']);
+      delLoalData(['token', 'userId', 'userName']);
       //现在用户权限为游客
       setAuthority('guest');
       // redirect
-      if (window.location.pathname !== '/user/login' && !redirect) {
+      if (window.location.pathname !== '/login' && !redirect) {
         yield put(
           routerRedux.replace({
-            pathname: '/user/login',
+            pathname: '/login',
             search: stringify({
               redirect: window.location.href,
             }),

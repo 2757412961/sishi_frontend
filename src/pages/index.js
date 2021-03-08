@@ -12,6 +12,7 @@ import ReactMapboxGl from 'react-mapbox-gl';
 import { getLocalData } from '@/utils/common';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Row, Col, Icon } from 'antd';
+import ditu2 from '@/assets/ditu2.png';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
@@ -69,13 +70,16 @@ export default function() {
       {/*  <img className={styles.button} style={{marginLeft:'50px'}} src={paimingjifen}/>*/}
       {/*</div>*/}
       <div className={styles.map_div} >
-        <MapboxMap
-          style='mapbox://styles/mapbox/light-v10'
-          containerStyle={{ position:'absolute', left:'10px', top:'10px', height: '50vh', width: '70vw', borderRadius:"10px" }}
-        />
+        {/*<MapboxMap*/}
+        {/*  style='mapbox://styles/mapbox/light-v10'*/}
+        {/*  containerStyle={{ position:'absolute', left:'10px', top:'10px', height: '50vh', width: '70vw', borderRadius:"10px" }}*/}
+        {/*/>*/}
+        <div>
+          <img  className={styles.ditu} src={ditu2}/>
+        </div>
         <a href='/mapPage'>
           <div className={styles.mask_div}>
-            <Icon style={{marginLeft:"10vw", color:'rgba(100, 0, 0, 0.5)', fontSize:"40px"}} type="step-forward" />
+            <Icon style={{fontStyle: 'oblique', marginLeft:"20vw", color:'rgba(100, 0, 0, 0.5)', fontSize:"40px"}} type="step-forward" />
             <div className={styles.ditu_font}>
               四史地图
             </div>
