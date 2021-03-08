@@ -8,7 +8,8 @@ import { connect } from 'dva';
 import React, { Component } from 'react';
 import styles from './index.less';
 import loginCloud from '@/assets/images/login/body_cloud.png';
-import loginLeft from '@/assets/images/login/login.png';
+import changcheng from '@/assets/images/login/changcheng.jpg';
+import tiananmen from '@/assets/images/login/tiananmen.jpg';
 import Link from 'umi/link';
 import { getLocalData } from '@/utils/common.js';
 
@@ -20,7 +21,7 @@ class RegistrationForm extends React.Component {
     autoCompleteResult: "off",
     autoLogin:false,
     haveAutoLogin:false,
-    username:null,
+    userName:null,
   };
 
 
@@ -30,7 +31,7 @@ class RegistrationForm extends React.Component {
       this.setState({
         autoLogin:true,
         haveAutoLogin:true,
-        username:localUsername
+        userName:localUsername
       })
     }
   }
@@ -88,7 +89,7 @@ class RegistrationForm extends React.Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult, autoLogin ,username} = this.state;
+    const { autoCompleteResult, autoLogin ,userName} = this.state;
     const formItemLayout = {
       wrapperCol: {
         xs: { span: 24 },
@@ -121,8 +122,8 @@ class RegistrationForm extends React.Component {
     return <Form onSubmit={this.handleSubmit}>
       <h2>账号登录</h2>
       <FormItem {...formItemLayout}>
-        {getFieldDecorator('username', {
-          initialValue:username,
+        {getFieldDecorator('userName', {
+          initialValue:userName,
           rules: [
             {
               required: true,
@@ -189,12 +190,12 @@ function LoginBox({ dispatch, loading }) {
         style={{ backgroundImage: 'url(' + loginCloud + ')' }}
       >
         <div className={styles.main_login}>
-          {/*<div className={styles.left_box}>*/}
-          {/*  <img*/}
-          {/*    src={loginLeft}*/}
-          {/*    alt=""*/}
-          {/*  />*/}
-          {/*</div>*/}
+          <div className={styles.left_box}>
+            <img
+              src={tiananmen}
+              alt=""
+            />
+          </div>
           <div className={styles.login_box}>
             <WrappedRegistrationForm
               handleUserLogin={handleUserLogin}

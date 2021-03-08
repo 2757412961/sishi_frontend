@@ -38,6 +38,7 @@ class Header extends Component {
   render() {
     // const { username, avatar } = this.props.userInfo.userInfo;
     const indexUrl = this.props.indexUrl;
+    let userName = getLocalData({ dataName: 'userName' });
 
     const menu = <Menu>
         <Menu.Item key="0">
@@ -58,38 +59,42 @@ class Header extends Component {
           <div className={styles.head_logo}>
             <img src={zhedalogo} className={styles.zheda_logo} alt="" />
           </div>
-
+          {/*<div>*/}
+          {/*  <a href='/login'>*/}
+          {/*    <span style={{color:"white", marginRight:"10px"}}>登录</span>*/}
+          {/*  </a>*/}
+          {/*</div>*/}
           <div>
             <a href='/management'>
-              <span style={{color:"white", marginRight:"10px"}}>管理页面</span>
+              <span style={{color:"white"}}>管理页面</span>
             </a>
           </div>
 
-          {/*{username ? (*/}
-          {/*  <Dropdown overlay={menu} trigger={['click']}>*/}
-          {/*    <div className={styles.head_user}>*/}
-          {/*      <div className={styles.head_user_avatar}>*/}
-          {/*        <Avatar size="small" icon="user" src={avatar} />*/}
-          {/*      </div>*/}
-          {/*      <div className={styles.head_user_name}>*/}
-          {/*        <span>{username}</span>*/}
-          {/*      </div>*/}
-          {/*    </div>*/}
-          {/*  </Dropdown>*/}
-          {/*) : (*/}
-          {/*  <div className={styles.head_opration}>*/}
-          {/*    <Button type="default" htmlType="submit" onClick={() => router.replace('/login')}>*/}
-          {/*      登录*/}
-          {/*    </Button>*/}
-          {/*    <Button*/}
-          {/*      type="primary"*/}
-          {/*      htmlType="submit"*/}
-          {/*      onClick={() => router.replace('/register')}*/}
-          {/*    >*/}
-          {/*      注册*/}
-          {/*    </Button>*/}
-          {/*  </div>*/}
-          {/*)}*/}
+          {getLocalData({ dataName: 'userName' }) ? (
+            <Dropdown overlay={menu} trigger={['click']}>
+              <div className={styles.head_user}>
+                {/*<div className={styles.head_user_avatar}>*/}
+                {/*  <Avatar size="small" icon="user" src={avatar} />*/}
+                {/*</div>*/}
+                <div className={styles.head_user_name}>
+                  <span>{getLocalData({ dataName: 'userName' })}</span>
+                </div>
+              </div>
+            </Dropdown>
+          ) : (
+            <div className={styles.head_opration}>
+              <Button type="default" htmlType="submit" onClick={() => router.replace('/login')}>
+                登录
+              </Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                onClick={() => router.replace('/register')}
+              >
+                注册
+              </Button>
+            </div>
+          )}
         </div>
         {/*<div className={classnames(styles.header_second)}>*/}
         {/*  <div style={{margin:"0 auto"}}>*/}
