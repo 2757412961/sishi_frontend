@@ -148,7 +148,7 @@ class RegistrationForm extends React.Component {
         <Checkbox checked={autoLogin } defaultChecked={false} onChange={this.changeAutoLogin}>
           记住用户名
         </Checkbox>
-        <a style={{ float: 'right' }} onClick={this.showModal}>
+        <a style={{ float: 'right', color:"rgba(245, 34, 45, 0.7)"}} onClick={this.showModal}>
           忘记密码？
         </a>
       </div>
@@ -204,7 +204,7 @@ function LoginBox({ dispatch, loading }) {
             <div className={styles.full_row}>
               <div className={styles.left}>
                 <span>还没有账号？</span>
-                <Link to="/register">免费注册</Link>
+                <Link to="/register" style={{color:"rgba(245, 34, 45, 0.7)"}}>免费注册</Link>
               </div>
             </div>
           </div>

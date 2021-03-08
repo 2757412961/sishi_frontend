@@ -58,46 +58,7 @@ class Header extends Component {
           <div className={styles.head_logo}>
             <img src={zhedalogo} className={styles.zheda_logo} alt="" />
           </div>
-          <div style={{
-            position: 'absolute',
-            left: '50%',
-            transform: 'translate(-50%)',
-          }}>
-            <Row justify="space-around">
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 党史新学</span>
-              </Col>
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 建设中国</span>
-              </Col>
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 中特之路</span>
-              </Col>
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 改革复兴</span>
-              </Col>
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 文军长征</span>
-              </Col>
-            </Row>
-            <Row justify="space-around">
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 决胜小康</span>
-              </Col>
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 百花齐放</span>
-              </Col>
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 理论学习</span>
-              </Col>
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 微视频学习</span>
-              </Col>
-              <Col className="gutter-row" span={4} className={styles.font_style}>
-                <span>· 我想对党说</span>
-              </Col>
-            </Row>
-          </div>
+
           <div>
             <a href='/management'>
               <span style={{color:"white", marginRight:"10px"}}>管理页面</span>

@@ -306,7 +306,7 @@ class Register extends Component {
             >
               注册
             </Button>
-            <Link className={styles.login} to="/login">
+            <Link className={styles.login} style={{color:"rgba(245, 34, 45, 0.7)"}} to="/login">
               使用已有账户登录
             </Link>
           </FormItem>

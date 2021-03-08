@@ -11,6 +11,7 @@ import router from 'umi/router';
 import ReactMapboxGl from 'react-mapbox-gl';
 import { getLocalData } from '@/utils/common';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { Row, Col, Icon } from 'antd';
 
 const MAPBOX_TOKEN =
   'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
@@ -21,6 +22,42 @@ export default function() {
   return (
     <div className={styles.normal}>
       <div className={styles.welcome} />
+      <div className={styles.module_div}>
+        <Row justify="space-between">
+          <Col span={4} style={{width:"150px"}}>
+            <div className={styles.font_style}>· 党史新学</div>
+          </Col>
+          <Col span={4} style={{width:"150px"}} >
+            <div className={styles.font_style}>· 建设中国</div>
+          </Col>
+          <Col span={4} style={{width:"150px"}} >
+            <div className={styles.font_style}>· 中特之路</div>
+          </Col>
+          <Col span={4} style={{width:"150px"}} >
+            <div className={styles.font_style}>· 改革复兴</div>
+          </Col>
+          <Col span={4} style={{width:"150px"}} >
+            <div className={styles.font_style}>· 文军长征</div>
+          </Col>
+        </Row>
+        <Row justify="space-between">
+          <Col span={4} style={{width:"150px"}}>
+            <div className={styles.font_style}>· 决胜小康</div>
+          </Col>
+          <Col span={4} style={{width:"150px"}}>
+            <div className={styles.font_style}>· 百花齐放</div>
+          </Col>
+          <Col span={4} style={{width:"150px"}}>
+            <div className={styles.font_style}>· 理论学习</div>
+          </Col>
+          <Col span={4} style={{width:"150px"}}>
+            <div className={styles.font_style}>· 微视频学习</div>
+          </Col>
+          <Col span={4} style={{width:"150px"}}>
+            <div className={styles.font_style}>· 我想对党说</div>
+          </Col>
+        </Row>
+      </div>
       {/*<div className={styles.button_div}>*/}
       {/*  <img className={styles.button} style={{marginRight:'50px'}} src={sishihuimou}/>*/}
       {/*  <a href="/mapPage">*/}
@@ -33,9 +70,17 @@ export default function() {
       {/*</div>*/}
       <div className={styles.map_div} >
         <MapboxMap
-          style='light'
-          containerStyle={{ height: '50vh', width: '100vw' }}
+          style='mapbox://styles/mapbox/light-v10'
+          containerStyle={{ position:'absolute', left:'10px', top:'10px', height: '50vh', width: '70vw', borderRadius:"10px" }}
         />
+        <a href='/mapPage'>
+          <div className={styles.mask_div}>
+            <Icon style={{marginLeft:"10vw", color:'rgba(100, 0, 0, 0.5)', fontSize:"40px"}} type="step-forward" />
+            <div className={styles.ditu_font}>
+              四史地图
+            </div>
+          </div>
+        </a>
       </div>
     </div>
   );
