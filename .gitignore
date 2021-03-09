@@ -3,6 +3,7 @@
 # IDEA
 /.idea
 /.idea/
+.idea/
 /node_modules/
 
 # dependencies
