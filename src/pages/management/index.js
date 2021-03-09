@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import { Layout, Menu, Space, Cascader, Form, Row, Col, Tag, Empty, Button } from 'antd';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import styles from './index.less';
-// import Link from 'umi/link';
 import { judgeUrl, getLocalData } from '@/utils/common.js';
 import router from 'umi/router';
 import { connect } from 'dva';
 import classnames from 'classnames';
-import { TagsOutlined, TableOutlined, SettingOutlined } from '@ant-design/icons';
+import { TagsOutlined, TableOutlined, FileAddOutlined } from '@ant-design/icons';
 
-// import table from './components/table';
+import MapinfoTable from './components/mapinfo/mapinfoTable';
+import MapinfoModal from './components/mapinfo/mapinfoModal';
 import Editor from './components/editor';
-// import EditorZjh from './components/editorZjh/index';
+import EditorZjh from './components/editorZjh';
 
 const FormItem = Form.Item;
 
@@ -49,7 +49,7 @@ class Management extends Component {
           children: [
             {
               value: 'nanjing',
-              label: 'Nanjing',
+              label: 'Nanjiffaaaaaaaaaaaaaaaaaaffffffffffffffffffng',
               children: [
                 {
                   value: 'zhonghuamen',
@@ -129,7 +129,7 @@ class Management extends Component {
 
                 <Menu.Item key="7">
                   <span>地理信息资源表</span>
-                  <Link to='/management/table'/>
+                  <Link to='/management/mapinfo'/>
                 </Menu.Item>
               </SubMenu>
             </Menu>
@@ -140,24 +140,22 @@ class Management extends Component {
               <Row>
                 <Col span={8} style={{ textAlign: 'left' }}>
                   <Cascader
+                    size="large"
                     placeholder="请选择标签"
-                    options={this.state.cascadeOptions}/>
+                    options={this.state.cascadeOptions}
+                    showSearch={{ matchInputWidth: true }}/>
                 </Col>
-                <Route path='/management/table'>
-                  <Col span={8} style={{ textAlign: 'center' }}>
-                    <h1>地理信息资源表</h1>
-                  </Col>
-                  <Col span={8} style={{ textAlign: 'right' }}>
-                    <Button type="primary">+新增地理信息资源</Button>
-                  </Col>
+                <Route path='/management/mapinfo'>
+                  <Col span={8} style={{ textAlign: 'center' }}><h1>地理信息资源表</h1></Col>
+                  <Col span={8} style={{ textAlign: 'right' }}> <MapinfoModal/> </Col>
                 </Route>
               </Row>
             </Header>
 
             <Content>
               {/*<Route path=''  component={Empty}/>*/}
-              {/*<Route path='/management/table' exact component={table}/>*/}
-              {/*<Route path='/management/EditorZjh' exact component={EditorZjh}/>*/}
+              <Route path='/management/mapinfo' exact component={MapinfoTable}/>
+              <Route path='/management/EditorZjh' exact component={EditorZjh}/>
             </Content>
             <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
           </Layout>
