@@ -8,6 +8,7 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import { TagsOutlined, TableOutlined, FileAddOutlined } from '@ant-design/icons';
 
+import TagTable from './components/tag/tagTable';
 import MapinfoTable from './components/mapinfo/mapinfoTable';
 import MapinfoModal from './components/mapinfo/mapinfoModal';
 import Editor from './components/editor';
@@ -21,6 +22,7 @@ class Management extends Component {
     this.state = {
       collapsed: false,
       cascadeOptions: [],
+      cascadeValue: [],
     };
   }
 
@@ -67,9 +69,14 @@ class Management extends Component {
     });
   }
 
-  onCollapse = collapsed => {
+  onCollapseSider = collapsed => {
     console.log(collapsed);
     this.setState({ collapsed });
+  };
+
+  onChangeCascader = (val) => {
+    console.log(val);
+    this.setState({ cascadeValue: val });
   };
 
   handleClick = e => {
@@ -85,20 +92,20 @@ class Management extends Component {
     return (
       <BrowserRouter>
         <Layout>
-          <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}
+          <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapseSider}
                  style={{ overflow: 'auto', height: '100vh' }}
                  theme='light'>
             <Menu
               onClick={this.handleClick}
               // style={{ width: 256 }}
-              defaultSelectedKeys={[ '3' ]}
-              defaultOpenKeys={[ 'sub2' ]}
+              defaultSelectedKeys={[ '1' ]}
+              defaultOpenKeys={[ 'sub1' ]}
               theme='light'
               mode="inline">
               <SubMenu key="sub1" icon={<TagsOutlined/>} title="标签管理">
                 <Menu.Item key="1">
                   <span>标签表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <Link to='/management/tag'/>
                 </Menu.Item>
 
                 <Menu.Item key="2">
@@ -109,27 +116,43 @@ class Management extends Component {
               <SubMenu key="sub2" icon={<TableOutlined/>} title="资源管理">
                 <Menu.Item key="3">
                   <span>文章资源表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <Link to='/management/article'/>
                 </Menu.Item>
 
                 <Menu.Item key="4">
                   <span>图片资源表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <Link to='/management/picture'/>
                 </Menu.Item>
 
                 <Menu.Item key="5">
-                  <span>视频资源表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <span>音频资源表</span>
+                  <Link to='/management/audio'/>
                 </Menu.Item>
 
                 <Menu.Item key="6">
-                  <span>题录资源表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <span>视频资源表</span>
+                  <Link to='/management/video'/>
                 </Menu.Item>
 
                 <Menu.Item key="7">
+                  <span>题录资源表</span>
+                  <Link to='/management/question'/>
+                </Menu.Item>
+
+                <Menu.Item key="8">
                   <span>地理信息资源表</span>
                   <Link to='/management/mapinfo'/>
+                </Menu.Item>
+              </SubMenu>
+              <SubMenu key="sub3" icon={<TagsOutlined/>} title="用户管理">
+                <Menu.Item key="9">
+                  <span>用户表</span>
+                  <Link to='/management/user'/>
+                </Menu.Item>
+
+                <Menu.Item key="10">
+                  <span>答题记录关联表</span>
+                  <Link to='/management/EditorZjh'/>
                 </Menu.Item>
               </SubMenu>
             </Menu>
@@ -140,10 +163,10 @@ class Management extends Component {
               <Row>
                 <Col span={8} style={{ textAlign: 'left' }}>
                   <Cascader
-                    size="large"
                     placeholder="请选择标签"
+                    onChange={this.onChangeCascader}
                     options={this.state.cascadeOptions}
-                    showSearch={{ matchInputWidth: true }}/>
+                    style={{ width: '300px' }}/>
                 </Col>
                 <Route path='/management/mapinfo'>
                   <Col span={8} style={{ textAlign: 'center' }}><h1>地理信息资源表</h1></Col>
@@ -153,8 +176,15 @@ class Management extends Component {
             </Header>
 
             <Content>
-              {/*<Route path=''  component={Empty}/>*/}
+              <Route path='/management/tag' exact component={TagTable}/>
+              {/*<Route path='/management/EditorZjh' exact component={EditorZjh}/>*/}
+              <Route path='/management/article' exact component={EditorZjh}/>
+              <Route path='/management/picture' exact component={EditorZjh}/>
+              <Route path='/management/audio' exact component={EditorZjh}/>
+              <Route path='/management/video' exact component={EditorZjh}/>
+              <Route path='/management/question' exact component={EditorZjh}/>
               <Route path='/management/mapinfo' exact component={MapinfoTable}/>
+              <Route path='/management/user' exact component={EditorZjh}/>
               <Route path='/management/EditorZjh' exact component={EditorZjh}/>
             </Content>
             <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>

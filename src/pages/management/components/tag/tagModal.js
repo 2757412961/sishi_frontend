@@ -6,14 +6,13 @@ export default class MapinfoModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // modalVisible: false,
-      modalVisible: true,
+      modalVisible: false,
       confirmLoading: false,
-      modalText: "tsafgs",
+      modalText: '',
     };
   }
 
-   showModal = () => {
+  showModal = () => {
     this.setModalVisible(true);
   };
 
