@@ -1,17 +1,20 @@
-import React, { Component } from 'react';
-import { Layout, Menu, Space, Cascader, Form, Row, Col, Tag, Empty, Button } from 'antd';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Layout, Menu, Space, Cascader, Form, Row, Col, Tag, Empty, Button} from 'antd';
+import {BrowserRouter, Route, Link} from 'react-router-dom';
 import styles from './index.less';
-// import Link from 'umi/link';
-import { judgeUrl, getLocalData } from '@/utils/common.js';
+import {judgeUrl, getLocalData} from '@/utils/common.js';
 import router from 'umi/router';
-import { connect } from 'dva';
+import {connect} from 'dva';
 import classnames from 'classnames';
-import { TagsOutlined, TableOutlined, SettingOutlined } from '@ant-design/icons';
+import {TagsOutlined, TableOutlined, FileAddOutlined} from '@ant-design/icons';
 
-// import table from './components/table';
+import TagTable from './components/tag/tagTable';
+import TagModal from './components/tag/tagModal';
+import ArticleModal from './components/article/articleModal'
+import MapinfoTable from './components/mapinfo/mapinfoTable';
+import MapinfoModal from './components/mapinfo/mapinfoModal';
 import Editor from './components/editor';
-// import EditorZjh from './components/editorZjh/index';
+import EditorZjh from './components/editorZjh';
 
 const FormItem = Form.Item;
 
@@ -21,6 +24,7 @@ class Management extends Component {
     this.state = {
       collapsed: false,
       cascadeOptions: [],
+      cascadeValue: [],
     };
   }
 
@@ -41,6 +45,10 @@ class Management extends Component {
                 },
               ],
             },
+            {
+              value: 'suzhou',
+              label: 'Suzhou',
+            }
           ],
         },
         {
@@ -49,7 +57,7 @@ class Management extends Component {
           children: [
             {
               value: 'nanjing',
-              label: 'Nanjing',
+              label: 'Nanjiffaaaaaaaaaaaaaaaaaaffffffffffffffffffng',
               children: [
                 {
                   value: 'zhonghuamen',
@@ -67,40 +75,42 @@ class Management extends Component {
     });
   }
 
-  onCollapse = collapsed => {
-    console.log(collapsed);
-    this.setState({ collapsed });
+  onCollapseSide = collapsed => {
+    this.setState({collapsed});
+  };
+
+  onChangeCascade = (val) => {
+    this.setState({cascadeValue: val});
   };
 
   handleClick = e => {
     this.initState();
-    console.log('click ', e);
+    // console.log('click ', e);
   };
 
   render() {
-    const { collapsed } = this.state;
-    const { SubMenu } = Menu;
-    const { Header, Footer, Sider, Content } = Layout;
+    const {collapsed} = this.state;
+    const {SubMenu} = Menu;
+    const {Header, Footer, Sider, Content} = Layout;
 
     return (
       <BrowserRouter>
         <Layout>
-          <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}
-                 style={{ overflow: 'auto', height: '100vh' }}
+          <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapseSide}
+                 style={{overflow: 'auto', height: '100vh'}}
                  theme='light'>
             <Menu
               onClick={this.handleClick}
               // style={{ width: 256 }}
-              defaultSelectedKeys={[ '3' ]}
-              defaultOpenKeys={[ 'sub2' ]}
+              defaultSelectedKeys={['2']}
+              defaultOpenKeys={['sub2']}
               theme='light'
               mode="inline">
               <SubMenu key="sub1" icon={<TagsOutlined/>} title="标签管理">
                 <Menu.Item key="1">
                   <span>标签表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <Link to='/management/tag'/>
                 </Menu.Item>
-
                 <Menu.Item key="2">
                   <span>标签资源关联表</span>
                   <Link to='/management/EditorZjh'/>
@@ -109,57 +119,76 @@ class Management extends Component {
               <SubMenu key="sub2" icon={<TableOutlined/>} title="资源管理">
                 <Menu.Item key="3">
                   <span>文章资源表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <Link to='/management/article'/>
                 </Menu.Item>
-
                 <Menu.Item key="4">
                   <span>图片资源表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <Link to='/management/picture'/>
                 </Menu.Item>
-
                 <Menu.Item key="5">
-                  <span>视频资源表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <span>音频资源表</span>
+                  <Link to='/management/audio'/>
                 </Menu.Item>
-
                 <Menu.Item key="6">
-                  <span>题录资源表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <span>视频资源表</span>
+                  <Link to='/management/video'/>
                 </Menu.Item>
-
                 <Menu.Item key="7">
+                  <span>题录资源表</span>
+                  <Link to='/management/question'/>
+                </Menu.Item>
+                <Menu.Item key="8">
                   <span>地理信息资源表</span>
-                  <Link to='/management/table'/>
+                  <Link to='/management/mapinfo'/>
+                </Menu.Item>
+              </SubMenu>
+              <SubMenu key="sub3" icon={<TagsOutlined/>} title="用户管理">
+                <Menu.Item key="9">
+                  <span>用户表</span>
+                  <Link to='/management/user'/>
+                </Menu.Item>
+                <Menu.Item key="10">
+                  <span>答题记录关联表</span>
+                  <Link to='/management/user_answer'/>
                 </Menu.Item>
               </SubMenu>
             </Menu>
           </Sider>
 
           <Layout>
-            <Header style={{ background: '#FFFFFF' }}>
+            <Header style={{background: '#FFFFFF'}}>
               <Row>
-                <Col span={8} style={{ textAlign: 'left' }}>
+                <Col span={8} style={{textAlign: 'left'}}>
                   <Cascader
                     placeholder="请选择标签"
-                    options={this.state.cascadeOptions}/>
+                    onChange={this.onChangeCascade}
+                    options={this.state.cascadeOptions}
+                    style={{width: '300px'}}/>
                 </Col>
-                <Route path='/management/table'>
-                  <Col span={8} style={{ textAlign: 'center' }}>
-                    <h1>地理信息资源表</h1>
-                  </Col>
-                  <Col span={8} style={{ textAlign: 'right' }}>
-                    <Button type="primary">+新增地理信息资源</Button>
-                  </Col>
+                <Route path='/management/tag'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>标签表</h1></Col>
+                  <Col span={8} style={{textAlign: 'right'}}><TagModal cascadeOptions={this.state.cascadeOptions}/></Col>
+                </Route>
+                <Route path='/management/mapinfo'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>地理信息资源表</h1></Col>
+                  <Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}/></Col>
                 </Route>
               </Row>
             </Header>
 
             <Content>
-              {/*<Route path=''  component={Empty}/>*/}
-              {/*<Route path='/management/table' exact component={table}/>*/}
-              {/*<Route path='/management/EditorZjh' exact component={EditorZjh}/>*/}
+              <Route path='/management/tag' exact component={TagTable}/>
+              <Route path='/management/EditorZjh' exact component={EditorZjh}/>
+              <Route path='/management/article' exact component={ArticleModal}/>
+              <Route path='/management/picture' exact component={EditorZjh}/>
+              <Route path='/management/audio' exact component={EditorZjh}/>
+              <Route path='/management/video' exact component={EditorZjh}/>
+              <Route path='/management/question' exact component={EditorZjh}/>
+              <Route path='/management/mapinfo' exact component={MapinfoTable}/>
+              <Route path='/management/user' exact component={EditorZjh}/>
+              <Route path='/management/user_answer' exact component={EditorZjh}/>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+            <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
           </Layout>
         </Layout>
       </BrowserRouter>
