@@ -8,13 +8,21 @@ class TagModal extends Component {
     this.state = {
       modalVisible: false,
       confirmLoading: false,
-      cascadeValue: "",
+      cascadeValue: []
     };
   }
 
   showModal = () => {
     this.setModalVisible(true);
   };
+
+  closeModal = () => {
+    this.setModalVisible(false);
+  };
+
+  resetModal = () => {
+    this.props.form.resetFields();
+  }
 
   setModalVisible = (val) => {
     this.setState({modalVisible: val});
@@ -24,30 +32,18 @@ class TagModal extends Component {
     this.setState({confirmLoading: val});
   };
 
-  handleOk = () => {
-    this.setConfirmLoading(true);
-    setTimeout(() => {
-      this.setModalVisible(false);
-      this.setConfirmLoading(false);
-    }, 2000);
-  };
-
-  handleCancel = () => {
-    this.setModalVisible(false);
-  };
-
-  onChangeCascade = (val) => {
-    this.setState({cascadeValue: val});
-    console.log(val);
-  };
-
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        console.log(this.props.form.getFieldsValue())
       }
     });
+  };
+
+  onChangeCascade = (val) => {
+    this.setState({cascadeValue: val});
   };
 
   render() {
@@ -59,49 +55,41 @@ class TagModal extends Component {
         span: 18,
       },
     };
-
     const {getFieldDecorator} = this.props.form;
 
     return (
       <>
-        <Button type="primary" onClick={this.showModal}> <FileAddOutlined/>新增标签资源 </Button>
+        <Button type="primary" onClick={this.showModal}><FileAddOutlined/>新增标签</Button>
 
         <Modal
           title="新增标签资源"
           visible={this.state.modalVisible}
-          okText={"提交"}
-          onOk={this.handleOk}
           confirmLoading={this.state.confirmLoading}
-          cancelText={"取消"}
-          onCancel={this.handleCancel}
-          footer={[<Button key='submit' type="primary" htmlType="submit" onClick={this.handleSubmit}>提交</Button>]}
+          onCancel={this.closeModal}
+          footer={[
+            <Button key='cancel' htmlType="button" onClick={this.closeModal}>取消</Button>,
+            <Button key='reset' type="danger" htmlType="button" onClick={this.resetModal}>重置</Button>,
+            <Button key='submit' type="primary" htmlType="submit" onClick={this.handleSubmit}>提交</Button>,
+          ]}
           destroyOnClose={true}>
 
-          <Form
-            {...layout}
-            form={this.form}
-            // preserve={false}
-            name="basic">
-            <Form.Item
-              label="标签路径"
-              name="tagPath"
-              rules={[{required: true, message: '请输入标签路径!'}]}>
-              <Cascader
-                placeholder="请选择标签"
-                onChange={this.onChangeCascade}
-                options={this.props.cascadeOptions}
-                changeOnSelect/>
+          <Form name="basic" {...layout}>
+            <Form.Item label="标签路径" name="tagPath">
+              {getFieldDecorator('tagPath', {rules: [{required: true, message: '请输入标签路径!'},]})(
+                <Cascader
+                  placeholder="请选择标签"
+                  onChange={this.onChangeCascade}
+                  options={this.props.cascadeOptions}
+                  changeOnSelect/>
+              )}
             </Form.Item>
 
-            <Form.Item
-              label="新建标签名称"
-              name="tagName">
-              {getFieldDecorator('tagName', {
-                rules: [{required: true, message: '请输入新建标签名称!'}],
-              })(<Input/>)}
+            <Form.Item label="新建标签名称" name="tagName">
+              {getFieldDecorator('tagName', {rules: [{required: true, message: '请输入新建标签名称!'},]})(
+                <Input placeholder="请输入新建标签名称"/>
+              )}
             </Form.Item>
           </Form>
-          <p>{this.state.modalText}</p>
         </Modal>
       </>
     );

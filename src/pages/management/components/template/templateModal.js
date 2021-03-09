@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
-import { Modal, Button } from 'antd';
-import { FileAddOutlined } from '@ant-design/icons';
+import React, {Component} from 'react';
+import {Modal, Form, Input, Button} from 'antd';
+import {FileAddOutlined} from '@ant-design/icons';
 
-export default class MapinfoModal extends React.Component {
+class MapinfoModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modalVisible: false,
       confirmLoading: false,
-      modalText: "",
     };
   }
 
@@ -16,49 +15,76 @@ export default class MapinfoModal extends React.Component {
     this.setModalVisible(true);
   };
 
-  setModalVisible = (val) => {
-    this.setState({ modalVisible: val });
-  };
-
-  setConfirmLoading = (val) => {
-    this.setState({ confirmLoading: val });
-  };
-
-  setModalText = (val) => {
-    this.setState({ modalText: val });
-  };
-
-  handleOk = () => {
-    this.setModalText('The modal will be closed after two seconds');
-    this.setConfirmLoading(true);
-    setTimeout(() => {
-      this.setModalVisible(false);
-      this.setConfirmLoading(false);
-    }, 2000);
-  };
-
-  handleCancel = () => {
-    console.log('Clicked cancel button');
+  closeModal = () => {
     this.setModalVisible(false);
   };
 
+  resetModal = () => {
+    this.props.form.resetFields();
+  }
+
+  setModalVisible = (val) => {
+    this.setState({modalVisible: val});
+  };
+
+  setConfirmLoading = (val) => {
+    this.setState({confirmLoading: val});
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        console.log(this.props.form.getFieldsValue())
+      }
+    });
+  };
+
   render() {
+    const layout = {
+      labelCol: {
+        span: 6,
+      },
+      wrapperCol: {
+        span: 18,
+      },
+    };
+    const {getFieldDecorator} = this.props.form;
+
     return (
       <>
-        <Button type="primary" onClick={this.showModal}>
-          <FileAddOutlined/>新增地理信息资源
-        </Button>
+        <Button type="primary" onClick={this.showModal}><FileAddOutlined/>新增标签资源</Button>
 
         <Modal
-          title="Title"
+          title="新增标签资源"
           visible={this.state.modalVisible}
-          onOk={this.handleOk}
           confirmLoading={this.state.confirmLoading}
-          onCancel={this.handleCancel}>
+          onCancel={this.closeModal}
+          footer={[
+            <Button key='cancel' htmlType="button" onClick={this.closeModal}>取消</Button>,
+            <Button key='reset' type="danger" htmlType="button" onClick={this.resetModal}>重置</Button>,
+            <Button key='submit' type="primary" htmlType="submit" onClick={this.handleSubmit}>提交</Button>,
+          ]}
+          destroyOnClose={true}>
 
-          <p>{this.state.modalText}</p>
+          <Form
+            // preserve={false}
+            name="basic"
+            {...layout}>
+
+            <Form.Item
+              label="新建标签名称"
+              name="tagName">
+              {getFieldDecorator('tagName', {rules: [{required: true, message: '请输入新建标签名称!'},]})(
+                <Input placeholder="请输入新建标签名称"/>
+              )}
+            </Form.Item>
+          </Form>
         </Modal>
       </>
     );
   }
 }
+
+export default Form.create()(MapinfoModal);

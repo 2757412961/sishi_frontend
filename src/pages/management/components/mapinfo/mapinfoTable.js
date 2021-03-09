@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Table, Tag } from 'antd';
+import {Table, Tag,} from 'antd';
 
-export default class MapinfoTable extends React.Component {
+export default class MapinfoTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,15 +25,14 @@ export default class MapinfoTable extends React.Component {
           key: 'mapJson',
           sorter: (a, b) => a.mapJson.length - b.mapJson.length,
           sortDirections: [ 'descend', 'ascend' ],
-          // render: tags => (
+          // render: (text, record, index) => (
           //   <>
-          //     {tags.map(tag => {
-          //       return (
-          //         <Tag color={'geekblue'} key={tag}>
-          //           {tag.toUpperCase()}
-          //         </Tag>
-          //       );
-          //     })}
+          //     {record.tagName.split('@')
+          //       .map(tag => {
+          //         return (
+          //           <Tag color="green"> {tag.toUpperCase()}</Tag>
+          //         );
+          //       })}
           //   </>
           // ),
         },

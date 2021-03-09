@@ -75,17 +75,17 @@ class Management extends Component {
     });
   }
 
-  onCollapseSider = collapsed => {
+  onCollapseSide = collapsed => {
     this.setState({collapsed});
   };
 
-  onChangeCascader = (val) => {
+  onChangeCascade = (val) => {
     this.setState({cascadeValue: val});
   };
 
   handleClick = e => {
     this.initState();
-    console.log('click ', e);
+    // console.log('click ', e);
   };
 
   render() {
@@ -96,14 +96,14 @@ class Management extends Component {
     return (
       <BrowserRouter>
         <Layout>
-          <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapseSider}
+          <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapseSide}
                  style={{overflow: 'auto', height: '100vh'}}
                  theme='light'>
             <Menu
               onClick={this.handleClick}
               // style={{ width: 256 }}
               defaultSelectedKeys={['2']}
-              defaultOpenKeys={['sub1']}
+              defaultOpenKeys={['sub2']}
               theme='light'
               mode="inline">
               <SubMenu key="sub1" icon={<TagsOutlined/>} title="标签管理">
@@ -161,7 +161,7 @@ class Management extends Component {
                 <Col span={8} style={{textAlign: 'left'}}>
                   <Cascader
                     placeholder="请选择标签"
-                    onChange={this.onChangeCascader}
+                    onChange={this.onChangeCascade}
                     options={this.state.cascadeOptions}
                     style={{width: '300px'}}/>
                 </Col>
@@ -171,7 +171,7 @@ class Management extends Component {
                 </Route>
                 <Route path='/management/mapinfo'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>地理信息资源表</h1></Col>
-                  <Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeOptions={this.state.cascadeOptions}/></Col>
+                  <Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}/></Col>
                 </Route>
               </Row>
             </Header>
