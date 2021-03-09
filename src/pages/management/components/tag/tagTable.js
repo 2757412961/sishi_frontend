@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Tag } from 'antd';
 
-export default class TagTable extends React.Component {
+export default class TagTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,11 +49,11 @@ export default class TagTable extends React.Component {
         },
         {
           tagId: '3',
-          tagName: '改革开放史@建立经济特区',
+          tagName: '改革开放史@建立经济特区@kang',
         },
         {
           tagId: '4',
-          tagName: '社会主义发展史@中国特色社会主义',
+          tagName: '社会主义发展史@中国特色社会主义@ad@test',
         },
       ],
     };

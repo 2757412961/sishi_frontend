@@ -8,7 +8,7 @@ export default class MapinfoModal extends React.Component {
     this.state = {
       modalVisible: false,
       confirmLoading: false,
-      modalText: '',
+      modalText: "",
     };
   }
 

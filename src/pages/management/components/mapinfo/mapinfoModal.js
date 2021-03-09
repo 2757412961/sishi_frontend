@@ -1,32 +1,31 @@
-import React, { Component } from 'react';
-import { Modal, Button } from 'antd';
-import { FileAddOutlined } from '@ant-design/icons';
+import React, {Component} from 'react';
+import {Modal, Button} from 'antd';
+import {FileAddOutlined} from '@ant-design/icons';
 
-export default class MapinfoModal extends React.Component {
+export default class MapinfoModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // modalVisible: false,
-      modalVisible: true,
+      modalVisible: false,
       confirmLoading: false,
-      modalText: "tsafgs",
+      modalText: "",
     };
   }
 
-   showModal = () => {
+  showModal = () => {
     this.setModalVisible(true);
   };
 
   setModalVisible = (val) => {
-    this.setState({ modalVisible: val });
+    this.setState({modalVisible: val});
   };
 
   setConfirmLoading = (val) => {
-    this.setState({ confirmLoading: val });
+    this.setState({confirmLoading: val});
   };
 
   setModalText = (val) => {
-    this.setState({ modalText: val });
+    this.setState({modalText: val});
   };
 
   handleOk = () => {
@@ -46,12 +45,10 @@ export default class MapinfoModal extends React.Component {
   render() {
     return (
       <>
-        <Button type="primary" onClick={this.showModal}>
-          <FileAddOutlined/>新增地理信息资源
-        </Button>
+        <Button type="primary" onClick={this.showModal}> <FileAddOutlined/>新增地理信息资源 </Button>
 
         <Modal
-          title="Title"
+          title="新增地理信息资源"
           visible={this.state.modalVisible}
           onOk={this.handleOk}
           confirmLoading={this.state.confirmLoading}
