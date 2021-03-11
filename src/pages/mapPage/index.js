@@ -32,6 +32,7 @@ class MapPage extends Component {
       grade:0,
       answer:false,
       first: false,
+      questionNumber:1,
     };
   }
   componentDidMount() {
@@ -222,9 +223,10 @@ class MapPage extends Component {
         <Modal visible={this.state.modalVisble}
                title="开始答题"
                centered
-               style={{top:'3em'}}
+               style={{top:'3em',color:'black',fontStyle:{}}}
                bodyStyle={{height:'70vh'}}
                maskStyle={{backgroundColor: 'rgba(198,170,145,1)' ,top:'5em',}}
+               className={styles.modal}
                footer={[
                  <Row gutter={16}>
                    <Col span={8}>
@@ -239,6 +241,8 @@ class MapPage extends Component {
                        onClick={()=> {
                          this.setState({modalVisble:false})
                          this.setState({deadline:Date.now() +  1000 * 60})
+                         this.setState({questionNumber: this.state.questionNumber+1})
+                         this.setState({answer:false})
                        }}>
                        下一题
                      </Button>
@@ -249,7 +253,7 @@ class MapPage extends Component {
                  </Row>
                  ]}
         >
-          <Card title={question}>
+          <Card title={this.state.questionNumber+"."+question}>
             <Radio.Group onChange={this.onChange} value={this.state.value}>
               <Radio style={radioStyle} value={0}>
                 {answer[0]}
@@ -267,7 +271,7 @@ class MapPage extends Component {
             </Radio.Group>
           </Card>
           <Button  key="submit"
-                   type="primary" style={{left:'30em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
+                   type="primary" style={{bottom:'-2em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
             if(this.state.value==rightAnswer){
               this.setState({grade:this.state.grade++});
             }
