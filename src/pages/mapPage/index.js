@@ -234,26 +234,27 @@ class MapPage extends Component {
       lineHeight: '30px',
     };
     let _this_ = this;
+    let knowledgeUrl="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
+    let knowlegeContent="中国共产党第一次全国代表大会，简称中共一大，' +\n" +
+      "        '于1921年7月23日在上海法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴闭幕结束。' +\n" +
+      "        '大会的召开宣告了中国共产党的正式成立。";
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
       <Sider style={{backgroundColor:'white'}} width={300}>
         <Button onClick={() =>this.setState({modalVisble:true})}>开始答题</Button>
         <Modal visible={this.state.modalVisble}
-               title="开始答题"
+               title="互动页面"
                centered
                style={{top:'3em',color:'black',fontStyle:{}}}
                bodyStyle={{height:'70vh'}}
                maskStyle={{backgroundColor: 'rgba(198,170,145,1)' ,top:'5em',}}
                className={styles.modal}
+               onOk={()=>this.setState({modalVisble:false})}
                footer={[
-                 <Row gutter={16}>
-                   <Col span={8}>
                      <Button  key="back" onClick={()=>{}}>
-                       上一题
-                     </Button>
-                   </Col>
-                   <Col span={8}>
+                       取消
+                     </Button>,
                      <Button
                        key="submit"
                        type="primary"
@@ -263,24 +264,44 @@ class MapPage extends Component {
                          this.setState({questionNumber: this.state.questionNumber+1})
                          this.setState({answer:false})
                        }}>
-                       下一题
+                       确定
                      </Button>
-                   </Col>
-                   <Col span={8}>
-                     <Countdown title="Countdown" value={this.state.deadline} onFinish={()=>{}} />
-                   </Col>
-                 </Row>
                  ]}
         >
           <Tabs defaultActiveKey="1">
+
             <TabPane
               tab={
                 <span>
-                        <Icon type="control" />
-                          答题
+                        <Icon type="book" />
+                          知识卡片
                       </span>
               }
               key="1"
+            >
+              <Card style={{ width: '100' }}
+                    cover={
+                      <img
+                        alt="example"
+                        src={knowledgeUrl}
+                      />
+                    }
+                    actions={[
+                      <Icon type="setting" key="setting" />,
+                      <Icon type="edit" key="edit" />,
+                      <Icon type="ellipsis" key="ellipsis" />,
+                    ]}>
+                {knowlegeContent}
+              </Card>
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="question" />
+                          答题
+                      </span>
+              }
+              key="2"
             >
               <Card title={this.state.questionNumber+"."+question}>
                 <Radio.Group onChange={this.onChange} value={this.state.value}>
@@ -309,15 +330,38 @@ class MapPage extends Component {
                 (<h1>正确答案是</h1>):''}
               {this.state.answer==true?
                 (<Card type="inner" title={answer[rightAnswer]} />):''}
+              <Row gutter={16}>
+                <Col span={8}>
+                  <Button  key="back" onClick={()=>{}}>
+                    上一题
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Button
+                    key="submit"
+                    type="primary"
+                    onClick={()=> {
+                      this.setState({modalVisble:false})
+                      this.setState({deadline:Date.now() +  1000 * 60})
+                      this.setState({questionNumber: this.state.questionNumber+1})
+                      this.setState({answer:false})
+                    }}>
+                    下一题
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Countdown title="Countdown" value={this.state.deadline} onFinish={()=>{}} />
+                </Col>
+              </Row>
             </TabPane>
             <TabPane
               tab={
                 <span>
-                        <Icon type="file-text" />
+                        <Icon type="video-camera" />
                           视频
                       </span>
               }
-              key="2"
+              key="3"
             >
               <div className={styles.item_log}>
               </div>
@@ -325,11 +369,11 @@ class MapPage extends Component {
             <TabPane
               tab={
                 <span>
-                        <Icon type="file-text" />
+                        <Icon type="sound" />
                          音乐
                       </span>
               }
-              key="3"
+              key="4"
             >
                 <Card type="inner" size="small" title= '结果类型：' bordered={false}>
                   {/*<Table dataSource={{}} pagination={false}>*/}

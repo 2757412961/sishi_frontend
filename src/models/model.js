@@ -8,27 +8,27 @@ export default {
   state: {
     status: '',
     modalVisble:false,
-    context:'',
+    questionContext:'',
+    option:[],
+    answer:'',
+    knowledgeContent:'',
+    knowledgeUrl:'',
   },
-
-  effects: {
-    * submit({payload}, {call, put}) {
-      const response = yield call(registerUser, payload);
-      if (response.success) {
-        yield put({
-          type: 'registerHandle',
-          payload: response.data,
-        });
-      }
-    },
-  },
-
   reducers: {
     showModal(state){
       return {...state, modalVisble: true,};
     },
-    hideModal(state){
+    hideModal(state,payload){
       return{...state,modalVisble: false};
+    },
+    setQuestion(state,payload){
+      return{...state,questionContext:payload.questionContext,
+        option:payload.option,
+        answer:payload.answer,}
+    },
+    setKnowledge(state,payload){
+      return{...state,knowledgeContent:payload.knowledgeContent,
+        knowledgeUrl:payload.knowledgeUrl,}
     },
     registerHandle(state, {payload}) {
       setAuthority('NORMAL');
@@ -42,4 +42,24 @@ export default {
       return {...state, status: '',};
     },
   },
+  effects: {
+    * submit({payload}, {call, put}) {
+      const response = yield call(registerUser, payload);
+      if (response.success) {
+        yield put({
+          type: 'registerHandle',
+          payload: response.data,
+        });
+      }
+    },
+  },
+  //获取问题及答案
+  * getQuestion({payload}, {call, put}) {
+
+  },
+  //获取知识卡片
+  * getKnowLedge({payload}, {call, put}) {
+
+  },
+
 };

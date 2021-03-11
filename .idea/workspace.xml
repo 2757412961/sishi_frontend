@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c235577d-4b96-496c-af49-fdb9f5506cca" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/mapPage/MapPageMap/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mapPage/MapPageMap/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/model.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/mapPage/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mapPage/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/mapPage/index.less" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mapPage/index.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/mapPage/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/model.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +83,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615193999469</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="答题页面bug">
+      <created>1615469116773</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1615469116773</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -126,6 +131,17 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Merge branch 'master' of https://e.coding.net/zittur/sishi-front/sishi&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
     <MESSAGE value="登录注册功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="登录注册功能" />
+    <MESSAGE value="答题页面bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="答题页面bug" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="396" y="5" key="CommitChangelistDialog2" timestamp="1615471451486">
+      <screen x="0" y="0" width="1549" height="831" />
+    </state>
+    <state x="396" y="5" key="CommitChangelistDialog2/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615471451486" />
+    <state x="367" y="149" key="Vcs.Push.Dialog.v2" timestamp="1615469130529">
+      <screen x="0" y="0" width="1549" height="831" />
+    </state>
+    <state x="367" y="149" key="Vcs.Push.Dialog.v2/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615469130529" />
   </component>
 </project>
