@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline } from 'antd';
+import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -16,7 +16,8 @@ import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import dangshi from '@/assets/dangshi.PNG'
 import dangshi_background from '@/assets/dangshi_background.PNG'
-
+const { TabPane } = Tabs;
+const { Column, ColumnGroup } = Table;
 const Authorized = RenderAuthorized(getAuthority());
 const { Countdown } = Statistic;
 const { Content, Sider } = Layout;
@@ -34,6 +35,7 @@ class MapPage extends Component {
       first: false,
       questionNumber:1,
     };
+
   }
   componentDidMount() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
@@ -82,10 +84,17 @@ class MapPage extends Component {
     //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
     map.addControl(nav, 'top-left');
   }
+  showModal=()=>{
+    this.setState({modalVisble:true})
+    console.log(this.state.modalVisble)
+  }
   oneClick = () => {
+
+    const {dispatch}=this.props;
     this.setState({
       first: true,
     })
+    let _this=this;
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
     let localhost = window.location.origin;
     let sources = {
@@ -176,10 +185,19 @@ class MapPage extends Component {
     })
     map.on('click', 'shanghai', function(e) {
       let showInfo = null;
+      console.log(this)
+      console.log(dispatch)
+      function showModal() {
+        dispatch({
+          type: 'mapPage/fetch',
+        });
+      }
+
       var coordinates = e.features[0].geometry.coordinates;
-      showInfo = '<div className={styles.markerTop}><h2>中共一大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+
+      showInfo ='<div  className={styles.markerTop}><h2>中共一大</h2></div><div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
         '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-        '大会的召开宣告了中国共产党的正式成立。</p> <p><a>点击进入学习卡片</a></p></div>'
+        '大会的召开宣告了中国共产党的正式成立。</p> <p><a onClick={_this.showModal()}>点击进入学习卡片</a></p></div>'
       new mapboxgl.Popup()
         .setLngLat(coordinates)
         .setHTML(showInfo)
@@ -215,6 +233,7 @@ class MapPage extends Component {
       height: '30px',
       lineHeight: '30px',
     };
+    let _this_ = this;
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
@@ -253,39 +272,73 @@ class MapPage extends Component {
                  </Row>
                  ]}
         >
-          <Card title={this.state.questionNumber+"."+question}>
-            <Radio.Group onChange={this.onChange} value={this.state.value}>
-              <Radio style={radioStyle} value={0}>
-                {answer[0]}
-              </Radio>
-              <Radio style={radioStyle} value={1}>
-                {answer[1]}
-              </Radio>
-              <Radio style={radioStyle} value={2}>
-                {answer[2]}
-              </Radio>
-              <Radio style={radioStyle} value={3}>
-                {answer[3]}
-                {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-              </Radio>
-            </Radio.Group>
-          </Card>
-          <Button  key="submit"
-                   type="primary" style={{bottom:'-2em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
-            if(this.state.value==rightAnswer){
-              this.setState({grade:this.state.grade++});
-            }
-            this.setState({answer:true})}}>提交</Button>
-          {this.state.answer==true?
-            (<h1>正确答案是</h1>):''}
-          {this.state.answer==true?
-            (<Card type="inner" title={answer[rightAnswer]} />):''}
-          {/*  <Card type="inner" title={answer[0]} extra={<a href="#">More</a>} onClick={()=>{console.log(answer[0])}}/>*/}
-          {/*  <Card type="inner" title={answer[1]} extra={<a href="#">More</a>}/>*/}
-          {/*  <Card type="inner" title={answer[2]} extra={<a href="#">More</a>}/>*/}
-          {/*  <Card type="inner" title={answer[3]} extra={<a href="#">More</a>}/>*/}
-          {/*</Card>,*/}
-          {/*<h1>{question}</h1>*/}
+          <Tabs defaultActiveKey="1">
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="control" />
+                          答题
+                      </span>
+              }
+              key="1"
+            >
+              <Card title={this.state.questionNumber+"."+question}>
+                <Radio.Group onChange={this.onChange} value={this.state.value}>
+                  <Radio style={radioStyle} value={0}>
+                    {answer[0]}
+                  </Radio>
+                  <Radio style={radioStyle} value={1}>
+                    {answer[1]}
+                  </Radio>
+                  <Radio style={radioStyle} value={2}>
+                    {answer[2]}
+                  </Radio>
+                  <Radio style={radioStyle} value={3}>
+                    {answer[3]}
+                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                  </Radio>
+                </Radio.Group>
+              </Card>
+              <Button  key="submit"
+                       type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
+                if(this.state.value==rightAnswer){
+                  this.setState({grade:this.state.grade++});
+                }
+                this.setState({answer:true})}}>提交</Button>
+              {this.state.answer==true?
+                (<h1>正确答案是</h1>):''}
+              {this.state.answer==true?
+                (<Card type="inner" title={answer[rightAnswer]} />):''}
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="file-text" />
+                          视频
+                      </span>
+              }
+              key="2"
+            >
+              <div className={styles.item_log}>
+              </div>
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="file-text" />
+                         音乐
+                      </span>
+              }
+              key="3"
+            >
+                <Card type="inner" size="small" title= '结果类型：' bordered={false}>
+                  {/*<Table dataSource={{}} pagination={false}>*/}
+                  {/*  <Column title="结果名称" dataIndex="name" key="name" />*/}
+                  {/*  <Column title="结果值" dataIndex="resultDesc" key="resultDesc" />*/}
+                  {/*</Table>*/}
+                </Card>
+            </TabPane>
+          </Tabs>
         </Modal>
         <Timeline style={{color:'red',marginLeft:'23%',marginTop:'10%'}}>
           <div onClick={this.oneClick} style={{cursor: 'pointer'}} id='fit'>
@@ -299,10 +352,16 @@ class MapPage extends Component {
         <div className={styles.normal}>
           <div className={styles.mapContainer}  id="onlineMapping">
           </div>
-          <div className={styles.dangshi_div} style={{display: this.state.first ? 'block': 'none'}}>
+          <div className={styles.dangshi_div1} style={{display: this.state.first ? 'block': 'none'}}>
             <img  src={dangshi} className={styles.dangshi} />
             <div className={styles.dangshi_font}>
               党史学习
+            </div>
+          </div>
+          <div className={styles.dangshi_div}>
+            <img  src={dangshi} className={styles.dangshi} />
+            <div className={styles.dangshi_font}>
+              返回地图首页
             </div>
           </div>
         </div>
