@@ -306,6 +306,6 @@ function MapPageMap(props) {
   );
 }
 
-export default connect(({  }) => ({
+export default connect(({ mapPage }) => ({mapPage
 
 }))(MapPageMap);

@@ -24,7 +24,12 @@ export default {
   },
 
   reducers: {
-
+    showModal(state){
+      return {...state, modalVisble: true,};
+    },
+    hideModal(state){
+      return{...state,modalVisble: false};
+    },
     registerHandle(state, {payload}) {
       setAuthority('NORMAL');
       reloadAuthorized();
