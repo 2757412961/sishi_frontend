@@ -365,7 +365,7 @@ class MapPage extends Component {
                   </Button>
                 </Col>
                 <Col span={8}>
-                  <Countdown title="Countdown" value={this.state.deadline} onFinish={()=>{}} />
+                  <Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />
                 </Col>
               </Row>
             </TabPane>

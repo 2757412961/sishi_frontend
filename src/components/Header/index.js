@@ -61,11 +61,11 @@ class Header extends Component {
         >
           <div className={styles.head_logo}>
             <img src={xueyuanlogo} className={styles.xueyuan_logo} alt="" />
-            <div>
-              <a href='/management'>
-                <span style={{}}>管理页面</span>
-              </a>
-            </div>
+            {/*<div>*/}
+            {/*  <a href='/management'>*/}
+            {/*    <span style={{}}>管理页面</span>*/}
+            {/*  </a>*/}
+            {/*</div>*/}
           </div>
           {/*<div>*/}
           {/*  <a href='/login'>*/}
