@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c235577d-4b96-496c-af49-fdb9f5506cca" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/model.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/mapPage/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/mapPage/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,18 +10,24 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="ZYL0311" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="30" />
-    <option name="y" value="5" />
-    <option name="width" value="1940" />
-    <option name="height" value="1060" />
-  </component>
+  <component name="ProjectId" id="1pdQTIUTpHHeqMyPjjEqC1xuzRv" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="editor.config.ad.shown" value="true" />
@@ -68,6 +72,7 @@
       <workItem from="1615373958432" duration="2306000" />
       <workItem from="1615382531870" duration="4161000" />
       <workItem from="1615425079478" duration="5117000" />
+      <workItem from="1615510502975" duration="618000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of https://e.coding.net/zittur/sishi-front/sishi&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml">
       <created>1615166601498</created>
@@ -90,7 +95,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615469116773</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="页面更新">
+      <created>1615471478835</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1615471478835</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -132,16 +144,25 @@
     <MESSAGE value="Merge branch 'master' of https://e.coding.net/zittur/sishi-front/sishi&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
     <MESSAGE value="登录注册功能" />
     <MESSAGE value="答题页面bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="答题页面bug" />
+    <MESSAGE value="页面更新" />
+    <option name="LAST_COMMIT_MESSAGE" value="页面更新" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="396" y="5" key="CommitChangelistDialog2" timestamp="1615471451486">
+    <state x="396" y="5" key="CommitChangelistDialog2" timestamp="1615471471707">
       <screen x="0" y="0" width="1549" height="831" />
     </state>
-    <state x="396" y="5" key="CommitChangelistDialog2/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615471451486" />
-    <state x="367" y="149" key="Vcs.Push.Dialog.v2" timestamp="1615469130529">
+    <state x="396" y="5" key="CommitChangelistDialog2/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615471471707" />
+    <state x="148" y="66" key="DiffContextDialog" timestamp="1615511404512">
       <screen x="0" y="0" width="1549" height="831" />
     </state>
-    <state x="367" y="149" key="Vcs.Push.Dialog.v2/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615469130529" />
+    <state x="148" y="66" key="DiffContextDialog/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615511404512" />
+    <state x="367" y="149" key="Vcs.Push.Dialog.v2" timestamp="1615471542894">
+      <screen x="0" y="0" width="1549" height="831" />
+    </state>
+    <state x="367" y="149" key="Vcs.Push.Dialog.v2/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615471542894" />
+    <state x="488" y="207" key="git4idea.merge.GitPullDialog" timestamp="1615511371366">
+      <screen x="0" y="0" width="1549" height="831" />
+    </state>
+    <state x="488" y="207" key="git4idea.merge.GitPullDialog/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615511371366" />
   </component>
 </project>
