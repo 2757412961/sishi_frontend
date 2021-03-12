@@ -206,7 +206,7 @@ class MapPage extends Component {
         '大会的召开宣告了中国共产党的正式成立。' +
         '</p> ' +
         '<p>' +
-        '<button id="btn">点击进入学习卡片</button>' +
+        '<a id="btn">点击进入学习卡片</a>' +
         '</p>' +
         '</div>'
       new mapboxgl.Popup()
