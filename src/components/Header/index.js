@@ -14,6 +14,7 @@ import { connect } from 'dva';
 import classnames from 'classnames';
 import header from '@/assets/header.jpg';
 import zhedalogo from '@/assets/zhedalogo.png';
+import xueyuanlogo from '@/assets/images/xueyuanlogo.svg';
 
 class Header extends Component {
   constructor(props) {
@@ -55,19 +56,57 @@ class Header extends Component {
         className={classnames(styles.head_nav, window.location.pathname === '/mapView'?//配置二级目录时需要加上/fuxi
           styles.active : '')}
       >
-        <div className={classnames(styles.header_first)} style={{ backgroundImage: `url(${header})`}}>
+        <div className={classnames(styles.header_second)}
+             // style={{ backgroundImage: `url(${header})`}}
+        >
           <div className={styles.head_logo}>
-            <img src={zhedalogo} className={styles.zheda_logo} alt="" />
+            <img src={xueyuanlogo} className={styles.xueyuan_logo} alt="" />
+            {/*<div>*/}
+            {/*  <a href='/management'>*/}
+            {/*    <span style={{}}>管理页面</span>*/}
+            {/*  </a>*/}
+            {/*</div>*/}
           </div>
           {/*<div>*/}
           {/*  <a href='/login'>*/}
           {/*    <span style={{color:"white", marginRight:"10px"}}>登录</span>*/}
           {/*  </a>*/}
           {/*</div>*/}
-          <div>
-            <a href='/management'>
-              <span style={{color:"white"}}>管理页面</span>
-            </a>
+          <div className={styles.font_div}>
+            <Row justify="space-between" style={{marginBottom:"10px"}}>
+              <Col span={4} style={{marginRight:"20px"}}>
+                <div className={styles.font_style}>· 党史新学</div>
+              </Col>
+              <Col span={4} style={{marginRight:"20px"}}>
+                <div className={styles.font_style}>· 建设中国</div>
+              </Col>
+              <Col span={4} style={{marginRight:"20px"}}>
+                <div className={styles.font_style}>· 中特之路</div>
+              </Col>
+              <Col span={4} style={{marginRight:"20px"}}>
+                <div className={styles.font_style}>· 改革复兴</div>
+              </Col>
+              <Col span={4}>
+                <div className={styles.font_style}>· 文军长征</div>
+              </Col>
+            </Row>
+            <Row justify="space-between">
+              <Col span={4} style={{marginRight:"20px"}}>
+                <div className={styles.font_style}>· 决胜小康</div>
+              </Col>
+              <Col span={4} style={{marginRight:"20px"}}>
+                <div className={styles.font_style}>· 百花齐放</div>
+              </Col>
+              <Col span={4} style={{marginRight:"20px"}}>
+                <div className={styles.font_style}>· 理论学习</div>
+              </Col>
+              <Col span={4} style={{marginRight:"20px"}}>
+                <div className={styles.font_style}>· 微视频学习</div>
+              </Col>
+              <Col span={4}>
+                <div className={styles.font_style}>· 我想对党说</div>
+              </Col>
+            </Row>
           </div>
 
           {getLocalData({ dataName: 'userName' }) ? (
