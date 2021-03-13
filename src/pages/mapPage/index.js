@@ -12,8 +12,8 @@ import MapPageMap from './MapPageMap';
 import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
-// @import '~video-react/styles/scss/video-react';
-import {Player} from 'video-react'
+// // @import '~video-react/styles/scss/video-react';
+// import {Player} from 'video-react'
 import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import dangshi from '@/assets/dangshi.PNG'
@@ -365,7 +365,7 @@ class MapPage extends Component {
                   </Button>
                 </Col>
                 <Col span={8}>
-                  <Countdown title="Countdown" value={this.state.deadline} onFinish={()=>{}} />
+                  <Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />
                 </Col>
               </Row>
             </TabPane>
