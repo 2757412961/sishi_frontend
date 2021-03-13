@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table } from 'antd';
+import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -17,6 +17,8 @@ import {getAuthority} from '@/utils/authority';
 import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import dangshi from '@/assets/dangshi.PNG'
+import yay from '@/assets/unnamed.jpg'
+import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
@@ -29,7 +31,7 @@ class MapPage extends Component {
     super(props);
     this.state = {
       _collapsed: false,
-      modalVisble: false,
+      modalVisble: true,
       deadline: Date.now() +  1000 * 60,
       value:1,
       grade:0,
@@ -262,7 +264,7 @@ class MapPage extends Component {
         var coordinates = e.features[0].geometry.coordinates;
         showInfo = '<div className={styles.markerTop}><h2>中共一大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
           '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-          '大会的召开宣告了中国共产党的正式成立。</p> <p><a>点击进入学习卡片</a></p></div>'
+          '大会的召开宣告了中国共产党的正式成立。</p> <p ><a>点击进入学习卡片</a></p></div>'
         new mapboxgl.Popup()
           .setLngLat(coordinates)
           .setHTML(showInfo)
@@ -316,6 +318,7 @@ class MapPage extends Component {
       ]]);
     }
   }
+
   onChange = e => {
     console.log('radio checked', e.target.value);
     this.setState({
@@ -323,7 +326,13 @@ class MapPage extends Component {
     });
   };
 
+  onChangee = (a, b, c) => {
+    console.log(a, b, c);
+  };
+
   render(){
+
+
     let question='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
     let answer=['A.大连','B.旅顺','C.平壤','D.花园口'];
     let rightAnswer=1;
@@ -486,12 +495,30 @@ class MapPage extends Component {
               key="4"
             >
                 <Card type="inner" size="small" title= '音乐列表' bordered={false}>
-                  <audio width="400" controls="controls">  <source src="music.mp3" type="audio/mp3" />  </audio>
+                  <audio width="400" controls="controls">  <source src="./music.mp3" type="audio/mp3" />  </audio>
                   {/*<Table dataSource={{}} pagination={false}>*/}
                   {/*  <Column title="结果名称" dataIndex="name" key="name" />*/}
                   {/*  <Column title="结果值" dataIndex="resultDesc" key="resultDesc" />*/}
                   {/*</Table>*/}
                 </Card>
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="sound" />
+                         图片
+                      </span>
+              }
+              key="5"
+            >
+              <Carousel afterChange={this.onChangee()}>
+                <div >
+                  <img  src={yay} />
+                </div>
+                <div >
+                  <img  src={yaa} style={{height: 250, width:400 }}/>
+                </div>
+              </Carousel>
             </TabPane>
           </Tabs>
         </Modal>
