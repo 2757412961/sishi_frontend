@@ -184,7 +184,7 @@ class Register extends Component {
     return (
       <div className={styles.main}>
         <h3>
-          欢迎注册伏羲平台账号
+          欢迎注册党史学习教育平台账号
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem label="用户名">
@@ -304,7 +304,7 @@ class Register extends Component {
               type="primary"
               htmlType="submit"
             >
-              注册
+              <span style={{color:"white"}}>注册</span>
             </Button>
             <Link className={styles.login} style={{color:"rgba(245, 34, 45, 0.7)"}} to="/login">
               使用已有账户登录
