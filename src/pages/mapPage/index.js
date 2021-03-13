@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline, Icon} from 'antd';
+import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -16,14 +16,12 @@ import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import dangshi from '@/assets/dangshi.PNG'
 import dangshi_background from '@/assets/dangshi_background.PNG'
-
+const { TabPane } = Tabs;
+const { Column, ColumnGroup } = Table;
 const Authorized = RenderAuthorized(getAuthority());
 const { Countdown } = Statistic;
 const { Content, Sider } = Layout;
 const noMatch=<Redirect to={`/login?redirect=${window.location.href}`} />;
-
-
-
 class MapPage extends Component {
   constructor(props) {
     super(props);
@@ -95,6 +93,55 @@ class MapPage extends Component {
     //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
     map.addControl(nav, 'top-left');
     //加载中共一大（上海，嘉兴地点）的火花图标
+  }
+  showModal=()=>{
+    this.setState({modalVisble:true})
+    console.log(this.state.modalVisble)
+  }
+  oneClick = () => {
+
+    const {dispatch}=this.props;
+    this.setState({
+      first: true,
+    })
+    let _this=this;
+    mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
+    let localhost = window.location.origin;
+    let sources = {
+      "osm-tiles1": {
+        "type": "raster",
+        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
+        'tileSize': 256
+      },
+      "osm-tiles2": {
+        "type": "raster",
+        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
+        'tileSize': 256
+      }
+    };
+    let layers = [{
+      "id": "simple-tiles1",
+      "type": "raster",
+      "source": "osm-tiles1",
+    },
+      {
+        "id": "simple-tiles2",
+        "type": "raster",
+        "source": "osm-tiles2",
+      }
+    ];
+    const map = new mapboxgl.Map({
+      container: 'onlineMapping',
+      style: {
+        "version": 8,
+        "sprite": localhost + "/MapBoxGL/css/sprite",
+        "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+        "sources": sources,
+        "layers": layers,
+      },
+      center: [121.52, 31.04],  //上海经纬度坐标
+      zoom: 3,
+    });
     map.on('load', function() {
       map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
         if(error) throw  error;
@@ -111,6 +158,7 @@ class MapPage extends Component {
                 "geometry": {
                   "type": "Point",
                   "coordinates": [121.48, 31.22],
+                  // "coordinates": [120.79, 30.75]
                 }
               }]
             }
@@ -137,6 +185,7 @@ class MapPage extends Component {
                 "type": "Feature",
                 "geometry": {
                   "type": "Point",
+                  // "coordinates": [121.48, 31.22],
                   "coordinates": [120.79, 30.75]
                 }
               }]
@@ -232,6 +281,54 @@ class MapPage extends Component {
         });
       });
     })
+    map.on('click', 'shanghai', function(e) {
+      let showInfo = null;
+      console.log(this)
+      console.log(dispatch)
+      function showModal() {
+        dispatch({
+          type: 'mapPage/fetch',
+        });
+      }
+
+      var coordinates = e.features[0].geometry.coordinates;
+      showInfo ='' +
+        '<div  className={styles.markerTop}>' +
+        '<h2>中共一大</h2>' +
+        '</div>' +
+        '<div className={styles.markerBody}>' +
+        '<p>中国共产党第一次全国代表大会，简称中共一大，' +
+        '于1921年7月23日在' +
+        '<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省' +
+        '<span>嘉兴</span>闭幕结束。' +
+        '大会的召开宣告了中国共产党的正式成立。' +
+        '</p> ' +
+        '<p>' +
+        '<a id="btn">点击进入学习卡片</a>' +
+        '</p>' +
+        '</div>'
+      new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML(showInfo)
+        .addTo(map);
+        document.getElementById('btn')
+          .addEventListener('click', function(){
+            _this.showModal()
+          });
+    })
+    map.on('mouseenter, ;shanghai', function() {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave, ;shanghai', function() {
+      map.getCanvas().style.cursor = '';
+    });
+    map.fitBounds([[
+      120.72 ,
+      30.53
+    ], [
+      121.73 ,
+      31.53
+    ]]);
     this.map = map;
   }
   //侧边栏中共一大点击事件
@@ -312,13 +409,13 @@ class MapPage extends Component {
       ]]);
     }
   }
-
   onChange = e => {
     console.log('radio checked', e.target.value);
     this.setState({
       value: e.target.value,
     });
   };
+
   render(){
     let question='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
     let answer=['A.大连','B.旅顺','C.平壤','D.花园口'];
@@ -329,31 +426,37 @@ class MapPage extends Component {
       lineHeight: '30px',
     };
     const {unCheckStyle,checkStyle} = this.state;
+    let knowledgeUrl="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
+    let knowlegeContent="中国共产党第一次全国代表大会，简称中共一大，' +\n" +
+      "        '于1921年7月23日在上海法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴闭幕结束。' +\n" +
+      "        '大会的召开宣告了中国共产党的正式成立。";
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
       <Sider style={{backgroundColor:'white'}} width={300}>
         <Button onClick={() =>this.setState({modalVisble:true})}>开始答题</Button>
         <Modal visible={this.state.modalVisble}
-               title="开始答题"
+               title="互动页面"
                centered
-               style={{top:'3em'}}
+               style={{top:'3em',color:'black',fontStyle:{}}}
                bodyStyle={{height:'70vh'}}
-               maskStyle={{backgroundColor: 'rgba(198,170,145,1)' ,top:'5em',}}
+               maskStyle={{backgroundColor: 'rgba(198,170,145,0.1)' ,top:'5em',}}
+               className={styles.modal}
+               onOk={()=>this.setState({modalVisble:false})}
                footer={[
                  <Row gutter={16}>
                    <Col span={8}>
                      <Button  key="back" onClick={()=>{}}>
-                       上一题
-                     </Button>
-                   </Col>
-                   <Col span={8}>
+                       取消
+                     </Button>,
                      <Button
                        key="submit"
                        type="primary"
                        onClick={()=> {
                          this.setState({modalVisble:false})
                          this.setState({deadline:Date.now() +  1000 * 60})
+                         this.setState({questionNumber: this.state.questionNumber+1})
+                         this.setState({answer:false})
                        }}>
                        下一题
                      </Button>
@@ -364,6 +467,134 @@ class MapPage extends Component {
                  </Row>
                  ]}
         >
+          <Tabs defaultActiveKey="1">
+
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="book" />
+                          知识卡片
+                      </span>
+              }
+              key="1"
+            >
+              <Card style={{ width: '100' }}
+                    cover={
+                      <img
+                        alt="example"
+                        src={knowledgeUrl}
+                      />
+                    }
+                    actions={[
+                      <Icon type="setting" key="setting" />,
+                      <Icon type="edit" key="edit" />,
+                      <Icon type="ellipsis" key="ellipsis" />,
+                    ]}>
+                {knowlegeContent}
+              </Card>
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="question" />
+                          答题
+                      </span>
+              }
+              key="2"
+            >
+              <Card title={this.state.questionNumber+"."+question}>
+                <Radio.Group onChange={this.onChange} value={this.state.value}>
+                  <Radio style={radioStyle} value={0}>
+                    {answer[0]}
+                  </Radio>
+                  <Radio style={radioStyle} value={1}>
+                    {answer[1]}
+                  </Radio>
+                  <Radio style={radioStyle} value={2}>
+                    {answer[2]}
+                  </Radio>
+                  <Radio style={radioStyle} value={3}>
+                    {answer[3]}
+                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                  </Radio>
+                </Radio.Group>
+              </Card>
+              <Button  key="submit"
+                       type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
+                if(this.state.value==rightAnswer){
+                  this.setState({grade:this.state.grade++});
+                }
+                this.setState({answer:true})}}>提交</Button>
+              {this.state.answer==true?
+                (<h1>正确答案是</h1>):''}
+              {this.state.answer==true?
+                (<Card type="inner" title={answer[rightAnswer]} />):''}
+              <Row gutter={16}>
+                <Col span={8}>
+                  <Button  key="back" onClick={()=>{}}>
+                    上一题
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Button
+                    key="submit"
+                    type="primary"
+                    onClick={()=> {
+                      this.setState({modalVisble:false})
+                      this.setState({deadline:Date.now() +  1000 * 60})
+                      this.setState({questionNumber: this.state.questionNumber+1})
+                      this.setState({answer:false})
+                    }}>
+                    下一题
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />
+                </Col>
+              </Row>
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="video-camera" />
+                          视频
+                      </span>
+              }
+              key="3"
+            >
+              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                     controls="controls">
+                {/*<source src="./1.mp4"*/}
+                {/*/>*/}
+                {/*<source src="./1.mp4"*/}
+                {/*/>*/}
+                <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+                />
+                <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+                />
+              </video>
+              {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
+              {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
+              {/*</video>*/}
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="sound" />
+                         音乐
+                      </span>
+              }
+              key="4"
+            >
+                <Card type="inner" size="small" title= '音乐列表' bordered={false}>
+                  <audio width="400" controls="controls">  <source src="music.mp3" type="audio/mp3" />  </audio>
+                  {/*<Table dataSource={{}} pagination={false}>*/}
+                  {/*  <Column title="结果名称" dataIndex="name" key="name" />*/}
+                  {/*  <Column title="结果值" dataIndex="resultDesc" key="resultDesc" />*/}
+                  {/*</Table>*/}
+                </Card>
+            </TabPane>
+          </Tabs>
           <Card title={question}>
             <Radio.Group onChange={this.onChange} value={this.state.value}>
               <Radio style={radioStyle} value={0}>
@@ -415,10 +646,16 @@ class MapPage extends Component {
         <div className={styles.normal}>
           <div className={styles.mapContainer}  id="onlineMapping">
           </div>
-          <div className={styles.dangshi_div} style={{display: this.state.first ? 'block': 'none'}}>
+          <div className={styles.dangshi_div1} style={{display: this.state.first ? 'block': 'none'}}>
             <img  src={dangshi} className={styles.dangshi} />
             <div className={styles.dangshi_font}>
               党史学习
+            </div>
+          </div>
+          <div className={styles.dangshi_div}>
+            <img  src={dangshi} className={styles.dangshi} />
+            <div className={styles.dangshi_font}>
+              返回地图首页
             </div>
           </div>
         </div>
