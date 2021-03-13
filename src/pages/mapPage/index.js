@@ -12,8 +12,8 @@ import MapPageMap from './MapPageMap';
 import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
-// @import '~video-react/styles/scss/video-react';
-import {Player} from 'video-react'
+// // @import '~video-react/styles/scss/video-react';
+// import {Player} from 'video-react'
 import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import dangshi from '@/assets/dangshi.PNG'
@@ -36,6 +36,16 @@ class MapPage extends Component {
       answer:false,
       first: false,
       questionNumber:1,
+      unCheckStyle: {
+        cursor: "pointer",
+        opacity: 0.5,
+        fontSize: 14,
+      },
+      checkStyle: {
+        cursor: 'pointer',
+        opacity: 1,
+        fontSize: 17,
+      },
     };
 
   }
@@ -85,55 +95,7 @@ class MapPage extends Component {
     });
     //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
     map.addControl(nav, 'top-left');
-  }
-  showModal=()=>{
-    this.setState({modalVisble:true})
-    console.log(this.state.modalVisble)
-  }
-  oneClick = () => {
-
-    const {dispatch}=this.props;
-    this.setState({
-      first: true,
-    })
-    let _this=this;
-    mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
-    let localhost = window.location.origin;
-    let sources = {
-      "osm-tiles1": {
-        "type": "raster",
-        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
-        'tileSize': 256
-      },
-      "osm-tiles2": {
-        "type": "raster",
-        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
-        'tileSize': 256
-      }
-    };
-    let layers = [{
-      "id": "simple-tiles1",
-      "type": "raster",
-      "source": "osm-tiles1",
-    },
-      {
-        "id": "simple-tiles2",
-        "type": "raster",
-        "source": "osm-tiles2",
-      }
-    ];
-    const map = new mapboxgl.Map({
-      container: 'onlineMapping',
-      style: {
-        "version": 8,
-        "sprite": localhost + "/MapBoxGL/css/sprite",
-        "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-        "sources": sources,
-        "layers": layers,
-      },
-      center: [121.52, 31.04],  //上海经纬度坐标
-      zoom: 3,
-    });
+    //加载中共一大（上海，嘉兴地点）的火花图标
     map.on('load', function() {
       map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
         if(error) throw  error;
@@ -150,14 +112,18 @@ class MapPage extends Component {
                 "geometry": {
                   "type": "Point",
                   "coordinates": [121.48, 31.22],
-                  // "coordinates": [120.79, 30.75]
                 }
               }]
             }
           },
           "layout": {
             "icon-image": 'shanghai',
-            "icon-size": 0.23,
+            "icon-size": [
+              "interpolate", ["linear"], ["zoom"],
+              3,0.1,
+              17,0.8
+            ],
+            "icon-ignore-placement": true,
           }
         });
         map.addImage('jiaxing', image);
@@ -172,7 +138,6 @@ class MapPage extends Component {
                 "type": "Feature",
                 "geometry": {
                   "type": "Point",
-                  // "coordinates": [121.48, 31.22],
                   "coordinates": [120.79, 30.75]
                 }
               }]
@@ -180,59 +145,176 @@ class MapPage extends Component {
           },
           "layout": {
             "icon-image": 'jiaxing',
-            "icon-size": 0.23,
+            "icon-size": [
+              "interpolate", ["linear"], ["zoom"],
+              3,0.1,
+              17,0.8
+            ],
+            "icon-ignore-placement": true,
           }
         });
       });
     })
-    map.on('click', 'shanghai', function(e) {
-      let showInfo = null;
-      console.log(this)
-      console.log(dispatch)
-      function showModal() {
-        dispatch({
-          type: 'mapPage/fetch',
+    //加载中共二大（上海）的火花图标
+    map.on('load', function() {
+      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
+        if(error) throw  error;
+        map.addImage('中共二大', image);
+        map.addLayer({
+          "id": "中共二大",
+          "type": "symbol",
+          "source": {
+            "type": "geojson",
+            "data": {
+              "type": "FeatureCollection",
+              "features": [{
+                "type": "Feature",
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [121.47, 31.23],
+                }
+              }]
+            }
+          },
+          "layout": {
+            "icon-image": '中共二大',
+            "icon-size": [
+              "interpolate", ["linear"], ["zoom"],
+              3,0.1,
+              17,0.8
+            ],
+            "icon-ignore-placement": true,
+          }
         });
-      }
-
-      var coordinates = e.features[0].geometry.coordinates;
-      showInfo ='' +
-        '<div  className={styles.markerTop}>' +
-        '<h2>中共一大</h2>' +
-        '</div>' +
-        '<div className={styles.markerBody}>' +
-        '<p>中国共产党第一次全国代表大会，简称中共一大，' +
-        '于1921年7月23日在' +
-        '<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省' +
-        '<span>嘉兴</span>闭幕结束。' +
-        '大会的召开宣告了中国共产党的正式成立。' +
-        '</p> ' +
-        '<p>' +
-        '<a id="btn">点击进入学习卡片</a>' +
-        '</p>' +
-        '</div>'
-      new mapboxgl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(showInfo)
-        .addTo(map);
-        document.getElementById('btn')
-          .addEventListener('click', function(){
-            _this.showModal()
-          });
+      });
     })
-    map.on('mouseenter, ;shanghai', function() {
-      map.getCanvas().style.cursor = 'pointer';
-    });
-    map.on('mouseleave, ;shanghai', function() {
-      map.getCanvas().style.cursor = '';
-    });
-    map.fitBounds([[
-      120.72 ,
-      30.53
-    ], [
-      121.73 ,
-      31.53
-    ]]);
+    //加载中共三大（广州）的火花图标
+    map.on('load', function() {
+      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
+        if(error) throw  error;
+        map.addImage('中共三大', image);
+        map.addLayer({
+          "id": "中共三大",
+          "type": "symbol",
+          "source": {
+            "type": "geojson",
+            "data": {
+              "type": "FeatureCollection",
+              "features": [{
+                "type": "Feature",
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": [113.30, 23.12],
+                }
+              }]
+            }
+          },
+          "layout": {
+            "icon-image": '中共三大',
+            "icon-size":  [
+              "interpolate", ["linear"], ["zoom"],
+              3,0.1,
+              17,0.8
+            ],
+            "icon-ignore-placement": true,
+            "text-field": "中共三大",
+            "text-anchor": 'left',
+            "text-offset": [1,0.1],
+            // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+            "text-size": [
+              "interpolate", ["linear"], ["zoom"],
+              3,10,
+              17,38
+            ],
+          },
+          paint: {
+            "text-color": 'rgb(255,0,0)',
+          }
+        });
+      });
+    })
+    this.map = map;
+  }
+  showModal=()=>{
+    this.setState({modalVisble:true})
+    console.log(this.state.modalVisble)
+  }
+  oneClick = (e) => {
+    this.setState({
+      first: true,
+    })
+    if(e==="1"){
+      document.getElementById("timeLine3").style.opacity = 0.5;
+      document.getElementById("timeLine1").style.opacity = 1;
+      document.getElementById("timeLine2").style.opacity = 0.5;
+      //窗口定位到上海，嘉兴区域
+      this.map.fitBounds([[
+        120.72 ,
+        30.53
+      ], [
+        121.73 ,
+        31.53
+      ]]);
+      let _this = this
+      //加载上海，嘉兴图标的点击事件
+      this.map.on('click', 'shanghai', function(e) {
+        let showInfo = null;
+        var coordinates = e.features[0].geometry.coordinates;
+        showInfo = '<div className={styles.markerTop}><h2>中共一大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+          '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+          '大会的召开宣告了中国共产党的正式成立。</p> <p><a>点击进入学习卡片</a></p></div>'
+        new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(showInfo)
+          .addTo(_this.map);
+      })
+      this.map.on('mouseenter', 'shanghai', function() {
+        _this.map.getCanvas().style.cursor = 'pointer';
+      });
+      this.map.on('mouseleave', 'shanghai', function() {
+        _this.map.getCanvas().style.cursor = '';
+      });
+    }
+    else if (e==="2") {
+      document.getElementById("timeLine3").style.opacity = 0.5;
+      document.getElementById("timeLine1").style.opacity = 0.5;
+      document.getElementById("timeLine2").style.opacity = 1;
+      /* //添加视频
+   map.on('load', function() {
+     map.addSource("video", {
+       "type": "video",
+       "urls": ["https://static-assets.mapbox.com/mapbox-gl-js/drone.mp4"],
+       "coordinates": [
+         [120.22,32.03],
+         [122.22,32.03],
+         [122.22,30.03],
+         [120.22,30.03]
+       ]
+     });
+     map.addLayer({
+       'id': "video",
+       "type": "raster",
+       "source": "video",
+     });
+   })*/
+      this.map.flyTo({
+        center:[121.22 , 31.03],
+        zoom: 6,
+        speed: 1,
+        // curve: 3,
+      })
+    } else {
+      document.getElementById("timeLine3").style.opacity = 1;
+      document.getElementById("timeLine1").style.opacity = 0.5;
+      document.getElementById("timeLine2").style.opacity = 0.5;
+      this.map.fitBounds([[
+        115.89,
+        39.42,
+      ], [
+        116.89,
+        40.42,
+      ]]);
+    }
   }
   onChange = e => {
     console.log('radio checked', e.target.value);
@@ -250,6 +332,7 @@ class MapPage extends Component {
       height: '30px',
       lineHeight: '30px',
     };
+    const {unCheckStyle,checkStyle} = this.state;
     let knowledgeUrl="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
     let knowlegeContent="中国共产党第一次全国代表大会，简称中共一大，' +\n" +
       "        '于1921年7月23日在上海法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴闭幕结束。' +\n" +
@@ -365,7 +448,7 @@ class MapPage extends Component {
                   </Button>
                 </Col>
                 <Col span={8}>
-                  <Countdown title="Countdown" value={this.state.deadline} onFinish={()=>{}} />
+                  <Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />
                 </Col>
               </Row>
             </TabPane>
@@ -412,12 +495,17 @@ class MapPage extends Component {
             </TabPane>
           </Tabs>
         </Modal>
-        <Timeline style={{color:'red',marginLeft:'23%',marginTop:'10%'}}>
-          <div onClick={this.oneClick} style={{cursor: 'pointer'}} id='fit'>
-            <Timeline.Item color='red'>1921年7月-中共一大</Timeline.Item>
+        <Timeline className={styles.timeline}>
+          <div id="1" onClick={ (id) => this.oneClick("1",id)}>
+            {/*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*/}
+            <Timeline.Item color='red' style={unCheckStyle} id="timeLine1">1921年7月-中共一大</Timeline.Item>
           </div>
-          <Timeline.Item color='red'>1922年7月-中共二大</Timeline.Item>
-          <Timeline.Item color='red'>1923年6月-中共三大</Timeline.Item>
+          <div id="2" onClick={(id) => this.oneClick("2",id)}>
+            <Timeline.Item color='red' style={unCheckStyle} id="timeLine2">1922年7月-中共二大</Timeline.Item>
+          </div>
+          <div id="3" onClick={(id) => this.oneClick("3",id)}>
+            <Timeline.Item  color='red' style={unCheckStyle} id="timeLine3">1923年6月-中共三大</Timeline.Item>
+          </div>
         </Timeline>
       </Sider>
       <Content>
