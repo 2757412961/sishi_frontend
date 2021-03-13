@@ -11,7 +11,9 @@ import { MapContext, RotationControl, ScaleControl, ZoomControl } from 'react-ma
 import MapPageMap from './MapPageMap';
 import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
-import {getAuthority} from '@/utils/authority'
+import {getAuthority} from '@/utils/authority';
+// // @import '~video-react/styles/scss/video-react';
+// import {Player} from 'video-react'
 import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import dangshi from '@/assets/dangshi.PNG'
@@ -248,7 +250,6 @@ class MapPage extends Component {
       height: '30px',
       lineHeight: '30px',
     };
-    let _this_ = this;
     let knowledgeUrl="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
     let knowlegeContent="中国共产党第一次全国代表大会，简称中共一大，' +\n" +
       "        '于1921年7月23日在上海法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴闭幕结束。' +\n" +
@@ -257,13 +258,12 @@ class MapPage extends Component {
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
       <Sider style={{backgroundColor:'white'}} width={300}>
-        <Button onClick={() =>this.setState({modalVisble:true})}>开始答题</Button>
         <Modal visible={this.state.modalVisble}
                title="互动页面"
                centered
                style={{top:'3em',color:'black',fontStyle:{}}}
                bodyStyle={{height:'70vh'}}
-               maskStyle={{backgroundColor: 'rgba(198,170,145,1)' ,top:'5em',}}
+               maskStyle={{backgroundColor: 'rgba(198,170,145,0.1)' ,top:'5em',}}
                className={styles.modal}
                onOk={()=>this.setState({modalVisble:false})}
                footer={[
@@ -378,8 +378,20 @@ class MapPage extends Component {
               }
               key="3"
             >
-              <div className={styles.item_log}>
-              </div>
+              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                     controls="controls">
+                {/*<source src="./1.mp4"*/}
+                {/*/>*/}
+                {/*<source src="./1.mp4"*/}
+                {/*/>*/}
+                <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+                />
+                <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+                />
+              </video>
+              {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
+              {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
+              {/*</video>*/}
             </TabPane>
             <TabPane
               tab={
@@ -390,7 +402,8 @@ class MapPage extends Component {
               }
               key="4"
             >
-                <Card type="inner" size="small" title= '结果类型：' bordered={false}>
+                <Card type="inner" size="small" title= '音乐列表' bordered={false}>
+                  <audio width="400" controls="controls">  <source src="music.mp3" type="audio/mp3" />  </audio>
                   {/*<Table dataSource={{}} pagination={false}>*/}
                   {/*  <Column title="结果名称" dataIndex="name" key="name" />*/}
                   {/*  <Column title="结果值" dataIndex="resultDesc" key="resultDesc" />*/}
