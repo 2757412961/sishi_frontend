@@ -27,20 +27,20 @@ const basemapStyle = {
 };
 const MapboxMap = ReactMapboxGl({ accessToken: MAPBOX_TOKEN, attributionControl: false, preserveDrawingBuffer: true,
   transformRequest:(url, resourceType)=> {
-    if((url.indexOf('renderStyle')>=0 || url.indexOf('tileV3')>=0)&& getLocalData({ dataName: 'rzpj' })) {
-      console.log("url re1", url);
-      let str = '{"rzpj":"'+getLocalData({ dataName: 'rzpj' })+'"}';
-      console.log("url re2", url, str);
-      let rzpj = JSON.parse(str);
-      console.log("url re", url, str, rzpj);
-      return {
-        url: url,
-        headers: rzpj
-        // getLocalData({ dataName: 'rzpj' }),
-        // credentials: 'include',
+      if((url.indexOf('renderStyle')>=0 || url.indexOf('tileV3')>=0)&& getLocalData({ dataName: 'rzpj' })) {
+        console.log("url re1", url);
+        let str = '{"rzpj":"'+getLocalData({ dataName: 'rzpj' })+'"}';
+        console.log("url re2", url, str);
+        let rzpj = JSON.parse(str);
+        console.log("url re", url, str, rzpj);
+        return {
+          url: url,
+          headers: rzpj
+            // getLocalData({ dataName: 'rzpj' }),
+          // credentials: 'include',
+        }
       }
     }
-  }
 });
 
 
@@ -252,7 +252,7 @@ function MapPageMap(props) {
           "fill-opacity": 0.9      /* 透明度 */
         },
         "filter": ["==", "$type", "Polygon"]
-      });
+        });
       alert('成功添加数据');
     }
     catch (err) {
@@ -306,6 +306,6 @@ function MapPageMap(props) {
   );
 }
 
-export default connect(({  }) => ({
+export default connect(({ mapPage }) => ({mapPage
 
 }))(MapPageMap);
