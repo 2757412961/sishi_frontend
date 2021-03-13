@@ -156,7 +156,7 @@ class RegistrationForm extends React.Component {
       <FormItem {...tailFormItemLayout}>
         <Button type="primary" htmlType="submit" size="large"
                 loading={this.props.loading.effects['userInfo/userLogin']}>
-          <span style={{color:"white"}}>登录</span>
+          登录
         </Button>
       </FormItem>
     </Form>;
