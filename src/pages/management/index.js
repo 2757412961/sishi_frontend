@@ -11,10 +11,14 @@ import {TagsOutlined, TableOutlined, FileAddOutlined} from '@ant-design/icons';
 import TagTable from './components/tag/tagTable';
 import TagModal from './components/tag/tagModal';
 import TagResourceTable from './components/tagResource/tagResourceTable';
-import ArticleTable from './components/article/articleTable'
-import ArticleModal from './components/article/articleModal'
-import PictureTable from './components/picture/pictureTable'
-import PictureModal from './components/picture/pictureModal'
+import ArticleTable from './components/article/articleTable';
+import ArticleModal from './components/article/articleModal';
+import PictureTable from './components/picture/pictureTable';
+import PictureModal from './components/picture/pictureModal';
+import AudioTable from './components/audio/audioTable';
+import AudioModal from './components/audio/audioModal';
+import VideoTable from './components/video/videoTable';
+import VideoModal from './components/video/videoModal';
 import MapinfoTable from './components/mapinfo/mapinfoTable';
 import MapinfoModal from './components/mapinfo/mapinfoModal';
 import Editor from './components/editor';
@@ -182,6 +186,14 @@ class Management extends Component {
                 {/*  <Col span={8} style={{textAlign: 'center'}}><h1>图片资源表</h1></Col>*/}
                 {/*  <Col span={8} style={{textAlign: 'right'}}><PictureModal cascadeValue={this.state.cascadeValue}/></Col>*/}
                 {/*</Route>*/}
+                {/*<Route path='/management/audio'>*/}
+                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>音频资源表</h1></Col>*/}
+                {/*  <Col span={8} style={{textAlign: 'right'}}><AudioModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                {/*</Route>*/}
+                {/*<Route path='/management/video'>*/}
+                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>视频资源表</h1></Col>*/}
+                {/*  <Col span={8} style={{textAlign: 'right'}}><VideoModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                {/*</Route>*/}
                 <Route path='/management/mapinfo'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>地理信息资源表</h1></Col>
                   <Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}/></Col>
@@ -194,8 +206,8 @@ class Management extends Component {
               <Route path='/management/EditorZjh' exact component={TagResourceTable}/>
               <Route path='/management/article' exact component={ArticleTable}/>
               <Route path='/management/picture' exact component={PictureTable}/>
-              <Route path='/management/audio' exact component={EditorZjh}/>
-              <Route path='/management/video' exact component={EditorZjh}/>
+              <Route path='/management/audio' exact component={AudioTable}/>
+              <Route path='/management/video' exact component={VideoTable}/>
               <Route path='/management/question' exact component={EditorZjh}/>
               <Route path='/management/mapinfo' exact component={MapinfoTable}/>
               <Route path='/management/user' exact component={EditorZjh}/>
