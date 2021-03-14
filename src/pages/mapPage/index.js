@@ -240,6 +240,7 @@ class MapPage extends Component {
     console.log(this.state.modalVisble)
   }
   oneClick = (e) => {
+    const {dispatch}=this.props;
     this.setState({
       first: true,
     })
@@ -257,16 +258,51 @@ class MapPage extends Component {
       ]]);
       let _this = this
       //加载上海，嘉兴图标的点击事件
+      // this.map.on('click', 'shanghai', function(e) {
+      //   let showInfo = null;
+      //   var coordinates = e.features[0].geometry.coordinates;
+      //   showInfo = '<div className={styles.markerTop}><h2>中共一大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      //     '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      //     '大会的召开宣告了中国共产党的正式成立。</p> <p><a>点击进入学习卡片</a></p></div>'
+      //   new mapboxgl.Popup()
+      //     .setLngLat(coordinates)
+      //     .setHTML(showInfo)
+      //     .addTo(_this.map);
+      // })
       this.map.on('click', 'shanghai', function(e) {
         let showInfo = null;
+        console.log(this)
+        console.log(dispatch)
+        function showModal() {
+          dispatch({
+            type: 'mapPage/fetch',
+          });
+        }
+
         var coordinates = e.features[0].geometry.coordinates;
-        showInfo = '<div className={styles.markerTop}><h2>中共一大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-          '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-          '大会的召开宣告了中国共产党的正式成立。</p> <p><a>点击进入学习卡片</a></p></div>'
+        showInfo ='' +
+          '<div  className={styles.markerTop}>' +
+          '<h2>中共一大</h2>' +
+          '</div>' +
+          '<div className={styles.markerBody}>' +
+          '<p>中国共产党第一次全国代表大会，简称中共一大，' +
+          '于1921年7月23日在' +
+          '<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省' +
+          '<span>嘉兴</span>闭幕结束。' +
+          '大会的召开宣告了中国共产党的正式成立。' +
+          '</p> ' +
+          '<p>' +
+          '<a id="btn">点击进入学习卡片</a>' +
+          '</p>' +
+          '</div>'
         new mapboxgl.Popup()
           .setLngLat(coordinates)
           .setHTML(showInfo)
           .addTo(_this.map);
+        document.getElementById('btn')
+          .addEventListener('click', function(){
+            _this.showModal()
+          });
       })
       this.map.on('mouseenter', 'shanghai', function() {
         _this.map.getCanvas().style.cursor = 'pointer';
