@@ -541,7 +541,7 @@ class MapPage extends Component {
               }
               key="5"
             >
-              <Carousel afterChange={this.onChangee()}>
+              <Carousel >
                 <div >
                   <img  src={yay} />
                 </div>
