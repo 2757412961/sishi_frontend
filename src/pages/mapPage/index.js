@@ -31,7 +31,7 @@ class MapPage extends Component {
     super(props);
     this.state = {
       _collapsed: false,
-      modalVisble: true,
+      modalVisble: false,
       deadline: Date.now() +  1000 * 60,
       value:1,
       grade:0,
@@ -242,6 +242,7 @@ class MapPage extends Component {
     console.log(this.state.modalVisble)
   }
   oneClick = (e) => {
+    const {dispatch}=this.props;
     this.setState({
       first: true,
     })
@@ -259,16 +260,51 @@ class MapPage extends Component {
       ]]);
       let _this = this
       //加载上海，嘉兴图标的点击事件
+      // this.map.on('click', 'shanghai', function(e) {
+      //   let showInfo = null;
+      //   var coordinates = e.features[0].geometry.coordinates;
+      //   showInfo = '<div className={styles.markerTop}><h2>中共一大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      //     '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      //     '大会的召开宣告了中国共产党的正式成立。</p> <p><a>点击进入学习卡片</a></p></div>'
+      //   new mapboxgl.Popup()
+      //     .setLngLat(coordinates)
+      //     .setHTML(showInfo)
+      //     .addTo(_this.map);
+      // })
       this.map.on('click', 'shanghai', function(e) {
         let showInfo = null;
+        console.log(this)
+        console.log(dispatch)
+        function showModal() {
+          dispatch({
+            type: 'mapPage/fetch',
+          });
+        }
+
         var coordinates = e.features[0].geometry.coordinates;
-        showInfo = '<div className={styles.markerTop}><h2>中共一大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-          '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-          '大会的召开宣告了中国共产党的正式成立。</p> <p ><a>点击进入学习卡片</a></p></div>'
+        showInfo ='' +
+          '<div  className={styles.markerTop}>' +
+          '<h2>中共一大</h2>' +
+          '</div>' +
+          '<div className={styles.markerBody}>' +
+          '<p>中国共产党第一次全国代表大会，简称中共一大，' +
+          '于1921年7月23日在' +
+          '<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省' +
+          '<span>嘉兴</span>闭幕结束。' +
+          '大会的召开宣告了中国共产党的正式成立。' +
+          '</p> ' +
+          '<p>' +
+          '<a id="btn">点击进入学习卡片</a>' +
+          '</p>' +
+          '</div>'
         new mapboxgl.Popup()
           .setLngLat(coordinates)
           .setHTML(showInfo)
           .addTo(_this.map);
+        document.getElementById('btn')
+          .addEventListener('click', function(){
+            _this.showModal()
+          });
       })
       this.map.on('mouseenter', 'shanghai', function() {
         _this.map.getCanvas().style.cursor = 'pointer';
@@ -326,13 +362,7 @@ class MapPage extends Component {
     });
   };
 
-  onChangee = (a, b, c) => {
-    console.log(a, b, c);
-  };
-
   render(){
-
-
     let question='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
     let answer=['A.大连','B.旅顺','C.平壤','D.花园口'];
     let rightAnswer=1;
@@ -495,7 +525,7 @@ class MapPage extends Component {
               key="4"
             >
                 <Card type="inner" size="small" title= '音乐列表' bordered={false}>
-                  <audio width="400" controls="controls">  <source src="./music.mp3" type="audio/mp3" />  </audio>
+                  <audio width="400" controls="controls">  <source src="music.mp3" type="audio/mp3" />  </audio>
                   {/*<Table dataSource={{}} pagination={false}>*/}
                   {/*  <Column title="结果名称" dataIndex="name" key="name" />*/}
                   {/*  <Column title="结果值" dataIndex="resultDesc" key="resultDesc" />*/}
