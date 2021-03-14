@@ -1,47 +1,51 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {Table, Tag,} from 'antd';
 
-export default class MapinfoTable extends Component {
+export default class ArticleTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       columns: [
         {
-          title: 'Map ID',
-          dataIndex: 'mapId',
-          key: 'mapId',
+          title: 'Article ID',
+          dataIndex: 'articleId',
+          key: 'articleId',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Map Name',
-          dataIndex: 'mapName',
-          key: 'mapName',
-          sorter: (a, b) => a.mapName.length - b.mapName.length,
-          sortDirections: [ 'descend', 'ascend' ],
+          title: 'Article Title',
+          dataIndex: 'articleTitle',
+          key: 'articleTitle',
+          sorter: (a, b) => a.articleTitle.length - b.articleTitle.length,
+          sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Map Json',
-          dataIndex: 'mapJson',
-          key: 'mapJson',
-          sorter: (a, b) => a.mapJson.length - b.mapJson.length,
-          sortDirections: [ 'descend', 'ascend' ],
-          // render: (text, record, index) => (
-          //   <>
-          //     {record.tagName.split('@')
-          //       .map(tag => {
-          //         return (
-          //           <Tag color="green"> {tag.toUpperCase()}</Tag>
-          //         );
-          //       })}
-          //   </>
-          // ),
+          title: 'Article Author',
+          dataIndex: 'articleAuthor',
+          key: 'articleAuthor',
+          sorter: (a, b) => a.articleAuthor.length - b.articleAuthor.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
+          title: 'Article Content',
+          dataIndex: 'articleContent',
+          key: 'articleContent',
+          sorter: (a, b) => a.articleContent.length - b.articleContent.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
+          title: 'Publish Time',
+          dataIndex: 'publishTime',
+          key: 'publishTime',
+          sorter: (a, b) => a.publishTime - b.publishTime,
+          sortDirections: ['descend', 'ascend'],
         },
         {
           title: 'Create Time',
           dataIndex: 'createTime',
           key: 'createTime',
           sorter: (a, b) => a.createTime - b.createTime,
-          sortDirections: [ 'descend', 'ascend' ],
+          sortDirections: ['descend', 'ascend'],
         },
         {
           title: 'Action',
@@ -54,22 +58,36 @@ export default class MapinfoTable extends Component {
 
       dataSource: [
         {
-          mapId: '1',
-          mapName: 'test',
-          mapJson: 'fds',
-          createTime: 4894189,
+          articleId: '1',
+          articleAuthor: 'test',
+          articleTitle: 'test',
+          articleContent: 'ggg',
+          publishTime: 4894189,
+          createTime: 32,
         },
         {
-          mapId: '2',
-          mapName: 'abcx',
-          mapJson: 'ggfds',
+          articleId: '2',
+          articleAuthor: 'test',
+          articleTitle: 'qwe',
+          articleContent: 'h d',
+          publishTime: 4894189,
           createTime: 123,
         },
         {
-          mapId: '3',
-          mapName: 'oiuyt',
-          mapJson: 'sdfffds',
-          createTime: 4843294189,
+          articleId: '3',
+          articleAuthor: 'test',
+          articleTitle: 'eq w eq s d e qwe',
+          articleContent: 'sss',
+          publishTime: 123,
+          createTime: 3,
+        },
+        {
+          articleId: '4',
+          articleAuthor: 'test',
+          articleTitle: 'das df a sf',
+          articleContent: 'hhhh',
+          publishTime: 4894189,
+          createTime: 123312,
         },
       ],
     };

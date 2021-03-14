@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Modal, Form, Input, Button, Breadcrumb} from 'antd';
 import {FileAddOutlined} from '@ant-design/icons';
 
-class MapinfoModal extends Component {
+class ArticleModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,15 +75,15 @@ class MapinfoModal extends Component {
               )}
             </Form.Item>
 
-            <Form.Item label="地图名称" name="mapName">
-              {getFieldDecorator('mapName', {rules: [{required: true, message: '请输入地图名称!'},]})(
-                <Input placeholder="请输入地图名称"/>
+            <Form.Item label="文章标题" name="articleTitle">
+              {getFieldDecorator('articleTitle', {rules: [{required: true, message: '请输入文章标题!'},]})(
+                <Input placeholder="请输入文章标题"/>
               )}
             </Form.Item>
 
-            <Form.Item label="地理信息(json)" name="mapJson">
-              {getFieldDecorator('mapJson', {rules: [{required: true, message: '请输入mapJson!'},]})(
-                <Input placeholder="请输入mapJson"/>
+            <Form.Item label="文章作者" name="articleAuthor">
+              {getFieldDecorator('articleAuthor', {rules: [{required: true, message: '请输入文章作者!'},]})(
+                <Input placeholder="请输入文章作者"/>
               )}
             </Form.Item>
 
@@ -94,4 +94,4 @@ class MapinfoModal extends Component {
   }
 }
 
-export default Form.create()(MapinfoModal);
+export default Form.create()(ArticleModal);
