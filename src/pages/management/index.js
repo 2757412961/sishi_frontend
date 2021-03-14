@@ -10,6 +10,7 @@ import {TagsOutlined, TableOutlined, FileAddOutlined} from '@ant-design/icons';
 
 import TagTable from './components/tag/tagTable';
 import TagModal from './components/tag/tagModal';
+import ArticleTable from './components/article/ArticleTable'
 import ArticleModal from './components/article/articleModal'
 import MapinfoTable from './components/mapinfo/mapinfoTable';
 import MapinfoModal from './components/mapinfo/mapinfoModal';
@@ -57,7 +58,7 @@ class Management extends Component {
           children: [
             {
               value: 'nanjing',
-              label: 'Nanjiffaaaaaaaaaaaaaaaaaaffffffffffffffffffng',
+              label: 'Nanjing',
               children: [
                 {
                   value: 'zhonghuamen',
@@ -179,7 +180,7 @@ class Management extends Component {
             <Content>
               <Route path='/management/tag' exact component={TagTable}/>
               <Route path='/management/EditorZjh' exact component={EditorZjh}/>
-              <Route path='/management/article' exact component={ArticleModal}/>
+              <Route path='/management/article' exact component={ArticleTable}/>
               <Route path='/management/picture' exact component={EditorZjh}/>
               <Route path='/management/audio' exact component={EditorZjh}/>
               <Route path='/management/video' exact component={EditorZjh}/>

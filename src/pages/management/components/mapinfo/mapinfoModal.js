@@ -69,21 +69,24 @@ class MapinfoModal extends Component {
           destroyOnClose={true}>
 
           <Form name="basic" {...layout}>
-            {/*<Form.Item label="标签路径" name="tagPath">*/}
-            {/*  {getFieldDecorator('tagPath',)(*/}
-            {/*    <Input disabled={true} value={this.props.cascadeValue.map(v=>{*/}
-            {/*      return(*/}
-            {/*        */}
-            {/*      )*/}
-            {/*    })}></Input>*/}
-            {/*  )}*/}
-            {/*</Form.Item>*/}
-
-            <Form.Item label="新建标签名称" name="tagName">
-              {getFieldDecorator('tagName', {rules: [{required: true, message: '请输入新建标签名称!'},]})(
-                <Input placeholder="请输入新建标签名称"/>
+            <Form.Item label="标签名称" name="tagName">
+              {getFieldDecorator('tagName', {initialValue: this.props.cascadeValue.join("@")})(
+                <Input disabled={true}/>
               )}
             </Form.Item>
+
+            <Form.Item label="地图名称" name="mapName">
+              {getFieldDecorator('mapName', {rules: [{required: true, message: '请输入地图名称!'},]})(
+                <Input placeholder="请输入地图名称"/>
+              )}
+            </Form.Item>
+
+            <Form.Item label="地理信息(json)" name="mapJson">
+              {getFieldDecorator('mapJson', {rules: [{required: true, message: '请输入mapJson!'},]})(
+                <Input placeholder="请输入mapJson"/>
+              )}
+            </Form.Item>
+
           </Form>
         </Modal>
       </>
