@@ -37,12 +37,11 @@ const list = [
     text:'1921年7月-中共一大',
     showInfo: '<div className={styles.markerTop}>' +
       '<h2>中共一大</h2>' +
-      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-    '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-    '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
       '</div>',
     cardImg:p1,
     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+    label:"党史新学@中共一大@嘉兴",
   },
   {
     id:'shanghai',
@@ -53,6 +52,7 @@ const list = [
       '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
     cardImg:p2,
     cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+    label:"党史新学@中共二大@上海",
   },
   {
     id:'guangzhou',
@@ -63,6 +63,7 @@ const list = [
       '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
     cardImg:p3,
     cardContent:'中国共产党第三次全国代表大会，简称中共三大',
+    label:"党史新学@中共三大@广州",
   }
 ];
 
@@ -94,6 +95,9 @@ class MapPage extends Component {
 
   }
   componentDidMount() {
+    const {dispatch}=this.props;
+    dispatch({ type: 'mapPage/getQuestion'});
+    console.log('dispatch',dispatch);
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
     let localhost = window.location.origin;
     let sources = {
@@ -242,6 +246,9 @@ class MapPage extends Component {
       height: '30px',
       lineHeight: '30px',
     };
+    let allNumber=3;
+    const {mapPage}=this.props;
+    console.log('mapPage',mapPage);
     const {unCheckStyle,checkStyle} = this.state;
     let knowledgeUrl="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
     let knowlegeContent="中国共产党第一次全国代表大会，简称中共一大，' +\n" +
@@ -313,16 +320,21 @@ class MapPage extends Component {
               <Button  key="submit"
                        type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
                 if(this.state.value==rightAnswer){
-                  this.setState({grade:this.state.grade++});
+                  this.setState({grade:this.state.grade+1});
                 }
-                this.setState({answer:true})}}>提交</Button>
+                this.setState({answer:true})
+                if(this.state.questionNumber==allNumber)
+                {
+                  alert("答题结束")
+                }
+                       }}>提交</Button>
               {this.state.answer==true?
                 (<h1>正确答案是</h1>):''}
               {this.state.answer==true?
                 (<Card type="inner" title={answer[rightAnswer]} />):''}
               <Row gutter={16}>
                 <Col span={8}>
-                  <Button  key="back" onClick={()=>{}}>
+                  <Button  key="back" onClick={()=>{this.setState({questionNumber: this.state.questionNumber-1})}}>
                     上一题
                   </Button>
                 </Col>
@@ -332,17 +344,29 @@ class MapPage extends Component {
                     type="primary"
                     onClick={()=> {
                       // this.setState({modalVisble:false})
+                      if(this.state.questionNumber==allNumber){
+                        return
+                      }
+                      if(this.state.answer==false){
+                        alert('你还未提交本题答案')
+                      }
+                      else{
                       this.setState({deadline:Date.now() +  1000 * 60})
                       this.setState({questionNumber: this.state.questionNumber+1})
                       this.setState({answer:false})
+                      }
                     }}>
                     下一题
                   </Button>
                 </Col>
                 <Col span={8}>
-                  <Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />
+                  <h2><span>{this.state.questionNumber}</span>/
+                  <span>{allNumber}</span></h2>
+                  {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
                 </Col>
               </Row>
+              {this.state.questionNumber==allNumber&&this.state.answer?
+                (<h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1>):''}
             </TabPane>
             <TabPane
               tab={
@@ -359,8 +383,12 @@ class MapPage extends Component {
                 {/*/>*/}
                 {/*<source src="./1.mp4"*/}
                 {/*/>*/}
-                <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
-                />
+                {/*<source src="https://media.w3.org/2010/05/sintel/sdsfler.mp4"*/}
+                {/*/>*/}
+                {/*<source src="https://media.w3.org/2010/05/sintel/sdsfler.mp4"*/}
+                {/*/>*/}
+                {/*<source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"*/}
+                {/*/>*/}
                 <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
                 />
               </video>
@@ -378,7 +406,9 @@ class MapPage extends Component {
               key="4"
             >
                 <Card type="inner" size="small" title= '音乐列表' bordered={false}>
-                  <audio width="400" controls="controls">  <source src="music.mp3" type="audio/mp3" />  </audio>
+                  <audio width="800" controls="controls"  loop="loop" preload="auto" title="123">
+                    <source src="http://music.163.com/song/media/outer/url?id=476592630.mp3" type="audio/mp3" />
+                  </audio>
                   {/*<Table dataSource={{}} pagination={false}>*/}
                   {/*  <Column title="结果名称" dataIndex="name" key="name" />*/}
                   {/*  <Column title="结果值" dataIndex="resultDesc" key="resultDesc" />*/}
