@@ -385,6 +385,24 @@ class MapPage extends Component {
                   {/*</Table>*/}
                 </Card>
             </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="sound" />
+                         图片
+                      </span>
+              }
+              key="5"
+            >
+              <Carousel >
+                <div >
+                  <img  src={yay} />
+                </div>
+                <div >
+                  <img  src={yaa} style={{height: 250, width:400 }}/>
+                </div>
+              </Carousel>
+            </TabPane>
           </Tabs>
         </Modal>
         <Timeline className={styles.timeline}>{
