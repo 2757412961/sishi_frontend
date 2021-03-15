@@ -59,6 +59,7 @@
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ChangesTree.GroupingKeys" value="" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -202,18 +203,18 @@
       <screen x="0" y="0" width="1549" height="831" />
     </state>
     <state x="213" y="0" key="CommitChangelistDialog2/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615516744512" />
-    <state x="148" y="66" key="DiffContextDialog" timestamp="1615516640064">
+    <state x="148" y="66" key="DiffContextDialog" timestamp="1615770631941">
       <screen x="0" y="0" width="1549" height="831" />
     </state>
-    <state x="148" y="66" key="DiffContextDialog/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615516640064" />
+    <state x="148" y="66" key="DiffContextDialog/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615770631941" />
     <state x="367" y="149" key="Vcs.Push.Dialog.v2" timestamp="1615770033243">
       <screen x="0" y="0" width="1549" height="831" />
     </state>
     <state x="367" y="149" key="Vcs.Push.Dialog.v2/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615770033243" />
-    <state x="488" y="207" key="git4idea.merge.GitPullDialog" timestamp="1615770040102">
+    <state x="488" y="207" key="git4idea.merge.GitPullDialog" timestamp="1615770684136">
       <screen x="0" y="0" width="1549" height="831" />
     </state>
-    <state x="488" y="207" key="git4idea.merge.GitPullDialog/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615770040102" />
+    <state x="488" y="207" key="git4idea.merge.GitPullDialog/0.0.1549.831/1920.0.1549.831@0.0.1549.831" timestamp="1615770684136" />
     <state x="432" y="69" width="670" height="676" key="search.everywhere.popup" timestamp="1615512912660">
       <screen x="0" y="0" width="1549" height="831" />
     </state>
