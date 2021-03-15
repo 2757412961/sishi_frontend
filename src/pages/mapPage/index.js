@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table } from 'antd';
+import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -20,6 +20,8 @@ import p1 from '@/assets/test/1.jpg';
 import p2 from '@/assets/test/2.jpg';
 import p3 from '@/assets/test/3.jpg';
 import dangshi from '@/assets/dangshi.PNG'
+import yay from '@/assets/unnamed.jpg'
+import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;

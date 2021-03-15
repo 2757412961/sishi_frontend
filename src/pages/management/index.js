@@ -10,11 +10,20 @@ import {TagsOutlined, TableOutlined, FileAddOutlined} from '@ant-design/icons';
 
 import TagTable from './components/tag/tagTable';
 import TagModal from './components/tag/tagModal';
-import ArticleModal from './components/article/articleModal'
+import TagResourceTable from './components/tagResource/tagResourceTable';
+import ArticleTable from './components/article/articleTable';
+import ArticleModal from './components/article/articleModal';
+import PictureTable from './components/picture/pictureTable';
+import PictureModal from './components/picture/pictureModal';
+import AudioTable from './components/audio/audioTable';
+import AudioModal from './components/audio/audioModal';
+import VideoTable from './components/video/videoTable';
+import VideoModal from './components/video/videoModal';
 import MapinfoTable from './components/mapinfo/mapinfoTable';
 import MapinfoModal from './components/mapinfo/mapinfoModal';
 import Editor from './components/editor';
 import EditorZjh from './components/editorZjh';
+
 
 const FormItem = Form.Item;
 
@@ -57,7 +66,7 @@ class Management extends Component {
           children: [
             {
               value: 'nanjing',
-              label: 'Nanjiffaaaaaaaaaaaaaaaaaaffffffffffffffffffng',
+              label: 'Nanjing',
               children: [
                 {
                   value: 'zhonghuamen',
@@ -134,7 +143,7 @@ class Management extends Component {
                   <Link to='/management/video'/>
                 </Menu.Item>
                 <Menu.Item key="7">
-                  <span>题录资源表</span>
+                  <span>题目资源表</span>
                   <Link to='/management/question'/>
                 </Menu.Item>
                 <Menu.Item key="8">
@@ -169,6 +178,22 @@ class Management extends Component {
                   <Col span={8} style={{textAlign: 'center'}}><h1>标签表</h1></Col>
                   <Col span={8} style={{textAlign: 'right'}}><TagModal cascadeOptions={this.state.cascadeOptions}/></Col>
                 </Route>
+                <Route path='/management/article'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>文章资源表</h1></Col>
+                  <Col span={8} style={{textAlign: 'right'}}><ArticleModal cascadeValue={this.state.cascadeValue}/></Col>
+                </Route>
+                {/*<Route path='/management/picture'>*/}
+                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>图片资源表</h1></Col>*/}
+                {/*  <Col span={8} style={{textAlign: 'right'}}><PictureModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                {/*</Route>*/}
+                {/*<Route path='/management/audio'>*/}
+                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>音频资源表</h1></Col>*/}
+                {/*  <Col span={8} style={{textAlign: 'right'}}><AudioModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                {/*</Route>*/}
+                {/*<Route path='/management/video'>*/}
+                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>视频资源表</h1></Col>*/}
+                {/*  <Col span={8} style={{textAlign: 'right'}}><VideoModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                {/*</Route>*/}
                 <Route path='/management/mapinfo'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>地理信息资源表</h1></Col>
                   <Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}/></Col>
@@ -178,11 +203,11 @@ class Management extends Component {
 
             <Content>
               <Route path='/management/tag' exact component={TagTable}/>
-              <Route path='/management/EditorZjh' exact component={EditorZjh}/>
-              <Route path='/management/article' exact component={ArticleModal}/>
-              <Route path='/management/picture' exact component={EditorZjh}/>
-              <Route path='/management/audio' exact component={EditorZjh}/>
-              <Route path='/management/video' exact component={EditorZjh}/>
+              <Route path='/management/EditorZjh' exact component={TagResourceTable}/>
+              <Route path='/management/article' exact component={ArticleTable}/>
+              <Route path='/management/picture' exact component={PictureTable}/>
+              <Route path='/management/audio' exact component={AudioTable}/>
+              <Route path='/management/video' exact component={VideoTable}/>
               <Route path='/management/question' exact component={EditorZjh}/>
               <Route path='/management/mapinfo' exact component={MapinfoTable}/>
               <Route path='/management/user' exact component={EditorZjh}/>
