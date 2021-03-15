@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table } from 'antd';
+import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -12,11 +12,16 @@ import MapPageMap from './MapPageMap';
 import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
-// @import '~video-react/styles/scss/video-react';
-import {Player} from 'video-react'
+// // @import '~video-react/styles/scss/video-react';
+// import {Player} from 'video-react'
 import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
+import p1 from '@/assets/test/1.jpg';
+import p2 from '@/assets/test/2.jpg';
+import p3 from '@/assets/test/3.jpg';
 import dangshi from '@/assets/dangshi.PNG'
+import yay from '@/assets/unnamed.jpg'
+import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
@@ -24,6 +29,43 @@ const Authorized = RenderAuthorized(getAuthority());
 const { Countdown } = Statistic;
 const { Content, Sider } = Layout;
 const noMatch=<Redirect to={`/login?redirect=${window.location.href}`} />;
+
+const list = [
+  {
+    id:'jiaxing',
+    lonlat:[120.79, 30.75],
+    text:'1921年7月-中共一大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共一大</h2>' +
+      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+    '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+    '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p1,
+    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+  },
+  {
+    id:'shanghai',
+    lonlat:[121.48, 31.22],
+    text:'1922年7月-中共二大',
+    showInfo: '<div className={styles.markerTop}><h2>中共二大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    cardImg:p2,
+    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+  },
+  {
+    id:'guangzhou',
+    lonlat:[113.30, 23.12],
+    text:'1923年6月-中共三大',
+    showInfo: '<div className={styles.markerTop}><h2>中共三大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    cardImg:p3,
+    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
+  }
+];
+
 class MapPage extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +78,18 @@ class MapPage extends Component {
       answer:false,
       first: false,
       questionNumber:1,
+      unCheckStyle: {
+        cursor: "pointer",
+        opacity: 0.5,
+        fontSize: 14,
+      },
+      checkStyle: {
+        cursor: 'pointer',
+        opacity: 1,
+        fontSize: 17,
+      },
+      knowledgeUrl:list[0].cardImg,
+      knowledgeContent:list[0].cardContent,
     };
 
   }
@@ -85,154 +139,92 @@ class MapPage extends Component {
     });
     //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
     map.addControl(nav, 'top-left');
+    //加载中共一大（上海，嘉兴地点）的火花图标
+    map.on('load', function() {
+      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
+        if(error) throw  error;
+        for(let i = 0;i<list.length;i++){
+          map.addImage(list[i].id, image);
+          map.addLayer({
+            "id": list[i].id,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": list[i].lonlat,
+                  }
+                }]
+              }
+            },
+            "layout": {
+              "icon-image": list[i].id,
+              "icon-size": [
+                "interpolate", ["linear"], ["zoom"],
+                3,0.1,
+                17,0.8
+              ],
+              "icon-ignore-placement": true,
+            }
+          });
+        }
+      });
+    });
+    let _this = this;
+    for(let i = 0;i<list.length;i++){
+      map.on('click', list[i].id, function(e) {
+        var coordinates = e.features[0].geometry.coordinates;
+        let showInfo = list[i].showInfo;
+        new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(showInfo)
+          .addTo(map);
+        document.getElementById('btn')
+          .addEventListener('click', function(){
+            let cardImg = list[i].cardImg;
+            let cardContent = list[i].cardContent;
+            _this.setState({
+              knowledgeUrl: cardImg,
+              knowledgeContent: cardContent,
+            });
+            _this.showModal()
+          });
+      });
+      map.on('mouseenter', list[i].id, function() {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', list[i].id, function() {
+        map.getCanvas().style.cursor = '';
+      });
+    }
+    this.map = map;
   }
   showModal=()=>{
     this.setState({modalVisble:true})
     console.log(this.state.modalVisble)
   }
-  oneClick = () => {
-
-    const {dispatch}=this.props;
-    this.setState({
-      first: true,
-    })
-    let _this=this;
-    mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
-    let localhost = window.location.origin;
-    let sources = {
-      "osm-tiles1": {
-        "type": "raster",
-        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
-        'tileSize': 256
-      },
-      "osm-tiles2": {
-        "type": "raster",
-        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
-        'tileSize': 256
+  oneClick = (e, item) => {
+    console.log("e",e);
+    let _this = this;
+    let id = item.id;
+    for(let i = 0;i<list.length;i++){
+      if(id==list[i].id){
+        document.getElementById(list[i].id).style.opacity = 1;
+        _this.map.flyTo({
+          center:list[i].lonlat,
+          zoom: 6,
+          speed: 1,
+          // curve: 3,
+        })
       }
-    };
-    let layers = [{
-      "id": "simple-tiles1",
-      "type": "raster",
-      "source": "osm-tiles1",
-    },
-      {
-        "id": "simple-tiles2",
-        "type": "raster",
-        "source": "osm-tiles2",
+      else{
+        document.getElementById(list[i].id).style.opacity = 0.5;
       }
-    ];
-    const map = new mapboxgl.Map({
-      container: 'onlineMapping',
-      style: {
-        "version": 8,
-        "sprite": localhost + "/MapBoxGL/css/sprite",
-        "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-        "sources": sources,
-        "layers": layers,
-      },
-      center: [121.52, 31.04],  //上海经纬度坐标
-      zoom: 3,
-    });
-    map.on('load', function() {
-      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
-        if(error) throw  error;
-        map.addImage('shanghai', image);
-        map.addLayer({
-          "id": "shanghai",
-          "type": "symbol",
-          "source": {
-            "type": "geojson",
-            "data": {
-              "type": "FeatureCollection",
-              "features": [{
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": [121.48, 31.22],
-                  // "coordinates": [120.79, 30.75]
-                }
-              }]
-            }
-          },
-          "layout": {
-            "icon-image": 'shanghai',
-            "icon-size": 0.23,
-          }
-        });
-        map.addImage('jiaxing', image);
-        map.addLayer({
-          "id": "jiaxing",
-          "type": "symbol",
-          "source": {
-            "type": "geojson",
-            "data": {
-              "type": "FeatureCollection",
-              "features": [{
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  // "coordinates": [121.48, 31.22],
-                  "coordinates": [120.79, 30.75]
-                }
-              }]
-            }
-          },
-          "layout": {
-            "icon-image": 'jiaxing',
-            "icon-size": 0.23,
-          }
-        });
-      });
-    })
-    map.on('click', 'shanghai', function(e) {
-      let showInfo = null;
-      console.log(this)
-      console.log(dispatch)
-      function showModal() {
-        dispatch({
-          type: 'mapPage/fetch',
-        });
-      }
-
-      var coordinates = e.features[0].geometry.coordinates;
-      showInfo ='' +
-        '<div  className={styles.markerTop}>' +
-        '<h2>中共一大</h2>' +
-        '</div>' +
-        '<div className={styles.markerBody}>' +
-        '<p>中国共产党第一次全国代表大会，简称中共一大，' +
-        '于1921年7月23日在' +
-        '<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省' +
-        '<span>嘉兴</span>闭幕结束。' +
-        '大会的召开宣告了中国共产党的正式成立。' +
-        '</p> ' +
-        '<p>' +
-        '<a id="btn">点击进入学习卡片</a>' +
-        '</p>' +
-        '</div>'
-      new mapboxgl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(showInfo)
-        .addTo(map);
-        document.getElementById('btn')
-          .addEventListener('click', function(){
-            _this.showModal()
-          });
-    })
-    map.on('mouseenter, ;shanghai', function() {
-      map.getCanvas().style.cursor = 'pointer';
-    });
-    map.on('mouseleave, ;shanghai', function() {
-      map.getCanvas().style.cursor = '';
-    });
-    map.fitBounds([[
-      120.72 ,
-      30.53
-    ], [
-      121.73 ,
-      31.53
-    ]]);
+    }
   }
   onChange = e => {
     console.log('radio checked', e.target.value);
@@ -250,6 +242,7 @@ class MapPage extends Component {
       height: '30px',
       lineHeight: '30px',
     };
+    const {unCheckStyle,checkStyle} = this.state;
     let knowledgeUrl="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
     let knowlegeContent="中国共产党第一次全国代表大会，简称中共一大，' +\n" +
       "        '于1921年7月23日在上海法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴闭幕结束。' +\n" +
@@ -261,27 +254,13 @@ class MapPage extends Component {
         <Modal visible={this.state.modalVisble}
                title="互动页面"
                centered
-               style={{top:'3em',color:'black',fontStyle:{}}}
-               bodyStyle={{height:'70vh'}}
+               style={{top:'3em',color:'black',fontStyle:{},height:'70vh', width:'70vw'}}
+               // bodyStyle={{height:'70vh', width:'70vw'}}
                maskStyle={{backgroundColor: 'rgba(198,170,145,0.1)' ,top:'5em',}}
                className={styles.modal}
                onOk={()=>this.setState({modalVisble:false})}
-               footer={[
-                     <Button  key="back" onClick={()=>{}}>
-                       取消
-                     </Button>,
-                     <Button
-                       key="submit"
-                       type="primary"
-                       onClick={()=> {
-                         this.setState({modalVisble:false})
-                         this.setState({deadline:Date.now() +  1000 * 60})
-                         this.setState({questionNumber: this.state.questionNumber+1})
-                         this.setState({answer:false})
-                       }}>
-                       确定
-                     </Button>
-                 ]}
+               onCancel={()=>this.setState({modalVisble:false})}
+               footer={false}
         >
           <Tabs defaultActiveKey="1">
 
@@ -298,15 +277,11 @@ class MapPage extends Component {
                     cover={
                       <img
                         alt="example"
-                        src={knowledgeUrl}
+                        src={this.state.knowledgeUrl}
                       />
                     }
-                    actions={[
-                      <Icon type="setting" key="setting" />,
-                      <Icon type="edit" key="edit" />,
-                      <Icon type="ellipsis" key="ellipsis" />,
-                    ]}>
-                {knowlegeContent}
+                    >
+                {this.state.knowledgeContent}
               </Card>
             </TabPane>
             <TabPane
@@ -356,7 +331,7 @@ class MapPage extends Component {
                     key="submit"
                     type="primary"
                     onClick={()=> {
-                      this.setState({modalVisble:false})
+                      // this.setState({modalVisble:false})
                       this.setState({deadline:Date.now() +  1000 * 60})
                       this.setState({questionNumber: this.state.questionNumber+1})
                       this.setState({answer:false})
@@ -365,7 +340,7 @@ class MapPage extends Component {
                   </Button>
                 </Col>
                 <Col span={8}>
-                  <Countdown title="Countdown" value={this.state.deadline} onFinish={()=>{}} />
+                  <Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />
                 </Col>
               </Row>
             </TabPane>
@@ -412,12 +387,25 @@ class MapPage extends Component {
             </TabPane>
           </Tabs>
         </Modal>
-        <Timeline style={{color:'red',marginLeft:'23%',marginTop:'10%'}}>
-          <div onClick={this.oneClick} style={{cursor: 'pointer'}} id='fit'>
-            <Timeline.Item color='red'>1921年7月-中共一大</Timeline.Item>
-          </div>
-          <Timeline.Item color='red'>1922年7月-中共二大</Timeline.Item>
-          <Timeline.Item color='red'>1923年6月-中共三大</Timeline.Item>
+        <Timeline className={styles.timeline}>{
+          list.map((item)=> (
+            <div onClick={ (e) => this.oneClick(e, item)}>
+              {/*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*/}
+              <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>
+            </div>
+            )
+          )
+        }
+          {/*<div id="1" onClick={ (id) => this.oneClick("1",id)}>*/}
+          {/*  /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
+          {/*  <Timeline.Item color='red' style={unCheckStyle} id="timeLine1">1921年7月-中共一大</Timeline.Item>*/}
+          {/*</div>*/}
+          {/*<div id="2" onClick={(id) => this.oneClick("2",id)}>*/}
+          {/*  <Timeline.Item color='red' style={unCheckStyle} id="timeLine2">1922年7月-中共二大</Timeline.Item>*/}
+          {/*</div>*/}
+          {/*<div id="3" onClick={(id) => this.oneClick("3",id)}>*/}
+          {/*  <Timeline.Item  color='red' style={unCheckStyle} id="timeLine3">1923年6月-中共三大</Timeline.Item>*/}
+          {/*</div>*/}
         </Timeline>
       </Sider>
       <Content>
