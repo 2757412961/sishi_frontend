@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c235577d-4b96-496c-af49-fdb9f5506cca" name="Default Changelist" comment="加载视频">
+    <list default="true" id="c235577d-4b96-496c-af49-fdb9f5506cca" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -149,7 +149,14 @@
       <option name="project" value="LOCAL" />
       <updated>1615516730266</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="xml">
+      <created>1615770727976</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1615770727977</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,7 +199,8 @@
     <MESSAGE value="首页修改" />
     <MESSAGE value="Merge branch 'master' of https://e.coding.net/zittur/sishi-front/sishi&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
     <MESSAGE value="加载视频" />
-    <option name="LAST_COMMIT_MESSAGE" value="加载视频" />
+    <MESSAGE value="xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="xml" />
   </component>
   <component name="WindowStateProjectService">
     <state x="537" y="218" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1615512790882">
