@@ -23,6 +23,11 @@ import dangshi from '@/assets/dangshi.PNG'
 import yay from '@/assets/unnamed.jpg'
 import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
+
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
 const Authorized = RenderAuthorized(getAuthority());
@@ -67,6 +72,17 @@ const list = [
   }
 ];
 
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", color: "red" }}
+      onClick={onClick}
+    />
+  );
+}
+
 class MapPage extends Component {
   constructor(props) {
     super(props);
@@ -79,6 +95,14 @@ class MapPage extends Component {
       answer:false,
       first: false,
       questionNumber:1,
+      carousel_settings: {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        nextArrow: <SampleNextArrow />,
+      },
       unCheckStyle: {
         cursor: "pointer",
         opacity: 0.5,
@@ -94,6 +118,9 @@ class MapPage extends Component {
     };
 
   }
+
+
+
   componentDidMount() {
     const {dispatch}=this.props;
     dispatch({ type: 'mapPage/getQuestion'});
@@ -396,6 +423,38 @@ class MapPage extends Component {
               {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
               {/*</video>*/}
             </TabPane>
+
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="picture" />
+                         图片
+                      </span>
+              }
+              key="5"
+            >
+              {/*<Carousel >*/}
+              {/*  <div >*/}
+              {/*    <img  src={yay} />*/}
+              {/*  </div>*/}
+              {/*  <div >*/}
+              {/*    <img  src={yaa} style={{height: 250, width:400 }}/>*/}
+              {/*  </div>*/}
+              {/*</Carousel>*/}
+
+              <div style={{padding: 40, background: "#ececec"}} >
+                <Slider {...this.carousel_settings} >
+                  <div>
+                    <img  src={yay} />
+                  </div>
+                  <div>
+                    <img  src={yaa} style={{height: 250, width:400 }}/>
+                  </div>
+                </Slider>
+              </div>
+
+            </TabPane>
+
             <TabPane
               tab={
                 <span>
@@ -415,24 +474,7 @@ class MapPage extends Component {
                   {/*</Table>*/}
                 </Card>
             </TabPane>
-            <TabPane
-              tab={
-                <span>
-                        <Icon type="sound" />
-                         图片
-                      </span>
-              }
-              key="5"
-            >
-              <Carousel >
-                <div >
-                  <img  src={yay} />
-                </div>
-                <div >
-                  <img  src={yaa} style={{height: 250, width:400 }}/>
-                </div>
-              </Carousel>
-            </TabPane>
+
           </Tabs>
         </Modal>
         <Timeline className={styles.timeline}>{
