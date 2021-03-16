@@ -60,10 +60,10 @@ export default class TagTable extends Component {
       ],
     };
 
-    this.updateTable();
+    // this.updateTable();
   }
 
-  updateTable() {
+  updateTable = () => {
     if (this.props.cascadeValue.length == 0) {
       request({
         url: '/v1.0/api/tags',
@@ -89,10 +89,7 @@ export default class TagTable extends Component {
     }
   }
 
-  deleteRecord(text, record) {
-    // console.log(text)
-    console.log(record)
-
+  deleteRecord = (text, record) => {
     request({
       url: '/v1.0/api/tag/' + record.tagName,
       method: 'DELETE',
@@ -100,7 +97,8 @@ export default class TagTable extends Component {
     }).then((res) => {
       console.log(res);
 
-      this.updateTable();
+      this.props.updateCascade();
+      // this.updateTable();
     });
   }
 
