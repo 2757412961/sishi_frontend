@@ -25,9 +25,7 @@ export default class TagTable extends Component {
             <>
               {record.tagName.split('@')
                 .map(tag => {
-                  return (
-                    <Tag color="green"> {tag.toUpperCase()}</Tag>
-                  );
+                  return (<Tag color="green">{tag}</Tag>);
                 })}
             </>
           ),
@@ -53,11 +51,11 @@ export default class TagTable extends Component {
         },
         {
           tagId: '3',
-          tagName: '改革开放史@建立经济特区@kang',
+          tagName: '改革开放史@建立经济特区',
         },
         {
           tagId: '4',
-          tagName: '社会主义发展史@中国特色社会主义@ad@test',
+          tagName: '社会主义发展史@中国特色社会主义',
         },
       ],
     };
@@ -66,14 +64,29 @@ export default class TagTable extends Component {
   }
 
   updateTable() {
-    request({
-      url: '/v1.0/api/tags',
-      method: 'GET',
-      autoAdd: false, //不添加v1.0
-    }).then((res) => {
-      console.log(res);
-      this.setState({dataSource: res.list})
-    })
+    if (this.props.cascadeValue.length == 0) {
+      request({
+        url: '/v1.0/api/tags',
+        method: 'GET',
+        autoAdd: false, //不添加v1.0
+      }).then((res) => {
+        console.log(res);
+
+        this.setState({dataSource: res.list})
+      });
+    } else {
+      request({
+        url: '/v1.0/api/tag/' + this.props.cascadeValue.join('@'),
+        method: 'GET',
+        autoAdd: false, //不添加v1.0
+      }).then((res) => {
+        console.log(res);
+
+        if (res.hasOwnProperty("tagName")) {
+          this.setState({dataSource: [res]})
+        }
+      });
+    }
   }
 
   deleteRecord(text, record) {
@@ -88,7 +101,7 @@ export default class TagTable extends Component {
       console.log(res);
 
       this.updateTable();
-    })
+    });
   }
 
   render() {
