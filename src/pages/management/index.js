@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Layout, Menu, Space, Cascader, Form, Row, Col, Tag, Empty, Button} from 'antd';
+import {Layout, Menu, Card, Cascader, Form, Row, Col, Tag, Empty, Button} from 'antd';
 import {BrowserRouter, Route, Link} from 'react-router-dom';
 import styles from './index.less';
 import {judgeUrl, getLocalData} from '@/utils/common.js';
@@ -41,54 +41,6 @@ class Management extends Component {
     this.updateCascade();
   }
 
-  // TODO delete
-  initState() {
-    this.setState({
-      cascadeOptions: [
-        {
-          value: 'zhejiang',
-          label: 'Zhejiang',
-          children: [
-            {
-              value: 'hangzhou',
-              label: 'Hangzhou',
-              children: [
-                {
-                  value: 'xihu',
-                  label: 'West Lake',
-                },
-              ],
-            },
-            {
-              value: 'suzhou',
-              label: 'Suzhou',
-            }
-          ],
-        },
-        {
-          value: 'jiangsu',
-          label: 'Jiangsu',
-          children: [
-            {
-              value: 'nanjing',
-              label: 'Nanjing',
-              children: [
-                {
-                  value: 'zhonghuamen',
-                  label: 'Zhong Hua Men',
-                },
-                {
-                  value: 'test',
-                  label: 'test',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    });
-  }
-
   updateCascade = () => {
     request({
       url: '/v1.0/api/tag/tree',
@@ -113,15 +65,18 @@ class Management extends Component {
   componentDidUpdate(prevProps) {
     if (this.state.cascadeValue !== prevProps.cascadeValue) {
       // 监听 cascadeValue 值改变后更新数据表
-      if (typeof (this.tagTable) !== "undefined") {
-        this.tagTable.updateTable();
-      }
+      this.updateAllTable();
+    }
+  }
+
+  updateAllTable = () => {
+    if (typeof (this.tagTable) !== "undefined" && this.tagTable.updateTable !== null) {
+      this.tagTable.updateTable();
     }
   }
 
   handleClick = e => {
     // this.updateTable();
-    // this.initState();
     // console.log('click ', e);
   };
 
@@ -206,7 +161,9 @@ class Management extends Component {
                 </Col>
                 <Route path='/management/tag'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>标签表</h1></Col>
-                  <Col span={8} style={{textAlign: 'right'}}><TagModal ascadeOptions={this.state.cascadeOptions}/></Col>
+                  <Col span={8} style={{textAlign: 'right'}}><TagModal cascadeOptions={this.state.cascadeOptions}
+                                                                       updateCascade={this.updateCascade}
+                                                                       updateAllTable={this.updateAllTable}/></Col>
                 </Route>
                 <Route path='/management/tagResource'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>标签资源关联表</h1></Col>
@@ -214,7 +171,8 @@ class Management extends Component {
                 </Route>
                 <Route path='/management/article'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>文章资源表</h1></Col>
-                  {/*<Col span={8} style={{textAlign: 'right'}}><ArticleModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                  <Col span={8} style={{textAlign: 'right'}}><ArticleModal cascadeValue={this.state.cascadeValue}
+                  /></Col>
                 </Route>
                 <Route path='/management/picture'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>图片资源表</h1></Col>
@@ -234,34 +192,37 @@ class Management extends Component {
                 </Route>
                 <Route path='/management/mapinfo'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>地理信息资源表</h1></Col>
-                  {/*<Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                  <Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}
+                  /></Col>
                 </Route>
               </Row>
             </Header>
 
             <Content>
-              <Route path='/management/tag' exact>
-                <TagTable {...this.state} ref={ch => this.tagTable = ch} updateCascade={this.updateCascade}/></Route>
-              <Route path='/management/tagResource' exact>
-                <TagResourceTable {...this.state} ref={ch => this.tagResourceTable = ch}/></Route>
+              <Card>
+                <Route path='/management/tag' exact>
+                  <TagTable {...this.state} ref={ch => this.tagTable = ch} updateCascade={this.updateCascade}/></Route>
+                <Route path='/management/tagResource' exact>
+                  <TagResourceTable {...this.state} ref={ch => this.tagResourceTable = ch}/></Route>
 
-              <Route path='/management/article' exact>
-                <ArticleTable {...this.state} ref={ch => this.articleTable = ch}/></Route>
-              <Route path='/management/picture' exact>
-                <Index {...this.state} ref={ch => this.pictureTable = ch}/></Route>
-              <Route path='/management/audio' exact>
-                <AudioTable {...this.state} ref={ch => this.audioTable = ch}/></Route>
-              <Route path='/management/video' exact>
-                <VideoTable {...this.state} ref={ch => this.videoTable = ch}/></Route>
-              <Route path='/management/question' exact>
-                <Index {...this.state} ref={ch => this.questionTable = ch}/></Route>
-              <Route path='/management/mapinfo' exact>
-                <MapinfoTable {...this.state} ref={ch => this.mapinfoTable = ch}/></Route>
+                <Route path='/management/article' exact>
+                  <ArticleTable {...this.state} ref={ch => this.articleTable = ch}/></Route>
+                <Route path='/management/picture' exact>
+                  <Index {...this.state} ref={ch => this.pictureTable = ch}/></Route>
+                <Route path='/management/audio' exact>
+                  <AudioTable {...this.state} ref={ch => this.audioTable = ch}/></Route>
+                <Route path='/management/video' exact>
+                  <VideoTable {...this.state} ref={ch => this.videoTable = ch}/></Route>
+                <Route path='/management/question' exact>
+                  <Index {...this.state} ref={ch => this.questionTable = ch}/></Route>
+                <Route path='/management/mapinfo' exact>
+                  <MapinfoTable {...this.state} ref={ch => this.mapinfoTable = ch}/></Route>
 
-              <Route path='/management/user' exact>
-                <EditorZjh {...this.state} ref={ch => this.userTable = ch}/></Route>
-              <Route path='/management/userAnswer' exact>
-                <EditorZjh {...this.state} ref={ch => this.userAnswerTable = ch}/></Route>
+                <Route path='/management/user' exact>
+                  <EditorZjh {...this.state} ref={ch => this.userTable = ch}/></Route>
+                <Route path='/management/userAnswer' exact>
+                  <EditorZjh {...this.state} ref={ch => this.userAnswerTable = ch}/></Route>
+              </Card>
             </Content>
 
             <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
