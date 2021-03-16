@@ -6,15 +6,14 @@ import {judgeUrl, getLocalData} from '@/utils/common.js';
 import router from 'umi/router';
 import {connect} from 'dva';
 import classnames from 'classnames';
-import {TagsOutlined, TableOutlined, FileAddOutlined} from '@ant-design/icons';
 
 import TagTable from './components/tag/tagTable';
 import TagModal from './components/tag/tagModal';
 import TagResourceTable from './components/tagResource/tagResourceTable';
 import ArticleTable from './components/article/articleTable';
 import ArticleModal from './components/article/articleModal';
-import PictureTable from './components/picture/pictureTable';
-import PictureModal from './components/picture/pictureModal';
+// import PictureTable from './components/picture/pictureTable';
+// import PictureModal from './components/picture/pictureModal';
 import AudioTable from './components/audio/audioTable';
 import AudioModal from './components/audio/audioModal';
 import VideoTable from './components/video/videoTable';
@@ -23,6 +22,9 @@ import MapinfoTable from './components/mapinfo/mapinfoTable';
 import MapinfoModal from './components/mapinfo/mapinfoModal';
 import Editor from './components/editor';
 import EditorZjh from './components/editorZjh';
+import Index from './components/zTestCommunite'
+import request from "@/utils/request";
+import Children2 from "@/pages/management/components/zTestCommunite/Children2";
 
 
 const FormItem = Form.Item;
@@ -35,8 +37,11 @@ class Management extends Component {
       cascadeOptions: [],
       cascadeValue: [],
     };
+
+    this.updateCascade();
   }
 
+  // TODO delete
   initState() {
     this.setState({
       cascadeOptions: [
@@ -84,6 +89,18 @@ class Management extends Component {
     });
   }
 
+  updateCascade = () => {
+    request({
+      url: '/v1.0/api/tag/tree',
+      method: 'GET',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+      this.setState({cascadeOptions: res.list})
+      this.setState({cascadeValue: []})
+    })
+  }
+
   onCollapseSide = collapsed => {
     this.setState({collapsed});
   };
@@ -92,8 +109,19 @@ class Management extends Component {
     this.setState({cascadeValue: val});
   };
 
+  // 典型用法（不要忘记比较 props）：
+  componentDidUpdate(prevProps) {
+    if (this.state.cascadeValue !== prevProps.cascadeValue) {
+      // 监听 cascadeValue 值改变后更新数据表
+      if (typeof (this.tagTable) !== "undefined") {
+        this.tagTable.updateTable();
+      }
+    }
+  }
+
   handleClick = e => {
-    this.initState();
+    // this.updateTable();
+    // this.initState();
     // console.log('click ', e);
   };
 
@@ -106,26 +134,26 @@ class Management extends Component {
       <BrowserRouter>
         <Layout>
           <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapseSide}
-                 style={{overflow: 'auto', height: '100vh'}}
+                 style={{overflow: 'auto', height: '120vh'}}
                  theme='light'>
             <Menu
               onClick={this.handleClick}
               // style={{ width: 256 }}
               defaultSelectedKeys={['2']}
-              defaultOpenKeys={['sub2']}
+              defaultOpenKeys={['sub1']}
               theme='light'
               mode="inline">
-              <SubMenu key="sub1" icon={<TagsOutlined/>} title="标签管理">
+              <SubMenu key="sub1" title="标签管理">
                 <Menu.Item key="1">
                   <span>标签表</span>
                   <Link to='/management/tag'/>
                 </Menu.Item>
                 <Menu.Item key="2">
                   <span>标签资源关联表</span>
-                  <Link to='/management/EditorZjh'/>
+                  <Link to='/management/tagResource'/>
                 </Menu.Item>
               </SubMenu>
-              <SubMenu key="sub2" icon={<TableOutlined/>} title="资源管理">
+              <SubMenu key="sub2" title="资源管理">
                 <Menu.Item key="3">
                   <span>文章资源表</span>
                   <Link to='/management/article'/>
@@ -143,7 +171,7 @@ class Management extends Component {
                   <Link to='/management/video'/>
                 </Menu.Item>
                 <Menu.Item key="7">
-                  <span>题目资源表</span>
+                  <span>答题资源表</span>
                   <Link to='/management/question'/>
                 </Menu.Item>
                 <Menu.Item key="8">
@@ -151,14 +179,14 @@ class Management extends Component {
                   <Link to='/management/mapinfo'/>
                 </Menu.Item>
               </SubMenu>
-              <SubMenu key="sub3" icon={<TagsOutlined/>} title="用户管理">
+              <SubMenu key="sub3" title="用户管理">
                 <Menu.Item key="9">
                   <span>用户表</span>
                   <Link to='/management/user'/>
                 </Menu.Item>
                 <Menu.Item key="10">
                   <span>答题记录关联表</span>
-                  <Link to='/management/user_answer'/>
+                  <Link to='/management/userAnswer'/>
                 </Menu.Item>
               </SubMenu>
             </Menu>
@@ -170,49 +198,72 @@ class Management extends Component {
                 <Col span={8} style={{textAlign: 'left'}}>
                   <Cascader
                     placeholder="请选择标签"
+                    changeOnSelect={true}
+                    value={this.state.cascadeValue}
                     onChange={this.onChangeCascade}
                     options={this.state.cascadeOptions}
                     style={{width: '300px'}}/>
                 </Col>
                 <Route path='/management/tag'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>标签表</h1></Col>
-                  <Col span={8} style={{textAlign: 'right'}}><TagModal cascadeOptions={this.state.cascadeOptions}/></Col>
+                  <Col span={8} style={{textAlign: 'right'}}><TagModal ascadeOptions={this.state.cascadeOptions}/></Col>
+                </Route>
+                <Route path='/management/tagResource'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>标签资源关联表</h1></Col>
+                  {/*  <Col span={8} style={{textAlign: 'right'}}><TagResourceModal cascadeValue={this.state.cascadeValue}/></Col>*/}
                 </Route>
                 <Route path='/management/article'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>文章资源表</h1></Col>
-                  <Col span={8} style={{textAlign: 'right'}}><ArticleModal cascadeValue={this.state.cascadeValue}/></Col>
+                  {/*<Col span={8} style={{textAlign: 'right'}}><ArticleModal cascadeValue={this.state.cascadeValue}/></Col>*/}
                 </Route>
-                {/*<Route path='/management/picture'>*/}
-                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>图片资源表</h1></Col>*/}
-                {/*  <Col span={8} style={{textAlign: 'right'}}><PictureModal cascadeValue={this.state.cascadeValue}/></Col>*/}
-                {/*</Route>*/}
-                {/*<Route path='/management/audio'>*/}
-                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>音频资源表</h1></Col>*/}
-                {/*  <Col span={8} style={{textAlign: 'right'}}><AudioModal cascadeValue={this.state.cascadeValue}/></Col>*/}
-                {/*</Route>*/}
-                {/*<Route path='/management/video'>*/}
-                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>视频资源表</h1></Col>*/}
-                {/*  <Col span={8} style={{textAlign: 'right'}}><VideoModal cascadeValue={this.state.cascadeValue}/></Col>*/}
-                {/*</Route>*/}
+                <Route path='/management/picture'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>图片资源表</h1></Col>
+                  {/*  <Col span={8} style={{textAlign: 'right'}}><PictureModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                </Route>
+                <Route path='/management/audio'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>音频资源表</h1></Col>
+                  {/*  <Col span={8} style={{textAlign: 'right'}}><AudioModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                </Route>
+                <Route path='/management/video'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>视频资源表</h1></Col>
+                  {/*  <Col span={8} style={{textAlign: 'right'}}><VideoModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                </Route>
+                <Route path='/management/question'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>答题资源表</h1></Col>
+                  {/*  <Col span={8} style={{textAlign: 'right'}}><QuestionModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                </Route>
                 <Route path='/management/mapinfo'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>地理信息资源表</h1></Col>
-                  <Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}/></Col>
+                  {/*<Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}/></Col>*/}
                 </Route>
               </Row>
             </Header>
 
             <Content>
-              <Route path='/management/tag' exact component={TagTable}/>
-              <Route path='/management/EditorZjh' exact component={TagResourceTable}/>
-              <Route path='/management/article' exact component={ArticleTable}/>
-              <Route path='/management/picture' exact component={PictureTable}/>
-              <Route path='/management/audio' exact component={AudioTable}/>
-              <Route path='/management/video' exact component={VideoTable}/>
-              <Route path='/management/question' exact component={EditorZjh}/>
-              <Route path='/management/mapinfo' exact component={MapinfoTable}/>
-              <Route path='/management/user' exact component={EditorZjh}/>
-              <Route path='/management/user_answer' exact component={EditorZjh}/>
+              <Route path='/management/tag' exact>
+                <TagTable {...this.state} ref={ch => this.tagTable = ch} updateCascade={this.updateCascade}/></Route>
+              <Route path='/management/tagResource' exact>
+                <TagResourceTable {...this.state} ref={ch => this.tagResourceTable = ch}/></Route>
+
+              <Route path='/management/article' exact>
+                <ArticleTable {...this.state} ref={ch => this.articleTable = ch}/></Route>
+              <Route path='/management/picture' exact>
+                <Index {...this.state} ref={ch => this.pictureTable = ch}/></Route>
+              <Route path='/management/audio' exact>
+                <AudioTable {...this.state} ref={ch => this.audioTable = ch}/></Route>
+              <Route path='/management/video' exact>
+                <VideoTable {...this.state} ref={ch => this.videoTable = ch}/></Route>
+              <Route path='/management/question' exact>
+                <Index {...this.state} ref={ch => this.questionTable = ch}/></Route>
+              <Route path='/management/mapinfo' exact>
+                <MapinfoTable {...this.state} ref={ch => this.mapinfoTable = ch}/></Route>
+
+              <Route path='/management/user' exact>
+                <EditorZjh {...this.state} ref={ch => this.userTable = ch}/></Route>
+              <Route path='/management/userAnswer' exact>
+                <EditorZjh {...this.state} ref={ch => this.userAnswerTable = ch}/></Route>
             </Content>
+
             <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
           </Layout>
         </Layout>

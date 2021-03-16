@@ -10,12 +10,14 @@ export default class TagResourceTable extends Component {
           title: 'Tag ID',
           dataIndex: 'tagId',
           key: 'tagId',
+          align: 'center',
           render: text => <a>{text}</a>,
         },
         {
           title: 'Tag Name',
           dataIndex: 'tagName',
           key: 'tagName',
+          align: 'center',
           sorter: (a, b) => a.mapName.length - b.mapName.length,
           sortDirections: ['descend', 'ascend'],
           render: (text, record, index) => (
@@ -33,18 +35,21 @@ export default class TagResourceTable extends Component {
           title: 'Resource ID',
           dataIndex: 'resourceId',
           key: 'resourceId',
+          align: 'center',
           render: text => <a>{text}</a>,
         },
         {
           title: 'Resource Type',
           dataIndex: 'resourceType',
           key: 'resourceType',
+          align: 'center',
           sorter: (a, b) => a.resourceType.length - b.resourceType.length,
           sortDirections: ['descend', 'ascend'],
         },
         {
           title: 'Action',
           key: 'action',
+          align: 'center',
           render: (text, record) => (
             <a>Delete</a>
           ),

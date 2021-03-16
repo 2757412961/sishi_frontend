@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Modal, Form, Input, Button, Checkbox, Cascader, Col} from 'antd';
-import {FileAddOutlined} from '@ant-design/icons';
+import request from "@/utils/request";
 
 class TagModal extends Component {
   constructor(props) {
@@ -36,8 +36,21 @@ class TagModal extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        console.log(this.props.form.getFieldsValue())
+        let formData = this.props.form.getFieldsValue();
+        console.log(formData.tagPath.join('@') + '@' + formData.tagName);
+
+        request({
+          url: '/v1.0/api/tag',
+          method: 'POST',
+          data: {
+            tagName: formData.tagPath.join('@') + '@' + formData.tagName,
+          },
+          autoAdd: false, //不添加v1.0
+        }).then((res) => {
+          console.log(res);
+
+          this.closeModal();
+        })
       }
     });
   };
@@ -59,7 +72,7 @@ class TagModal extends Component {
 
     return (
       <>
-        <Button type="primary" onClick={this.showModal}><FileAddOutlined/>新增标签</Button>
+        <Button type="primary" onClick={this.showModal}>新增标签</Button>
 
         <Modal
           title="新增标签资源"
