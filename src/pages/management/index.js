@@ -6,7 +6,6 @@ import {judgeUrl, getLocalData} from '@/utils/common.js';
 import router from 'umi/router';
 import {connect} from 'dva';
 import classnames from 'classnames';
-import {TagsOutlined, TableOutlined, FileAddOutlined} from '@ant-design/icons';
 
 import TagTable from './components/tag/tagTable';
 import TagModal from './components/tag/tagModal';
@@ -103,7 +102,7 @@ class Management extends Component {
     const {Header, Footer, Sider, Content} = Layout;
 
     return (
-      <BrowserRouter>
+      <BrowserRouter >
         <Layout>
           <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapseSide}
                  style={{overflow: 'auto', height: '100vh'}}
@@ -112,10 +111,10 @@ class Management extends Component {
               onClick={this.handleClick}
               // style={{ width: 256 }}
               defaultSelectedKeys={['2']}
-              defaultOpenKeys={['sub2']}
+              defaultOpenKeys={['sub1']}
               theme='light'
               mode="inline">
-              <SubMenu key="sub1" icon={<TagsOutlined/>} title="标签管理">
+              <SubMenu key="sub1" title="标签管理">
                 <Menu.Item key="1">
                   <span>标签表</span>
                   <Link to='/management/tag'/>
@@ -125,7 +124,7 @@ class Management extends Component {
                   <Link to='/management/EditorZjh'/>
                 </Menu.Item>
               </SubMenu>
-              <SubMenu key="sub2" icon={<TableOutlined/>} title="资源管理">
+              <SubMenu key="sub2" title="资源管理">
                 <Menu.Item key="3">
                   <span>文章资源表</span>
                   <Link to='/management/article'/>
@@ -151,7 +150,7 @@ class Management extends Component {
                   <Link to='/management/mapinfo'/>
                 </Menu.Item>
               </SubMenu>
-              <SubMenu key="sub3" icon={<TagsOutlined/>} title="用户管理">
+              <SubMenu key="sub3" title="用户管理">
                 <Menu.Item key="9">
                   <span>用户表</span>
                   <Link to='/management/user'/>
@@ -176,11 +175,13 @@ class Management extends Component {
                 </Col>
                 <Route path='/management/tag'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>标签表</h1></Col>
-                  <Col span={8} style={{textAlign: 'right'}}><TagModal cascadeOptions={this.state.cascadeOptions}/></Col>
+                  <Col span={8} style={{textAlign: 'right'}}><TagModal
+                    cascadeOptions={this.state.cascadeOptions}/></Col>
                 </Route>
                 <Route path='/management/article'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>文章资源表</h1></Col>
-                  <Col span={8} style={{textAlign: 'right'}}><ArticleModal cascadeValue={this.state.cascadeValue}/></Col>
+                  <Col span={8} style={{textAlign: 'right'}}><ArticleModal
+                    cascadeValue={this.state.cascadeValue}/></Col>
                 </Route>
                 {/*<Route path='/management/picture'>*/}
                 {/*  <Col span={8} style={{textAlign: 'center'}}><h1>图片资源表</h1></Col>*/}
@@ -196,7 +197,8 @@ class Management extends Component {
                 {/*</Route>*/}
                 <Route path='/management/mapinfo'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>地理信息资源表</h1></Col>
-                  <Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}/></Col>
+                  <Col span={8} style={{textAlign: 'right'}}><MapinfoModal
+                    cascadeValue={this.state.cascadeValue}/></Col>
                 </Route>
               </Row>
             </Header>

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Modal, Form, Input, Button} from 'antd';
-import {FileAddOutlined} from '@ant-design/icons';
 
 class MapinfoModal extends Component {
   constructor(props) {
@@ -54,7 +53,7 @@ class MapinfoModal extends Component {
 
     return (
       <>
-        <Button type="primary" onClick={this.showModal}><FileAddOutlined/>新增标签资源</Button>
+        <Button type="primary" onClick={this.showModal}>>新增标签资源</Button>
 
         <Modal
           title="新增标签资源"

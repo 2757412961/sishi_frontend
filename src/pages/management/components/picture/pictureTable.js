@@ -10,12 +10,14 @@ export default class PictureTable extends Component {
           title: 'Picture ID',
           dataIndex: 'pictureId',
           key: 'pictureId',
+          align: 'center',
           render: text => <a>{text}</a>,
         },
         {
           title: 'Picture Name',
           dataIndex: 'pictureName',
           key: 'pictureName',
+          align: 'center',
           sorter: (a, b) => a.pictureName.length - b.pictureName.length,
           sortDirections: ['descend', 'ascend'],
         },
@@ -23,6 +25,7 @@ export default class PictureTable extends Component {
           title: 'Picture Url',
           dataIndex: 'pictureUrl',
           key: 'pictureUrl',
+          align: 'center',
           sorter: (a, b) => a.pictureUrl.length - b.pictureUrl.length,
           sortDirections: ['descend', 'ascend'],
         },
@@ -30,12 +33,14 @@ export default class PictureTable extends Component {
           title: 'Create Time',
           dataIndex: 'createTime',
           key: 'createTime',
+          align: 'center',
           sorter: (a, b) => a.createTime - b.createTime,
           sortDirections: ['descend', 'ascend'],
         },
         {
           title: 'Action',
           key: 'action',
+          align: 'center',
           render: (text, record) => (
             <a>Delete</a>
           ),
