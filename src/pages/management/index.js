@@ -12,8 +12,8 @@ import TagModal from './components/tag/tagModal';
 import TagResourceTable from './components/tagResource/tagResourceTable';
 import ArticleTable from './components/article/articleTable';
 import ArticleModal from './components/article/articleModal';
-import PictureTable from './components/picture/pictureTable';
-import PictureModal from './components/picture/pictureModal';
+// import PictureTable from './components/picture/pictureTable';
+// import PictureModal from './components/picture/pictureModal';
 import AudioTable from './components/audio/audioTable';
 import AudioModal from './components/audio/audioModal';
 import VideoTable from './components/video/videoTable';
@@ -22,6 +22,7 @@ import MapinfoTable from './components/mapinfo/mapinfoTable';
 import MapinfoModal from './components/mapinfo/mapinfoModal';
 import Editor from './components/editor';
 import EditorZjh from './components/editorZjh';
+import request from "@/utils/request";
 
 
 const FormItem = Form.Item;
@@ -34,8 +35,12 @@ class Management extends Component {
       cascadeOptions: [],
       cascadeValue: [],
     };
+
+    this.updateCascade();
   }
 
+
+  // TODO delete
   initState() {
     this.setState({
       cascadeOptions: [
@@ -83,6 +88,17 @@ class Management extends Component {
     });
   }
 
+  updateCascade() {
+    request({
+      url: '/v1.0/api/tag/tree',
+      method: 'GET',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+      this.setState({cascadeOptions: res.list})
+    })
+  }
+
   onCollapseSide = collapsed => {
     this.setState({collapsed});
   };
@@ -92,7 +108,8 @@ class Management extends Component {
   };
 
   handleClick = e => {
-    this.initState();
+    // this.updateTable();
+    // this.initState();
     // console.log('click ', e);
   };
 
@@ -102,10 +119,10 @@ class Management extends Component {
     const {Header, Footer, Sider, Content} = Layout;
 
     return (
-      <BrowserRouter >
+      <BrowserRouter>
         <Layout>
           <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapseSide}
-                 style={{overflow: 'auto', height: '100vh'}}
+                 style={{overflow: 'auto', height: '120vh'}}
                  theme='light'>
             <Menu
               onClick={this.handleClick}
@@ -207,10 +224,10 @@ class Management extends Component {
               <Route path='/management/tag' exact component={TagTable}/>
               <Route path='/management/EditorZjh' exact component={TagResourceTable}/>
               <Route path='/management/article' exact component={ArticleTable}/>
-              <Route path='/management/picture' exact component={PictureTable}/>
+              <Route path='/management/picture' exact component={TagTable}/>
               <Route path='/management/audio' exact component={AudioTable}/>
               <Route path='/management/video' exact component={VideoTable}/>
-              <Route path='/management/question' exact component={EditorZjh}/>
+              <Route path='/management/question' exact component={TagTable}/>
               <Route path='/management/mapinfo' exact component={MapinfoTable}/>
               <Route path='/management/user' exact component={EditorZjh}/>
               <Route path='/management/user_answer' exact component={EditorZjh}/>

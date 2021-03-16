@@ -18,7 +18,7 @@ export default class TagTable extends Component {
           title: 'Tag Name',
           dataIndex: 'tagName',
           key: 'tagName',
-          sorter: (a, b) => a.mapName.length - b.mapName.length,
+          sorter: (a, b) => a.tagName.length - b.tagName.length,
           sortDirections: ['descend', 'ascend'],
           align: 'center',
           render: (text, record, index) => (
@@ -37,7 +37,7 @@ export default class TagTable extends Component {
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
           ),
         },
       ],
@@ -62,10 +62,10 @@ export default class TagTable extends Component {
       ],
     };
 
-    this.initTable();
+    this.updateTable();
   }
 
-  initTable() {
+  updateTable() {
     request({
       url: '/v1.0/api/tags',
       method: 'GET',
@@ -80,25 +80,18 @@ export default class TagTable extends Component {
     // console.log(text)
     console.log(record)
 
-    // request({
-    //   url: '/v1.0/api/tags',
-    //   method: 'GET',
-    //   autoAdd: false, //不添加v1.0
-    // }).then((res) => {
-    //   console.log(res);
-    //   this.setState({dataSource: res.list})
-    // })
+    request({
+      url: '/v1.0/api/tag/' + record.tagName,
+      method: 'DELETE',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      this.updateTable();
+    })
   }
 
   render() {
-
-    // console.log(request({
-    //   url: '/v1.0/api/tags',
-    //   method: 'GET',
-    //   autoAdd: false, //不添加v1.0
-    // }));
-
-
     return (
       <>
         <Table columns={this.state.columns} dataSource={this.state.dataSource}/>
