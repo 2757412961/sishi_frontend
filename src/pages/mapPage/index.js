@@ -123,8 +123,29 @@ class MapPage extends Component {
 
   componentDidMount() {
     const {dispatch}=this.props;
+    dispatch({ type: 'mapPage/getTagTree'});
     dispatch({ type: 'mapPage/getQuestion'});
     console.log('dispatch',dispatch);
+    const {mapPage}=this.props;
+    console.log('mapPage',mapPage);
+    const {tagTree}=mapPage;
+    console.log('tagTree',tagTree);
+    //遍历tagTree;
+    let tree;
+    function forTree(treeList){
+      for (let i in treeList){
+        console.log('i',i);
+        if(treeList[i].children){
+          forTree(treeList[i].children)
+        }else{
+          console.log('else');
+          tree.push(treeList[i])
+        }
+      }
+      return tree;
+    }
+    let treeList=forTree(tagTree);
+    console.log('treeList',treeList);
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
     let localhost = window.location.origin;
     let sources = {
@@ -270,12 +291,39 @@ class MapPage extends Component {
     let rightAnswer=1;
     const radioStyle = {
       display: 'block',
-      height: '30px',
-      lineHeight: '30px',
+      height: '25px',
+      width:'200px',
+      // position:'relative',
+      // top:'3em',
+      //position:'relative',
+      //lineHeight: '30px',
+      // backgroundColor:'red',
     };
-    let allNumber=3;
+    // const {dispatch}=this.props;
+    // dispatch({ type: 'mapPage/getTagTree'});
+    // dispatch({ type: 'mapPage/getQuestion'});
+    // console.log('dispatch',dispatch);
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
+    const {tagTree}=mapPage;
+    console.log('tagTree',tagTree);
+    //遍历tagTree;
+    let tree=[];
+    function forTree(treeList){
+      for (let i in treeList){
+        console.log('i',i);
+        if(treeList[i].children.length>0){
+          forTree(treeList[i].children)
+        }else{
+          console.log('else');
+          tree.push(treeList[i])
+        }
+      }
+      return tree
+    }
+    let treeList=forTree(tagTree);
+    console.log('treeList',treeList);
+    let allNumber=3;
     const {unCheckStyle,checkStyle} = this.state;
     let knowledgeUrl="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
     let knowlegeContent="中国共产党第一次全国代表大会，简称中共一大，' +\n" +
@@ -327,18 +375,18 @@ class MapPage extends Component {
               }
               key="2"
             >
-              <Card title={this.state.questionNumber+"."+question}>
+              <Card   title={this.state.questionNumber+"."+question}>
                 <Radio.Group onChange={this.onChange} value={this.state.value}>
-                  <Radio style={radioStyle} value={0}>
+                  <Radio   style={radioStyle} value={0}>
                     {answer[0]}
                   </Radio>
-                  <Radio style={radioStyle} value={1}>
+                  <Radio   style={radioStyle} value={1}>
                     {answer[1]}
                   </Radio>
-                  <Radio style={radioStyle} value={2}>
+                  <Radio   style={radioStyle} value={2}>
                     {answer[2]}
                   </Radio>
-                  <Radio style={radioStyle} value={3}>
+                  <Radio   style={radioStyle} value={3}>
                     {answer[3]}
                     {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
                   </Radio>
