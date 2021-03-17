@@ -40,7 +40,7 @@ export default class ArticleTable extends Component {
         },
         {
           title: 'Article Publish Time',
-          dataIndex: 'publishTime',
+          dataIndex: 'articlePublishTime',
           key: 'articlePublishTime',
           align: 'center',
           sorter: (a, b) => a.articlePublishTime - b.articlePublishTime,

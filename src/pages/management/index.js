@@ -62,10 +62,10 @@ class Management extends Component {
   }
 
   updateAllTable = () => {
-    if (typeof (this.tagTable) !== "undefined" && this.tagTable.updateTable !== null) {
+    if (typeof (this.tagTable) !== "undefined" && this.tagTable !== null) {
       this.tagTable.updateTable();
     }
-    if (typeof (this.articleTable) !== "undefined" && this.articleTable.updateTable !== null) {
+    if (typeof (this.articleTable) !== "undefined" && this.articleTable !== null) {
       this.articleTable.updateTable();
     }
   }
@@ -175,7 +175,7 @@ class Management extends Component {
                 <Route path='/management/article'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>文章资源表</h1></Col>
                   <Col span={8} style={{textAlign: 'right'}}><ArticleModal cascadeValue={this.state.cascadeValue}
-                  /></Col>
+                                                                           updateAllTable={this.updateAllTable}/></Col>
                 </Route>
                 <Route path='/management/picture'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>图片资源表</h1></Col>
