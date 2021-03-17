@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Button, Breadcrumb} from 'antd';
+import {Modal, Form, Input, Button, Breadcrumb, message} from 'antd';
+import {Link} from "react-router-dom";
+import BraftEditor from "braft-editor";
 
 class ArticleModal extends Component {
   constructor(props) {
@@ -53,7 +55,7 @@ class ArticleModal extends Component {
 
     return (
       <>
-        <Button type="primary" onClick={this.showModal}>新增标签资源</Button>
+        <Button type="primary" onClick={this.showModal}>新增文章资源</Button>
 
         <Modal
           title="新增标签资源"
@@ -83,6 +85,27 @@ class ArticleModal extends Component {
             <Form.Item label="文章作者" name="articleAuthor">
               {getFieldDecorator('articleAuthor', {rules: [{required: true, message: '请输入文章作者!'},]})(
                 <Input placeholder="请输入文章作者"/>
+              )}
+            </Form.Item>
+
+            <Form.Item label="文章正文">
+              {getFieldDecorator('content', {
+                validateTrigger: 'onBlur',
+                rules: [{
+                  required: true,
+                  validator: (_, value, callback) => {
+                    if (value.isEmpty()) {
+                      callback('请输入正文内容')
+                    } else {
+                      callback()
+                    }
+                  }
+                }],
+              })(
+                <BraftEditor
+                  className="my-editor"
+                  placeholder="请输入正文内容"
+                />
               )}
             </Form.Item>
 

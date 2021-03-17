@@ -64,7 +64,7 @@ export default class TagTable extends Component {
   }
 
   updateTable = () => {
-    if (this.props.cascadeValue.length == 0) {
+    if (this.props.cascadeValue.length === 0) {
       request({
         url: '/v1.0/api/tags',
         method: 'GET',
@@ -72,7 +72,12 @@ export default class TagTable extends Component {
       }).then((res) => {
         console.log(res);
 
-        this.setState({dataSource: res.list})
+        if (res.success) {
+          this.setState({dataSource: res.list})
+          message.success('更新标签表格成功');
+        } else {
+          message.error('更新标签表格失败,' + res.message);
+        }
       });
     } else {
       request({
@@ -82,8 +87,13 @@ export default class TagTable extends Component {
       }).then((res) => {
         console.log(res);
 
-        if (res.hasOwnProperty("tagName")) {
-          this.setState({dataSource: [res]})
+        if (res.success) {
+          if (res.hasOwnProperty("tagName")) {
+            this.setState({dataSource: [res]})
+          }
+          message.success('更新标签表格成功');
+        } else {
+          message.error('更新标签表格失败,' + res.message);
         }
       });
     }
@@ -97,8 +107,13 @@ export default class TagTable extends Component {
     }).then((res) => {
       console.log(res);
 
-      this.props.updateCascade();
-      this.updateTable();
+      if (res.success) {
+        this.props.updateCascade();
+        this.updateTable();
+        message.success('删除标签成功');
+      } else {
+        message.error('删除标签失败,' + res.message);
+      }
     });
   }
 

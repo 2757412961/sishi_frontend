@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Layout, Menu, Card, Cascader, Form, Row, Col, Tag, Empty, Button} from 'antd';
+import {Layout, Menu, Card, Cascader, Form, Row, Col, Tag, message, Button} from 'antd';
 import {BrowserRouter, Route, Link} from 'react-router-dom';
 import styles from './index.less';
 import {judgeUrl, getLocalData} from '@/utils/common.js';
@@ -53,14 +53,6 @@ class Management extends Component {
     })
   }
 
-  onCollapseSide = collapsed => {
-    this.setState({collapsed});
-  };
-
-  onChangeCascade = (val) => {
-    this.setState({cascadeValue: val});
-  };
-
   // 典型用法（不要忘记比较 props）：
   componentDidUpdate(prevProps) {
     if (this.state.cascadeValue !== prevProps.cascadeValue) {
@@ -74,6 +66,14 @@ class Management extends Component {
       this.tagTable.updateTable();
     }
   }
+
+  onCollapseSide = collapsed => {
+    this.setState({collapsed});
+  };
+
+  onChangeCascade = (val) => {
+    this.setState({cascadeValue: val});
+  };
 
   handleClick = e => {
     // this.updateTable();

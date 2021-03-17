@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Tag,} from 'antd';
+import {Table, message,} from 'antd';
 
 export default class ArticleTable extends Component {
   constructor(props) {
