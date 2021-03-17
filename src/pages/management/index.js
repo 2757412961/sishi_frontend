@@ -68,6 +68,15 @@ class Management extends Component {
     if (typeof (this.articleTable) !== "undefined" && this.articleTable !== null) {
       this.articleTable.updateTable();
     }
+    if (typeof (this.videoTable) !== "undefined" && this.videoTable !== null) {
+      this.videoTable.updateTable();
+    }
+    if (typeof (this.videoTable) !== "undefined" && this.videoTable !== null) {
+      this.videoTable.updateTable();
+    }
+    if (typeof (this.videoTable) !== "undefined" && this.videoTable !== null) {
+      this.videoTable.updateTable();
+    }
   }
 
   onCollapseSide = collapsed => {
@@ -160,7 +169,7 @@ class Management extends Component {
                     value={this.state.cascadeValue}
                     onChange={this.onChangeCascade}
                     options={this.state.cascadeOptions}
-                    style={{width: '300px'}}/>
+                    style={{width: '360px'}}/>
                 </Col>
                 <Route path='/management/tag'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>标签表</h1></Col>
@@ -187,7 +196,8 @@ class Management extends Component {
                 </Route>
                 <Route path='/management/video'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>视频资源表</h1></Col>
-                  {/*  <Col span={8} style={{textAlign: 'right'}}><VideoModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                  <Col span={8} style={{textAlign: 'right'}}><VideoModal cascadeValue={this.state.cascadeValue}
+                                                                         updateAllTable={this.updateAllTable}/></Col>
                 </Route>
                 <Route path='/management/question'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>答题资源表</h1></Col>
