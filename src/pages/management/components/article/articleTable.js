@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Table, message,} from 'antd';
+import {Table, message, Button,} from 'antd';
+import request from "@/utils/request";
 
 export default class ArticleTable extends Component {
   constructor(props) {
@@ -38,19 +39,19 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Publish Time',
+          title: 'Article Publish Time',
           dataIndex: 'publishTime',
-          key: 'publishTime',
+          key: 'articlePublishTime',
           align: 'center',
-          sorter: (a, b) => a.publishTime - b.publishTime,
+          sorter: (a, b) => a.articlePublishTime - b.articlePublishTime,
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
-          dataIndex: 'createTime',
-          key: 'createTime',
+          title: 'Article Create Time',
+          dataIndex: 'articleCreateTime',
+          key: 'articleCreateTime',
           align: 'center',
-          sorter: (a, b) => a.createTime - b.createTime,
+          sorter: (a, b) => a.articleCreateTime - b.articleCreateTime,
           sortDirections: ['descend', 'ascend'],
         },
         {
@@ -58,7 +59,7 @@ export default class ArticleTable extends Component {
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <a>Delete</a>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
           ),
         },
       ],
@@ -69,35 +70,63 @@ export default class ArticleTable extends Component {
           articleAuthor: 'test',
           articleTitle: 'test',
           articleContent: 'ggg',
-          publishTime: 4894189,
-          createTime: 32,
+          articlePublishTime: 4894189,
+          articleCreateTime: 32,
         },
         {
           articleId: '2',
           articleAuthor: 'test',
           articleTitle: 'qwe',
           articleContent: 'h d',
-          publishTime: 4894189,
-          createTime: 123,
-        },
-        {
-          articleId: '3',
-          articleAuthor: 'test',
-          articleTitle: 'eq w eq s d e qwe',
-          articleContent: 'sss',
-          publishTime: 123,
-          createTime: 3,
-        },
-        {
-          articleId: '4',
-          articleAuthor: 'test',
-          articleTitle: 'das df a sf',
-          articleContent: 'hhhh',
-          publishTime: 4894189,
-          createTime: 123312,
+          articlePublishTime: 4894189,
+          articleCreateTime: 123,
         },
       ],
     };
+
+    this.updateTable();
+  }
+
+  updateTable = () => {
+    let requestUrl = '';
+    if (this.props.cascadeValue.length === 0) {
+      requestUrl = '/v1.0/api/articles';
+    } else {
+      requestUrl = '/v1.0/api/articles/tagName/' + this.props.cascadeValue.join('@');
+    }
+
+    request({
+      url: requestUrl,
+      method: 'GET',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.setState({dataSource: res.articles})
+        message.success('更新文章表格成功');
+      } else {
+        message.error('更新文章表格失败,' + res.message);
+      }
+    });
+  }
+
+  deleteRecord = (text, record) => {
+    request({
+      url: '/v1.0/api/tag/' + record.tagName,
+      method: 'DELETE',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.props.updateCascade();
+        this.updateTable();
+        message.success('删除文章成功');
+      } else {
+        message.error('删除文章失败,' + res.message);
+      }
+    });
   }
 
   render() {

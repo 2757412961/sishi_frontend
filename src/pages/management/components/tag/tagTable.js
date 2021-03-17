@@ -64,39 +64,27 @@ export default class TagTable extends Component {
   }
 
   updateTable = () => {
+    let requestUrl = '';
     if (this.props.cascadeValue.length === 0) {
-      request({
-        url: '/v1.0/api/tags',
-        method: 'GET',
-        autoAdd: false, //不添加v1.0
-      }).then((res) => {
-        console.log(res);
-
-        if (res.success) {
-          this.setState({dataSource: res.list})
-          message.success('更新标签表格成功');
-        } else {
-          message.error('更新标签表格失败,' + res.message);
-        }
-      });
+      requestUrl = '/v1.0/api/tags';
     } else {
-      request({
-        url: '/v1.0/api/tag/' + this.props.cascadeValue.join('@'),
-        method: 'GET',
-        autoAdd: false, //不添加v1.0
-      }).then((res) => {
-        console.log(res);
-
-        if (res.success) {
-          if (res.hasOwnProperty("tagName")) {
-            this.setState({dataSource: [res]})
-          }
-          message.success('更新标签表格成功');
-        } else {
-          message.error('更新标签表格失败,' + res.message);
-        }
-      });
+      requestUrl = '/v1.0/api/tag/' + this.props.cascadeValue.join('@');
     }
+
+    request({
+      url: requestUrl,
+      method: 'GET',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.setState({dataSource: res.list})
+        message.success('更新标签表格成功');
+      } else {
+        message.error('更新标签表格失败,' + res.message);
+      }
+    });
   }
 
   deleteRecord = (text, record) => {

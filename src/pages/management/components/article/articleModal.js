@@ -45,10 +45,10 @@ class ArticleModal extends Component {
   render() {
     const layout = {
       labelCol: {
-        span: 6,
+        span: 2,
       },
       wrapperCol: {
-        span: 18,
+        span: 22,
       },
     };
     const {getFieldDecorator} = this.props.form;
@@ -59,6 +59,7 @@ class ArticleModal extends Component {
 
         <Modal
           title="新增标签资源"
+          width={1200}
           visible={this.state.modalVisible}
           confirmLoading={this.state.confirmLoading}
           onCancel={this.closeModal}
@@ -66,8 +67,8 @@ class ArticleModal extends Component {
             <Button key='cancel' htmlType="button" onClick={this.closeModal}>取消</Button>,
             <Button key='reset' type="danger" htmlType="button" onClick={this.resetModal}>重置</Button>,
             <Button key='submit' type="primary" htmlType="submit" onClick={this.handleSubmit}>提交</Button>,
-          ]}
-          destroyOnClose={true}>
+          ]}>
+          {/*destroyOnClose={true}*/}
 
           <Form name="basic" {...layout}>
             <Form.Item label="标签名称" name="tagName">

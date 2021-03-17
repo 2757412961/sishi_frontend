@@ -65,6 +65,9 @@ class Management extends Component {
     if (typeof (this.tagTable) !== "undefined" && this.tagTable.updateTable !== null) {
       this.tagTable.updateTable();
     }
+    if (typeof (this.articleTable) !== "undefined" && this.articleTable.updateTable !== null) {
+      this.articleTable.updateTable();
+    }
   }
 
   onCollapseSide = collapsed => {
@@ -201,27 +204,37 @@ class Management extends Component {
             <Content>
               <Card>
                 <Route path='/management/tag' exact>
-                  <TagTable {...this.state} ref={ch => this.tagTable = ch} updateCascade={this.updateCascade}/></Route>
+                  <TagTable {...this.state} ref={ch => this.tagTable = ch} updateCascade={this.updateCascade}/>
+                </Route>
                 {/*<Route path='/management/tagResource' exact>*/}
-                {/*  <TagResourceTable {...this.state} ref={ch => this.tagResourceTable = ch}/></Route>*/}
+                {/*  <TagResourceTable {...this.state} ref={ch => this.tagResourceTable = ch}/>*/}
+                {/*</Route>*/}
 
                 <Route path='/management/article' exact>
-                  <ArticleTable {...this.state} ref={ch => this.articleTable = ch}/></Route>
+                  <ArticleTable {...this.state} ref={ch => this.articleTable = ch} updateCascade={this.updateCascade}/>
+                </Route>
                 <Route path='/management/picture' exact>
-                  <Index {...this.state} ref={ch => this.pictureTable = ch}/></Route>
+                  <Index {...this.state} ref={ch => this.pictureTable = ch} updateCascade={this.updateCascade}/>
+                </Route>
                 <Route path='/management/audio' exact>
-                  <AudioTable {...this.state} ref={ch => this.audioTable = ch}/></Route>
+                  <AudioTable {...this.state} ref={ch => this.audioTable = ch} updateCascade={this.updateCascade}/>
+                </Route>
                 <Route path='/management/video' exact>
-                  <VideoTable {...this.state} ref={ch => this.videoTable = ch}/></Route>
+                  <VideoTable {...this.state} ref={ch => this.videoTable = ch} updateCascade={this.updateCascade}/>
+                </Route>
                 <Route path='/management/question' exact>
-                  <Index {...this.state} ref={ch => this.questionTable = ch}/></Route>
+                  <Index {...this.state} ref={ch => this.questionTable = ch} updateCascade={this.updateCascade}/>
+                </Route>
                 <Route path='/management/mapinfo' exact>
-                  <MapinfoTable {...this.state} ref={ch => this.mapinfoTable = ch}/></Route>
+                  <MapinfoTable {...this.state} ref={ch => this.mapinfoTable = ch} updateCascade={this.updateCascade}/>
+                </Route>
 
                 <Route path='/management/user' exact>
-                  <EditorZjh {...this.state} ref={ch => this.userTable = ch}/></Route>
+                  <EditorZjh {...this.state} ref={ch => this.userTable = ch} updateCascade={this.updateCascade}/>
+                </Route>
                 <Route path='/management/userAnswer' exact>
-                  <EditorZjh {...this.state} ref={ch => this.userAnswerTable = ch}/></Route>
+                  <EditorZjh {...this.state} ref={ch => this.userAnswerTable = ch} updateCascade={this.updateCascade}/>
+                </Route>
               </Card>
             </Content>
 
