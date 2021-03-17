@@ -1,16 +1,15 @@
 import {setAuthority} from '@/utils/authority';
 import {reloadAuthorized} from '@/utils/Authorized';
-import {getQuestionsByTag,getAudioByTag,getVideoByTag,getArticlesByTag,getTagTree} from '@/services/question';
-
+import {getQuestionsByTag,getAudioByTag,getVideoByTag,
+  getArticlesByTag,getTagTree,getAllQuestion,updateQuestionStatus} from '@/services/question';
+import { getUserData } from '@/services/service';
 export default {
   namespace: 'mapPage',
 
   state: {
     status: '',
     modalVisble:false,
-    questionContext:'',
-    option:[],
-    answer:'',
+    question:[],
     knowledgeContent:'',
     knowledgeUrl:'',
     video:'',
@@ -31,9 +30,7 @@ export default {
     },
     //设置问题
     setQuestion(state,{payload}){
-      return{...state,questionContext:payload.questionContext,
-        option:payload.option,
-        answer:payload.answer,}
+      return{...state,question:payload}
     },
     //设置知识卡片
     setKnowledge(state,{payload}){
@@ -76,7 +73,16 @@ export default {
 
     //获取问题及答案
     * getQuestion({payload}, {call, put}) {
-      const response = yield call(getQuestionsByTag, "党史新学@中共一大");
+      //const response = yield call(getQuestionsByTag, "党史新学@中共一大");
+      const response = yield call(getAllQuestion);
+      console.log('response',response);
+      if (response.success) {
+        yield put({
+          type: 'setQuestion',
+          payload: response.list,
+        });
+      }
+
 
     },
     //获取知识卡片
@@ -94,6 +100,13 @@ export default {
     * getAudioByTag({payload}, {call, put}) {
       const response = yield call(getAudioByTag, "党史新学@中共一大");
     },
+
+    //更新用户积分
+    *updateUserGrades({payload}, {call, put}){
+      const response1=yield call(getUserData,payload);
+      console.log(response1);
+      const response = yield call(updateQuestionStatus, payload);
+    }
   },
 
 
