@@ -12,6 +12,10 @@ class TagModal extends Component {
     };
   }
 
+  setModalVisible = (val) => {
+    this.setState({modalVisible: val});
+  };
+
   showModal = () => {
     this.setModalVisible(true);
   };
@@ -23,14 +27,6 @@ class TagModal extends Component {
   resetModal = () => {
     this.props.form.resetFields();
   }
-
-  setModalVisible = (val) => {
-    this.setState({modalVisible: val});
-  };
-
-  setConfirmLoading = (val) => {
-    this.setState({confirmLoading: val});
-  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -49,6 +45,8 @@ class TagModal extends Component {
         }).then((res) => {
           console.log(res);
 
+          this.props.updateCascade();
+          this.props.updateAllTable();
           this.closeModal();
         })
       }

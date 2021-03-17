@@ -60,7 +60,7 @@ export default class TagTable extends Component {
       ],
     };
 
-    // this.updateTable();
+    this.updateTable();
   }
 
   updateTable = () => {
