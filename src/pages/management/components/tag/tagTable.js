@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import { Table, Tag } from 'antd';
+import React, {Component} from 'react';
+import {Table, Tag, Button} from 'antd';
+import request from "@/utils/request";
 
 export default class TagTable extends Component {
   constructor(props) {
@@ -10,21 +11,21 @@ export default class TagTable extends Component {
           title: 'Tag ID',
           dataIndex: 'tagId',
           key: 'tagId',
+          align: 'center',
           render: text => <a>{text}</a>,
         },
         {
           title: 'Tag Name',
           dataIndex: 'tagName',
           key: 'tagName',
-          sorter: (a, b) => a.mapName.length - b.mapName.length,
-          sortDirections: [ 'descend', 'ascend' ],
+          sorter: (a, b) => a.tagName.length - b.tagName.length,
+          sortDirections: ['descend', 'ascend'],
+          align: 'center',
           render: (text, record, index) => (
             <>
               {record.tagName.split('@')
                 .map(tag => {
-                  return (
-                    <Tag color="green"> {tag.toUpperCase()}</Tag>
-                  );
+                  return (<Tag color="green">{tag}</Tag>);
                 })}
             </>
           ),
@@ -32,8 +33,9 @@ export default class TagTable extends Component {
         {
           title: 'Action',
           key: 'action',
+          align: 'center',
           render: (text, record) => (
-            <a>Delete</a>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
           ),
         },
       ],
@@ -49,14 +51,55 @@ export default class TagTable extends Component {
         },
         {
           tagId: '3',
-          tagName: '改革开放史@建立经济特区@kang',
+          tagName: '改革开放史@建立经济特区',
         },
         {
           tagId: '4',
-          tagName: '社会主义发展史@中国特色社会主义@ad@test',
+          tagName: '社会主义发展史@中国特色社会主义',
         },
       ],
     };
+
+    this.updateTable();
+  }
+
+  updateTable = () => {
+    if (this.props.cascadeValue.length == 0) {
+      request({
+        url: '/v1.0/api/tags',
+        method: 'GET',
+        autoAdd: false, //不添加v1.0
+      }).then((res) => {
+        console.log(res);
+
+        this.setState({dataSource: res.list})
+      });
+    } else {
+      request({
+        url: '/v1.0/api/tag/' + this.props.cascadeValue.join('@'),
+        method: 'GET',
+        autoAdd: false, //不添加v1.0
+      }).then((res) => {
+        console.log(res);
+
+        if (res.hasOwnProperty("tagName")) {
+          this.setState({dataSource: [res]})
+        }
+      });
+    }
+  }
+
+  deleteRecord = (text, record) => {
+    request({
+      url: '/v1.0/api/tag/' + record.tagName,
+      method: 'DELETE',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      this.props.updateCascade();
+      // this.updateTable();
+    });
   }
 
   render() {
