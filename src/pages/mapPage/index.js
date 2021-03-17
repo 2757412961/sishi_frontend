@@ -126,7 +126,9 @@ class MapPage extends Component {
     const {dispatch}=this.props;
     dispatch({ type: 'mapPage/getTagTree'});
     dispatch({ type: 'mapPage/getQuestion'});
-    dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
+    // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
+    dispatch({ type: 'mapPage/getVideoByTag',payload:''});
+    dispatch({ type: 'mapPage/getAudioByTag',payload:''});
     console.log('dispatch',dispatch);
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);

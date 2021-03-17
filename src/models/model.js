@@ -1,7 +1,9 @@
 import {setAuthority} from '@/utils/authority';
 import {reloadAuthorized} from '@/utils/Authorized';
-import {getQuestionsByTag,getAudioByTag,getVideoByTag,
-  getArticlesByTag,getTagTree,getAllQuestion,updateQuestionStatus} from '@/services/question';
+import {
+  getQuestionsByTag, getAudioByTag, getVideoByTag,
+  getArticlesByTag, getTagTree, getAllQuestion, updateQuestionStatus, getAudioList, getVideoList,
+} from '@/services/question';
 import { getUserData } from '@/services/service';
 export default {
   namespace: 'mapPage',
@@ -88,17 +90,22 @@ export default {
     //获取知识卡片
     * getKnowLedge({payload}, {call, put}) {
       const response = yield call(getArticlesByTag, "党史新学@中共一大");
+      console.log('response',response);
 
     },
 
     //获取视频通过tagName
     * getVideoByTag({payload}, {call, put}) {
-      const response = yield call(getVideoByTag, "党史新学@中共一大");
+      //const response = yield call(getVideoByTag, "党史新学@中共一大");
+      const response = yield call(getVideoList);
+      console.log('response',response);
     },
 
     //获取音频通过tagName
     * getAudioByTag({payload}, {call, put}) {
-      const response = yield call(getAudioByTag, "党史新学@中共一大");
+      //const response = yield call(getAudioByTag, "党史新学@中共一大");
+      const response = yield call(getAudioList);
+      console.log('response',response);
     },
 
     //更新用户积分
