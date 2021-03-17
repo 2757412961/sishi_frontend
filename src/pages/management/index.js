@@ -94,8 +94,8 @@ class Management extends Component {
             <Menu
               onClick={this.handleClick}
               // style={{ width: 256 }}
-              defaultSelectedKeys={['2']}
-              defaultOpenKeys={['sub1']}
+              defaultSelectedKeys={['1']}
+              defaultOpenKeys={['sub2']}
               theme='light'
               mode="inline">
               <SubMenu key="sub1" title="标签管理">
@@ -103,10 +103,10 @@ class Management extends Component {
                   <span>标签表</span>
                   <Link to='/management/tag'/>
                 </Menu.Item>
-                <Menu.Item key="2">
-                  <span>标签资源关联表</span>
-                  <Link to='/management/tagResource'/>
-                </Menu.Item>
+                {/*<Menu.Item key="2">*/}
+                {/*  <span>标签资源关联表</span>*/}
+                {/*  <Link to='/management/tagResource'/>*/}
+                {/*</Menu.Item>*/}
               </SubMenu>
               <SubMenu key="sub2" title="资源管理">
                 <Menu.Item key="3">
@@ -165,10 +165,10 @@ class Management extends Component {
                                                                        updateCascade={this.updateCascade}
                                                                        updateAllTable={this.updateAllTable}/></Col>
                 </Route>
-                <Route path='/management/tagResource'>
-                  <Col span={8} style={{textAlign: 'center'}}><h1>标签资源关联表</h1></Col>
-                  {/*  <Col span={8} style={{textAlign: 'right'}}><TagResourceModal cascadeValue={this.state.cascadeValue}/></Col>*/}
-                </Route>
+                {/*<Route path='/management/tagResource'>*/}
+                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>标签资源关联表</h1></Col>*/}
+                {/*  <Col span={8} style={{textAlign: 'right'}}><TagResourceModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                {/*</Route>*/}
                 <Route path='/management/article'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>文章资源表</h1></Col>
                   <Col span={8} style={{textAlign: 'right'}}><ArticleModal cascadeValue={this.state.cascadeValue}
@@ -202,8 +202,8 @@ class Management extends Component {
               <Card>
                 <Route path='/management/tag' exact>
                   <TagTable {...this.state} ref={ch => this.tagTable = ch} updateCascade={this.updateCascade}/></Route>
-                <Route path='/management/tagResource' exact>
-                  <TagResourceTable {...this.state} ref={ch => this.tagResourceTable = ch}/></Route>
+                {/*<Route path='/management/tagResource' exact>*/}
+                {/*  <TagResourceTable {...this.state} ref={ch => this.tagResourceTable = ch}/></Route>*/}
 
                 <Route path='/management/article' exact>
                   <ArticleTable {...this.state} ref={ch => this.articleTable = ch}/></Route>

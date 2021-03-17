@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Tag, Button} from 'antd';
+import {Table, Tag, Button, message} from 'antd';
 import request from "@/utils/request";
 
 export default class TagTable extends Component {
@@ -98,7 +98,7 @@ export default class TagTable extends Component {
       console.log(res);
 
       this.props.updateCascade();
-      // this.updateTable();
+      this.updateTable();
     });
   }
 
