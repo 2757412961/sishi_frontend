@@ -12,6 +12,7 @@ import MapPageMap from './MapPageMap';
 import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
+import {motion} from 'framer-motion';
 // // @import '~video-react/styles/scss/video-react';
 // import {Player} from 'video-react'
 import redflag from '@/assets/redflag.png';
@@ -34,7 +35,8 @@ const Authorized = RenderAuthorized(getAuthority());
 const { Countdown } = Statistic;
 const { Content, Sider } = Layout;
 const noMatch=<Redirect to={`/login?redirect=${window.location.href}`} />;
-
+const variants={open: { opacity: 1, x: 0 },
+  closed: { opacity: 0, x: "-100%" },}
 const list = [
   {
     id:'jiaxing',
@@ -127,8 +129,9 @@ class MapPage extends Component {
     dispatch({ type: 'mapPage/getTagTree'});
     dispatch({ type: 'mapPage/getQuestion'});
     // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
-    dispatch({ type: 'mapPage/getVideoByTag',payload:''});
-    dispatch({ type: 'mapPage/getAudioByTag',payload:''});
+    debugger
+    dispatch({ type: 'mapPage/getVideoByTag'});
+    dispatch({ type: 'mapPage/getAudioByTag'});
     console.log('dispatch',dispatch);
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
@@ -293,16 +296,6 @@ class MapPage extends Component {
     let question1='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
     let answer=['A.大连','B.旅顺','C.平壤','D.花园口'];
     let rightAnswer=1;
-    const radioStyle = {
-      display: 'block',
-      height: '25px',
-      width:'200px',
-      // position:'relative',
-      // top:'3em',
-      //position:'relative',
-      //lineHeight: '30px',
-      // backgroundColor:'red',
-    };
     // const {dispatch}=this.props;
     // dispatch({ type: 'mapPage/getTagTree'});
     // dispatch({ type: 'mapPage/getQuestion'});
@@ -365,29 +358,30 @@ class MapPage extends Component {
                 <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                   <Row>
                     <Col span={12}>
-                  <Checkbox   style={radioStyle} value={'A'}>
+                  <Checkbox    value={'A'}>
                     {'A  '+(question[recent]?question[recent].optionA:'')}
                   </Checkbox>
                     </Col>
                     <Col span={12}>
-                  <Checkbox   style={radioStyle} value={'B'}>
+                  <Checkbox    value={'B'}>
                     {'B  '+(question[recent]?question[recent].optionB:'')}
                   </Checkbox>
                     </Col>
                     {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                  <Checkbox   style={radioStyle} value={'C'}>
+                  <Checkbox    value={'C'}>
                     {'C  '+(question[recent]?question[recent].optionC:'')}
                   </Checkbox>
                     </Col>:""}
                     {question[recent]&&question[recent].hasOwnProperty('optionD')?
                     <Col span={12}>
-                  <Checkbox   style={radioStyle} value={'D'}>
+                  <Checkbox    value={'D'}>
                     {'D  '+(question[recent]?question[recent].optionD:'')}
                     {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
                   </Checkbox>
                     </Col>:''}
                   </Row>
                 </Checkbox.Group>
+                  <img src=""/>
                 </div>
               </div>
               <Button  key="submit"
@@ -408,7 +402,14 @@ class MapPage extends Component {
                 (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
               <Row gutter={16}>
                 <Col span={8}>
-                  <Button  key="back" onClick={()=>{this.setState({questionNumber: this.state.questionNumber-1})}}>
+                  <Button  key="back" onClick={()=>{
+                    if(this.state.questionNumber>0) {
+                      this.setState({questionNumber: this.state.questionNumber-1});
+                    }else{
+                      return
+                    }
+                  }
+                  }>
                     上一题
                   </Button>
                 </Col>
@@ -443,7 +444,9 @@ class MapPage extends Component {
                 </Col>
               </Row>
               {this.state.questionNumber==allNumber&&this.state.answer?
-                (<h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1>):''}
+                (<div>
+                  <div className={styles.try}></div>
+                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
 
             </div>
             <div className={styles.bottom}></div>
@@ -496,23 +499,23 @@ class MapPage extends Component {
                 <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                   <Row>
                     <Col span={12}>
-                      <Checkbox   style={radioStyle} value={'A'}>
+                      <Checkbox    value={'A'}>
                         {'A  '+(question[recent]?question[recent].optionA:'')}
                       </Checkbox>
                     </Col>
                     <Col span={12}>
-                      <Checkbox   style={radioStyle} value={'B'}>
+                      <Checkbox    value={'B'}>
                         {'B  '+(question[recent]?question[recent].optionB:'')}
                       </Checkbox>
                     </Col>
                     {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                      <Checkbox   style={radioStyle} value={'C'}>
+                      <Checkbox    value={'C'}>
                         {'C  '+(question[recent]?question[recent].optionC:'')}
                       </Checkbox>
                     </Col>:""}
                     {question[recent]&&question[recent].hasOwnProperty('optionD')?
                       <Col span={12}>
-                        <Checkbox   style={radioStyle} value={'D'}>
+                        <Checkbox    value={'D'}>
                           {'D  '+(question[recent]?question[recent].optionD:'')}
                           {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
                         </Checkbox>
@@ -584,7 +587,9 @@ class MapPage extends Component {
                 </Col>
               </Row>
               {this.state.questionNumber==allNumber&&this.state.answer?
-                (<h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1>):''}
+                (<div>
+                  <div className={styles.try}></div>
+                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
             </TabPane>
             <TabPane
               tab={
@@ -705,6 +710,7 @@ class MapPage extends Component {
               返回地图首页
             </div>
           </div>
+          {/*<div className={styles.out}></div>*/}
         </div>
       </Content>
     </Layout>
