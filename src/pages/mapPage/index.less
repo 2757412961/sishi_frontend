@@ -137,140 +137,68 @@ h2 {
   top:2em;
 }
 .top{
-  height: 60px;
+  height: 90px;
+  width: 960px;
   background-Image:url("../../assets/headerQuestion.PNG");
 
 }
 .bottom{
-  height: 30px;
+  height: 50px;
+  width: 960px;
   background-Image:url("../../assets/bottomAnswer.PNG");
+}
+.try{
+  height: 60px;
+  width: 60px;
+  position: relative;
+  right: -600px;
+  background-Image:url("../../assets/1.gif");
 }
 :global {
   .ant-btn ant-btn-primary{
     background:#e2e4e5;
   }
-  //.ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td,
-  //.ant-table-small
-  //> .ant-table-content
-  //> .ant-table-scroll
-  //> .ant-table-header
-  //> table
-  //> .ant-table-thead
-  //> tr
-  //> th,
-  //.ant-table-small
-  //> .ant-table-content
-  //> .ant-table-scroll
-  //> .ant-table-body
-  //> table
-  //> .ant-table-tbody
-  //> tr
-  //> td {
-  //  padding: 6px 8px;
-  //}
-  //.ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th,
-  //.ant-table-small
-  //> .ant-table-content
-  //> .ant-table-scroll
-  //> .ant-table-header
-  //> table
-  //> .ant-table-thead
-  //> tr
-  //> th {
-  //  background: #e2e4e5;
-  //  border-right: 1px solid #fff;
-  //}
-  //.ant-table-small
-  //> .ant-table-content
-  //> .ant-table-body
-  //> table
-  //> .ant-table-thead
-  //> tr
-  //> th:last-of-type,
-  //.ant-table-small
-  //> .ant-table-content
-  //> .ant-table-scroll
-  //> .ant-table-header
-  //> table
-  //> .ant-table-thead
-  //> tr
-  //> th:last-of-type {
-  //  border-right: 0;
-  //}
-  //.ant-table-small > .ant-table-content > .ant-table-body {
-  //  margin: 0;
-  //}
-  //.ant-table-small table tbady td {
-  //  font-size: 13px;
-  //}
-  //.ant-table-small table tbady td {
-  //  font-size: 13px;
-  //}
-  //.ant-table-small
-  //> .ant-table-content
-  //> .ant-table-body
-  //> table
-  //> .ant-table-tbody
-  //> tr
-  //> td:last-of-type
-  //i:hover {
-  //  color: #0aaef2;
-  //}
-  //.input_mark:not([disabled]) {
-  //  border-color: #ff4c4c;
-  //}
-  //.input_mark:not([disabled]):focus {
-  //  box-shadow: 0 0 0 2px rgba(255, 76, 76, 0.2);
-  //}
-  //.ant-breadcrumb {
-  //  display: flex;
-  //}
-  //.ant-breadcrumb .ant-breadcrumb-link {
-  //  font-size: 14px;
-  //  color: #666;
-  //}
-  //.ant-breadcrumb > span {
-  //  display: flex;
-  //}
-  //.ant-breadcrumb a {
-  //  max-width: 170px;
-  //  overflow: hidden;
-  //  white-space: nowrap;
-  //  text-overflow: ellipsis;
-  //  color: #666;
-  //  display: inline-block;
-  //}
-  //.ant-breadcrumb .ant-breadcrumb-separator {
-  //  color: #666;
-  //}
-  //.ant-breadcrumb .breadcrumb_active {
-  //  color: #333;
-  //  font-weight: 500;
-  //}
-  //.ant-upload:focus {
-  //  outline: none;
-  //}
-  //.ant-input-lg {
-  //  font-size: 13px;
-  //}
-  //.btn_mark:not([disabled]) {
-  //  color: #0aaef2;
-  //  border-color: #0aaef2;
-  //}
-  //.btn_cancel:not([disabled]) {
-  //  color: #999;
-  //}
-  //.iconfont {
-  //  font-family: 'iconfont' !important;
-  //  font-size: 16px;
-  //  font-style: normal;
-  //  -webkit-font-smoothing: antialiased;
-  //  -webkit-text-stroke-width: 0.2px;
-  //  -moz-osx-font-smoothing: grayscale;
-  //}
+  .ant-row{
+    height: 100px;
+  }
+  .ant-col-12{
+    width: 400px;
+    height: 50px;
+  }
+  label.ant-checkbox-wrapper{
+    width: 300px;
+  }
 }
+.exampleContainer{
+  background: white;
+  border-radius: 30px;
+  width: 50px;
+  height: 50px;
+}
+//动画
+@keyframes picture{
+  0%   { background-Image:url("../../assets/1.gif");}
+  25%  { background-Image:url("../../assets/yay.jpg");}
+  50%  {background-Image:url("../../assets/redflag.png");}
+  100% {background-Image:url("../../assets/redflag.png");}
 
-
+}
+.out{
+  width: 50vw;
+  height: 30vh;
+  position: absolute;
+  flex: 2;
+  left: 10%;
+  top: 40%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation-name:picture;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
  //121.23 31.03
 
 
