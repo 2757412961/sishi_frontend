@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Modal, Form, Input, Button, Breadcrumb} from 'antd';
-import {FileAddOutlined} from '@ant-design/icons';
 
 class MapinfoModal extends Component {
   constructor(props) {
@@ -54,7 +53,7 @@ class MapinfoModal extends Component {
 
     return (
       <>
-        <Button type="primary" onClick={this.showModal}><FileAddOutlined/>新增标签资源</Button>
+        <Button type="primary" onClick={this.showModal}>新增地理资源</Button>
 
         <Modal
           title="新增标签资源"
@@ -81,9 +80,15 @@ class MapinfoModal extends Component {
               )}
             </Form.Item>
 
-            <Form.Item label="地理信息(json)" name="mapJson">
-              {getFieldDecorator('mapJson', {rules: [{required: true, message: '请输入地理信息(json)!'},]})(
-                <Input placeholder="请输入地理信息(json)"/>
+            <Form.Item label="地理信息(经度)" name="mapLon">
+              {getFieldDecorator('mapLon', {rules: [{required: true, message: '请输入地理信息(经度)!'},]})(
+                <Input placeholder="请输入地理信息(经度)"/>
+              )}
+            </Form.Item>
+
+            <Form.Item label="地理信息(纬度)" name="mapLat">
+              {getFieldDecorator('mapLat', {rules: [{required: true, message: '请输入地理信息(纬度)!'},]})(
+                <Input placeholder="请输入地理信息(纬度)"/>
               )}
             </Form.Item>
 

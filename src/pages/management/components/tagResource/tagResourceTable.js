@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Table, Tag} from 'antd';
+import request from "@/utils/request";
 
 export default class TagResourceTable extends Component {
   constructor(props) {
@@ -10,20 +11,22 @@ export default class TagResourceTable extends Component {
           title: 'Tag ID',
           dataIndex: 'tagId',
           key: 'tagId',
+          align: 'center',
           render: text => <a>{text}</a>,
         },
         {
           title: 'Tag Name',
           dataIndex: 'tagName',
           key: 'tagName',
-          sorter: (a, b) => a.mapName.length - b.mapName.length,
+          align: 'center',
+          sorter: (a, b) => a.tagName.length - b.tagName.length,
           sortDirections: ['descend', 'ascend'],
           render: (text, record, index) => (
             <>
               {record.tagName.split('@')
                 .map(tag => {
                   return (
-                    <Tag color="green"> {tag.toUpperCase()}</Tag>
+                    <Tag color="green"> {tag}</Tag>
                   );
                 })}
             </>
@@ -33,21 +36,16 @@ export default class TagResourceTable extends Component {
           title: 'Resource ID',
           dataIndex: 'resourceId',
           key: 'resourceId',
+          align: 'center',
           render: text => <a>{text}</a>,
         },
         {
           title: 'Resource Type',
           dataIndex: 'resourceType',
           key: 'resourceType',
+          align: 'center',
           sorter: (a, b) => a.resourceType.length - b.resourceType.length,
           sortDirections: ['descend', 'ascend'],
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          render: (text, record) => (
-            <a>Delete</a>
-          ),
         },
       ],
 
@@ -78,6 +76,34 @@ export default class TagResourceTable extends Component {
         },
       ],
     };
+
+    this.updateTable();
+  }
+
+  updateTable = () => {
+    // if (this.props.cascadeValue.length == 0) {
+    //   request({
+    //     url: '/v1.0/api/tags',
+    //     method: 'GET',
+    //     autoAdd: false, //不添加v1.0
+    //   }).then((res) => {
+    //     console.log(res);
+    //
+    //     this.setState({dataSource: res.list})
+    //   });
+    // } else {
+    //   request({
+    //     url: '/v1.0/api/tag/' + this.props.cascadeValue.join('@'),
+    //     method: 'GET',
+    //     autoAdd: false, //不添加v1.0
+    //   }).then((res) => {
+    //     console.log(res);
+    //
+    //     if (res.hasOwnProperty("tagName")) {
+    //       this.setState({dataSource: [res]})
+    //     }
+    //   });
+    // }
   }
 
   render() {
