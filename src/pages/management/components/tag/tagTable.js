@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, Tag, Button} from 'antd';
+import {Table, Tag, Button, message} from 'antd';
 import request from "@/utils/request";
 
 export default class TagTable extends Component {
@@ -64,29 +64,27 @@ export default class TagTable extends Component {
   }
 
   updateTable = () => {
-    if (this.props.cascadeValue.length == 0) {
-      request({
-        url: '/v1.0/api/tags',
-        method: 'GET',
-        autoAdd: false, //不添加v1.0
-      }).then((res) => {
-        console.log(res);
-
-        this.setState({dataSource: res.list})
-      });
+    let requestUrl = '';
+    if (this.props.cascadeValue.length === 0) {
+      requestUrl = '/v1.0/api/tags';
     } else {
-      request({
-        url: '/v1.0/api/tag/' + this.props.cascadeValue.join('@'),
-        method: 'GET',
-        autoAdd: false, //不添加v1.0
-      }).then((res) => {
-        console.log(res);
-
-        if (res.hasOwnProperty("tagName")) {
-          this.setState({dataSource: [res]})
-        }
-      });
+      requestUrl = '/v1.0/api/tag/' + this.props.cascadeValue.join('@');
     }
+
+    request({
+      url: requestUrl,
+      method: 'GET',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.setState({dataSource: res.list})
+        message.success('更新标签表格成功');
+      } else {
+        message.error('更新标签表格失败,' + res.message);
+      }
+    });
   }
 
   deleteRecord = (text, record) => {
@@ -97,8 +95,13 @@ export default class TagTable extends Component {
     }).then((res) => {
       console.log(res);
 
-      this.props.updateCascade();
-      // this.updateTable();
+      if (res.success) {
+        this.props.updateCascade();
+        this.updateTable();
+        message.success('删除标签成功');
+      } else {
+        message.error('删除标签失败,' + res.message);
+      }
     });
   }
 

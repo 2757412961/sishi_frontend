@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Button, Checkbox, Cascader, Col} from 'antd';
+import {Modal, Form, Input, Button, Checkbox, Cascader, Col, message} from 'antd';
 import request from "@/utils/request";
 
 class TagModal extends Component {
@@ -45,9 +45,14 @@ class TagModal extends Component {
         }).then((res) => {
           console.log(res);
 
-          this.props.updateCascade();
-          this.props.updateAllTable();
-          this.closeModal();
+          if (res.success) {
+            this.props.updateCascade();
+            this.props.updateAllTable();
+            this.closeModal();
+            message.success('添加标签成功');
+          } else {
+            message.error('添加标签失败,' + res.message);
+          }
         })
       }
     });

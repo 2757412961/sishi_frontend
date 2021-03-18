@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel } from 'antd';
+import { Button, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel,Checkbox } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -115,6 +115,7 @@ class MapPage extends Component {
       },
       knowledgeUrl:list[0].cardImg,
       knowledgeContent:list[0].cardContent,
+      startQuestion:false,
     };
 
   }
@@ -123,8 +124,32 @@ class MapPage extends Component {
 
   componentDidMount() {
     const {dispatch}=this.props;
+    dispatch({ type: 'mapPage/getTagTree'});
     dispatch({ type: 'mapPage/getQuestion'});
+    // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
+    dispatch({ type: 'mapPage/getVideoByTag',payload:''});
+    dispatch({ type: 'mapPage/getAudioByTag',payload:''});
     console.log('dispatch',dispatch);
+    const {mapPage}=this.props;
+    console.log('mapPage',mapPage);
+    const {tagTree}=mapPage;
+    console.log('tagTree',tagTree);
+    //遍历tagTree;
+    let tree;
+    function forTree(treeList){
+      for (let i in treeList){
+        console.log('i',i);
+        if(treeList[i].children){
+          forTree(treeList[i].children)
+        }else{
+          console.log('else');
+          tree.push(treeList[i])
+        }
+      }
+      return tree;
+    }
+    let treeList=forTree(tagTree);
+    console.log('treeList',treeList);
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
     let localhost = window.location.origin;
     let sources = {
@@ -258,33 +283,172 @@ class MapPage extends Component {
     }
   }
   onChange = e => {
-    console.log('radio checked', e.target.value);
+    console.log('radio checked', e);
     this.setState({
-      value: e.target.value,
+      value: e,
     });
   };
 
   render(){
-    let question='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
+    let question1='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
     let answer=['A.大连','B.旅顺','C.平壤','D.花园口'];
     let rightAnswer=1;
     const radioStyle = {
       display: 'block',
-      height: '30px',
-      lineHeight: '30px',
+      height: '25px',
+      width:'200px',
+      // position:'relative',
+      // top:'3em',
+      //position:'relative',
+      //lineHeight: '30px',
+      // backgroundColor:'red',
     };
-    let allNumber=3;
+    // const {dispatch}=this.props;
+    // dispatch({ type: 'mapPage/getTagTree'});
+    // dispatch({ type: 'mapPage/getQuestion'});
+    // console.log('dispatch',dispatch);
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
+    //debugger
+    const {tagTree,question}=mapPage;
+    let allNumber=question.length;
+    let recent=this.state.questionNumber-1
+    console.log('tagTree',tagTree);
+    //遍历tagTree;
+    let tree=[];
+    function forTree(treeList){
+      for (let i in treeList){
+        console.log('i',i);
+        if(treeList[i].children.length>0){
+          forTree(treeList[i].children)
+        }else{
+          tree.push(treeList[i])
+        }
+      }
+      return tree
+    }
+    //遍历树生成的数组treeList
+    let treeList=forTree(tagTree);
     const {unCheckStyle,checkStyle} = this.state;
-    let knowledgeUrl="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
-    let knowlegeContent="中国共产党第一次全国代表大会，简称中共一大，' +\n" +
-      "        '于1921年7月23日在上海法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴闭幕结束。' +\n" +
-      "        '大会的召开宣告了中国共产党的正式成立。";
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
       <Sider style={{backgroundColor:'white'}} width={300}>
+        <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
+          答题
+        </Button>
+        <Modal visible={this.state.startQuestion}
+               centered
+              //  style={{top:'3em',height:'500px'}}
+              width={1000}
+              // // bodyStyle={{backgroundImage:}}
+              //  className={styles.modal}
+              //  closable={false}
+              //  keyboard={true}
+               mask={true}
+               maskClosable={true}
+              // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+               title={null}
+               onCancel={this.handleCancel}
+               footer={null}
+               closable={false}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            <div className={styles.top}></div>
+            <div className="d-iframe">
+              {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
+              {/*        className="iframe-style"></iframe>*/}
+              <div className={styles.web} >
+                <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
+                <div className={styles.radio}>
+                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                  <Row>
+                    <Col span={12}>
+                  <Checkbox   style={radioStyle} value={'A'}>
+                    {'A  '+(question[recent]?question[recent].optionA:'')}
+                  </Checkbox>
+                    </Col>
+                    <Col span={12}>
+                  <Checkbox   style={radioStyle} value={'B'}>
+                    {'B  '+(question[recent]?question[recent].optionB:'')}
+                  </Checkbox>
+                    </Col>
+                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
+                  <Checkbox   style={radioStyle} value={'C'}>
+                    {'C  '+(question[recent]?question[recent].optionC:'')}
+                  </Checkbox>
+                    </Col>:""}
+                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                    <Col span={12}>
+                  <Checkbox   style={radioStyle} value={'D'}>
+                    {'D  '+(question[recent]?question[recent].optionD:'')}
+                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                  </Checkbox>
+                    </Col>:''}
+                  </Row>
+                </Checkbox.Group>
+                </div>
+              </div>
+              <Button  key="submit"
+                       type="primary" style={{top:'-10em',left:'60em',backgroundColor:'rgb(255,0,0)'}}
+                       onClick={()=>{
+                         let string=this.state.value.toString();
+                         if(string==(question[recent]?question[recent].answer:''))
+                         {
+                           this.setState({grade:this.state.grade+1});
+                         }
+                         this.setState({answer:true})
+                         if(this.state.questionNumber==allNumber) {
+                           alert("答题结束")
+                         }}}>提交</Button>
+              {this.state.answer==true?
+                (<h1>正确答案是</h1>):''}
+              {this.state.answer==true?
+                (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
+              <Row gutter={16}>
+                <Col span={8}>
+                  <Button  key="back" onClick={()=>{this.setState({questionNumber: this.state.questionNumber-1})}}>
+                    上一题
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Button
+                    key="submit"
+                    type="primary"
+                    onClick={()=> {
+                      if(this.state.questionNumber==allNumber&&this.state.answer==true){
+                        this.setState({startQuestion:false})
+                        this.setState({questionNumber: 1})
+                        const {dispatch}=this.props;
+                        dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
+                        return
+                      }
+                      if(this.state.answer==false){
+                        alert('你还未提交本题答案')
+                      } else{
+                        this.setState({deadline:Date.now() +  1000 * 60})
+                        this.setState({questionNumber: this.state.questionNumber+1})
+                        this.setState({answer:false})
+                      }
+                    }}>
+                    下一题
+                  </Button>
+                </Col>
+                <Col span={8}>
+                  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>
+                  <h1><span>{this.state.questionNumber}</span>/
+                    <span>{allNumber}</span></h1>
+                  {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
+                </Col>
+              </Row>
+              {this.state.questionNumber==allNumber&&this.state.answer?
+                (<h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1>):''}
+
+            </div>
+            <div className={styles.bottom}></div>
+          </div>
+        </Modal>
         <Modal visible={this.state.modalVisble}
                title="互动页面"
                centered
@@ -327,22 +491,49 @@ class MapPage extends Component {
               }
               key="2"
             >
-              <Card title={this.state.questionNumber+"."+question}>
-                <Radio.Group onChange={this.onChange} value={this.state.value}>
-                  <Radio style={radioStyle} value={0}>
-                    {answer[0]}
-                  </Radio>
-                  <Radio style={radioStyle} value={1}>
-                    {answer[1]}
-                  </Radio>
-                  <Radio style={radioStyle} value={2}>
-                    {answer[2]}
-                  </Radio>
-                  <Radio style={radioStyle} value={3}>
-                    {answer[3]}
-                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                  </Radio>
-                </Radio.Group>
+
+              <Card   title={this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}>
+                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                  <Row>
+                    <Col span={12}>
+                      <Checkbox   style={radioStyle} value={'A'}>
+                        {'A  '+(question[recent]?question[recent].optionA:'')}
+                      </Checkbox>
+                    </Col>
+                    <Col span={12}>
+                      <Checkbox   style={radioStyle} value={'B'}>
+                        {'B  '+(question[recent]?question[recent].optionB:'')}
+                      </Checkbox>
+                    </Col>
+                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
+                      <Checkbox   style={radioStyle} value={'C'}>
+                        {'C  '+(question[recent]?question[recent].optionC:'')}
+                      </Checkbox>
+                    </Col>:""}
+                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                      <Col span={12}>
+                        <Checkbox   style={radioStyle} value={'D'}>
+                          {'D  '+(question[recent]?question[recent].optionD:'')}
+                          {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                        </Checkbox>
+                      </Col>:''}
+                  </Row>
+                </Checkbox.Group>
+                {/*<Radio.Group onChange={this.onChange} value={this.state.value}>*/}
+                {/*  <Radio   style={radioStyle} value={0}>*/}
+                {/*    {answer[0]}*/}
+                {/*  </Radio>*/}
+                {/*  <Radio   style={radioStyle} value={1}>*/}
+                {/*    {answer[1]}*/}
+                {/*  </Radio>*/}
+                {/*  <Radio   style={radioStyle} value={2}>*/}
+                {/*    {answer[2]}*/}
+                {/*  </Radio>*/}
+                {/*  <Radio   style={radioStyle} value={3}>*/}
+                {/*    {answer[3]}*/}
+                {/*    /!*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*!/*/}
+                {/*  </Radio>*/}
+                {/*</Radio.Group>*/}
               </Card>
               <Button  key="submit"
                        type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
