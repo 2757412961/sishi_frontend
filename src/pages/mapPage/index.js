@@ -129,7 +129,6 @@ class MapPage extends Component {
     dispatch({ type: 'mapPage/getTagTree'});
     dispatch({ type: 'mapPage/getQuestion'});
     // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
-    debugger
     dispatch({ type: 'mapPage/getVideoByTag'});
     dispatch({ type: 'mapPage/getAudioByTag'});
     console.log('dispatch',dispatch);
