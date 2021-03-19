@@ -75,7 +75,7 @@ export default class ArticleTable extends Component {
         },
         {
           articleId: '2',
-          articleAuthor: 'test',
+          articleAuthor: 'tst',
           articleTitle: 'qwe',
           articleContent: 'h d',
           articlePublishTime: 4894189,
@@ -99,6 +99,9 @@ export default class ArticleTable extends Component {
       url: requestUrl,
       method: 'GET',
       autoAdd: false, //不添加v1.0
+      data: {
+        length: 1000
+      }
     }).then((res) => {
       console.log(res);
 
@@ -106,14 +109,20 @@ export default class ArticleTable extends Component {
         this.setState({dataSource: res.articles})
         message.success('更新文章表格成功');
       } else {
+        this.setState({dataSource: []})
         message.error('更新文章表格失败,' + res.message);
       }
     });
   }
 
   deleteRecord = (text, record) => {
+    if (this.props.cascadeValue.length === 0) {
+      message.warning('标签名称为空');
+      return;
+    }
+
     request({
-      url: '/v1.0/api/tag/' + record.tagName,
+      url: '/v1.0/api/article/' + record.articleId + '/tagName/' + this.props.cascadeValue.join("@"),
       method: 'DELETE',
       autoAdd: false, //不添加v1.0
     }).then((res) => {

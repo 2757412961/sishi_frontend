@@ -58,7 +58,6 @@ class MapinfoModal extends Component {
         <Modal
           title="新增标签资源"
           visible={this.state.modalVisible}
-          confirmLoading={this.state.confirmLoading}
           onCancel={this.closeModal}
           footer={[
             <Button key='cancel' htmlType="button" onClick={this.closeModal}>取消</Button>,
