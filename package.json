@@ -18,8 +18,10 @@
     "react-mapbox-gl": "^5.1.1",
     "react-redux": "^7.2.2",
     "react-slick": "^0.28.1",
+    "redux": "^4.0.5",
     "slick-carousel": "^1.8.1",
-    "video-react": "^0.14.1"
+    "video-react": "^0.14.1",
+    "video.js": "^7.11.4"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
