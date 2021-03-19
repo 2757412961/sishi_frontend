@@ -14,6 +14,9 @@ import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 // // @import '~video-react/styles/scss/video-react';
 // import {Player} from 'video-react'
+import videojs from 'video.js'
+import "video.js/dist/video-js.css";
+import "../../../node_modules/video-react/dist/video-react.css";
 import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import p1 from '@/assets/test/1.jpg';
@@ -23,6 +26,8 @@ import dangshi from '@/assets/dangshi.PNG'
 import yay from '@/assets/unnamed.jpg'
 import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
+import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
+import 'react-vertical-timeline-component/style.min.css';
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
 const Authorized = RenderAuthorized(getAuthority());
@@ -63,7 +68,112 @@ const list = [
       '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
     cardImg:p3,
     cardContent:'中国共产党第三次全国代表大会，简称中共三大',
+  },
+  {
+    id:'shanghai',
+    lonlat:[121.48, 31.22],
+    text:'1922年7月-中共二大',
+    showInfo: '<div className={styles.markerTop}><h2>中共二大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    cardImg:p2,
+    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+  },
+  {
+    id:'guangzhou',
+    lonlat:[113.30, 23.12],
+    text:'1923年6月-中共三大',
+    showInfo: '<div className={styles.markerTop}><h2>中共三大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    cardImg:p3,
+    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
+  },
+  {
+    id:'shanghai',
+    lonlat:[121.48, 31.22],
+    text:'1922年7月-中共二大',
+    showInfo: '<div className={styles.markerTop}><h2>中共二大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    cardImg:p2,
+    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+  },
+  {
+    id:'guangzhou',
+    lonlat:[113.30, 23.12],
+    text:'1923年6月-中共三大',
+    showInfo: '<div className={styles.markerTop}><h2>中共三大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    cardImg:p3,
+    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
+  },
+  {
+    id:'shanghai',
+    lonlat:[121.48, 31.22],
+    text:'1922年7月-中共二大',
+    showInfo: '<div className={styles.markerTop}><h2>中共二大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    cardImg:p2,
+    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+  },
+  {
+    id:'guangzhou',
+    lonlat:[113.30, 23.12],
+    text:'1923年6月-中共三大',
+    showInfo: '<div className={styles.markerTop}><h2>中共三大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    cardImg:p3,
+    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
   }
+];
+
+const subList = [
+  {
+    id:'jiaxing',
+    lonlat:[120.79, 30.75],
+    text:'1921年7月-中共大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共一大</h2>' +
+      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p1,
+    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+    sub:true,
+  },
+  {
+    id:'jiaxing',
+    lonlat:[120.79, 30.75],
+    text:'1921年7月-中共大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共一大</h2>' +
+      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p1,
+    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+    sub:true,
+  },
+  {
+    id:'jiaxing',
+    lonlat:[120.79, 30.75],
+    text:'1921年7月-中共大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共一大</h2>' +
+      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p1,
+    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+    sub:true,
+  },
 ];
 
 class MapPage extends Component {
@@ -90,9 +200,20 @@ class MapPage extends Component {
       },
       knowledgeUrl:list[0].cardImg,
       knowledgeContent:list[0].cardContent,
+      // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
+      more:true,
     };
 
   }
+
+  componentDidUpdate() {
+    // if (document.getElementById('video')) {
+    //   this.player = videojs("video");
+    //   this.player.controls(true)
+    //   this.player.src(this.state.current_url)
+    // }
+  }
+
   componentDidMount() {
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
     let localhost = window.location.origin;
@@ -203,6 +324,13 @@ class MapPage extends Component {
     }
     this.map = map;
   }
+
+  tabOnClick=()=> {
+    // this.player = videojs("video");
+    // this.player.controls(true)
+    // this.player.src(this.state.current_url)
+  }
+
   showModal=()=>{
     this.setState({modalVisble:true})
     console.log(this.state.modalVisble)
@@ -232,8 +360,26 @@ class MapPage extends Component {
       value: e.target.value,
     });
   };
+  moreOnClick=()=>{
+    let temp = this.state.more;
+    if(temp){
+      list.splice(2, 0, ...subList);
+    }
+    else{
+      list.splice(2, 3);
+    }
+    this.setState({
+      more:!temp
+    })
+    this.forceUpdate();
+  };
 
   render(){
+    // if (document.getElementById('video')) {
+    //   this.player = videojs("video");
+    //   this.player.controls(true)
+    //   this.player.src(this.state.current_url)
+    // }
     let question='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
     let answer=['A.大连','B.旅顺','C.平壤','D.花园口'];
     let rightAnswer=1;
@@ -243,15 +389,16 @@ class MapPage extends Component {
       lineHeight: '30px',
     };
     const {unCheckStyle,checkStyle} = this.state;
-    let knowledgeUrl="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png";
-    let knowlegeContent="中国共产党第一次全国代表大会，简称中共一大，' +\n" +
-      "        '于1921年7月23日在上海法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴闭幕结束。' +\n" +
-      "        '大会的召开宣告了中国共产党的正式成立。";
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
-      <Sider style={{backgroundColor:'white'}} width={300}>
+      <Sider style={{
+        backgroundColor:'rgba(131, 115, 39, 0.48)',
+        overflow: 'auto',
+      }} width={600}>
         <Modal visible={this.state.modalVisble}
+               destroyOnClose={true}
+               forceRender={true}
                title="互动页面"
                centered
                style={{top:'3em',color:'black',fontStyle:{},height:'70vh', width:'70vw'}}
@@ -345,6 +492,7 @@ class MapPage extends Component {
               </Row>
             </TabPane>
             <TabPane
+              // onClick={()=>this.tabOnClick()}
               tab={
                 <span>
                         <Icon type="video-camera" />
@@ -359,9 +507,9 @@ class MapPage extends Component {
                 {/*/>*/}
                 {/*<source src="./1.mp4"*/}
                 {/*/>*/}
-                <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
-                />
-                <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+              />
+                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
                 />
               </video>
               {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
@@ -405,26 +553,59 @@ class MapPage extends Component {
             </TabPane>
           </Tabs>
         </Modal>
-        <Timeline className={styles.timeline}>{
-          list.map((item)=> (
-            <div onClick={ (e) => this.oneClick(e, item)}>
-              {/*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*/}
-              <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>
-            </div>
+        <VerticalTimeline
+          // layout='1-column-left'
+        >
+          {list.map((item)=> (
+              item['sub']?
+                <VerticalTimelineElement
+                  id={item['id']}
+                  style={{fontSize:"15px", size:"10px"}}
+                  className="vertical-timeline-element--education"
+                  date="2006 - 2008"
+                  contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                  contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                  iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
+                  dateClassName={ styles.date }
+                  // icon={<Icon type="book" />}
+                >
+                  {item['text']}
+                  {
+                    item['text']=='1921年7月-中共一大'&&
+                    <div><Button onClick={this.moreOnClick}>{this.state.more?<span>更多</span>:<span>收回</span>}</Button></div>
+                  }
+                </VerticalTimelineElement>:
+                <VerticalTimelineElement
+                  id={item['id']}
+                  style={{fontSize:"15px", size:"10px"}}
+                  className="vertical-timeline-element--education"
+                  date="2006 - 2008"
+                  contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                  contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                  iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px"  }}
+                  dateClassName={ styles.date }
+                  // icon={<Icon type="book" />}
+                >
+                  {item['text']}
+                  {
+                    item['text']=='1921年7月-中共一大'&&
+                    <div><Button onClick={this.moreOnClick}>{this.state.more?<span>更多</span>:<span>收回</span>}</Button></div>
+                  }
+                </VerticalTimelineElement>
+              )
             )
-          )
-        }
-          {/*<div id="1" onClick={ (id) => this.oneClick("1",id)}>*/}
-          {/*  /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
-          {/*  <Timeline.Item color='red' style={unCheckStyle} id="timeLine1">1921年7月-中共一大</Timeline.Item>*/}
-          {/*</div>*/}
-          {/*<div id="2" onClick={(id) => this.oneClick("2",id)}>*/}
-          {/*  <Timeline.Item color='red' style={unCheckStyle} id="timeLine2">1922年7月-中共二大</Timeline.Item>*/}
-          {/*</div>*/}
-          {/*<div id="3" onClick={(id) => this.oneClick("3",id)}>*/}
-          {/*  <Timeline.Item  color='red' style={unCheckStyle} id="timeLine3">1923年6月-中共三大</Timeline.Item>*/}
-          {/*</div>*/}
-        </Timeline>
+          }
+        </VerticalTimeline>
+        {/*<Timeline className={styles.timeline}>{*/}
+        {/*  list.map((item)=> (*/}
+        {/*    <div onClick={ (e) => this.oneClick(e, item)}>*/}
+        {/*      /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
+        {/*      <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>*/}
+        {/*    </div>*/}
+        {/*    )*/}
+        {/*  )*/}
+        {/*}*/}
+        {/*</Timeline>*/}
       </Sider>
       <Content>
         <div className={styles.normal}>
@@ -436,12 +617,12 @@ class MapPage extends Component {
               党史学习
             </div>
           </div>
-          <div className={styles.dangshi_div}>
-            <img  src={dangshi} className={styles.dangshi} />
-            <div className={styles.dangshi_font}>
-              返回地图首页
-            </div>
-          </div>
+          {/*<div className={styles.dangshi_div}>*/}
+          {/*  <img  src={dangshi} className={styles.dangshi} />*/}
+          {/*  <div className={styles.dangshi_font}>*/}
+          {/*    返回地图首页*/}
+          {/*  </div>*/}
+          {/*</div>*/}
         </div>
       </Content>
     </Layout>

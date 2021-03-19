@@ -16,7 +16,9 @@
     "react-dom": "^16.14.0",
     "react-mapbox-gl": "^5.1.1",
     "react-redux": "^7.2.2",
-    "video-react": "^0.14.1"
+    "redux": "^4.0.5",
+    "video-react": "^0.14.1",
+    "video.js": "^7.11.4"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",

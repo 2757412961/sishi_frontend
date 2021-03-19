@@ -43,19 +43,10 @@
     }
   }
 }
-.header_first{
-  height:50%;
+.header_divider{
   width:100%;
-  display: flex;
-  justify-content: space-between;
-  box-sizing: border-box;
-  //position: fixed;
-  //padding-left: 40px;
-  align-items: center;
-  background: rgba(132, 123, 125, 0.7);
-  //backgroundImage: 'url(@/assets/header.jpg)';
-  z-index: 99;
-  height: 70px;
+  height: 10px;
+  background: rgba(155, 20, 20, 1);
 }
 .header_second{
   height:50%;
@@ -66,20 +57,59 @@
   //position: fixed;
   //padding-left: 40px;
   align-items: center;
+  //background: rgba(181,145,118, 1);
   background: rgba(155, 20, 20, 1);
   //backgroundImage: 'url(@/assets/header.jpg)';
   z-index: 99;
   height: 70px;
 }
+.header_first{
+  height:50%;
+  width:100%;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  //position: fixed;
+  //padding-left: 40px;
+  align-items: center;
+  //background: rgba(155, 20, 20, 1);
+  background: rgba(155, 20, 20, 1);
+  //backgroundImage: 'url(@/assets/header.jpg)';
+  z-index: 99;
+  height: 70px;
+}
+.xuexi2{
+  position:absolute;
+  left:calc(50vw - 250px);
+  top:10px;
+  height:50px;
+  width:500px;
+}
+.xuexi3{
+  position:absolute;
+  left:calc(50vw - 175px);
+  top:10px;
+  height:50px;
+  width:350px;
+}
+.divider{
+  position:absolute;
+  left:calc(50vw - 350px);
+  height: 2px;
+  width: 700px;
+  background: -webkit-linear-gradient(left,rgba(255, 255, 255, 0),rgba(255, 255, 0, 1),rgba(255,255,255,0));
+  background: linear-gradient(to right, rgba(255, 255, 255, 0),rgba(255, 255, 0, 1),rgba(255,255,255,0));
+}
 .font_style{
   width:90px;
   cursor:default;
-  color:rgba(255,255,255,0.5);
+  color:rgba(255,255,255,0.7);
   font-weight:bold;
-  font-size: 13px;
+  font-size: 15px;
   //margin-bottom: 10px;
   //padding: 8px 0
   padding-left:10px;
+  margin: 0 auto;
 }
 .font_div{
   margin: 0 auto;
@@ -88,7 +118,7 @@
   position:absolute;
   left:0;
   right:0;
-  width:500px;
+  width:700px;
 }
 .head_logo {
   //width: 100px;
@@ -106,6 +136,14 @@
     margin-left: 10px;
     width: 45px;
     height: 45px;
+    color:white;
+  }
+  .logo_biaoti {
+    margin-right: 10px;
+    margin-left: 1px;
+    //width: 45px;
+    height: 45px;
+    color:white;
   }
   span {
     font-size: 20px;
