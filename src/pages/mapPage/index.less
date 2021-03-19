@@ -5,8 +5,8 @@
 }
 .mapContainer {
   position: relative;
+  width: 80%;
   height: 100%;
-  flex: 1;
   .legend {
     background-color: #EEEEEE;
     border-style:dotted;
@@ -111,15 +111,6 @@ h2 {
   margin-left: 23%;
   margin-top: 10%;
 }
-.zhonggongyida {
-  cursor: pointer;
-  opacity: 0.5;
-  :active{
-    opacity: 1;
-    font-weight: bolder;
-    font-size: 16px;
-  }
-}
 .web {
   .ant-modal-content {
     position: relative;
@@ -206,4 +197,20 @@ h2 {
 }
  //121.23 31.03
 
-
+.features {
+  width: 30%;
+  font-family: sans-serif;
+  overflow-y: scroll;
+  background-color: #fafafa;
+}
+.selection{
+  padding:  25px 50px;
+  line-height: 25px;
+  border-bottom: 1px solid #ddd;
+  opacity: 0.25;
+  font-size: 13px;
+}
+section:last-child {
+  border-bottom: none;
+  margin-bottom: 600px;
+}
