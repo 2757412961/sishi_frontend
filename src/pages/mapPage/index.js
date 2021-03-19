@@ -41,9 +41,25 @@ const variants={open: { opacity: 1, x: 0 },
   closed: { opacity: 0, x: "-100%" },}
 const list = [
   {
-    id:'jiaxing',
-    lonlat:[120.79, 30.75],
+    id:'一大-上海',
+    lonlat:[121.47069346816863, 31.22206084685108],
+    text:'1921年7月-中共一大上海',
+    value: '中共一大上海',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共一大</h2>' +
+      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p1,
+    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+    label:"党史新学@中共一大@上海",
+  },
+  {
+    id:'一大-嘉兴',
+    lonlat:[120.75580305351667, 30.75747193181725],
     text:'1921年7月-中共一大',
+    value: '中共一大嘉兴',
     showInfo: '<div className={styles.markerTop}>' +
       '<h2>中共一大</h2>' +
       '<p><a id="btn">点击进入学习卡片</a></p>' +
@@ -53,88 +69,162 @@ const list = [
     label:"党史新学@中共一大@嘉兴",
   },
   {
-    id:'shanghai',
-    lonlat:[121.48, 31.22],
-    text:'1922年7月-中共二大',
-    showInfo: '<div className={styles.markerTop}><h2>中共二大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    id:'二大-上海',
+    lonlat:[121.46214132313253, 31.2260623329518],
+    text: '1922年7月-中共二大',
+    value: '中共二大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共二大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
     cardImg:p2,
     cardContent:'中国共产党第二次全国代表大会，简称中共二大',
     label:"党史新学@中共二大@上海",
   },
   {
-    id:'guangzhou',
-    lonlat:[113.30, 23.12],
-    text:'1923年6月-中共三大',
-    showInfo: '<div className={styles.markerTop}><h2>中共三大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    id:'三大-广州',
+    lonlat:[113.29062697510238, 23.121680862715294],
+    text: '1923年6月-中共三大',
+    value: '中共三大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共三大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
     cardImg:p3,
     cardContent:'中国共产党第三次全国代表大会，简称中共三大',
     label:"党史新学@中共三大@广州",
   },
   {
-    id:'shanghai2',
-    lonlat:[121.48, 31.22],
-    text:'1922年7月-中共二大',
-    showInfo: '<div className={styles.markerTop}><h2>中共二大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    id:'四大-上海',
+    lonlat:[121.48020351895462,31.25728522799882],
+    text: '1925年1月-中共四大',
+    value: '中共四大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共四大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
     cardImg:p2,
-    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+    cardContent:'中国共产党第四次全国代表大会，简称中共四大',
+    label:"党史新学@中共四大@上海",
   },
   {
-    id:'guangzhou2',
-    lonlat:[113.30, 23.12],
-    text:'1923年6月-中共三大',
-    showInfo: '<div className={styles.markerTop}><h2>中共三大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
-    cardImg:p3,
-    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
-  },
-  {
-    id:'shanghai3',
-    lonlat:[121.48, 31.22],
-    text:'1922年7月-中共二大',
-    showInfo: '<div className={styles.markerTop}><h2>中共二大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    id:'五大-武汉',
+    lonlat:[114.29318634011975,30.553569642526185],
+    text: '1927年4月-中共五大',
+    value: '中共五大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共五大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
     cardImg:p2,
-    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+    cardContent:'中国共产党第五次全国代表大会，简称中共五大',
+    label:"党史新学@中共五大@武汉",
   },
   {
-    id:'guangzhou3',
-    lonlat:[113.30, 23.12],
-    text:'1923年6月-中共三大',
-    showInfo: '<div className={styles.markerTop}><h2>中共三大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
-    cardImg:p3,
-    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
-  },
-  {
-    id:'shanghai4',
-    lonlat:[121.48, 31.22],
-    text:'1922年7月-中共二大',
-    showInfo: '<div className={styles.markerTop}><h2>中共二大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
+    id:'六大-俄罗斯',
+    lonlat:[37.153974181328664,55.535728582753336],
+    text: '1928年6月-中共六大',
+    value: '中共六大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共六大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
     cardImg:p2,
-    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+    cardContent:'中国共产党第六次全国代表大会，简称中共六大',
+    label:"党史新学@中共六大@俄罗斯",
   },
   {
-    id:'guangzhou4',
-    lonlat:[113.30, 23.12],
-    text:'1923年6月-中共三大',
-    showInfo: '<div className={styles.markerTop}><h2>中共三大</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>',
-    cardImg:p3,
-    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
-  }
+    id:'七大-延安',
+    lonlat:[109.46267096678156,36.618757084621336],
+    text: '1945年4月-中共七大',
+    value: '中共七大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共七大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第七次全国代表大会，简称中共七大',
+    label:"党史新学@中共七大@延安",
+  },
+  {
+    id:'八大-政协礼堂',
+    lonlat:[116.35780179933835,39.91833919135752],
+    text: '1956年9月-中共八大',
+    value: '中共八大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共八大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第八次全国代表大会，简称中共八大',
+    label:"党史新学@中共八大@北京",
+  },{
+    id:'九大-人民大会堂',
+    lonlat:[116.38748691963224,39.90337460887406],
+    text: '1969年4月-中共九大',
+    value: '中共九大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共九大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第九次全国代表大会，简称中共九大',
+    label:"党史新学@中共九大@北京",
+  },
 ];
+var chapters = {
+  '一大上海': {
+    bearing: 0,
+    center: [121.47069346816863, 31.22206084685108],
+    zoom: 15.5,
+    pitch: 20
+  },
+  '一大嘉兴': {
+    duration: 6000,
+    center: [120.75580305351667, 30.75747193181725],
+    bearing: 0,
+    zoom: 15,
+    pitch: 30
+  },
+  '二大上海': {
+    bearing: 0,
+    center: [121.46214132313253, 31.2260623329518],
+    zoom: 16,
+    speed: 0.6,
+    pitch: 40
+  },
+  '三大广州': {
+    bearing: 0,
+    center: [113.29062697510238, 23.121680862715294],
+    zoom: 15.3,
+    pitch: 40,
+  },
+  '四大上海': {
+    bearing: 0,
+    center: [121.48020351895462,31.25728522799882],
+    zoom: 14.3,
+    pitch: 20,
+    speed: 0.5
+  },
+  '五大武汉': {
+    bearing: 0,
+    center: [114.29318634011975,30.553569642526185],
+    zoom: 16.3,
+    pitch: 50,
+  },
+  '七大延安': {
+    bearing: 0,
+    center: [109.46267096678156,36.618757084621336],
+    zoom: 17.3,
+    pitch: 40
+  },
+  '八大北京': {
+    bearing: 0,
+    center: [116.35780179933835,39.91833919135752],
+    zoom: 17,
+    pitch: 20
+  }
+};
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -149,17 +239,16 @@ function SampleNextArrow(props) {
 
 const subList = [
   {
-    id:'jiaxing9',
-    lonlat:[120.79, 30.75],
-    text:'1921年7月-中共大',
+    id:'一大-嘉兴',
+    lonlat:[120.75580305351667, 30.75747193181725],
+    text:'1921年7月-中共一大',
     showInfo: '<div className={styles.markerTop}>' +
       '<h2>中共一大</h2>' +
-      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
       '</div>',
     cardImg:p1,
     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+    label:"党史新学@中共一大@嘉兴",
     sub:true,
   },
   {
@@ -295,17 +384,93 @@ class MapPage extends Component {
       center: [121.52, 31.04],  //上海经纬度坐标
       zoom: 3,
     });
-    let nav = new mapboxgl.NavigationControl({
-      //是否显示指南针按钮，默认为true
-      "showCompass": true,
-      //是否显示缩放按钮，默认为true
-      "showZoom":true
-    });
-    //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
-    map.addControl(nav, 'top-left');
+    // let nav = new mapboxgl.NavigationControl({
+    //   //是否显示指南针按钮，默认为true
+    //   "showCompass": true,
+    //   //是否显示缩放按钮，默认为true
+    //   "showZoom":true
+    // });
+    // //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
+    // map.addControl(nav, 'top-left');
+    // On every scroll event, check which element is on screen
+    document.getElementById('features').onscroll = function() {
+      var chapterNames = Object.keys(chapters);
+      for (var i = 0; i < chapterNames.length; i++) {
+        var chapterName = chapterNames[i];
+        if (isElementOnScreen(chapterName)) {
+          setActiveChapter(chapterName);
+          break;
+        }
+      }
+    };
+    var activeChapterName = '一大上海';
+    function setActiveChapter(chapterName) {
+      if (chapterName === activeChapterName){
+        return
+      }
+      map.flyTo(chapters[chapterName]);
+      document.getElementById(chapterName).style.opacity = 1;
+      document.getElementById(activeChapterName).style.opacity = 0.25;
+      activeChapterName = chapterName;
+    }
+    function isElementOnScreen(id) {
+      var element = document.getElementById(id);
+      var bounds = element.getBoundingClientRect();
+      console.log('bounds',bounds.top,bounds.bottom)
+      return bounds.top < window.innerHeight && bounds.bottom > 0;
+    }
+
+    var size = 100;
+    var pulsingDot = {
+      width: size,
+      height: size,
+      data: new Uint8Array(size * size * 4),
+
+      onAdd: function() {
+        var canvas = document.createElement('canvas');
+        canvas.width = this.width;
+        canvas.height = this.height;
+        this.context = canvas.getContext('2d');
+      },
+
+      render: function() {
+        var duration = 1000;
+        var t = (performance.now() % duration) / duration;
+
+        var radius = size / 2 * 0.3;
+        var outerRadius = size / 2 * 0.7 * t + radius;
+        var context = this.context;
+
+// draw outer circle
+        context.clearRect(0, 0, this.width, this.height);
+        context.beginPath();
+        context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+        context.fillStyle = 'rgba(255, 100, 100,' + (1 - t) + ')';
+        context.fill();
+
+// draw inner circle
+        context.beginPath();
+        context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+        context.fillStyle = 'rgba(255, 0, 0, 1)';
+        context.strokeStyle = 'white';
+        context.lineWidth = 2 + 4 * (1 - t);
+        context.fill();
+        context.stroke();
+
+// update this image's data with data from the canvas
+        this.data = context.getImageData(0, 0, this.width, this.height).data;
+
+// keep the map repainting
+        map.triggerRepaint();
+
+// return `true` to let the map know that the image was updated
+        return true;
+      }
+    };
+
     //加载中共一大（上海，嘉兴地点）的火花图标
     map.on('load', function() {
-      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
+      /*map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
         if(error) throw  error;
         for(let i = 0;i<list.length;i++){
           map.addImage(list[i].id, image);
@@ -336,7 +501,49 @@ class MapPage extends Component {
             }
           });
         }
-      });
+      });*/
+      for (let i=0;i<list.length;i++) {
+        map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
+
+        map.addLayer({
+          "id": list[i].id,
+          "type": "symbol",
+          "source": {
+            "type": "geojson",
+            "data": {
+              "type": "FeatureCollection",
+              "features": [{
+                "type": "Feature",
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": list[i].lonlat,
+                }
+              }]
+            }
+          },
+          "layout": {
+            "icon-image": list[i].id,
+            "icon-optional": false,
+            "icon-ignore-placement": true,
+            // "text-ignore-placement": true,
+            "text-allow-overlap": true,
+            "text-field": list[i].value,
+            "text-anchor": 'left',
+            "text-offset": [1,0.1],
+            // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+            "text-size": [
+              "interpolate", ["linear"], ["zoom"],
+              3,20,
+              17,38
+            ],
+          },
+          paint: {
+            "text-color": 'rgb(255,0,0)',
+          }
+
+        });
+      }
+      // playback(0);
     });
     let _this = this;
     for(let i = 0;i<list.length;i++){
@@ -840,12 +1047,73 @@ class MapPage extends Component {
         <div className={styles.normal}>
           <div className={styles.mapContainer}  id="onlineMapping">
           </div>
-          <div className={styles.dangshi_div1} style={{display: this.state.first ? 'block': 'none'}}>
-            <img  src={dangshi} className={styles.dangshi} />
-            <div className={styles.dangshi_font}>
-              党史学习
-            </div>
+          <div id='features' className={styles.features}>
+            <section id='一大上海' className={styles.selection}>
+              <h3>中共一大上海</h3>
+              <p>November 1895. London is shrouded in fog and Sherlock Holmes and Watson pass time restlessly awaiting a
+                new case. "The London criminal is certainly a dull fellow," Sherlock bemoans. "There have been numerous
+                petty thefts," Watson offers in response. Just then a telegram arrives from Sherlock's brother Mycroft
+                with a mysterious case.</p>
+            </section>
+            <section id='一大嘉兴' className={styles.selection}>
+              <h3>中共一大嘉兴</h3>
+              <p>Arthur Cadogan West was found dead, head crushed in on train tracks at Aldgate Station at 6AM Tuesday
+                morning. West worked at Woolwich Arsenal on the Bruce-Partington submarine, a secret military project.
+                Plans for the submarine had been stolen and seven of the ten missing papers were found in West's
+                possession. Mycroft implores Sherlock to take the case and recover the three missing papers.</p>
+            </section>
+            <section id='二大上海' className={styles.selection}>
+              <h3>中共二大上海</h3>
+              <p>Holmes and Watson's investigations take them across London. Sherlock deduces that West was murdered
+                elsewhere, then moved to Aldgate Station to create the illusion that he was crushed on the tracks by a
+                train. On their way to Woolwich Sherlock dispatches a telegram to Mycroft at London Bridge: "Send list
+                of all foreign spies known to be in England, with full address."</p>
+            </section>
+            <section id='三大广州' className={styles.selection}>
+              <h3>中共三大广州</h3>
+              <p>While investigating at Woolwich Arsenal Sherlock learns that West did not have the three
+                keys&mdash;door, office, and safe&mdash;necessary to steal the papers. The train station clerk mentions
+                seeing an agitated West boarding the 8:15 train to London Bridge. Sherlock suspects West of following
+                someone who had access to the Woolwich chief's keyring with all three keys.</p>
+            </section>
+            <section id='四大上海' className={styles.selection}>
+              <h3>中共四大上海</h3>
+              <p>Mycroft responds to Sherlock's telegram and mentions several spies. Hugo Oberstein of 13 Caulfield
+                Gardens catches Sherlock's eye. He heads to the nearby Gloucester Road station to investigate and learns
+                that the windows of Caulfield Gardens open over rail tracks where trains stop frequently.</p>
+            </section>
+            <section id='五大武汉' className={styles.selection}>
+              <h3>中共五大武汉</h3>
+              <p>Holmes deduces that the murderer placed West atop a stopped train at Caulfield Gardens. The train
+                traveled to Aldgate Station before West's body finally toppled off. Backtracking to the criminal's
+                apartment, Holmes finds a series of classified ads from <em>The Daily Telegraph</em> stashed away. All
+                are under the name Pierrot: "Monday night after nine. Two taps. Only ourselves. Do not be so suspicious.
+                Payment in hard cash when goods delivered."</p>
+            </section>
+            <section id='七大延安' className={styles.selection}>
+              <h3>中共七大延安</h3>
+              <p>Holmes and Watson head to The Daily Telegraph and place an ad to draw out the criminal. It reads:
+                "To-night. Same hour. Same place. Two taps. Most vitally important. Your own safety at stake. Pierrot."
+                The trap works and Holmes catches the criminal: Colonel Valentine Walter, the brother of Woolwich
+                Arsenal's chief. He confesses to working for Hugo Oberstein to obtain the submarine plans in order to
+                pay off his debts.</p>
+            </section>
+            <section id='八大北京' className={styles.selection}>
+              <h3>中共八大北京</h3>
+              <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
+                where he promises additional plans for the submarine in exchange for money. The plan works and Holmes
+                and Watson catch both criminals.</p>
+              <small id="citation">
+                Adapted from <a href='http://www.gutenberg.org/files/2346/2346-h/2346-h.htm'>Project Gutenberg</a>
+              </small>
+            </section>
           </div>
+          {/*<div className={styles.dangshi_div1} style={{display: this.state.first ? 'block': 'none'}}>*/}
+          {/*  <img  src={dangshi} className={styles.dangshi} />*/}
+          {/*  <div className={styles.dangshi_font}>*/}
+          {/*    党史学习*/}
+          {/*  </div>*/}
+          {/*</div>*/}
           {/*<div className={styles.dangshi_div}>*/}
           {/*  <img  src={dangshi} className={styles.dangshi} />*/}
           {/*  <div className={styles.dangshi_font}>*/}
