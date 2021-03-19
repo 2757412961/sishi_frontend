@@ -660,18 +660,19 @@ class MapPage extends Component {
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
     //debugger
-    let tree=[];
-    function forTree(treeList){
-      for (let i in treeList){
-        console.log('i',i);
-        if(treeList[i].children.length>0){
-          forTree(treeList[i].children)
-        }else{
-          tree.push(treeList[i])
-        }
-      }
-      return tree
-    }
+    // let tree=[];
+    // function forTree1(treeList){
+    //   for (let i in treeList){
+    //     console.log('i',i);
+    //     if(treeList[i].children.length>0){
+    //       forTree(treeList[i].children)
+    //     }else{
+    //       tree.push(treeList[i])
+    //     }
+    //   }
+    //   return tree
+    // }
+    tree=[];
     const {tagTree,question}=mapPage;
     let list1=forTree(tagTree);
     list=forList(list1);
