@@ -8,6 +8,29 @@ export default class EditorDemo extends React.Component {
   state = {
     // 创建一个空的editorState作为初始值
     editorState: BraftEditor.createEditorState(null),
+    mediaItems: [
+      {
+        id: 1,
+        type: 'IMAGE',
+        url: 'https://margox.cn/wp-content/uploads/2018/09/IMG_9508.jpg'
+      }, {
+        id: 2,
+        type: 'VIDEO',
+        url: 'http://192.168.137.1:8088/media/video/Bishop%20Briggs%20-%20River.mp4'
+      }, {
+        id: 3,
+        type: 'IMAGE',
+        url: 'http://cpc.people.com.cn/NMediaFile/2021/0312/MAIN202103120915000347748011503.jpg'
+      }, {
+        id: 4,
+        type: 'AUDIO',
+        url: 'https://margox.cn/wp-content/uploads/2016/10/Jesper-Kyd-Venice-Rooftops.mp3'
+      }, {
+        id: 5,
+        type: 'IMAGE',
+        url: 'http://www.hebgcdy.com/ztbd/zggcdwsmn/images/toutu.png'
+      }
+    ],
   };
 
   // async componentDidMount () {
@@ -25,6 +48,10 @@ export default class EditorDemo extends React.Component {
   //   const htmlContent = this.state.editorState.toHTML()
   //   const result = await saveEditorContent(htmlContent)
   // }
+
+  initMediaItems = () => {
+
+  }
 
   handleEditorChange = (editorState) => {
     this.setState({editorState});
@@ -168,7 +195,7 @@ export default class EditorDemo extends React.Component {
           placeholder="请输入正文内容"
           onChange={this.handleEditorChange}
           extendControls={extendControls}
-          media={{accepts: mediaAccepts, uploadFn: this.myUploadFn}}
+          media={{accepts: mediaAccepts, items: this.state.mediaItems, uploadFn: this.myUploadFn}}
           // onSave={this.submitContent} // 在编辑器内按下Command/Ctrl + s时触发的函数
         />
       </div>

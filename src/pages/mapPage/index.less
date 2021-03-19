@@ -87,20 +87,24 @@ h2 {
   text-align: center;
   color: red;
 }
-span {
-  color: red;
-}
+//span {
+//  color: red;
+//}
  a,a:hover {
   font-size: 13px;
-  color: red;
+  //color: red;
   text-align: center;
   display: block;
 }
  .modal{
    span {
      color: black;
-   }
-
+   };
+   background-color:beige;
+   //background-Image:url("../../assets/background.png");
+   background-repeat:no-repeat;
+   background-attachment:fixed;
+   background-position:center;
  }
 .timeline {
   color: red;
@@ -116,9 +120,90 @@ span {
     font-size: 16px;
   }
 }
+.web {
+  .ant-modal-content {
+    position: relative;
+    background-color: #00000000 !important;
+    border: 0;
+    border-radius: 4px;
+    background-clip: padding-box;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0) !important;
+  }
 
+  .ant-modal-body {
+    padding: 0 !important;
+    font-size: 0 !important;
+    line-height: 1 !important;
+  }
+}
+.radio{
+  position: relative;
+  left:10%;
+  top:2em;
+}
+.top{
+  height: 90px;
+  width: 960px;
+  background-Image:url("../../assets/headerQuestion.PNG");
 
+}
+.bottom{
+  height: 50px;
+  width: 960px;
+  background-Image:url("../../assets/bottomAnswer.PNG");
+}
+.try{
+  height: 60px;
+  width: 60px;
+  position: relative;
+  right: -600px;
+  background-Image:url("../../assets/1.gif");
+}
+:global {
+  .ant-btn ant-btn-primary{
+    background:#e2e4e5;
+  }
+  .ant-row{
+    height: 100px;
+  }
+  .ant-col-12{
+    width: 400px;
+    height: 50px;
+  }
+  label.ant-checkbox-wrapper{
+    width: 300px;
+  }
+}
+.exampleContainer{
+  background: white;
+  border-radius: 30px;
+  width: 50px;
+  height: 50px;
+}
+//动画
+@keyframes picture{
+  0%   { background-Image:url("../../assets/1.gif");}
+  25%  { background-Image:url("../../assets/yay.jpg");}
+  50%  {background-Image:url("../../assets/redflag.png");}
+  100% {background-Image:url("../../assets/redflag.png");}
 
+}
+.out{
+  width: 50vw;
+  height: 30vh;
+  position: absolute;
+  flex: 2;
+  left: 10%;
+  top: 40%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation-name:picture;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
  //121.23 31.03
 
 

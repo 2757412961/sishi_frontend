@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Modal, Form, Input, Button, Checkbox, Cascader, Col} from 'antd';
-import {FileAddOutlined} from '@ant-design/icons';
 
 class TagResourceModal extends Component {
   constructor(props) {
@@ -59,7 +58,7 @@ class TagResourceModal extends Component {
 
     return (
       <>
-        <Button type="primary" onClick={this.showModal}><FileAddOutlined/>新增标签</Button>
+        <Button type="primary" onClick={this.showModal}>新增标签</Button>
 
         <Modal
           title="新增标签资源"
