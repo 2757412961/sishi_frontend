@@ -660,9 +660,22 @@ class MapPage extends Component {
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
     //debugger
+    let tree=[];
+    function forTree(treeList){
+      for (let i in treeList){
+        console.log('i',i);
+        if(treeList[i].children.length>0){
+          forTree(treeList[i].children)
+        }else{
+          tree.push(treeList[i])
+        }
+      }
+      return tree
+    }
     const {tagTree,question}=mapPage;
     let list1=forTree(tagTree);
     list=forList(list1);
+    console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
     const {unCheckStyle,checkStyle} = this.state;
