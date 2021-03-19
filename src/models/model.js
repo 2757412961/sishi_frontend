@@ -71,6 +71,7 @@ export default {
           payload: response.list,
         });
       }
+      return response;
     },
 
     //获取问题及答案
