@@ -8,6 +8,7 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
+    "@antv/l7": "^2.3.9",
     "antd": "^3.19.5",
     "braft-editor": "^2.3.9",
     "dva": "^2.6.0-beta.6",

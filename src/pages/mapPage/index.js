@@ -12,6 +12,9 @@ import MapPageMap from './MapPageMap';
 import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
+import flyline from '@/assets/pointData/flyline.json';
+import { LineLayer } from '@antv/l7';
+
 // import {motion} from 'framer-motion';
 // // @import '~video-react/styles/scss/video-react';
 // import {Player} from 'video-react'
@@ -176,56 +179,68 @@ const variants={open: { opacity: 1, x: 0 },
 // ];
 let list=[];
 var chapters = {
-  '一大上海': {
+  '一大-上海': {
     bearing: 0,
     center: [121.47069346816863, 31.22206084685108],
     zoom: 15.5,
     pitch: 20
   },
-  '一大嘉兴': {
+  '一大-嘉兴': {
     duration: 6000,
     center: [120.75580305351667, 30.75747193181725],
     bearing: 0,
     zoom: 15,
     pitch: 30
   },
-  '二大上海': {
+  '二大-上海': {
     bearing: 0,
     center: [121.46214132313253, 31.2260623329518],
     zoom: 16,
     speed: 0.6,
-    pitch: 40
+    pitch: 30
   },
-  '三大广州': {
+  '三大-广州': {
     bearing: 0,
     center: [113.29062697510238, 23.121680862715294],
-    zoom: 15.3,
-    pitch: 40,
+    zoom: 17.3,
+    pitch: 20,
   },
-  '四大上海': {
+  '四大-上海': {
     bearing: 0,
     center: [121.48020351895462,31.25728522799882],
-    zoom: 14.3,
+    zoom: 16.3,
     pitch: 20,
-    speed: 0.5
+    speed: 1,
   },
-  '五大武汉': {
+  '五大-武汉': {
     bearing: 0,
     center: [114.29318634011975,30.553569642526185],
     zoom: 16.3,
-    pitch: 50,
+    pitch: 40,
   },
-  '七大延安': {
+  '六大-俄罗斯': {
+    bearing: 0,
+    center: [37.153974181328664,55.535728582753336],
+    zoom: 16.3,
+    pitch: 20
+  },
+  '七大-延安': {
     bearing: 0,
     center: [109.46267096678156,36.618757084621336],
-    zoom: 17.3,
-    pitch: 40
+    zoom: 16.3,
+    pitch: 20
   },
-  '八大北京': {
+  '八大-政协礼堂': {
     bearing: 0,
     center: [116.35780179933835,39.91833919135752],
     zoom: 17,
     pitch: 20
+  },
+  '九大-人民大会堂': {
+    bearing: 0,
+    center: [116.38748691963224,39.90337460887406],
+    zoom: 16,
+    pitch: 10
   }
 };
 
@@ -430,7 +445,8 @@ class MapPage extends Component {
     // //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
     // map.addControl(nav, 'top-left');
     // On every scroll event, check which element is on screen
-    document.getElementById('features').onscroll = function() {
+    document.getElementById('verticalTimeLine').onscroll = function() {
+      console.log("verticalTimeLine", 1234)
       var chapterNames = Object.keys(chapters);
       for (var i = 0; i < chapterNames.length; i++) {
         var chapterName = chapterNames[i];
@@ -440,22 +456,86 @@ class MapPage extends Component {
         }
       }
     };
-    var activeChapterName = '一大上海';
+    /*document.getElementById('features').onscroll = function() {
+      var chapterNames = Object.keys(chapters);
+      for (var i = 0; i < chapterNames.length; i++) {
+        var chapterName = chapterNames[i];
+        if (isElementOnScreen(chapterName)) {
+          setActiveChapter(chapterName);
+          break;
+        }
+      }
+    };*/
+    var activeChapterName = '一大-上海';
     function setActiveChapter(chapterName) {
       if (chapterName === activeChapterName){
         return
       }
       map.flyTo(chapters[chapterName]);
-      document.getElementById(chapterName).style.opacity = 1;
-      document.getElementById(activeChapterName).style.opacity = 0.25;
+      // document.getElementById(chapterName).style.opacity = 1;
+      // document.getElementById(activeChapterName).style.opacity = 0.25;
       activeChapterName = chapterName;
     }
     function isElementOnScreen(id) {
       var element = document.getElementById(id);
       var bounds = element.getBoundingClientRect();
-      console.log('bounds',bounds.top,bounds.bottom)
       return bounds.top < window.innerHeight && bounds.bottom > 0;
     }
+
+    map.on('load',function() {
+      const lineLayer = new LineLayer()
+        .source(flyline, {
+          parser: {
+            type: 'json',
+            coordinates: "coord",
+          }
+        })
+        .color('#ff6b34')
+        .shape('arc3d')
+        .size(2)
+        .active(true)
+        .animate({
+          interval: 2,
+          trailLength: 2,
+          duration: 1
+        })
+        .style({
+          opacity: 1.0
+        });
+      map.addLayer(lineLayer);
+
+      // map.addLayer({
+      //   "id": "flyline",
+      //   "type": "line",
+      //   "source": {
+      //     "type": "geojson",
+      //     "data": {
+      //       "type": "FeatureCollection",
+      //       "features": [
+      //         {
+      //           "type": "Feature",
+      //           "properties": {},
+      //           "geometry": {
+      //             "type": "LineString",
+      //             "coordinates": [[116.38748691963224,39.90337460887406],[121.47069346816863, 31.22206084685108]]
+      //           }
+      //         }
+      //       ]
+      //     }
+      //   },
+      //   "layout": {
+      //     "line-join": "round",
+      //     "line-cap": "round"
+      //   },
+      //   "paint": {
+      //     "line-color": "#888",
+      //     "line-width": 18
+      //   }
+      // });
+    })
+
+
+
 
     var size = 100;
     var pulsingDot = {
@@ -623,8 +703,9 @@ class MapPage extends Component {
     if(_this.map){
       _this.map.flyTo({
         center:item.lonlat,
-        zoom: 6,
+        zoom: 16,
         speed: 1,
+        pitch:20,
         // curve: 3,
       })
     }
@@ -1015,52 +1096,53 @@ class MapPage extends Component {
                   {/*</Table>*/}
                 </Card>
             </TabPane>
-
           </Tabs>
         </Modal>
-        <VerticalTimeline
-          // layout='1-column-left'
-        >
-          {list.map((item)=> (
-              item['sub']?
-                <VerticalTimelineElement
-                  id={item['id']}
-                  style={{fontSize:"15px", size:"10px"}}
-                  className="vertical-timeline-element--education"
-                  date="2006 - 2008"
-                  contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                  contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                  iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
-                  dateClassName={ styles.date }
-                  // icon={<Icon type="book" />}
-                >
-                  {item['text']}
-                  {
-                    item['text']=='1921年7月-中共一大'&&
-                    <div><Button onClick={this.moreOnClick}>{this.state.more?<span>更多</span>:<span>收回</span>}</Button></div>
-                  }
-                </VerticalTimelineElement>:
-                <VerticalTimelineElement
-                  id={item['id']}
-                  style={{fontSize:"15px", size:"10px"}}
-                  className="vertical-timeline-element--education"
-                  date="2006 - 2008"
-                  contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                  contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                  iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px"  }}
-                  dateClassName={ styles.date }
-                  onTimelineElementClick={()=>this.oneClick(item) }
-                >
-                  {item['text']}
-                  {
-                    item['text']=='1921年7月-中共一大'&&
-                    <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(155,20,20,1)"}} />:<Icon type="arrow-up" style={{color:"rgba(155,20,20,1)"}} />}</div></div>
-                  }
-                </VerticalTimelineElement>
+        <div id='verticalTimeLine' className={styles.verticalTimeLine}>
+          <VerticalTimeline
+            // layout='1-column-left'
+          >
+            {list.map((item)=> (
+                item['sub']?
+                  <VerticalTimelineElement
+                    id={item['id']}
+                    style={{fontSize:"15px", size:"10px"}}
+                    className="vertical-timeline-element--education"
+                    date="2006 - 2008"
+                    contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                    contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                    iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
+                    dateClassName={ styles.date }
+                    // icon={<Icon type="book" />}
+                  >
+                    {item['text']}
+                    {
+                      item['text']=='1921年7月-中共一大'&&
+                      <div><Button onClick={this.moreOnClick}>{this.state.more?<span>更多</span>:<span>收回</span>}</Button></div>
+                    }
+                  </VerticalTimelineElement>:
+                  <VerticalTimelineElement
+                    id={item['id']}
+                    style={{fontSize:"15px", size:"10px"}}
+                    className="vertical-timeline-element--education"
+                    date="2006 - 2008"
+                    contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                    contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                    iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px"  }}
+                    dateClassName={ styles.date }
+                    onTimelineElementClick={()=>this.oneClick(item) }
+                  >
+                    {item['text']}
+                    {
+                      item['text']=='1921年7月-中共一大'&&
+                      <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(155,20,20,1)"}} />:<Icon type="arrow-up" style={{color:"rgba(155,20,20,1)"}} />}</div></div>
+                    }
+                  </VerticalTimelineElement>
               )
             )
-          }
-        </VerticalTimeline>
+            }
+          </VerticalTimeline>
+        </div>
         {/*<Timeline className={styles.timeline}>{*/}
         {/*  list.map((item)=> (*/}
         {/*    <div onClick={ (e) => this.oneClick(e, item)}>*/}
@@ -1135,6 +1217,12 @@ class MapPage extends Component {
               <small id="citation">
                 Adapted from <a href='http://www.gutenberg.org/files/2346/2346-h/2346-h.htm'>Project Gutenberg</a>
               </small>
+            </section>
+            <section id='九大北京' className={styles.selection}>
+              <h3>中共九大北京</h3>
+              <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
+                where he promises additional plans for the submarine in exchange for money. The plan works and Holmes
+                and Watson catch both criminals.</p>
             </section>
           </div>
           {/*<div className={styles.dangshi_div1} style={{display: this.state.first ? 'block': 'none'}}>*/}
