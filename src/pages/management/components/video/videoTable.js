@@ -110,6 +110,7 @@ export default class VideoTable extends Component {
         this.setState({dataSource: res.videos})
         message.success('更新视频表格成功');
       } else {
+        this.setState({dataSource: []})
         message.error('更新视频表格失败,' + res.message);
       }
     });
@@ -120,8 +121,9 @@ export default class VideoTable extends Component {
       message.warning('标签名称为空');
       return;
     }
+
     request({
-      url: '/v1.0/api/tag/' + record.videoId + '/tagName/' + this.props.cascadeValue.join("@"),
+      url: '/v1.0/api/video/' + record.videoId + '/tagName/' + this.props.cascadeValue.join("@"),
       method: 'DELETE',
       autoAdd: false, //不添加v1.0
     }).then((res) => {
