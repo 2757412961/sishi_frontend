@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
@@ -20,13 +21,17 @@ import eventcard from '@/assets/eventcard.png';
 import p1 from '@/assets/test/1.jpg';
 import p2 from '@/assets/test/2.jpg';
 import p3 from '@/assets/test/3.jpg';
+import tupian from '../../assets/icon/图片.png';
+import shipin from '@/assets/icon/视频.png';
+import yinpin from '@/assets/icon/音频.png';
+import wenzhang from '@/assets/icon/文章.png';
+import dati from '@/assets/icon/答题.png';
 import dangshi from '@/assets/dangshi.PNG'
 import yay from '@/assets/unnamed.jpg'
 import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -39,6 +44,7 @@ const { Content, Sider } = Layout;
 const noMatch=<Redirect to={`/login?redirect=${window.location.href}`} />;
 const variants={open: { opacity: 1, x: 0 },
   closed: { opacity: 0, x: "-100%" },}
+
 const list = [
   {
     id:'一大-上海',
@@ -75,7 +81,7 @@ const list = [
     value: '中共二大',
     showInfo: '<div className={styles.markerTop}>' +
       '<h2>中共二大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '<p><a id="btn"><img src="tupian"/></a></p>' +
       '</div>',
     cardImg:p2,
     cardContent:'中国共产党第二次全国代表大会，简称中共二大',
@@ -114,7 +120,7 @@ const list = [
     value: '中共五大',
     showInfo: '<div className={styles.markerTop}>' +
       '<h2>中共五大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '<p><a id="btn"><img alt="1" src="../../assets/icon/文章.png"/></a></p>' +
       '</div>',
     cardImg:p2,
     cardContent:'中国共产党第五次全国代表大会，简称中共五大',
@@ -226,6 +232,8 @@ var chapters = {
   }
 };
 
+const popupRef = React.createRef();
+
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
   return (
@@ -285,6 +293,8 @@ class MapPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeKey: "1",
+      itemNow:list[0],
       _collapsed: false,
       modalVisble: false,
       deadline: Date.now() +  1000 * 60,
@@ -550,20 +560,25 @@ class MapPage extends Component {
       map.on('click', list[i].id, function(e) {
         var coordinates = e.features[0].geometry.coordinates;
         let showInfo = list[i].showInfo;
+        _this.setState({
+          itemNow: list[i],
+        })
+
         new mapboxgl.Popup()
           .setLngLat(coordinates)
-          .setHTML(showInfo)
-          .addTo(map);
-        document.getElementById('btn')
-          .addEventListener('click', function(){
-            let cardImg = list[i].cardImg;
-            let cardContent = list[i].cardContent;
-            _this.setState({
-              knowledgeUrl: cardImg,
-              knowledgeContent: cardContent,
-            });
-            _this.showModal()
-          });
+          // .setHTML(showInfo)
+          .addTo(map)
+          .setDOMContent(popupRef.current);
+        // document.getElementById('btn')
+        //   .addEventListener('click', function(){
+        //     let cardImg = list[i].cardImg;
+        //     let cardContent = list[i].cardContent;
+        //     _this.setState({
+        //       knowledgeUrl: cardImg,
+        //       knowledgeContent: cardContent,
+        //     });
+        //     _this.showModal()
+        //   });
       });
       map.on('mouseenter', list[i].id, function() {
         map.getCanvas().style.cursor = 'pointer';
@@ -574,8 +589,11 @@ class MapPage extends Component {
     }
     this.map = map;
   }
-  showModal=()=>{
-    this.setState({modalVisble:true})
+  showModal=(activeKey)=>{
+    this.setState({
+      modalVisble:true,
+      activeKey:activeKey,
+    });
     console.log(this.state.modalVisble)
   }
   oneClick = (item) => {
@@ -783,13 +801,16 @@ class MapPage extends Component {
                onCancel={()=>this.setState({modalVisble:false})}
                footer={false}
         >
-          <Tabs defaultActiveKey="1">
+          <Tabs
+            defaultActiveKey="1"
+            activeKey={this.state.activeKey}
+          >
 
             <TabPane
               tab={
                 <span>
                         <Icon type="book" />
-                          知识卡片
+                          文章
                       </span>
               }
               key="1"
@@ -808,11 +829,56 @@ class MapPage extends Component {
             <TabPane
               tab={
                 <span>
+                        <Icon type="picture" />
+                         图片
+                      </span>
+              }
+              key="2"
+            >
+              <div style={{padding: 40, background: "#ececec"}} >
+                <Slider {...this.carousel_settings} >
+                  <div>
+                    <img  src={yay} />
+                  </div>
+                  <div>
+                    <img  src={yaa} style={{height: 250, width:400 }}/>
+                  </div>
+                </Slider>
+              </div>
+
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="video-camera" />
+                          视频
+                      </span>
+              }
+              key="3"
+            >
+              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                     controls="controls">
+                {/*<source src="./1.mp4"*/}
+                {/*/>*/}
+                {/*<source src="./1.mp4"*/}
+                {/*/>*/}
+                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+              />
+                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                />
+              </video>
+              {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
+              {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
+              {/*</video>*/}
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
                         <Icon type="question" />
                           答题
                       </span>
               }
-              key="2"
+              key="4"
             >
 
               <Card   title={this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}>
@@ -842,21 +908,6 @@ class MapPage extends Component {
                       </Col>:''}
                   </Row>
                 </Checkbox.Group>
-                {/*<Radio.Group onChange={this.onChange} value={this.state.value}>*/}
-                {/*  <Radio   style={radioStyle} value={0}>*/}
-                {/*    {answer[0]}*/}
-                {/*  </Radio>*/}
-                {/*  <Radio   style={radioStyle} value={1}>*/}
-                {/*    {answer[1]}*/}
-                {/*  </Radio>*/}
-                {/*  <Radio   style={radioStyle} value={2}>*/}
-                {/*    {answer[2]}*/}
-                {/*  </Radio>*/}
-                {/*  <Radio   style={radioStyle} value={3}>*/}
-                {/*    {answer[3]}*/}
-                {/*    /!*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*!/*/}
-                {/*  </Radio>*/}
-                {/*</Radio.Group>*/}
               </Card>
               <Button  key="submit"
                        type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
@@ -868,7 +919,7 @@ class MapPage extends Component {
                 {
                   alert("答题结束")
                 }
-                       }}>提交</Button>
+              }}>提交</Button>
               {this.state.answer==true?
                 (<h1>正确答案是</h1>):''}
               {this.state.answer==true?
@@ -892,9 +943,9 @@ class MapPage extends Component {
                         alert('你还未提交本题答案')
                       }
                       else{
-                      this.setState({deadline:Date.now() +  1000 * 60})
-                      this.setState({questionNumber: this.state.questionNumber+1})
-                      this.setState({answer:false})
+                        this.setState({deadline:Date.now() +  1000 * 60})
+                        this.setState({questionNumber: this.state.questionNumber+1})
+                        this.setState({answer:false})
                       }
                     }}>
                     下一题
@@ -902,7 +953,7 @@ class MapPage extends Component {
                 </Col>
                 <Col span={8}>
                   <h2><span>{this.state.questionNumber}</span>/
-                  <span>{allNumber}</span></h2>
+                    <span>{allNumber}</span></h2>
                   {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
                 </Col>
               </Row>
@@ -910,81 +961,6 @@ class MapPage extends Component {
                 (<div>
                   <div className={styles.try}></div>
                   <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
-                        <Icon type="video-camera" />
-                          视频
-                      </span>
-              }
-              key="3"
-            >
-              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
-                     controls="controls">
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-              />
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                />
-              </video>
-              {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
-              {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
-              {/*</video>*/}
-            </TabPane>
-
-            <TabPane
-              tab={
-                <span>
-                        <Icon type="picture" />
-                         图片
-                      </span>
-              }
-              key="5"
-            >
-              {/*<Carousel >*/}
-              {/*  <div >*/}
-              {/*    <img  src={yay} />*/}
-              {/*  </div>*/}
-              {/*  <div >*/}
-              {/*    <img  src={yaa} style={{height: 250, width:400 }}/>*/}
-              {/*  </div>*/}
-              {/*</Carousel>*/}
-
-              <div style={{padding: 40, background: "#ececec"}} >
-                <Slider {...this.carousel_settings} >
-                  <div>
-                    <img  src={yay} />
-                  </div>
-                  <div>
-                    <img  src={yaa} style={{height: 250, width:400 }}/>
-                  </div>
-                </Slider>
-              </div>
-
-            </TabPane>
-
-            <TabPane
-              tab={
-                <span>
-                        <Icon type="sound" />
-                         音乐
-                      </span>
-              }
-              key="4"
-            >
-                <Card type="inner" size="small" title= '音乐列表' bordered={false}>
-                  <audio width="800" controls="controls"  loop="loop" preload="auto" title="123">
-                    <source src="http://music.163.com/song/media/outer/url?id=476592630.mp3" type="audio/mp3" />
-                  </audio>
-                  {/*<Table dataSource={{}} pagination={false}>*/}
-                  {/*  <Column title="结果名称" dataIndex="name" key="name" />*/}
-                  {/*  <Column title="结果值" dataIndex="resultDesc" key="resultDesc" />*/}
-                  {/*</Table>*/}
-                </Card>
             </TabPane>
 
           </Tabs>
@@ -1032,20 +1008,47 @@ class MapPage extends Component {
             )
           }
         </VerticalTimeline>
-        {/*<Timeline className={styles.timeline}>{*/}
-        {/*  list.map((item)=> (*/}
-        {/*    <div onClick={ (e) => this.oneClick(e, item)}>*/}
-        {/*      /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
-        {/*      <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>*/}
-        {/*    </div>*/}
-        {/*    )*/}
-        {/*  )*/}
-        {/*}*/}
-        {/*</Timeline>*/}
       </Sider>
       <Content>
         <div className={styles.normal}>
           <div className={styles.mapContainer}  id="onlineMapping">
+            <div  ref={popupRef} className={styles.popupDiv}>
+              <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
+              <Row style={{width:"240px",top:"10px"}} justify="space-between">
+                <Col span={2} onClick={()=>this.showModal("1")}>
+                  <Icon className={styles.popup} type="book" />
+                </Col>
+                <Col span={4} onClick={()=>this.showModal("1")}>
+                  文章
+                </Col>
+                <Col span={2} onClick={()=>this.showModal("2")}>
+                  <Icon className={styles.popup} type="picture" />
+                </Col>
+                <Col span={4} onClick={()=>this.showModal("2")}>
+                  图片
+                </Col>
+                <Col span={2} onClick={()=>this.showModal("3")}>
+                  <Icon className={styles.popup} type="video-camera" />
+                </Col>
+                <Col span={4} onClick={()=>this.showModal("3")}>
+                  视频
+                </Col>
+                <Col span={2} onClick={()=>this.showModal("4")}>
+                  <Icon className={styles.popup} type="question" />
+                </Col>
+                <Col span={4} onClick={()=>this.showModal("4")}>
+                  答题
+                </Col>
+              </Row>
+            </div>
+            {/*{*/}
+            {/*  list.map((item, index)=>(*/}
+            {/*    <div  ref={popupRef[index]}>*/}
+            {/*      /!*<span>{item.id}</span>*!/*/}
+            {/*      <Icon type="book" />*/}
+            {/*    </div>*/}
+            {/*  ))*/}
+            {/*}*/}
           </div>
           <div id='features' className={styles.features}>
             <section id='一大上海' className={styles.selection}>
@@ -1108,18 +1111,6 @@ class MapPage extends Component {
               </small>
             </section>
           </div>
-          {/*<div className={styles.dangshi_div1} style={{display: this.state.first ? 'block': 'none'}}>*/}
-          {/*  <img  src={dangshi} className={styles.dangshi} />*/}
-          {/*  <div className={styles.dangshi_font}>*/}
-          {/*    党史学习*/}
-          {/*  </div>*/}
-          {/*</div>*/}
-          {/*<div className={styles.dangshi_div}>*/}
-          {/*  <img  src={dangshi} className={styles.dangshi} />*/}
-          {/*  <div className={styles.dangshi_font}>*/}
-          {/*    返回地图首页*/}
-          {/*  </div>*/}
-          {/*</div>*/}
         </div>
       </Content>
     </Layout>
@@ -1127,59 +1118,6 @@ class MapPage extends Component {
   );}
 }
 
-// function MapPage(props) {
-//   const [_collapsed, setCollapsed] = useState(false);
-//   const [modalVisble,setModalVisble]=useState(false);
-//   const [deadline,setDeadline] =useState( Date.now() +  1000 * 60);
-//
-//
-//   return (
-//     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
-//       <Layout className={styles.normal}>
-//         <Sider style={{backgroundColor:'white'}} width={300}>
-//           <Button onClick={() =>setModalVisble(true)}>开始答题</Button>
-//           <Modal visible={modalVisble}
-//                  title="开始答题"
-//                  centered
-//                  style={{top:'3em'}}
-//                  bodyStyle={{height:'70vh'}}
-//                  maskStyle={{backgroundColor: 'rgba(198,170,145,1)' ,top:'5em',}}
-//                  footer={[
-//                    <Row gutter={16}>
-//                      <Col span={8}>
-//                        <Button  key="back" onClick={()=>{}}>
-//                          上一题
-//                        </Button>
-//                      </Col>
-//                      <Col span={8}>
-//                        <Button
-//                          key="submit"
-//                          type="primary"
-//                          onClick={()=> {
-//                            setModalVisble(false)
-//                            setDeadline(Date.now() +  1000 * 60)
-//                          }}>
-//                          下一题
-//                        </Button>
-//                      </Col>
-//                      <Col span={8}>
-//                        <Countdown title="Countdown" value={deadline} onFinish={()=>{}} />
-//                      </Col>
-//                    </Row>
-//                  ]}
-//           >{deadline}
-//             <p>Some contents...</p>
-//             <p>Some contents...</p>
-//             <p>Some contents...</p>
-//           </Modal>
-//         </Sider>
-//         <Content>
-//           <MapPageMap/>
-//         </Content>
-//       </Layout>
-//     </Authorized>
-//   );
-// }
 export default connect(({ mapPage }) => ({
 mapPage
 }))(MapPage);
