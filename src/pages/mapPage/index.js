@@ -14,9 +14,11 @@ import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
-import { Scene, LineLayer,Control,PolygonLayer } from '@antv/l7';
+import point from '@/assets/pointData/point.json';
+import { Scene, LineLayer,Control,PolygonLayer,PointLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
-
+import {MapboxLayer} from '@deck.gl/mapbox';
+import {ArcLayer} from '@deck.gl/layers';
 // import {motion} from 'framer-motion';
 // // @import '~video-react/styles/scss/video-react';
 // import {Player} from 'video-react'
@@ -36,6 +38,7 @@ import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
+
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -324,14 +327,15 @@ function forList(treeList){
   for (let i in treeList){
     if(treeList[i].hasOwnProperty('geoCoordinates')){
       let temp={};
-      temp.id=i;
+      temp.id=treeList[i].label;
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
       temp.text=treeList[i].label;
       temp.value=treeList[i].label;
       temp.time=treeList[i].time;
-      temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}>' + '<p>发生时间'
-        +treeList[i].time+'</p> <p><a id="btn">点击进入学习卡片</a></p></div>';
+      temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+        '于'+treeList[i].time+'在<span>'+treeList[i].label+'</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+        '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>';
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       list.push(temp);
@@ -436,9 +440,9 @@ class MapPage extends Component {
         list=forList(tagTree);
       }
     });
-    const map = new Scene({
+    /*const map = new Scene({
       id: 'student-map',
-      /** 渲染的地图会有一个antv的logo,可以让其消失 */
+      /!** 渲染的地图会有一个antv的logo,可以让其消失 *!/
       logoVisible: false,
       map: new Mapbox({
         // container: 'onlineMapping',
@@ -465,7 +469,30 @@ class MapPage extends Component {
       //   center: [ 121.52, 31.04 ],  //上海经纬度坐标
       //   zoom: 3,
       // })
+    });*/
+    const map = new mapboxgl.Map({
+      container: 'onlineMapping',
+      style: {
+        "version": 8,
+        "sprite": localhost + "/MapBoxGL/css/sprite",
+        "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+        "sources": sources,
+        "layers": layers,
+      },
+      center: [121.52, 31.04],  //上海经纬度坐标
+      zoom: 3,
+      pitch:30,
+      bearing: 10,
     });
+    // let nav = new mapboxgl.NavigationControl({
+    //   //是否显示指南针按钮，默认为true
+    //   "showCompass": true,
+    //   //是否显示缩放按钮，默认为true
+    //   "showZoom":true
+    // });
+    // //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
+    // map.addControl(nav, 'top-left');
+    // On every scroll event, check which element is on screen
     document.getElementById('verticalTimeLine').onscroll = function() {
       console.log("verticalTimeLine", 1234)
       var chapterNames = Object.keys(chapters);
@@ -503,7 +530,46 @@ class MapPage extends Component {
       return bounds.top < window.innerHeight && bounds.bottom > 0;
     }
 
-    map.on('loaded', async () => {
+    /*map.on('loaded', async () => {
+      //添加一大到九大坐标点
+      const pointLayer = new PointLayer()
+        .source(point, {
+          parser: {
+            type: 'json',
+            x:'lng',
+            y:'lat'
+          }
+        })
+        .color('red')
+        .shape('circle')
+        .size(26)
+        .animate({rings:2})
+        .active(true)
+        .style({
+          opacity: 1.0
+        });
+      //添加一大到九大坐标点名称
+      const textLayer = new PointLayer()
+        .source(point, {
+          parser: {
+            type: 'json',
+            x:'lng',
+            y:'lat'
+          }
+        })
+        .color('red')
+        .shape('name','text')
+        .size(17)
+        .style({
+          textAnchor: 'bottom-left', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [ 3, -3 ], // 文本相对锚点的偏移量 [水平, 垂直]
+          spacing: 2, // 字符间距
+          padding: [ 1, 1 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+          stroke: 'red', // 描边颜色
+          strokeWidth: 0.1, // 描边宽度
+          strokeOpacity: 1.0
+        });
+      //添加参加一大各代表的流向图
       const lineLayer = new LineLayer()
         .source(flyline, {
           parser: {
@@ -521,10 +587,22 @@ class MapPage extends Component {
           duration: 1
         })
         .style({
-          opacity: 1.0
+          opacity: 1.0,
+          stroke: 'white',
         });
+      map.addLayer(pointLayer);
+      map.addLayer(textLayer);
       map.addLayer(lineLayer);
-    });
+
+      pointLayer.on('click', function(e) {
+        var html = '<p>Hello World!</p>\n  <p>There is in China</p>';
+
+        new Scene.Popup().setLnglat([116.38748691963224,39.90337460887406]).setHTML(html).addTo(map);
+      })
+
+
+
+    });*/
 
     var size = 100;
     var pulsingDot = {
@@ -573,7 +651,6 @@ class MapPage extends Component {
         return true;
       }
     };
-
     //加载中共一大（上海，嘉兴地点）的火花图标
     map.on('load', function() {
       /*map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
@@ -610,44 +687,43 @@ class MapPage extends Component {
       });*/
       for (let i=0;i<list.length;i++) {
         map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
+        map.addLayer({
+          "id": list[i].id,
+          "type": "symbol",
+          "source": {
+            "type": "geojson",
+            "data": {
+              "type": "FeatureCollection",
+              "features": [{
+                "type": "Feature",
+                "geometry": {
+                  "type": "Point",
+                  "coordinates": list[i].lonlat,
+                }
+              }]
+            }
+          },
+          "layout": {
+            "icon-image": list[i].id,
+            "icon-optional": false,
+            "icon-ignore-placement": true,
+            // "text-ignore-placement": true,
+            "text-allow-overlap": true,
+            "text-field": list[i].value,
+            "text-anchor": 'left',
+            "text-offset": [1,0.1],
+            // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+            "text-size": [
+              "interpolate", ["linear"], ["zoom"],
+              3,20,
+              17,38
+            ],
+          },
+          paint: {
+            "text-color": 'rgb(255,0,0)',
+          }
 
-        // map.addLayer({
-        //   "id": list[i].id,
-        //   "type": "symbol",
-        //   "source": {
-        //     "type": "geojson",
-        //     "data": {
-        //       "type": "FeatureCollection",
-        //       "features": [{
-        //         "type": "Feature",
-        //         "geometry": {
-        //           "type": "Point",
-        //           "coordinates": list[i].lonlat,
-        //         }
-        //       }]
-        //     }
-        //   },
-        //   "layout": {
-        //     "icon-image": list[i].id,
-        //     "icon-optional":false,
-        //     "icon-ignore-placement": true,
-        //     // "text-ignore-placement": true,
-        //     "text-allow-overlap": true,
-        //     "text-field": list[i].value,
-        //     "text-anchor": 'left',
-        //     "text-offset": [1,0.1],
-        //     // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-        //     "text-size": [
-        //       "interpolate", ["linear"], ["zoom"],
-        //       3,20,
-        //       17,38
-        //     ],
-        //   },
-        //   paint: {
-        //     "text-color": 'rgb(255,0,0)',
-        //   }
-        //
-        // });
+        });
       }
       // playback(0);
     });
@@ -683,6 +759,25 @@ class MapPage extends Component {
         map.getCanvas().style.cursor = '';
       });
     }
+    const myDeckLayer = new MapboxLayer({
+      id: 'arc',
+      type: ArcLayer,
+      data: flyline,
+      getSourcePosition: d => d.coord[0],
+      getTargetPosition: d => d.coord[1],
+      getSourceColor: d => [255, 0, 0],
+      getTargetColor: d => [255, 0, 0],
+      getWidth: 2.3,
+
+      // animate:({
+      //   interval: 0.8,
+      //   trailLength: 2,
+      //   duration: 1
+      // })
+    });
+    map.on('load', ()=> {
+      map.addLayer(myDeckLayer)
+    })
     this.map = map;
   }
   showModal=(activeKey)=>{
@@ -748,13 +843,29 @@ class MapPage extends Component {
     //   }
     //   return tree
     // }
-    // tree=[];
+    tree=[];
     const {tagTree,question}=mapPage;
     // let list1=forTree(tagTree);
-     list=forList(tagTree);
-    console.log('listRender',list[0]);
+    list=forList(tagTree);
+    console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
+    console.log('tagTree',tagTree);
+    //遍历tagTree;
+    let tree=[];
+    function forTree(treeList){
+      for (let i in treeList){
+        console.log('i',i);
+        if(treeList[i].children.length>0){
+          forTree(treeList[i].children)
+        }else{
+          tree.push(treeList[i])
+        }
+      }
+      return tree
+    }
+    //遍历树生成的数组treeList
+    // let treeList=forTree(tagTree);
     const {unCheckStyle,checkStyle} = this.state;
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
