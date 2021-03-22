@@ -15,7 +15,7 @@ class ArticleModal extends Component {
       editorState: BraftEditor.createEditorState(null),
       mediaItems: [
         {
-          id: 1,
+          id: "rtsrtd89-59s",
           type: 'IMAGE',
           url: 'https://margox.cn/wp-content/uploads/2018/09/IMG_9508.jpg'
         }, {
@@ -60,7 +60,21 @@ class ArticleModal extends Component {
 
   // Braft editor
   initMediaItems = () => {
+    request({
+      url: '/v1.0/api/tagResource/mediaItems',
+      method: 'GET',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
 
+      if (res.success) {
+        this.setState({mediaItems: res.list})
+        message.success('更新媒体资源成功');
+      } else {
+        this.setState({mediaItems: []})
+        message.error('更新媒体资源失败,' + res.message);
+      }
+    });
   }
 
   handleEditorChange = (editorState) => {
