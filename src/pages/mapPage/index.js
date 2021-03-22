@@ -14,9 +14,11 @@ import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
-import { Scene, LineLayer,Control,PolygonLayer } from '@antv/l7';
+import point from '@/assets/pointData/point.json';
+import { Scene, LineLayer,Control,PolygonLayer,PointLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
-
+import {MapboxLayer} from '@deck.gl/mapbox';
+import {ArcLayer} from '@deck.gl/layers';
 // import {motion} from 'framer-motion';
 // // @import '~video-react/styles/scss/video-react';
 // import {Player} from 'video-react'
@@ -49,8 +51,8 @@ const { Content, Sider } = Layout;
 const noMatch=<Redirect to={`/login?redirect=${window.location.href}`} />;
 const variants={open: { opacity: 1, x: 0 },
   closed: { opacity: 0, x: "-100%" },}
-//
-//
+
+
 // const list = [
 //   {
 //     id:'一大-上海',
@@ -435,9 +437,9 @@ class MapPage extends Component {
         list=forList(tagTree);
       }
     });
-    const map = new Scene({
+    /*const map = new Scene({
       id: 'student-map',
-      /** 渲染的地图会有一个antv的logo,可以让其消失 */
+      /!** 渲染的地图会有一个antv的logo,可以让其消失 *!/
       logoVisible: false,
       map: new Mapbox({
         // container: 'onlineMapping',
@@ -450,6 +452,8 @@ class MapPage extends Component {
         },
         center: [ 121.52, 31.04 ],  //上海经纬度坐标
         zoom: 3,
+        pitch:30,
+        bearing: 10,
         token:'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg'
       }),
       // map: new Mapbox({
@@ -464,6 +468,20 @@ class MapPage extends Component {
       //   center: [ 121.52, 31.04 ],  //上海经纬度坐标
       //   zoom: 3,
       // })
+    });*/
+    const map = new mapboxgl.Map({
+      container: 'onlineMapping',
+      style: {
+        "version": 8,
+        "sprite": localhost + "/MapBoxGL/css/sprite",
+        "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+        "sources": sources,
+        "layers": layers,
+      },
+      center: [121.52, 31.04],  //上海经纬度坐标
+      zoom: 3,
+      pitch:30,
+      bearing: 10,
     });
     // let nav = new mapboxgl.NavigationControl({
     //   //是否显示指南针按钮，默认为true
@@ -511,28 +529,79 @@ class MapPage extends Component {
       return bounds.top < window.innerHeight && bounds.bottom > 0;
     }
 
-    map.on('loaded', async () => {
+    /*map.on('loaded', async () => {
+      //添加一大到九大坐标点
+      const pointLayer = new PointLayer()
+        .source(point, {
+          parser: {
+            type: 'json',
+            x:'lng',
+            y:'lat'
+          }
+        })
+        .color('red')
+        .shape('circle')
+        .size(26)
+        .animate({rings:2})
+        .active(true)
+        .style({
+          opacity: 1.0
+        });
+      //添加一大到九大坐标点名称
+      const textLayer = new PointLayer()
+        .source(point, {
+          parser: {
+            type: 'json',
+            x:'lng',
+            y:'lat'
+          }
+        })
+        .color('red')
+        .shape('name','text')
+        .size(17)
+        .style({
+          textAnchor: 'bottom-left', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
+          textOffset: [ 3, -3 ], // 文本相对锚点的偏移量 [水平, 垂直]
+          spacing: 2, // 字符间距
+          padding: [ 1, 1 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
+          stroke: 'red', // 描边颜色
+          strokeWidth: 0.1, // 描边宽度
+          strokeOpacity: 1.0
+        });
+      //添加参加一大各代表的流向图
       const lineLayer = new LineLayer()
         .source(flyline, {
           parser: {
             type: 'json',
-            coordinates: flyline[0].coord,
+            coordinates: "coord",
           }
         })
-        .color('#ff6b34')
+        .color('red')
         .shape('arc3d')
         .size(2)
         .active(true)
         .animate({
-          interval: 2,
+          interval: 0.8,
           trailLength: 2,
           duration: 1
         })
         .style({
-          opacity: 1.0
+          opacity: 1.0,
+          stroke: 'white',
         });
+      map.addLayer(pointLayer);
+      map.addLayer(textLayer);
       map.addLayer(lineLayer);
-    });
+
+      pointLayer.on('click', function(e) {
+        var html = '<p>Hello World!</p>\n  <p>There is in China</p>';
+
+        new Scene.Popup().setLnglat([116.38748691963224,39.90337460887406]).setHTML(html).addTo(map);
+      })
+
+
+
+    });*/
 
     var size = 100;
     var pulsingDot = {
@@ -581,7 +650,6 @@ class MapPage extends Component {
         return true;
       }
     };
-
     //加载中共一大（上海，嘉兴地点）的火花图标
     map.on('load', function() {
       /*map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
@@ -618,7 +686,6 @@ class MapPage extends Component {
       });*/
       for (let i=0;i<list.length;i++) {
         map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
-
         map.addLayer({
           "id": list[i].id,
           "type": "symbol",
@@ -691,6 +758,25 @@ class MapPage extends Component {
         map.getCanvas().style.cursor = '';
       });
     }
+    const myDeckLayer = new MapboxLayer({
+      id: 'arc',
+      type: ArcLayer,
+      data: flyline,
+      getSourcePosition: d => d.coord[0],
+      getTargetPosition: d => d.coord[1],
+      getSourceColor: d => [255, 0, 0],
+      getTargetColor: d => [255, 0, 0],
+      getWidth: 2.3,
+
+      // animate:({
+      //   interval: 0.8,
+      //   trailLength: 2,
+      //   duration: 1
+      // })
+    });
+    map.on('load', ()=> {
+      map.addLayer(myDeckLayer)
+    })
     this.map = map;
   }
   showModal=(activeKey)=>{
@@ -759,7 +845,7 @@ class MapPage extends Component {
     tree=[];
     const {tagTree,question}=mapPage;
     // let list1=forTree(tagTree);
-     list=forList(tagTree);
+    list=forList(tagTree);
     console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
@@ -778,574 +864,574 @@ class MapPage extends Component {
       return tree
     }
     //遍历树生成的数组treeList
-    let treeList=forTree(tagTree);
+    // let treeList=forTree(tagTree);
     const {unCheckStyle,checkStyle} = this.state;
-  return (
-    <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
-    <Layout className={styles.normal}>
-      <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
-        <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
-          答题
-        </Button>
-        <Modal visible={this.state.startQuestion}
-               centered
+    return (
+      <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
+        <Layout className={styles.normal}>
+          <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
+            <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
+              答题
+            </Button>
+            <Modal visible={this.state.startQuestion}
+                   centered
               //  style={{top:'3em',height:'500px'}}
-              width={1000}
+                   width={1000}
               // // bodyStyle={{backgroundImage:}}
               //  className={styles.modal}
               //  closable={false}
               //  keyboard={true}
-               mask={true}
-               maskClosable={true}
+                   mask={true}
+                   maskClosable={true}
               // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-               title={null}
-               onCancel={this.handleCancel}
-               footer={null}
-               closable={false}
-               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-        >
-          <div className={styles.modal}>
-            <div className={styles.top}></div>
-            <div className="d-iframe">
-              {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
-              {/*        className="iframe-style"></iframe>*/}
-              <div className={styles.web} >
-                <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
-                <div className={styles.radio}>
-                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                  <Row>
-                    <Col span={12}>
-                  <Checkbox    value={'A'}>
-                    {'A  '+(question[recent]?question[recent].optionA:'')}
-                  </Checkbox>
+                   title={null}
+                   onCancel={this.handleCancel}
+                   footer={null}
+                   closable={false}
+                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+            >
+              <div className={styles.modal}>
+                <div className={styles.top}></div>
+                <div className="d-iframe">
+                  {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
+                  {/*        className="iframe-style"></iframe>*/}
+                  <div className={styles.web} >
+                    <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
+                    <div className={styles.radio}>
+                      <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                        <Row>
+                          <Col span={12}>
+                            <Checkbox    value={'A'}>
+                              {'A  '+(question[recent]?question[recent].optionA:'')}
+                            </Checkbox>
+                          </Col>
+                          <Col span={12}>
+                            <Checkbox    value={'B'}>
+                              {'B  '+(question[recent]?question[recent].optionB:'')}
+                            </Checkbox>
+                          </Col>
+                          {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
+                            <Checkbox    value={'C'}>
+                              {'C  '+(question[recent]?question[recent].optionC:'')}
+                            </Checkbox>
+                          </Col>:""}
+                          {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                            <Col span={12}>
+                              <Checkbox    value={'D'}>
+                                {'D  '+(question[recent]?question[recent].optionD:'')}
+                                {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                              </Checkbox>
+                            </Col>:''}
+                        </Row>
+                      </Checkbox.Group>
+                      <img src=""/>
+                    </div>
+                  </div>
+                  {this.state.answer==true?
+                    (<h1>正确答案是</h1>):''}
+                  {this.state.answer==true?
+                    (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
+                  <Row gutter={16}>
+                    <Col span={8}>
+                      <Button  key="submit"
+                               type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
+                               onClick={()=>{
+                                 let string=this.state.value.toString();
+                                 if(string==(question[recent]?question[recent].answer:''))
+                                 {
+                                   this.setState({grade:this.state.grade+1});
+                                 }
+                                 this.setState({answer:true})
+                                 if(this.state.questionNumber==allNumber) {
+                                   alert("答题结束")
+                                 }}}>提交</Button>
                     </Col>
-                    <Col span={12}>
-                  <Checkbox    value={'B'}>
-                    {'B  '+(question[recent]?question[recent].optionB:'')}
-                  </Checkbox>
+                    <Col span={8}>
+                      <Button
+                        key="submit"
+                        type="primary"
+                        onClick={()=> {
+                          if(this.state.questionNumber==allNumber&&this.state.answer==true){
+                            this.setState({startQuestion:false})
+                            this.setState({questionNumber: 1})
+                            const {dispatch}=this.props;
+                            dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
+                            return
+                          }
+                          if(this.state.answer==false){
+                            alert('你还未提交本题答案')
+                          } else{
+                            this.setState({deadline:Date.now() +  1000 * 60})
+                            this.setState({questionNumber: this.state.questionNumber+1})
+                            this.setState({answer:false})
+                          }
+                        }}>
+                        下一题
+                      </Button>
                     </Col>
-                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                  <Checkbox    value={'C'}>
-                    {'C  '+(question[recent]?question[recent].optionC:'')}
-                  </Checkbox>
-                    </Col>:""}
-                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                    <Col span={12}>
-                  <Checkbox    value={'D'}>
-                    {'D  '+(question[recent]?question[recent].optionD:'')}
-                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                  </Checkbox>
-                    </Col>:''}
+                    <Col span={8}>
+                      <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>
+                      <h1><span>{this.state.questionNumber}</span>/
+                        <span>{allNumber}</span></h1>
+                      {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
+                    </Col>
                   </Row>
-                </Checkbox.Group>
-                  <img src=""/>
+                  {this.state.questionNumber==allNumber&&this.state.answer?
+                    (<div>
+                      <div className={styles.try}></div>
+                      <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
+
                 </div>
+                <div className={styles.bottom}></div>
               </div>
-              {this.state.answer==true?
-                (<h1>正确答案是</h1>):''}
-              {this.state.answer==true?
-                (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
-              <Row gutter={16}>
-                <Col span={8}>
-                  <Button  key="submit"
-                           type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
-                           onClick={()=>{
-                             let string=this.state.value.toString();
-                             if(string==(question[recent]?question[recent].answer:''))
-                             {
-                               this.setState({grade:this.state.grade+1});
-                             }
-                             this.setState({answer:true})
-                             if(this.state.questionNumber==allNumber) {
-                               alert("答题结束")
-                             }}}>提交</Button>
-                </Col>
-                <Col span={8}>
-                  <Button
-                    key="submit"
-                    type="primary"
-                    onClick={()=> {
-                      if(this.state.questionNumber==allNumber&&this.state.answer==true){
-                        this.setState({startQuestion:false})
-                        this.setState({questionNumber: 1})
-                        const {dispatch}=this.props;
-                        dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
-                        return
-                      }
-                      if(this.state.answer==false){
-                        alert('你还未提交本题答案')
-                      } else{
-                        this.setState({deadline:Date.now() +  1000 * 60})
-                        this.setState({questionNumber: this.state.questionNumber+1})
-                        this.setState({answer:false})
-                      }
-                    }}>
-                    下一题
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>
-                  <h1><span>{this.state.questionNumber}</span>/
-                    <span>{allNumber}</span></h1>
-                  {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
-                </Col>
-              </Row>
-              {this.state.questionNumber==allNumber&&this.state.answer?
-                (<div>
-                  <div className={styles.try}></div>
-                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
+            </Modal>
+            <Modal visible={this.state.modalVisble}
+                   destroyOnClose={true}
+                   forceRender={true}
+                   title="互动页面"
+                   centered
+                   style={{top:'3em',color:'black',fontStyle:{},height:'70vh', width:'70vw'}}
+              // bodyStyle={{height:'70vh', width:'70vw'}}
+                   maskStyle={{backgroundColor: 'rgba(198,170,145,0.1)' ,top:'5em',}}
+                   className={styles.modal}
+                   onOk={()=>this.setState({modalVisble:false})}
+                   onCancel={()=>this.setState({modalVisble:false})}
+                   footer={false}
+            >
+              <Tabs
+                defaultActiveKey="1"
+                activeKey={this.state.activeKey}
+              >
 
-            </div>
-            <div className={styles.bottom}></div>
-          </div>
-        </Modal>
-        <Modal visible={this.state.modalVisble}
-               destroyOnClose={true}
-               forceRender={true}
-               title="互动页面"
-               centered
-               style={{top:'3em',color:'black',fontStyle:{},height:'70vh', width:'70vw'}}
-               // bodyStyle={{height:'70vh', width:'70vw'}}
-               maskStyle={{backgroundColor: 'rgba(198,170,145,0.1)' ,top:'5em',}}
-               className={styles.modal}
-               onOk={()=>this.setState({modalVisble:false})}
-               onCancel={()=>this.setState({modalVisble:false})}
-               footer={false}
-        >
-          <Tabs
-            defaultActiveKey="1"
-            activeKey={this.state.activeKey}
-          >
-
-            <TabPane
-              tab={
-                <span>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="book" />
                           文章
                       </span>
-              }
-              key="1"
-            >
-              <Card style={{ width: '100' }}
-                    cover={
-                      <img
-                        alt="example"
-                        src={this.state.knowledgeUrl}
-                      />
-                    }
-                    >
-                {this.state.knowledgeContent}
-              </Card>
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
+                  }
+                  key="1"
+                >
+                  <Card style={{ width: '100' }}
+                        cover={
+                          <img
+                            alt="example"
+                            src={this.state.knowledgeUrl}
+                          />
+                        }
+                  >
+                    {this.state.knowledgeContent}
+                  </Card>
+                </TabPane>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="picture" />
                          图片
                       </span>
-              }
-              key="2"
-            >
-              <div style={{padding: 40, background: "#ececec"}} >
-                <Slider {...this.carousel_settings} >
-                  <div>
-                    <img  src={yay} />
+                  }
+                  key="2"
+                >
+                  <div style={{padding: 40, background: "#ececec"}} >
+                    <Slider {...this.carousel_settings} >
+                      <div>
+                        <img  src={yay} />
+                      </div>
+                      <div>
+                        <img  src={yaa} style={{height: 250, width:400 }}/>
+                      </div>
+                    </Slider>
                   </div>
-                  <div>
-                    <img  src={yaa} style={{height: 250, width:400 }}/>
-                  </div>
-                </Slider>
-              </div>
 
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
+                </TabPane>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="video-camera" />
                           视频
                       </span>
-              }
-              key="3"
-            >
-              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
-                     controls="controls">
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-              />
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                />
-              </video>
-              {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
-              {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
-              {/*</video>*/}
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
+                  }
+                  key="3"
+                >
+                  <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                         controls="controls">
+                    {/*<source src="./1.mp4"*/}
+                    {/*/>*/}
+                    {/*<source src="./1.mp4"*/}
+                    {/*/>*/}
+                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                    />
+                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                    />
+                  </video>
+                  {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
+                  {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
+                  {/*</video>*/}
+                </TabPane>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="question" />
                           答题
                       </span>
-              }
-              key="4"
-            >
+                  }
+                  key="4"
+                >
 
-              <Card   title={this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}>
-                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                  <Row>
-                    <Col span={12}>
-                      <Checkbox    value={'A'}>
-                        {'A  '+(question[recent]?question[recent].optionA:'')}
-                      </Checkbox>
+                  <Card   title={this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}>
+                    <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                      <Row>
+                        <Col span={12}>
+                          <Checkbox    value={'A'}>
+                            {'A  '+(question[recent]?question[recent].optionA:'')}
+                          </Checkbox>
+                        </Col>
+                        <Col span={12}>
+                          <Checkbox    value={'B'}>
+                            {'B  '+(question[recent]?question[recent].optionB:'')}
+                          </Checkbox>
+                        </Col>
+                        {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
+                          <Checkbox    value={'C'}>
+                            {'C  '+(question[recent]?question[recent].optionC:'')}
+                          </Checkbox>
+                        </Col>:""}
+                        {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                          <Col span={12}>
+                            <Checkbox    value={'D'}>
+                              {'D  '+(question[recent]?question[recent].optionD:'')}
+                              {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                            </Checkbox>
+                          </Col>:''}
+                      </Row>
+                    </Checkbox.Group>
+                    {/*<Radio.Group onChange={this.onChange} value={this.state.value}>*/}
+                    {/*  <Radio   style={radioStyle} value={0}>*/}
+                    {/*    {answer[0]}*/}
+                    {/*  </Radio>*/}
+                    {/*  <Radio   style={radioStyle} value={1}>*/}
+                    {/*    {answer[1]}*/}
+                    {/*  </Radio>*/}
+                    {/*  <Radio   style={radioStyle} value={2}>*/}
+                    {/*    {answer[2]}*/}
+                    {/*  </Radio>*/}
+                    {/*  <Radio   style={radioStyle} value={3}>*/}
+                    {/*    {answer[3]}*/}
+                    {/*    /!*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*!/*/}
+                    {/*  </Radio>*/}
+                    {/*</Radio.Group>*/}
+                  </Card>
+                  <Button  key="submit"
+                           type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
+                    if(this.state.value==rightAnswer){
+                      this.setState({grade:this.state.grade+1});
+                    }
+                    this.setState({answer:true})
+                    if(this.state.questionNumber==allNumber)
+                    {
+                      alert("答题结束")
+                    }
+                  }}>提交</Button>
+                  {this.state.answer==true?
+                    (<h1>正确答案是</h1>):''}
+                  {this.state.answer==true?
+                    (<Card type="inner" title={answer[rightAnswer]} />):''}
+                  <Row gutter={16}>
+                    <Col span={8}>
+                      <Button  key="back" onClick={()=>{this.setState({questionNumber: this.state.questionNumber-1})}}>
+                        上一题
+                      </Button>
                     </Col>
-                    <Col span={12}>
-                      <Checkbox    value={'B'}>
-                        {'B  '+(question[recent]?question[recent].optionB:'')}
-                      </Checkbox>
+                    <Col span={8}>
+                      <Button
+                        key="submit"
+                        type="primary"
+                        onClick={()=> {
+                          // this.setState({modalVisble:false})
+                          if(this.state.questionNumber==allNumber){
+                            return
+                          }
+                          if(this.state.answer==false){
+                            alert('你还未提交本题答案')
+                          }
+                          else{
+                            this.setState({deadline:Date.now() +  1000 * 60})
+                            this.setState({questionNumber: this.state.questionNumber+1})
+                            this.setState({answer:false})
+                          }
+                        }}>
+                        下一题
+                      </Button>
                     </Col>
-                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                      <Checkbox    value={'C'}>
-                        {'C  '+(question[recent]?question[recent].optionC:'')}
-                      </Checkbox>
-                    </Col>:""}
-                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                      <Col span={12}>
-                        <Checkbox    value={'D'}>
-                          {'D  '+(question[recent]?question[recent].optionD:'')}
-                          {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                        </Checkbox>
-                      </Col>:''}
+                    <Col span={8}>
+                      <h2><span>{this.state.questionNumber}</span>/
+                        <span>{allNumber}</span></h2>
+                      {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
+                    </Col>
                   </Row>
-                </Checkbox.Group>
-                {/*<Radio.Group onChange={this.onChange} value={this.state.value}>*/}
-                {/*  <Radio   style={radioStyle} value={0}>*/}
-                {/*    {answer[0]}*/}
-                {/*  </Radio>*/}
-                {/*  <Radio   style={radioStyle} value={1}>*/}
-                {/*    {answer[1]}*/}
-                {/*  </Radio>*/}
-                {/*  <Radio   style={radioStyle} value={2}>*/}
-                {/*    {answer[2]}*/}
-                {/*  </Radio>*/}
-                {/*  <Radio   style={radioStyle} value={3}>*/}
-                {/*    {answer[3]}*/}
-                {/*    /!*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*!/*/}
-                {/*  </Radio>*/}
-                {/*</Radio.Group>*/}
-              </Card>
-              <Button  key="submit"
-                       type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
-                if(this.state.value==rightAnswer){
-                  this.setState({grade:this.state.grade+1});
-                }
-                this.setState({answer:true})
-                if(this.state.questionNumber==allNumber)
-                {
-                  alert("答题结束")
-                }
-                       }}>提交</Button>
-              {this.state.answer==true?
-                (<h1>正确答案是</h1>):''}
-              {this.state.answer==true?
-                (<Card type="inner" title={answer[rightAnswer]} />):''}
-              <Row gutter={16}>
-                <Col span={8}>
-                  <Button  key="back" onClick={()=>{this.setState({questionNumber: this.state.questionNumber-1})}}>
-                    上一题
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <Button
-                    key="submit"
-                    type="primary"
-                    onClick={()=> {
-                      // this.setState({modalVisble:false})
-                      if(this.state.questionNumber==allNumber){
-                        return
-                      }
-                      if(this.state.answer==false){
-                        alert('你还未提交本题答案')
-                      }
-                      else{
-                        this.setState({deadline:Date.now() +  1000 * 60})
-                        this.setState({questionNumber: this.state.questionNumber+1})
-                        this.setState({answer:false})
-                      }
-                    }}>
-                    下一题
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <h2><span>{this.state.questionNumber}</span>/
-                    <span>{allNumber}</span></h2>
-                  {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
-                </Col>
-              </Row>
-              {this.state.questionNumber==allNumber&&this.state.answer?
-                (<div>
-                  <div className={styles.try}></div>
-                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
+                  {this.state.questionNumber==allNumber&&this.state.answer?
+                    (<div>
+                      <div className={styles.try}></div>
+                      <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
+                </TabPane>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="video-camera" />
                           视频
                       </span>
-              }
-              key="3"
-            >
-              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
-                     controls="controls">
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-              />
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                />
-              </video>
-              {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
-              {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
-              {/*</video>*/}
-            </TabPane>
+                  }
+                  key="3"
+                >
+                  <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                         controls="controls">
+                    {/*<source src="./1.mp4"*/}
+                    {/*/>*/}
+                    {/*<source src="./1.mp4"*/}
+                    {/*/>*/}
+                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                    />
+                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                    />
+                  </video>
+                  {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
+                  {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
+                  {/*</video>*/}
+                </TabPane>
 
-            <TabPane
-              tab={
-                <span>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="picture" />
                          图片
                       </span>
-              }
-              key="5"
-            >
-              {/*<Carousel >*/}
-              {/*  <div >*/}
-              {/*    <img  src={yay} />*/}
-              {/*  </div>*/}
-              {/*  <div >*/}
-              {/*    <img  src={yaa} style={{height: 250, width:400 }}/>*/}
-              {/*  </div>*/}
-              {/*</Carousel>*/}
+                  }
+                  key="5"
+                >
+                  {/*<Carousel >*/}
+                  {/*  <div >*/}
+                  {/*    <img  src={yay} />*/}
+                  {/*  </div>*/}
+                  {/*  <div >*/}
+                  {/*    <img  src={yaa} style={{height: 250, width:400 }}/>*/}
+                  {/*  </div>*/}
+                  {/*</Carousel>*/}
 
-              <div style={{padding: 40, background: "#ececec"}} >
-                <Slider {...this.carousel_settings} >
-                  <div>
-                    <img  src={yay} />
+                  <div style={{padding: 40, background: "#ececec"}} >
+                    <Slider {...this.carousel_settings} >
+                      <div>
+                        <img  src={yay} />
+                      </div>
+                      <div>
+                        <img  src={yaa} style={{height: 250, width:400 }}/>
+                      </div>
+                    </Slider>
                   </div>
-                  <div>
-                    <img  src={yaa} style={{height: 250, width:400 }}/>
-                  </div>
-                </Slider>
-              </div>
 
-            </TabPane>
+                </TabPane>
 
-            <TabPane
-              tab={
-                <span>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="sound" />
                          音乐
                       </span>
-              }
-              key="4"
-            >
-                <Card type="inner" size="small" title= '音乐列表' bordered={false}>
-                  <audio width="800" controls="controls"  loop="loop" preload="auto" title="123">
-                    <source src="http://music.163.com/song/media/outer/url?id=476592630.mp3" type="audio/mp3" />
-                  </audio>
-                  {/*<Table dataSource={{}} pagination={false}>*/}
-                  {/*  <Column title="结果名称" dataIndex="name" key="name" />*/}
-                  {/*  <Column title="结果值" dataIndex="resultDesc" key="resultDesc" />*/}
-                  {/*</Table>*/}
-                </Card>
-            </TabPane>
-          </Tabs>
-        </Modal>
-        <div id='verticalTimeLine' className={styles.verticalTimeLine}>
-          <VerticalTimeline
-            // layout='1-column-left'
-          >
-            {list.map((item)=> (
-                item['sub']?
-                  <VerticalTimelineElement
-                    id={item['id']}
-                    style={{fontSize:"15px", size:"10px"}}
-                    className="vertical-timeline-element--education"
-                    date="2006 - 2008"
-                    contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                    contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                    iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
-                    dateClassName={ styles.date }
-                    // icon={<Icon type="book" />}
-                  >
-                    {item['text']}
-                    {
-                      item['text']=='1921年7月-中共一大'&&
-                      <div><Button onClick={this.moreOnClick}>{this.state.more?<span>更多</span>:<span>收回</span>}</Button></div>
-                    }
-                  </VerticalTimelineElement>:
-                  <VerticalTimelineElement
-                    id={item['id']}
-                    style={{fontSize:"15px", size:"10px"}}
-                    className="vertical-timeline-element--education"
-                    date="2006 - 2008"
-                    contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                    contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                    iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px"  }}
-                    dateClassName={ styles.date }
-                    onTimelineElementClick={()=>this.oneClick(item) }
-                  >
-                    {item['text']}
-                    {
-                      item['text']=='1921年7月-中共一大'&&
-                      <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(155,20,20,1)"}} />:<Icon type="arrow-up" style={{color:"rgba(155,20,20,1)"}} />}</div></div>
-                    }
-                  </VerticalTimelineElement>
-              )
-            )
-          }
-        </VerticalTimeline>
-        </div>
-        {/*<Timeline className={styles.timeline}>{*/}
-        {/*  list.map((item)=> (*/}
-        {/*    <div onClick={ (e) => this.oneClick(e, item)}>*/}
-        {/*      /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
-        {/*      <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>*/}
-        {/*    </div>*/}
-        {/*    )*/}
-        {/*  )*/}
-        {/*}*/}
-        {/*</Timeline>*/}
-      </Sider>
-      <Content>
-        <div className={styles.normal}>
-          <div className={styles.mapContainer}  id="student-map">
-            <div  ref={popupRef} className={styles.popupDiv}>
-              {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
-              <Row style={{width:"240px",top:"10px"}} justify="space-between">
-                <Col span={2} onClick={()=>this.showModal("1")}>
-                  <Icon className={styles.popup} type="book" />
-                </Col>
-                <Col span={4} onClick={()=>this.showModal("1")}>
-                  文章
-                </Col>
-                <Col span={2} onClick={()=>this.showModal("2")}>
-                  <Icon className={styles.popup} type="picture" />
-                </Col>
-                <Col span={4} onClick={()=>this.showModal("2")}>
-                  图片
-                </Col>
-                <Col span={2} onClick={()=>this.showModal("3")}>
-                  <Icon className={styles.popup} type="video-camera" />
-                </Col>
-                <Col span={4} onClick={()=>this.showModal("3")}>
-                  视频
-                </Col>
-                <Col span={2} onClick={()=>this.showModal("4")}>
-                  <Icon className={styles.popup} type="question" />
-                </Col>
-                <Col span={4} onClick={()=>this.showModal("4")}>
-                  答题
-                </Col>
-              </Row>
+                  }
+                  key="4"
+                >
+                  <Card type="inner" size="small" title= '音乐列表' bordered={false}>
+                    <audio width="800" controls="controls"  loop="loop" preload="auto" title="123">
+                      <source src="http://music.163.com/song/media/outer/url?id=476592630.mp3" type="audio/mp3" />
+                    </audio>
+                    {/*<Table dataSource={{}} pagination={false}>*/}
+                    {/*  <Column title="结果名称" dataIndex="name" key="name" />*/}
+                    {/*  <Column title="结果值" dataIndex="resultDesc" key="resultDesc" />*/}
+                    {/*</Table>*/}
+                  </Card>
+                </TabPane>
+              </Tabs>
+            </Modal>
+            <div id='verticalTimeLine' className={styles.verticalTimeLine}>
+              <VerticalTimeline
+                // layout='1-column-left'
+              >
+                {list.map((item)=> (
+                    item['sub']?
+                      <VerticalTimelineElement
+                        id={item['id']}
+                        style={{fontSize:"15px", size:"10px"}}
+                        className="vertical-timeline-element--education"
+                        date="2006 - 2008"
+                        contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                        contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                        iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
+                        dateClassName={ styles.date }
+                        // icon={<Icon type="book" />}
+                      >
+                        {item['text']}
+                        {
+                          item['text']=='1921年7月-中共一大'&&
+                          <div><Button onClick={this.moreOnClick}>{this.state.more?<span>更多</span>:<span>收回</span>}</Button></div>
+                        }
+                      </VerticalTimelineElement>:
+                      <VerticalTimelineElement
+                        id={item['id']}
+                        style={{fontSize:"15px", size:"10px"}}
+                        className="vertical-timeline-element--education"
+                        date="2006 - 2008"
+                        contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                        contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                        iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px"  }}
+                        dateClassName={ styles.date }
+                        onTimelineElementClick={()=>this.oneClick(item) }
+                      >
+                        {item['text']}
+                        {
+                          item['text']=='1921年7月-中共一大'&&
+                          <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(155,20,20,1)"}} />:<Icon type="arrow-up" style={{color:"rgba(155,20,20,1)"}} />}</div></div>
+                        }
+                      </VerticalTimelineElement>
+                  )
+                )
+                }
+              </VerticalTimeline>
             </div>
-            {/*{*/}
-            {/*  list.map((item, index)=>(*/}
-            {/*    <div  ref={popupRef[index]}>*/}
-            {/*      /!*<span>{item.id}</span>*!/*/}
-            {/*      <Icon type="book" />*/}
+            {/*<Timeline className={styles.timeline}>{*/}
+            {/*  list.map((item)=> (*/}
+            {/*    <div onClick={ (e) => this.oneClick(e, item)}>*/}
+            {/*      /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
+            {/*      <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>*/}
             {/*    </div>*/}
-            {/*  ))*/}
+            {/*    )*/}
+            {/*  )*/}
             {/*}*/}
-          </div>
-          <div id='features' className={styles.features}>
-            <section id='一大上海' className={styles.selection}>
-              <h3>中共一大上海</h3>
-              <p>November 1895. London is shrouded in fog and Sherlock Holmes and Watson pass time restlessly awaiting a
-                new case. "The London criminal is certainly a dull fellow," Sherlock bemoans. "There have been numerous
-                petty thefts," Watson offers in response. Just then a telegram arrives from Sherlock's brother Mycroft
-                with a mysterious case.</p>
-            </section>
-            <section id='一大嘉兴' className={styles.selection}>
-              <h3>中共一大嘉兴</h3>
-              <p>Arthur Cadogan West was found dead, head crushed in on train tracks at Aldgate Station at 6AM Tuesday
-                morning. West worked at Woolwich Arsenal on the Bruce-Partington submarine, a secret military project.
-                Plans for the submarine had been stolen and seven of the ten missing papers were found in West's
-                possession. Mycroft implores Sherlock to take the case and recover the three missing papers.</p>
-            </section>
-            <section id='二大上海' className={styles.selection}>
-              <h3>中共二大上海</h3>
-              <p>Holmes and Watson's investigations take them across London. Sherlock deduces that West was murdered
-                elsewhere, then moved to Aldgate Station to create the illusion that he was crushed on the tracks by a
-                train. On their way to Woolwich Sherlock dispatches a telegram to Mycroft at London Bridge: "Send list
-                of all foreign spies known to be in England, with full address."</p>
-            </section>
-            <section id='三大广州' className={styles.selection}>
-              <h3>中共三大广州</h3>
-              <p>While investigating at Woolwich Arsenal Sherlock learns that West did not have the three
-                keys&mdash;door, office, and safe&mdash;necessary to steal the papers. The train station clerk mentions
-                seeing an agitated West boarding the 8:15 train to London Bridge. Sherlock suspects West of following
-                someone who had access to the Woolwich chief's keyring with all three keys.</p>
-            </section>
-            <section id='四大上海' className={styles.selection}>
-              <h3>中共四大上海</h3>
-              <p>Mycroft responds to Sherlock's telegram and mentions several spies. Hugo Oberstein of 13 Caulfield
-                Gardens catches Sherlock's eye. He heads to the nearby Gloucester Road station to investigate and learns
-                that the windows of Caulfield Gardens open over rail tracks where trains stop frequently.</p>
-            </section>
-            <section id='五大武汉' className={styles.selection}>
-              <h3>中共五大武汉</h3>
-              <p>Holmes deduces that the murderer placed West atop a stopped train at Caulfield Gardens. The train
-                traveled to Aldgate Station before West's body finally toppled off. Backtracking to the criminal's
-                apartment, Holmes finds a series of classified ads from <em>The Daily Telegraph</em> stashed away. All
-                are under the name Pierrot: "Monday night after nine. Two taps. Only ourselves. Do not be so suspicious.
-                Payment in hard cash when goods delivered."</p>
-            </section>
-            <section id='七大延安' className={styles.selection}>
-              <h3>中共七大延安</h3>
-              <p>Holmes and Watson head to The Daily Telegraph and place an ad to draw out the criminal. It reads:
-                "To-night. Same hour. Same place. Two taps. Most vitally important. Your own safety at stake. Pierrot."
-                The trap works and Holmes catches the criminal: Colonel Valentine Walter, the brother of Woolwich
-                Arsenal's chief. He confesses to working for Hugo Oberstein to obtain the submarine plans in order to
-                pay off his debts.</p>
-            </section>
-            <section id='八大北京' className={styles.selection}>
-              <h3>中共八大北京</h3>
-              <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
-                where he promises additional plans for the submarine in exchange for money. The plan works and Holmes
-                and Watson catch both criminals.</p>
-              <small id="citation">
-                Adapted from <a href='http://www.gutenberg.org/files/2346/2346-h/2346-h.htm'>Project Gutenberg</a>
-              </small>
-            </section>
-            <section id='九大北京' className={styles.selection}>
-              <h3>中共九大北京</h3>
-              <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
-                where he promises additional plans for the submarine in exchange for money. The plan works and Holmes
-                and Watson catch both criminals.</p>
-            </section>
-          </div>
-          {/*<div className={styles.dangshi_div1} style={{display: this.state.first ? 'block': 'none'}}>*/}
-          {/*  <img  src={dangshi} className={styles.dangshi} />*/}
-          {/*  <div className={styles.dangshi_font}>*/}
-          {/*    党史学习*/}
-          {/*  </div>*/}
-          {/*</div>*/}
-          {/*<div className={styles.dangshi_div}>*/}
-          {/*  <img  src={dangshi} className={styles.dangshi} />*/}
-          {/*  <div className={styles.dangshi_font}>*/}
-          {/*    返回地图首页*/}
-          {/*  </div>*/}
-          {/*</div>*/}
-        </div>
-      </Content>
-    </Layout>
-    </Authorized>
-  );}
+            {/*</Timeline>*/}
+          </Sider>
+          <Content>
+            <div className={styles.normal}>
+              <div className={styles.mapContainer}  id="onlineMapping">
+                <div  ref={popupRef} className={styles.popupDiv}>
+                  {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
+                  <Row style={{width:"240px",top:"10px"}} justify="space-between">
+                    <Col span={2} onClick={()=>this.showModal("1")}>
+                      <Icon className={styles.popup} type="book" />
+                    </Col>
+                    <Col span={4} onClick={()=>this.showModal("1")}>
+                      文章
+                    </Col>
+                    <Col span={2} onClick={()=>this.showModal("2")}>
+                      <Icon className={styles.popup} type="picture" />
+                    </Col>
+                    <Col span={4} onClick={()=>this.showModal("2")}>
+                      图片
+                    </Col>
+                    <Col span={2} onClick={()=>this.showModal("3")}>
+                      <Icon className={styles.popup} type="video-camera" />
+                    </Col>
+                    <Col span={4} onClick={()=>this.showModal("3")}>
+                      视频
+                    </Col>
+                    <Col span={2} onClick={()=>this.showModal("4")}>
+                      <Icon className={styles.popup} type="question" />
+                    </Col>
+                    <Col span={4} onClick={()=>this.showModal("4")}>
+                      答题
+                    </Col>
+                  </Row>
+                </div>
+                {/*{*/}
+                {/*  list.map((item, index)=>(*/}
+                {/*    <div  ref={popupRef[index]}>*/}
+                {/*      /!*<span>{item.id}</span>*!/*/}
+                {/*      <Icon type="book" />*/}
+                {/*    </div>*/}
+                {/*  ))*/}
+                {/*}*/}
+              </div>
+              <div id='features' className={styles.features}>
+                <section id='一大上海' className={styles.selection}>
+                  <h3>中共一大上海</h3>
+                  <p>November 1895. London is shrouded in fog and Sherlock Holmes and Watson pass time restlessly awaiting a
+                    new case. "The London criminal is certainly a dull fellow," Sherlock bemoans. "There have been numerous
+                    petty thefts," Watson offers in response. Just then a telegram arrives from Sherlock's brother Mycroft
+                    with a mysterious case.</p>
+                </section>
+                <section id='一大嘉兴' className={styles.selection}>
+                  <h3>中共一大嘉兴</h3>
+                  <p>Arthur Cadogan West was found dead, head crushed in on train tracks at Aldgate Station at 6AM Tuesday
+                    morning. West worked at Woolwich Arsenal on the Bruce-Partington submarine, a secret military project.
+                    Plans for the submarine had been stolen and seven of the ten missing papers were found in West's
+                    possession. Mycroft implores Sherlock to take the case and recover the three missing papers.</p>
+                </section>
+                <section id='二大上海' className={styles.selection}>
+                  <h3>中共二大上海</h3>
+                  <p>Holmes and Watson's investigations take them across London. Sherlock deduces that West was murdered
+                    elsewhere, then moved to Aldgate Station to create the illusion that he was crushed on the tracks by a
+                    train. On their way to Woolwich Sherlock dispatches a telegram to Mycroft at London Bridge: "Send list
+                    of all foreign spies known to be in England, with full address."</p>
+                </section>
+                <section id='三大广州' className={styles.selection}>
+                  <h3>中共三大广州</h3>
+                  <p>While investigating at Woolwich Arsenal Sherlock learns that West did not have the three
+                    keys&mdash;door, office, and safe&mdash;necessary to steal the papers. The train station clerk mentions
+                    seeing an agitated West boarding the 8:15 train to London Bridge. Sherlock suspects West of following
+                    someone who had access to the Woolwich chief's keyring with all three keys.</p>
+                </section>
+                <section id='四大上海' className={styles.selection}>
+                  <h3>中共四大上海</h3>
+                  <p>Mycroft responds to Sherlock's telegram and mentions several spies. Hugo Oberstein of 13 Caulfield
+                    Gardens catches Sherlock's eye. He heads to the nearby Gloucester Road station to investigate and learns
+                    that the windows of Caulfield Gardens open over rail tracks where trains stop frequently.</p>
+                </section>
+                <section id='五大武汉' className={styles.selection}>
+                  <h3>中共五大武汉</h3>
+                  <p>Holmes deduces that the murderer placed West atop a stopped train at Caulfield Gardens. The train
+                    traveled to Aldgate Station before West's body finally toppled off. Backtracking to the criminal's
+                    apartment, Holmes finds a series of classified ads from <em>The Daily Telegraph</em> stashed away. All
+                    are under the name Pierrot: "Monday night after nine. Two taps. Only ourselves. Do not be so suspicious.
+                    Payment in hard cash when goods delivered."</p>
+                </section>
+                <section id='七大延安' className={styles.selection}>
+                  <h3>中共七大延安</h3>
+                  <p>Holmes and Watson head to The Daily Telegraph and place an ad to draw out the criminal. It reads:
+                    "To-night. Same hour. Same place. Two taps. Most vitally important. Your own safety at stake. Pierrot."
+                    The trap works and Holmes catches the criminal: Colonel Valentine Walter, the brother of Woolwich
+                    Arsenal's chief. He confesses to working for Hugo Oberstein to obtain the submarine plans in order to
+                    pay off his debts.</p>
+                </section>
+                <section id='八大北京' className={styles.selection}>
+                  <h3>中共八大北京</h3>
+                  <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
+                    where he promises additional plans for the submarine in exchange for money. The plan works and Holmes
+                    and Watson catch both criminals.</p>
+                  <small id="citation">
+                    Adapted from <a href='http://www.gutenberg.org/files/2346/2346-h/2346-h.htm'>Project Gutenberg</a>
+                  </small>
+                </section>
+                <section id='九大北京' className={styles.selection}>
+                  <h3>中共九大北京</h3>
+                  <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
+                    where he promises additional plans for the submarine in exchange for money. The plan works and Holmes
+                    and Watson catch both criminals.</p>
+                </section>
+              </div>
+              {/*<div className={styles.dangshi_div1} style={{display: this.state.first ? 'block': 'none'}}>*/}
+              {/*  <img  src={dangshi} className={styles.dangshi} />*/}
+              {/*  <div className={styles.dangshi_font}>*/}
+              {/*    党史学习*/}
+              {/*  </div>*/}
+              {/*</div>*/}
+              {/*<div className={styles.dangshi_div}>*/}
+              {/*  <img  src={dangshi} className={styles.dangshi} />*/}
+              {/*  <div className={styles.dangshi_font}>*/}
+              {/*    返回地图首页*/}
+              {/*  </div>*/}
+              {/*</div>*/}
+            </div>
+          </Content>
+        </Layout>
+      </Authorized>
+    );}
 }
 
 // function MapPage(props) {
@@ -1402,5 +1488,5 @@ class MapPage extends Component {
 //   );
 // }
 export default connect(({ mapPage }) => ({
-mapPage
+  mapPage
 }))(MapPage);
