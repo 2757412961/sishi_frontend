@@ -450,7 +450,7 @@ class MapPage extends Component {
         .source(flyline, {
           parser: {
             type: 'json',
-            coordinates: "coord",
+            coordinates: flyline[0].coord,
           }
         })
         .color('#ff6b34')
@@ -496,9 +496,6 @@ class MapPage extends Component {
       //   }
       // });
     })
-
-
-
 
     var size = 100;
     var pulsingDot = {
