@@ -2,57 +2,57 @@ import React, {Component} from 'react';
 import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
 
-export default class AudioTable extends Component {
+export default class PictureTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       columns: [
         {
-          title: 'Audio ID',
-          dataIndex: 'audioId',
-          key: 'audioId',
+          title: 'Picture ID',
+          dataIndex: 'pictureId',
+          key: 'pictureId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Audio Title',
-          dataIndex: 'audioTitle',
-          key: 'audioTitle',
+          title: 'Picture Title',
+          dataIndex: 'pictureTitle',
+          key: 'pictureTitle',
           align: 'center',
-          sorter: (a, b) => a.audioTitle.length - b.audioTitle.length,
+          sorter: (a, b) => a.pictureTitle.length - b.pictureTitle.length,
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Audio Source',
-          dataIndex: 'audioSource',
-          key: 'audioSource',
+          title: 'Picture Source',
+          dataIndex: 'pictureSource',
+          key: 'pictureSource',
           align: 'center',
-          sorter: (a, b) => a.audioSource.length - b.audioSource.length,
+          sorter: (a, b) => a.pictureSource.length - b.pictureSource.length,
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Audio Content',
-          dataIndex: 'audioContent',
-          key: 'audioContent',
+          title: 'Picture Content',
+          dataIndex: 'pictureContent',
+          key: 'pictureContent',
           align: 'center',
-          sorter: (a, b) => a.audioContent.length - b.audioContent.length,
+          sorter: (a, b) => a.pictureContent.length - b.pictureContent.length,
           sortDirections: ['descend', 'ascend'],
           ellipsis: true,
         },
         {
-          title: 'Audio Publish Time',
-          dataIndex: 'audioPublishTime',
-          key: 'audioPublishTime',
+          title: 'Picture Publish Time',
+          dataIndex: 'picturePublishTime',
+          key: 'picturePublishTime',
           align: 'center',
-          sorter: (a, b) => a.audioPublishTime - b.audioPublishTime,
+          sorter: (a, b) => a.picturePublishTime - b.picturePublishTime,
           sortDirections: ['descend', 'ascend'],
         },
         {
           title: 'Create Time',
-          dataIndex: 'audioCreateTime',
-          key: 'audioCreateTime',
+          dataIndex: 'pictureCreateTime',
+          key: 'pictureCreateTime',
           align: 'center',
-          sorter: (a, b) => a.audioCreateTime - b.audioCreateTime,
+          sorter: (a, b) => a.pictureCreateTime - b.pictureCreateTime,
           sortDirections: ['descend', 'ascend'],
         },
         {
@@ -67,20 +67,20 @@ export default class AudioTable extends Component {
 
       dataSource: [
         {
-          audioId: '1',
-          audioTitle: 'test',
-          audioSource: 'test',
-          audioContent: 'ggg',
-          audioPublishTime: 4894189,
-          audioCreateTime: 32,
+          pictureId: '1',
+          pictureTitle: 'test',
+          pictureSource: 'test',
+          pictureContent: 'ggg',
+          picturePublishTime: 4894189,
+          pictureCreateTime: 32,
         },
         {
-          audioId: '2',
-          audioTitle: 'qwe',
-          audioSource: 'test',
-          audioContent: 'h d',
-          audioPublishTime: 4894189,
-          audioCreateTime: 123,
+          pictureId: '2',
+          pictureTitle: 'qwe',
+          pictureSource: 'test',
+          pictureContent: 'h d',
+          picturePublishTime: 4894189,
+          pictureCreateTime: 123,
         },
       ],
     };
@@ -91,9 +91,9 @@ export default class AudioTable extends Component {
   updateTable = () => {
     let requestUrl = '';
     if (this.props.cascadeValue.length === 0) {
-      requestUrl = '/v1.0/api/audios';
+      requestUrl = '/v1.0/api/pictures';
     } else {
-      requestUrl = '/v1.0/api/audios/tagName/' + this.props.cascadeValue.join('@');
+      requestUrl = '/v1.0/api/pictures/tagName/' + this.props.cascadeValue.join('@');
     }
 
     request({
@@ -107,11 +107,11 @@ export default class AudioTable extends Component {
       console.log(res);
 
       if (res.success) {
-        this.setState({dataSource: res.audios})
-        message.success('更新音频表格成功');
+        this.setState({dataSource: res.pictures})
+        message.success('更新图片表格成功');
       } else {
         this.setState({dataSource: []})
-        message.error('更新音频表格失败,' + res.message);
+        message.error('更新图片表格失败,' + res.message);
       }
     });
   }
@@ -123,7 +123,7 @@ export default class AudioTable extends Component {
     }
 
     request({
-      url: '/v1.0/api/audio/' + record.audioId + '/tagName/' + this.props.cascadeValue.join("@"),
+      url: '/v1.0/api/picture/' + record.pictureId + '/tagName/' + this.props.cascadeValue.join("@"),
       method: 'DELETE',
       autoAdd: false, //不添加v1.0
     }).then((res) => {
@@ -132,9 +132,9 @@ export default class AudioTable extends Component {
       if (res.success) {
         this.props.updateCascade();
         this.updateTable();
-        message.success('删除音频成功');
+        message.success('删除图片成功');
       } else {
-        message.error('删除音频失败,' + res.message);
+        message.error('删除图片失败,' + res.message);
       }
     });
   }

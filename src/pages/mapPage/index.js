@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
@@ -13,7 +14,8 @@ import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
-import { LineLayer } from '@antv/l7';
+import { Scene, LineLayer,Control,PolygonLayer } from '@antv/l7';
+import { Mapbox } from '@antv/l7-maps';
 
 // import {motion} from 'framer-motion';
 // // @import '~video-react/styles/scss/video-react';
@@ -23,6 +25,11 @@ import eventcard from '@/assets/eventcard.png';
 import p1 from '@/assets/test/1.jpg';
 import p2 from '@/assets/test/2.jpg';
 import p3 from '@/assets/test/3.jpg';
+import tupian from '../../assets/icon/图片.png';
+import shipin from '@/assets/icon/视频.png';
+import yinpin from '@/assets/icon/音频.png';
+import wenzhang from '@/assets/icon/文章.png';
+import dati from '@/assets/icon/答题.png';
 import dangshi from '@/assets/dangshi.PNG'
 import yay from '@/assets/unnamed.jpg'
 import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
@@ -42,139 +49,142 @@ const { Content, Sider } = Layout;
 const noMatch=<Redirect to={`/login?redirect=${window.location.href}`} />;
 const variants={open: { opacity: 1, x: 0 },
   closed: { opacity: 0, x: "-100%" },}
-const list = [
-  {
-    id:'一大-上海',
-    lonlat:[121.47069346816863, 31.22206084685108],
-    text:'1921年7月-中共一大上海',
-    value: '中共一大上海',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共一大</h2>' +
-      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p1,
-    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-    label:"党史新学@中共一大@上海",
-  },
-  {
-    id:'一大-嘉兴',
-    lonlat:[120.75580305351667, 30.75747193181725],
-    text:'1921年7月-中共一大',
-    value: '中共一大嘉兴',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共一大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p1,
-    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-    label:"党史新学@中共一大@嘉兴",
-  },
-  {
-    id:'二大-上海',
-    lonlat:[121.46214132313253, 31.2260623329518],
-    text: '1922年7月-中共二大',
-    value: '中共二大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共二大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
-    label:"党史新学@中共二大@上海",
-  },
-  {
-    id:'三大-广州',
-    lonlat:[113.29062697510238, 23.121680862715294],
-    text: '1923年6月-中共三大',
-    value: '中共三大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共三大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p3,
-    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
-    label:"党史新学@中共三大@广州",
-  },
-  {
-    id:'四大-上海',
-    lonlat:[121.48020351895462,31.25728522799882],
-    text: '1925年1月-中共四大',
-    value: '中共四大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共四大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第四次全国代表大会，简称中共四大',
-    label:"党史新学@中共四大@上海",
-  },
-  {
-    id:'五大-武汉',
-    lonlat:[114.29318634011975,30.553569642526185],
-    text: '1927年4月-中共五大',
-    value: '中共五大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共五大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第五次全国代表大会，简称中共五大',
-    label:"党史新学@中共五大@武汉",
-  },
-  {
-    id:'六大-俄罗斯',
-    lonlat:[37.153974181328664,55.535728582753336],
-    text: '1928年6月-中共六大',
-    value: '中共六大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共六大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第六次全国代表大会，简称中共六大',
-    label:"党史新学@中共六大@俄罗斯",
-  },
-  {
-    id:'七大-延安',
-    lonlat:[109.46267096678156,36.618757084621336],
-    text: '1945年4月-中共七大',
-    value: '中共七大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共七大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第七次全国代表大会，简称中共七大',
-    label:"党史新学@中共七大@延安",
-  },
-  {
-    id:'八大-政协礼堂',
-    lonlat:[116.35780179933835,39.91833919135752],
-    text: '1956年9月-中共八大',
-    value: '中共八大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共八大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第八次全国代表大会，简称中共八大',
-    label:"党史新学@中共八大@北京",
-  },{
-    id:'九大-人民大会堂',
-    lonlat:[116.38748691963224,39.90337460887406],
-    text: '1969年4月-中共九大',
-    value: '中共九大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共九大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第九次全国代表大会，简称中共九大',
-    label:"党史新学@中共九大@北京",
-  },
-];
+//
+//
+// const list = [
+//   {
+//     id:'一大-上海',
+//     lonlat:[121.47069346816863, 31.22206084685108],
+//     text:'1921年7月-中共一大上海',
+//     value: '中共一大上海',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共一大</h2>' +
+//       '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+//       '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+//       '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p1,
+//     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+//     label:"党史新学@中共一大@上海",
+//   },
+//   {
+//     id:'一大-嘉兴',
+//     lonlat:[120.75580305351667, 30.75747193181725],
+//     text:'1921年7月-中共一大',
+//     value: '中共一大嘉兴',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共一大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p1,
+//     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+//     label:"党史新学@中共一大@嘉兴",
+//   },
+//   {
+//     id:'二大-上海',
+//     lonlat:[121.46214132313253, 31.2260623329518],
+//     text: '1922年7月-中共二大',
+//     value: '中共二大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共二大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+//     label:"党史新学@中共二大@上海",
+//   },
+//   {
+//     id:'三大-广州',
+//     lonlat:[113.29062697510238, 23.121680862715294],
+//     text: '1923年6月-中共三大',
+//     value: '中共三大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共三大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p3,
+//     cardContent:'中国共产党第三次全国代表大会，简称中共三大',
+//     label:"党史新学@中共三大@广州",
+//   },
+//   {
+//     id:'四大-上海',
+//     lonlat:[121.48020351895462,31.25728522799882],
+//     text: '1925年1月-中共四大',
+//     value: '中共四大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共四大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第四次全国代表大会，简称中共四大',
+//     label:"党史新学@中共四大@上海",
+//   },
+//   {
+//     id:'五大-武汉',
+//     lonlat:[114.29318634011975,30.553569642526185],
+//     text: '1927年4月-中共五大',
+//     value: '中共五大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共五大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第五次全国代表大会，简称中共五大',
+//     label:"党史新学@中共五大@武汉",
+//   },
+//   {
+//     id:'六大-俄罗斯',
+//     lonlat:[37.153974181328664,55.535728582753336],
+//     text: '1928年6月-中共六大',
+//     value: '中共六大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共六大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第六次全国代表大会，简称中共六大',
+//     label:"党史新学@中共六大@俄罗斯",
+//   },
+//   {
+//     id:'七大-延安',
+//     lonlat:[109.46267096678156,36.618757084621336],
+//     text: '1945年4月-中共七大',
+//     value: '中共七大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共七大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第七次全国代表大会，简称中共七大',
+//     label:"党史新学@中共七大@延安",
+//   },
+//   {
+//     id:'八大-政协礼堂',
+//     lonlat:[116.35780179933835,39.91833919135752],
+//     text: '1956年9月-中共八大',
+//     value: '中共八大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共八大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第八次全国代表大会，简称中共八大',
+//     label:"党史新学@中共八大@北京",
+//   },{
+//     id:'九大-人民大会堂',
+//     lonlat:[116.38748691963224,39.90337460887406],
+//     text: '1969年4月-中共九大',
+//     value: '中共九大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共九大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第九次全国代表大会，简称中共九大',
+//     label:"党史新学@中共九大@北京",
+//   },
+// ];
+let list=[];
 var chapters = {
   '一大-上海': {
     bearing: 0,
@@ -241,6 +251,8 @@ var chapters = {
   }
 };
 
+const popupRef = React.createRef();
+
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
   return (
@@ -295,11 +307,47 @@ const subList = [
     sub:true,
   },
 ];
+//遍历树生成的数组treeList
+let tree=[];
+function forTree(treeList){
+  for (let i in treeList){
+    console.log('i',i);
+    if(treeList[i].children.length>0){
+      forTree(treeList[i].children)
+    }else{
+      tree.push(treeList[i])
+    }
+  }
+  return tree
+}
+function forList(treeList){
+  let list=[];
+  for (let i in treeList){
+    if(treeList[i].hasOwnProperty('geoCoordinates')){
+      let temp={};
+      temp.id=treeList[i].label;
+      temp.lonlat=treeList[i].geoCoordinates;
+      temp.tagName=treeList[i].tagName;
+      temp.text=treeList[i].label;
+      temp.value=treeList[i].label;
+      temp.time=treeList[i].time;
+      temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+        '于'+treeList[i].time+'在<span>'+treeList[i].label+'</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+        '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>';
+      temp.cardContent=treeList[i].tagName;
+      temp.cardImg=p1;
+      list.push(temp);
+    }
+  }
+  return list;
+}
 
 class MapPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeKey: "1",
+      itemNow:list[0],
       _collapsed: false,
       modalVisble: false,
       deadline: Date.now() +  1000 * 60,
@@ -326,14 +374,17 @@ class MapPage extends Component {
         opacity: 1,
         fontSize: 17,
       },
-      knowledgeUrl:list[0].cardImg,
-      knowledgeContent:list[0].cardContent,
+      knowledgeUrl:'',
+      //list[0].cardImg,
+      knowledgeContent:'',
+      //list[0].cardContent,
       // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
       more:true,
       startQuestion:false,
     };
 
   }
+
   componentDidMount() {
     const {dispatch}=this.props;
     dispatch({ type: 'mapPage/getTagTree'});
@@ -373,31 +424,46 @@ class MapPage extends Component {
         "source": "osm-tiles2",
       }
     ];
-    function forTree(treeList){
-      for (let i in treeList){
-        console.log('i',i);
-        if(treeList[i].children){
-          forTree(treeList[i].children)
-        }else{
-          console.log('else');
-          tree.push(treeList[i])
-        }
+    // let treeList=forTree(tagTree);
+    // console.log('treeList',treeList);
+    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
+      console.log('res',res);
+      if(res&&res.success){
+        let tagTree=res.list;
+        // let tree=forTree(tagTree);
+        // console.log('tree',tree);
+        list=forList(tagTree);
       }
-      return tree;
-    }
-    let treeList=forTree(tagTree);
-    console.log('treeList',treeList);
-    const map = new mapboxgl.Map({
-      container: 'onlineMapping',
-      style: {
-        "version": 8,
-        "sprite": localhost + "/MapBoxGL/css/sprite",
-        "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-        "sources": sources,
-        "layers": layers,
-      },
-      center: [121.52, 31.04],  //上海经纬度坐标
-      zoom: 3,
+    });
+    const map = new Scene({
+      id: 'student-map',
+      /** 渲染的地图会有一个antv的logo,可以让其消失 */
+      logoVisible: false,
+      map: new Mapbox({
+        // container: 'onlineMapping',
+        style: {
+          "version": 8,
+          "sprite": localhost + "/MapBoxGL/css/sprite",
+          "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+          "sources": sources,
+          "layers": layers,
+        },
+        center: [ 121.52, 31.04 ],  //上海经纬度坐标
+        zoom: 3,
+        token:'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg'
+      }),
+      // map: new Mapbox({
+      //   container: 'onlineMapping',
+      //   style: {
+      //     "version": 8,
+      //     "sprite": localhost + "/MapBoxGL/css/sprite",
+      //     "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+      //     "sources": sources,
+      //     "layers": layers,
+      //   },
+      //   center: [ 121.52, 31.04 ],  //上海经纬度坐标
+      //   zoom: 3,
+      // })
     });
     // let nav = new mapboxgl.NavigationControl({
     //   //是否显示指南针按钮，默认为true
@@ -445,7 +511,7 @@ class MapPage extends Component {
       return bounds.top < window.innerHeight && bounds.bottom > 0;
     }
 
-    map.on('load',function() {
+    map.on('loaded', async () => {
       const lineLayer = new LineLayer()
         .source(flyline, {
           parser: {
@@ -466,36 +532,7 @@ class MapPage extends Component {
           opacity: 1.0
         });
       map.addLayer(lineLayer);
-
-      // map.addLayer({
-      //   "id": "flyline",
-      //   "type": "line",
-      //   "source": {
-      //     "type": "geojson",
-      //     "data": {
-      //       "type": "FeatureCollection",
-      //       "features": [
-      //         {
-      //           "type": "Feature",
-      //           "properties": {},
-      //           "geometry": {
-      //             "type": "LineString",
-      //             "coordinates": [[116.38748691963224,39.90337460887406],[121.47069346816863, 31.22206084685108]]
-      //           }
-      //         }
-      //       ]
-      //     }
-      //   },
-      //   "layout": {
-      //     "line-join": "round",
-      //     "line-cap": "round"
-      //   },
-      //   "paint": {
-      //     "line-color": "#888",
-      //     "line-width": 18
-      //   }
-      // });
-    })
+    });
 
     var size = 100;
     var pulsingDot = {
@@ -627,20 +664,25 @@ class MapPage extends Component {
       map.on('click', list[i].id, function(e) {
         var coordinates = e.features[0].geometry.coordinates;
         let showInfo = list[i].showInfo;
+        _this.setState({
+          itemNow: list[i],
+        })
+
         new mapboxgl.Popup()
           .setLngLat(coordinates)
-          .setHTML(showInfo)
-          .addTo(map);
-        document.getElementById('btn')
-          .addEventListener('click', function(){
-            let cardImg = list[i].cardImg;
-            let cardContent = list[i].cardContent;
-            _this.setState({
-              knowledgeUrl: cardImg,
-              knowledgeContent: cardContent,
-            });
-            _this.showModal()
-          });
+          // .setHTML(showInfo)
+          .addTo(map)
+          .setDOMContent(popupRef.current);
+        // document.getElementById('btn')
+        //   .addEventListener('click', function(){
+        //     let cardImg = list[i].cardImg;
+        //     let cardContent = list[i].cardContent;
+        //     _this.setState({
+        //       knowledgeUrl: cardImg,
+        //       knowledgeContent: cardContent,
+        //     });
+        //     _this.showModal()
+        //   });
       });
       map.on('mouseenter', list[i].id, function() {
         map.getCanvas().style.cursor = 'pointer';
@@ -651,8 +693,11 @@ class MapPage extends Component {
     }
     this.map = map;
   }
-  showModal=()=>{
-    this.setState({modalVisble:true})
+  showModal=(activeKey)=>{
+    this.setState({
+      modalVisble:true,
+      activeKey:activeKey,
+    });
     console.log(this.state.modalVisble)
   }
   oneClick = (item) => {
@@ -699,7 +744,23 @@ class MapPage extends Component {
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
     //debugger
+    // let tree=[];
+    // function forTree1(treeList){
+    //   for (let i in treeList){
+    //     console.log('i',i);
+    //     if(treeList[i].children.length>0){
+    //       forTree(treeList[i].children)
+    //     }else{
+    //       tree.push(treeList[i])
+    //     }
+    //   }
+    //   return tree
+    // }
+    tree=[];
     const {tagTree,question}=mapPage;
+    // let list1=forTree(tagTree);
+     list=forList(tagTree);
+    console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
     console.log('tagTree',tagTree);
@@ -780,34 +841,24 @@ class MapPage extends Component {
                   <img src=""/>
                 </div>
               </div>
-              <Button  key="submit"
-                       type="primary" style={{top:'-10em',left:'60em',backgroundColor:'rgb(255,0,0)'}}
-                       onClick={()=>{
-                         let string=this.state.value.toString();
-                         if(string==(question[recent]?question[recent].answer:''))
-                         {
-                           this.setState({grade:this.state.grade+1});
-                         }
-                         this.setState({answer:true})
-                         if(this.state.questionNumber==allNumber) {
-                           alert("答题结束")
-                         }}}>提交</Button>
               {this.state.answer==true?
                 (<h1>正确答案是</h1>):''}
               {this.state.answer==true?
                 (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
               <Row gutter={16}>
                 <Col span={8}>
-                  <Button  key="back" onClick={()=>{
-                    if(this.state.questionNumber>0) {
-                      this.setState({questionNumber: this.state.questionNumber-1});
-                    }else{
-                      return
-                    }
-                  }
-                  }>
-                    上一题
-                  </Button>
+                  <Button  key="submit"
+                           type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
+                           onClick={()=>{
+                             let string=this.state.value.toString();
+                             if(string==(question[recent]?question[recent].answer:''))
+                             {
+                               this.setState({grade:this.state.grade+1});
+                             }
+                             this.setState({answer:true})
+                             if(this.state.questionNumber==allNumber) {
+                               alert("答题结束")
+                             }}}>提交</Button>
                 </Col>
                 <Col span={8}>
                   <Button
@@ -861,13 +912,16 @@ class MapPage extends Component {
                onCancel={()=>this.setState({modalVisble:false})}
                footer={false}
         >
-          <Tabs defaultActiveKey="1">
+          <Tabs
+            defaultActiveKey="1"
+            activeKey={this.state.activeKey}
+          >
 
             <TabPane
               tab={
                 <span>
                         <Icon type="book" />
-                          知识卡片
+                          文章
                       </span>
               }
               key="1"
@@ -886,11 +940,56 @@ class MapPage extends Component {
             <TabPane
               tab={
                 <span>
+                        <Icon type="picture" />
+                         图片
+                      </span>
+              }
+              key="2"
+            >
+              <div style={{padding: 40, background: "#ececec"}} >
+                <Slider {...this.carousel_settings} >
+                  <div>
+                    <img  src={yay} />
+                  </div>
+                  <div>
+                    <img  src={yaa} style={{height: 250, width:400 }}/>
+                  </div>
+                </Slider>
+              </div>
+
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
+                        <Icon type="video-camera" />
+                          视频
+                      </span>
+              }
+              key="3"
+            >
+              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                     controls="controls">
+                {/*<source src="./1.mp4"*/}
+                {/*/>*/}
+                {/*<source src="./1.mp4"*/}
+                {/*/>*/}
+                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+              />
+                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                />
+              </video>
+              {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
+              {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
+              {/*</video>*/}
+            </TabPane>
+            <TabPane
+              tab={
+                <span>
                         <Icon type="question" />
                           答题
                       </span>
               }
-              key="2"
+              key="4"
             >
 
               <Card   title={this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}>
@@ -970,9 +1069,9 @@ class MapPage extends Component {
                         alert('你还未提交本题答案')
                       }
                       else{
-                      this.setState({deadline:Date.now() +  1000 * 60})
-                      this.setState({questionNumber: this.state.questionNumber+1})
-                      this.setState({answer:false})
+                        this.setState({deadline:Date.now() +  1000 * 60})
+                        this.setState({questionNumber: this.state.questionNumber+1})
+                        this.setState({answer:false})
                       }
                     }}>
                     下一题
@@ -980,7 +1079,7 @@ class MapPage extends Component {
                 </Col>
                 <Col span={8}>
                   <h2><span>{this.state.questionNumber}</span>/
-                  <span>{allNumber}</span></h2>
+                    <span>{allNumber}</span></h2>
                   {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
                 </Col>
               </Row>
@@ -1108,8 +1207,8 @@ class MapPage extends Component {
                   </VerticalTimelineElement>
               )
             )
-            }
-          </VerticalTimeline>
+          }
+        </VerticalTimeline>
         </div>
         {/*<Timeline className={styles.timeline}>{*/}
         {/*  list.map((item)=> (*/}
@@ -1124,7 +1223,44 @@ class MapPage extends Component {
       </Sider>
       <Content>
         <div className={styles.normal}>
-          <div className={styles.mapContainer}  id="onlineMapping">
+          <div className={styles.mapContainer}  id="student-map">
+            <div  ref={popupRef} className={styles.popupDiv}>
+              {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
+              <Row style={{width:"240px",top:"10px"}} justify="space-between">
+                <Col span={2} onClick={()=>this.showModal("1")}>
+                  <Icon className={styles.popup} type="book" />
+                </Col>
+                <Col span={4} onClick={()=>this.showModal("1")}>
+                  文章
+                </Col>
+                <Col span={2} onClick={()=>this.showModal("2")}>
+                  <Icon className={styles.popup} type="picture" />
+                </Col>
+                <Col span={4} onClick={()=>this.showModal("2")}>
+                  图片
+                </Col>
+                <Col span={2} onClick={()=>this.showModal("3")}>
+                  <Icon className={styles.popup} type="video-camera" />
+                </Col>
+                <Col span={4} onClick={()=>this.showModal("3")}>
+                  视频
+                </Col>
+                <Col span={2} onClick={()=>this.showModal("4")}>
+                  <Icon className={styles.popup} type="question" />
+                </Col>
+                <Col span={4} onClick={()=>this.showModal("4")}>
+                  答题
+                </Col>
+              </Row>
+            </div>
+            {/*{*/}
+            {/*  list.map((item, index)=>(*/}
+            {/*    <div  ref={popupRef[index]}>*/}
+            {/*      /!*<span>{item.id}</span>*!/*/}
+            {/*      <Icon type="book" />*/}
+            {/*    </div>*/}
+            {/*  ))*/}
+            {/*}*/}
           </div>
           <div id='features' className={styles.features}>
             <section id='一大上海' className={styles.selection}>

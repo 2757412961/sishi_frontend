@@ -12,22 +12,23 @@ import TagModal from './components/tag/tagModal';
 import TagResourceTable from './components/tagResource/tagResourceTable';
 import ArticleTable from './components/article/articleTable';
 import ArticleModal from './components/article/articleModal';
-// import PictureTable from './components/picture/pictureTable';
-// import PictureModal from './components/picture/pictureModal';
+import PictureTable from './components/picture/pictureTable';
+import PictureModal from './components/picture/pictureModal';
 import AudioTable from './components/audio/audioTable';
 import AudioModal from './components/audio/audioModal';
 import VideoTable from './components/video/videoTable';
 import VideoModal from './components/video/videoModal';
 import MapinfoTable from './components/mapinfo/mapinfoTable';
 import MapinfoModal from './components/mapinfo/mapinfoModal';
+import QuestionTable from './components/question/questionTable';
+import QuestionModal from './components/question/questionModal';
 import Editor from './components/editor';
 import EditorZjh from './components/editorZjh';
 import Index from './components/zTestCommunite'
-import request from "@/utils/request";
+import Children1 from "@/pages/management/components/zTestCommunite/Children1";
 import Children2 from "@/pages/management/components/zTestCommunite/Children2";
 
-
-const FormItem = Form.Item;
+import request from "@/utils/request";
 
 class Management extends Component {
   constructor(props) {
@@ -68,14 +69,20 @@ class Management extends Component {
     if (typeof (this.articleTable) !== "undefined" && this.articleTable !== null) {
       this.articleTable.updateTable();
     }
-    if (typeof (this.videoTable) !== "undefined" && this.videoTable !== null) {
-      this.videoTable.updateTable();
+    if (typeof (this.pictureTable) !== "undefined" && this.pictureTable !== null) {
+      this.pictureTable.updateTable();
+    }
+    if (typeof (this.audioTable) !== "undefined" && this.audioTable !== null) {
+      this.audioTable.updateTable();
     }
     if (typeof (this.videoTable) !== "undefined" && this.videoTable !== null) {
       this.videoTable.updateTable();
     }
-    if (typeof (this.videoTable) !== "undefined" && this.videoTable !== null) {
-      this.videoTable.updateTable();
+    if (typeof (this.mapinfoTable) !== "undefined" && this.mapinfoTable !== null) {
+      this.mapinfoTable.updateTable();
+    }
+    if (typeof (this.questionTable) !== "undefined" && this.questionTable !== null) {
+      this.questionTable.updateTable();
     }
   }
 
@@ -88,7 +95,6 @@ class Management extends Component {
   };
 
   handleClick = e => {
-    // this.updateTable();
     // console.log('click ', e);
   };
 
@@ -188,11 +194,13 @@ class Management extends Component {
                 </Route>
                 <Route path='/management/picture'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>图片资源表</h1></Col>
-                  {/*  <Col span={8} style={{textAlign: 'right'}}><PictureModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                  <Col span={8} style={{textAlign: 'right'}}><PictureModal cascadeValue={this.state.cascadeValue}
+                                                                           updateAllTable={this.updateAllTable}/></Col>
                 </Route>
                 <Route path='/management/audio'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>音频资源表</h1></Col>
-                  {/*  <Col span={8} style={{textAlign: 'right'}}><AudioModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                  <Col span={8} style={{textAlign: 'right'}}><AudioModal cascadeValue={this.state.cascadeValue}
+                                                                         updateAllTable={this.updateAllTable}/></Col>
                 </Route>
                 <Route path='/management/video'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>视频资源表</h1></Col>
@@ -201,12 +209,20 @@ class Management extends Component {
                 </Route>
                 <Route path='/management/question'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>答题资源表</h1></Col>
-                  {/*  <Col span={8} style={{textAlign: 'right'}}><QuestionModal cascadeValue={this.state.cascadeValue}/></Col>*/}
+                  <Col span={8} style={{textAlign: 'right'}}><QuestionModal cascadeValue={this.state.cascadeValue}
+                                                                            updateAllTable={this.updateAllTable}/></Col>
                 </Route>
                 <Route path='/management/mapinfo'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>地理信息资源表</h1></Col>
                   <Col span={8} style={{textAlign: 'right'}}><MapinfoModal cascadeValue={this.state.cascadeValue}
-                  /></Col>
+                                                                           updateAllTable={this.updateAllTable}/></Col>
+                </Route>
+
+                <Route path='/management/user'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>用户表</h1></Col>
+                </Route>
+                <Route path='/management/userAnswer'>
+                  <Col span={8} style={{textAlign: 'center'}}><h1>答题记录表</h1></Col>
                 </Route>
               </Row>
             </Header>
@@ -224,7 +240,7 @@ class Management extends Component {
                   <ArticleTable {...this.state} ref={ch => this.articleTable = ch} updateCascade={this.updateCascade}/>
                 </Route>
                 <Route path='/management/picture' exact>
-                  <Index {...this.state} ref={ch => this.pictureTable = ch} updateCascade={this.updateCascade}/>
+                  <PictureTable {...this.state} ref={ch => this.pictureTable = ch} updateCascade={this.updateCascade}/>
                 </Route>
                 <Route path='/management/audio' exact>
                   <AudioTable {...this.state} ref={ch => this.audioTable = ch} updateCascade={this.updateCascade}/>
@@ -233,14 +249,14 @@ class Management extends Component {
                   <VideoTable {...this.state} ref={ch => this.videoTable = ch} updateCascade={this.updateCascade}/>
                 </Route>
                 <Route path='/management/question' exact>
-                  <Index {...this.state} ref={ch => this.questionTable = ch} updateCascade={this.updateCascade}/>
+                  <QuestionTable {...this.state} ref={ch => this.questionTable = ch} updateCascade={this.updateCascade}/>
                 </Route>
                 <Route path='/management/mapinfo' exact>
                   <MapinfoTable {...this.state} ref={ch => this.mapinfoTable = ch} updateCascade={this.updateCascade}/>
                 </Route>
 
                 <Route path='/management/user' exact>
-                  <EditorZjh {...this.state} ref={ch => this.userTable = ch} updateCascade={this.updateCascade}/>
+                  <Index {...this.state} ref={ch => this.userTable = ch} updateCascade={this.updateCascade}/>
                 </Route>
                 <Route path='/management/userAnswer' exact>
                   <EditorZjh {...this.state} ref={ch => this.userAnswerTable = ch} updateCascade={this.updateCascade}/>

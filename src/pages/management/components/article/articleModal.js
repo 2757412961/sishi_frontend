@@ -143,10 +143,6 @@ class ArticleModal extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    if (this.props.cascadeValue.length === 0) {
-      message.warning('标签名称为空');
-      return;
-    }
     if (this.state.editorState.isEmpty()) {
       message.warning('正文内容为空');
       return;
@@ -189,7 +185,7 @@ class ArticleModal extends Component {
         span: 22,
       },
     };
-    const {getFieldDecorator, setFieldDecorator} = this.props.form;
+    const {getFieldDecorator} = this.props.form;
 
     const {editorState} = this.state;
     const extendControls = [
@@ -211,21 +207,24 @@ class ArticleModal extends Component {
         <Button type="primary" onClick={this.showModal}>新增文章资源</Button>
 
         <Modal
-          title="新增标签资源"
+          title="新增文章资源"
           width={1200}
           visible={this.state.modalVisible}
-          confirmLoading={this.state.confirmLoading}
           onCancel={this.closeModal}
           footer={[
             <Button key='cancel' htmlType="button" onClick={this.closeModal}>取消</Button>,
             <Button key='reset' type="danger" htmlType="button" onClick={this.resetModal}>重置</Button>,
-            <Button key='submit' type="primary" htmlType="submit" onClick={this.handleSubmit}>提交</Button>,
+            <Button key='submit' type="primary" htmlType="submit" onClick={this.handleSubmit}
+                    loading={this.state.confirmLoading}>提交</Button>,
           ]}>
           {/*destroyOnClose={true}*/}
 
           <Form name="basic" {...layout}>
-            <Form.Item label="标签名称" name="tagName">
-              {getFieldDecorator('tagName', {initialValue: this.props.cascadeValue.join("@")})(
+            <Form.Item label="标签名称" name="tagName" extra="请在主页面选好标签！">
+              {getFieldDecorator('tagName', {
+                initialValue: this.props.cascadeValue.join("@"),
+                rules: [{required: true, message: '请输入标签名称!'},]
+              })(
                 <Input disabled={true}/>
               )}
             </Form.Item>
