@@ -376,7 +376,6 @@ class MapPage extends Component {
 
   componentDidMount() {
     const {dispatch}=this.props;
-    dispatch({ type: 'mapPage/getTagTree'});
     dispatch({ type: 'mapPage/getQuestion'});
     // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
     dispatch({ type: 'mapPage/getVideoByTag'});
@@ -415,13 +414,13 @@ class MapPage extends Component {
     ];
     // let treeList=forTree(tagTree);
     // console.log('treeList',treeList);
-    dispatch({ type: 'mapPage/getTagTree'}).then((res)=>{
+    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
       console.log('res',res);
       if(res&&res.success){
         let tagTree=res.list;
-        let tree=forTree(tagTree);
-        console.log('tree',tree);
-        list=forList(tree);
+        // let tree=forTree(tagTree);
+        // console.log('tree',tree);
+        list=forList(tagTree);
       }
     });
     const map = new mapboxgl.Map({
@@ -755,8 +754,8 @@ class MapPage extends Component {
     // }
     tree=[];
     const {tagTree,question}=mapPage;
-    let list1=forTree(tagTree);
-    list=forList(list1);
+    // let list1=forTree(tagTree);
+     list=forList(tagTree);
     console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
