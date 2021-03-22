@@ -3,13 +3,13 @@ import {Modal, Form, Input, Button, Upload, Icon, message} from 'antd';
 import {Link} from "react-router-dom";
 import request from "@/utils/request";
 
-class VideoModal extends Component {
+class PictureModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
       modalVisible: false,
       confirmLoading: false,
-      videoFile: null
+      pictureFile: null
     };
   }
 
@@ -35,12 +35,13 @@ class VideoModal extends Component {
     console.log(file);
     console.log(file.type);
 
-    if (file.type !== 'video/mp4') {
+    if (file.type !== 'image/png' && file.type !== 'image/jpeg' && file.type !== 'image/gif'
+      && file.type !== 'image/webp' && file.type !== 'image/apng' && file.type !== 'image/svg') {
       message.warning('文件格式不符合要求！');
       return false;
     }
 
-    this.setState({videoFile: file})
+    this.setState({pictureFile: file})
 
     return false;
   }
@@ -49,7 +50,7 @@ class VideoModal extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    if (this.state.videoFile === null) {
+    if (this.state.pictureFile === null) {
       message.warning('未上传文件');
       return;
     }
@@ -57,17 +58,17 @@ class VideoModal extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log(this.props.form.getFieldsValue());
-        let {tagName, videoTitle, videoSource, videoFile} = this.props.form.getFieldsValue();
+        let {tagName, pictureTitle, pictureSource, pictureFile} = this.props.form.getFieldsValue();
         let formData = new FormData();
         formData.append("tagName", tagName);
-        formData.append("videoTitle", videoTitle);
-        formData.append("videoSource", videoSource);
-        formData.append("videoFile", this.state.videoFile);
+        formData.append("pictureTitle", pictureTitle);
+        formData.append("pictureSource", pictureSource);
+        formData.append("pictureFile", this.state.pictureFile);
 
         this.setState({confirmLoading: true});
 
         request({
-          url: '/v1.0/api/video/form',
+          url: '/v1.0/api/picture/form',
           method: 'POST',
           data: formData,
           autoAdd: false, //不添加v1.0
@@ -77,9 +78,9 @@ class VideoModal extends Component {
           if (res.success) {
             this.props.updateAllTable();
             this.closeModal();
-            message.success('添加视频成功');
+            message.success('添加图片成功');
           } else {
-            message.error('添加视频失败,' + res.message);
+            message.error('添加图片失败,' + res.message);
           }
 
           this.setState({confirmLoading: false});
@@ -102,10 +103,10 @@ class VideoModal extends Component {
 
     return (
       <>
-        <Button type="primary" onClick={this.showModal}>新增视频资源</Button>
+        <Button type="primary" onClick={this.showModal}>新增图片资源</Button>
 
         <Modal
-          title="新增视频资源"
+          title="新增图片资源"
           // width={1200}
           visible={this.state.modalVisible}
           onCancel={this.closeModal}
@@ -127,19 +128,19 @@ class VideoModal extends Component {
               )}
             </Form.Item>
 
-            <Form.Item label="视频标题" name="videoTitle">
-              {getFieldDecorator('videoTitle', {rules: [{required: true, message: '请输入视频标题!'},]})(
-                <Input placeholder="请输入视频标题"/>
+            <Form.Item label="图片标题" name="pictureTitle">
+              {getFieldDecorator('pictureTitle', {rules: [{required: true, message: '请输入图片标题!'},]})(
+                <Input placeholder="请输入图片标题"/>
               )}
             </Form.Item>
 
-            <Form.Item label="视频来源" name="videoSource">
-              {getFieldDecorator('videoSource', {rules: [{required: true, message: '请输入视频来源!'},]})(
-                <Input placeholder="请输入视频来源"/>
+            <Form.Item label="图片来源" name="pictureSource">
+              {getFieldDecorator('pictureSource', {rules: [{required: true, message: '请输入图片来源!'},]})(
+                <Input placeholder="请输入图片来源"/>
               )}
             </Form.Item>
 
-            <Form.Item label="视频文件" name="videoFile" extra="上传的视频仅支持MP4格式">
+            <Form.Item label="图片文件" name="pictureFile">
               <Upload
                 beforeUpload={this.beforeUpload}
                 listType="picture">
@@ -154,4 +155,4 @@ class VideoModal extends Component {
   }
 }
 
-export default Form.create()(VideoModal);
+export default Form.create()(PictureModal);

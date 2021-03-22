@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Button, Breadcrumb, message} from 'antd';
+import {Modal, Form, Input, Button, Upload, Icon, message} from 'antd';
+import {Link} from "react-router-dom";
 import request from "@/utils/request";
 
-class MapinfoModal extends Component {
+class QuestionModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,6 +28,7 @@ class MapinfoModal extends Component {
     this.props.form.resetFields();
   }
 
+  // submit
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -34,14 +36,19 @@ class MapinfoModal extends Component {
         console.log(this.props.form.getFieldsValue());
         let formData = this.props.form.getFieldsValue();
 
+        this.setState({confirmLoading: true});
+
         request({
-          url: '/v1.0/api/mapinfo/tagName/' + formData.tagName,
+          url: '/v1.0/api/question/tagName/' + formData.tagName,
           method: 'POST',
           data: {
-            mapTitle: formData.mapTitle,
-            mapLon: formData.mapLon,
-            mapLat: formData.mapLat,
-            mapTime: formData.mapTime,
+            questionContent: formData.questionContent,
+            optionA: formData.optionA,
+            optionB: formData.optionB,
+            optionC: formData.optionC,
+            optionD: formData.optionD,
+            optionE: formData.optionE,
+            answer: formData.answer,
           },
           autoAdd: false, //不添加v1.0
         }).then((res) => {
@@ -50,10 +57,12 @@ class MapinfoModal extends Component {
           if (res.success) {
             this.props.updateAllTable();
             this.closeModal();
-            message.success('添加地理信息成功');
+            message.success('添加题目成功');
           } else {
-            message.error('添加地理信息失败,' + res.message);
+            message.error('添加题目失败,' + res.message);
           }
+
+          this.setState({confirmLoading: false});
         })
       }
     });
@@ -70,12 +79,13 @@ class MapinfoModal extends Component {
     };
     const {getFieldDecorator} = this.props.form;
 
+
     return (
       <>
-        <Button type="primary" onClick={this.showModal}>新增地理资源</Button>
+        <Button type="primary" onClick={this.showModal}>新增题目资源</Button>
 
         <Modal
-          title="新增标签资源"
+          title="新增题目资源"
           visible={this.state.modalVisible}
           onCancel={this.closeModal}
           footer={[
@@ -85,7 +95,7 @@ class MapinfoModal extends Component {
           ]}
           destroyOnClose={true}>
 
-          <Form name="basic" {...layout}>
+          <Form name="basic" {...layout} style={{}}>
             <Form.Item label="标签名称" name="tagName" extra="请在主页面选好标签！">
               {getFieldDecorator('tagName', {
                 initialValue: this.props.cascadeValue.join("@"),
@@ -95,29 +105,44 @@ class MapinfoModal extends Component {
               )}
             </Form.Item>
 
-            <Form.Item label="地图名称" name="mapTitle">
-              {getFieldDecorator('mapTitle', {rules: [{required: true, message: '请输入地图名称!'},]})(
-                <Input placeholder="请输入地图名称"/>
+            <Form.Item label="题目内容题" name="questionContent">
+              {getFieldDecorator('questionContent', {rules: [{required: true, message: '请输入题目内容!'},]})(
+                <Input placeholder="请输入题目内容"/>
               )}
             </Form.Item>
 
-            <Form.Item label="地理信息(经度)" name="mapLon">
-              {getFieldDecorator('mapLon', {rules: [{required: true, message: '请输入地理信息(经度)!'},]})(
-                <Input placeholder="请输入经度"/>
+            <Form.Item label="选项A" name="optionA">
+              {getFieldDecorator('optionA',)(
+                <Input placeholder="请输入选项A"/>
+              )}
+            </Form.Item>
+            <Form.Item label="选项B" name="optionB">
+              {getFieldDecorator('optionB',)(
+                <Input placeholder="请输入选项B"/>
+              )}
+            </Form.Item>
+            <Form.Item label="选项C" name="optionC">
+              {getFieldDecorator('optionC',)(
+                <Input placeholder="请输入选项C"/>
+              )}
+            </Form.Item>
+            <Form.Item label="选项D" name="optionD">
+              {getFieldDecorator('optionD',)(
+                <Input placeholder="请输入选项D"/>
+              )}
+            </Form.Item>
+            <Form.Item label="选项E" name="optionE">
+              {getFieldDecorator('optionE',)(
+                <Input placeholder="请输入选项E"/>
               )}
             </Form.Item>
 
-            <Form.Item label="地理信息(纬度)" name="mapLat">
-              {getFieldDecorator('mapLat', {rules: [{required: true, message: '请输入地理信息(纬度)!'},]})(
-                <Input placeholder="请输入纬度"/>
+            <Form.Item label="答案" name="answer">
+              {getFieldDecorator('answer', {rules: [{required: true, message: '请输入答案!'},]})(
+                <Input placeholder="请输入答案"/>
               )}
             </Form.Item>
 
-            <Form.Item label="时间信息" name="mapTime">
-              {getFieldDecorator('mapTime', {rules: [{required: true, message: '请输入时间信息!'},]})(
-                <Input placeholder="请输入时间信息"/>
-              )}
-            </Form.Item>
           </Form>
         </Modal>
       </>
@@ -125,4 +150,4 @@ class MapinfoModal extends Component {
   }
 }
 
-export default Form.create()(MapinfoModal);
+export default Form.create()(QuestionModal);
