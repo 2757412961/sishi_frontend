@@ -316,15 +316,14 @@ function forList(treeList){
   for (let i in treeList){
     if(treeList[i].hasOwnProperty('geoCoordinates')){
       let temp={};
-      temp.id=treeList[i].label;
+      temp.id=i;
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
       temp.text=treeList[i].label;
       temp.value=treeList[i].label;
       temp.time=treeList[i].time;
-      temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-        '于'+treeList[i].time+'在<span>'+treeList[i].label+'</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-        '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>';
+      temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}>' + '<p>发生时间'
+        +treeList[i].time+'</p> <p><a id="btn">点击进入学习卡片</a></p></div>';
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       list.push(temp);
@@ -618,7 +617,6 @@ class MapPage extends Component {
           });
         }
       });*/
-      //debugger
       for (let i=0;i<list.length;i++) {
         console.log('imap',i,list[i]);
         map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
@@ -640,7 +638,7 @@ class MapPage extends Component {
           },
           "layout": {
             "icon-image": list[i].id,
-            "icon-optional": false,
+            "icon-optional":false,
             "icon-ignore-placement": true,
             // "text-ignore-placement": true,
             "text-allow-overlap": true,
@@ -752,11 +750,11 @@ class MapPage extends Component {
     //   }
     //   return tree
     // }
-    tree=[];
+    // tree=[];
     const {tagTree,question}=mapPage;
     // let list1=forTree(tagTree);
      list=forList(tagTree);
-    console.log('listRender',list);
+    console.log('listRender',list[0]);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
     const {unCheckStyle,checkStyle} = this.state;
@@ -769,19 +767,14 @@ class MapPage extends Component {
         </Button>
         <Modal visible={this.state.startQuestion}
                centered
-              //  style={{top:'3em',height:'500px'}}
               width={1000}
-              // // bodyStyle={{backgroundImage:}}
-              //  className={styles.modal}
-              //  closable={false}
-              //  keyboard={true}
                mask={true}
                maskClosable={true}
               // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
                title={null}
-               onCancel={this.handleCancel}
+               onCancel={()=>this.setState({startQuestion:false})}
                footer={null}
-               closable={false}
+               closable={true}
                wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
         >
           <div className={styles.modal}>
@@ -826,7 +819,7 @@ class MapPage extends Component {
               {this.state.answer==true?
                 (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
               <Row gutter={16}>
-                <Col span={8}>
+                <Col span={12}>
                   <Button  key="submit"
                            type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
                            onClick={()=>{
@@ -840,7 +833,7 @@ class MapPage extends Component {
                                alert("答题结束")
                              }}}>提交</Button>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <Button
                     key="submit"
                     type="primary"
@@ -863,12 +856,12 @@ class MapPage extends Component {
                     下一题
                   </Button>
                 </Col>
-                <Col span={8}>
-                  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>
-                  <h1><span>{this.state.questionNumber}</span>/
-                    <span>{allNumber}</span></h1>
-                  {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
-                </Col>
+                {/*<Col span={8}>*/}
+                {/*  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>*/}
+                {/*  <h1><span>{this.state.questionNumber}</span>/*/}
+                {/*    <span>{allNumber}</span></h1>*/}
+                {/*  /!*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*!/*/}
+                {/*</Col>*/}
               </Row>
               {this.state.questionNumber==allNumber&&this.state.answer?
                 (<div>
