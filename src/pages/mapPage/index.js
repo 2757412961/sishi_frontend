@@ -14,7 +14,7 @@ import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
-import { Scene, LineLayer,Control,PolygonLayer } from '@antv/l7';
+import { Scene, LineLayer,Control,PolygonLayer,PointLayer,ImageLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
 
 // import {motion} from 'framer-motion';
@@ -50,139 +50,139 @@ const variants={open: { opacity: 1, x: 0 },
   closed: { opacity: 0, x: "-100%" },}
 //
 //
-// const list = [
-//   {
-//     id:'一大-上海',
-//     lonlat:[121.47069346816863, 31.22206084685108],
-//     text:'1921年7月-中共一大上海',
-//     value: '中共一大上海',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共一大</h2>' +
-//       '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-//       '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-//       '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p1,
-//     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-//     label:"党史新学@中共一大@上海",
-//   },
-//   {
-//     id:'一大-嘉兴',
-//     lonlat:[120.75580305351667, 30.75747193181725],
-//     text:'1921年7月-中共一大',
-//     value: '中共一大嘉兴',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共一大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p1,
-//     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-//     label:"党史新学@中共一大@嘉兴",
-//   },
-//   {
-//     id:'二大-上海',
-//     lonlat:[121.46214132313253, 31.2260623329518],
-//     text: '1922年7月-中共二大',
-//     value: '中共二大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共二大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第二次全国代表大会，简称中共二大',
-//     label:"党史新学@中共二大@上海",
-//   },
-//   {
-//     id:'三大-广州',
-//     lonlat:[113.29062697510238, 23.121680862715294],
-//     text: '1923年6月-中共三大',
-//     value: '中共三大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共三大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p3,
-//     cardContent:'中国共产党第三次全国代表大会，简称中共三大',
-//     label:"党史新学@中共三大@广州",
-//   },
-//   {
-//     id:'四大-上海',
-//     lonlat:[121.48020351895462,31.25728522799882],
-//     text: '1925年1月-中共四大',
-//     value: '中共四大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共四大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第四次全国代表大会，简称中共四大',
-//     label:"党史新学@中共四大@上海",
-//   },
-//   {
-//     id:'五大-武汉',
-//     lonlat:[114.29318634011975,30.553569642526185],
-//     text: '1927年4月-中共五大',
-//     value: '中共五大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共五大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第五次全国代表大会，简称中共五大',
-//     label:"党史新学@中共五大@武汉",
-//   },
-//   {
-//     id:'六大-俄罗斯',
-//     lonlat:[37.153974181328664,55.535728582753336],
-//     text: '1928年6月-中共六大',
-//     value: '中共六大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共六大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第六次全国代表大会，简称中共六大',
-//     label:"党史新学@中共六大@俄罗斯",
-//   },
-//   {
-//     id:'七大-延安',
-//     lonlat:[109.46267096678156,36.618757084621336],
-//     text: '1945年4月-中共七大',
-//     value: '中共七大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共七大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第七次全国代表大会，简称中共七大',
-//     label:"党史新学@中共七大@延安",
-//   },
-//   {
-//     id:'八大-政协礼堂',
-//     lonlat:[116.35780179933835,39.91833919135752],
-//     text: '1956年9月-中共八大',
-//     value: '中共八大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共八大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第八次全国代表大会，简称中共八大',
-//     label:"党史新学@中共八大@北京",
-//   },{
-//     id:'九大-人民大会堂',
-//     lonlat:[116.38748691963224,39.90337460887406],
-//     text: '1969年4月-中共九大',
-//     value: '中共九大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共九大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第九次全国代表大会，简称中共九大',
-//     label:"党史新学@中共九大@北京",
-//   },
-// ];
+const list2 = [
+  {
+    id:'一大-上海',
+    lonlat:[121.47069346816863, 31.22206084685108],
+    text:'1921年7月-中共一大上海',
+    value: '中共一大上海',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共一大</h2>' +
+      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p1,
+    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+    label:"党史新学@中共一大@上海",
+  },
+  {
+    id:'一大-嘉兴',
+    lonlat:[120.75580305351667, 30.75747193181725],
+    text:'1921年7月-中共一大',
+    value: '中共一大嘉兴',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共一大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p1,
+    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+    label:"党史新学@中共一大@嘉兴",
+  },
+  {
+    id:'二大-上海',
+    lonlat:[121.46214132313253, 31.2260623329518],
+    text: '1922年7月-中共二大',
+    value: '中共二大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共二大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+    label:"党史新学@中共二大@上海",
+  },
+  {
+    id:'三大-广州',
+    lonlat:[113.29062697510238, 23.121680862715294],
+    text: '1923年6月-中共三大',
+    value: '中共三大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共三大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p3,
+    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
+    label:"党史新学@中共三大@广州",
+  },
+  {
+    id:'四大-上海',
+    lonlat:[121.48020351895462,31.25728522799882],
+    text: '1925年1月-中共四大',
+    value: '中共四大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共四大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第四次全国代表大会，简称中共四大',
+    label:"党史新学@中共四大@上海",
+  },
+  {
+    id:'五大-武汉',
+    lonlat:[114.29318634011975,30.553569642526185],
+    text: '1927年4月-中共五大',
+    value: '中共五大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共五大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第五次全国代表大会，简称中共五大',
+    label:"党史新学@中共五大@武汉",
+  },
+  {
+    id:'六大-俄罗斯',
+    lonlat:[37.153974181328664,55.535728582753336],
+    text: '1928年6月-中共六大',
+    value: '中共六大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共六大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第六次全国代表大会，简称中共六大',
+    label:"党史新学@中共六大@俄罗斯",
+  },
+  {
+    id:'七大-延安',
+    lonlat:[109.46267096678156,36.618757084621336],
+    text: '1945年4月-中共七大',
+    value: '中共七大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共七大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第七次全国代表大会，简称中共七大',
+    label:"党史新学@中共七大@延安",
+  },
+  {
+    id:'八大-政协礼堂',
+    lonlat:[116.35780179933835,39.91833919135752],
+    text: '1956年9月-中共八大',
+    value: '中共八大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共八大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第八次全国代表大会，简称中共八大',
+    label:"党史新学@中共八大@北京",
+  },{
+    id:'九大-人民大会堂',
+    lonlat:[116.38748691963224,39.90337460887406],
+    text: '1969年4月-中共九大',
+    value: '中共九大',
+    showInfo: '<div className={styles.markerTop}>' +
+      '<h2>中共九大</h2>' +
+      '<p><a id="btn">点击进入学习卡片</a></p>' +
+      '</div>',
+    cardImg:p2,
+    cardContent:'中国共产党第九次全国代表大会，简称中共九大',
+    label:"党史新学@中共九大@北京",
+  },
+];
 let list=[];
 var chapters = {
   '一大-上海': {
@@ -337,6 +337,7 @@ function forList(treeList){
       temp.cardImg=p1;
       list.push(temp);
     }
+    console.log("treelist", list);
   }
   return list;
 }
@@ -608,6 +609,7 @@ class MapPage extends Component {
       });*/
       for (let i=0;i<list.length;i++) {
         map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
+        console.log("list", list);
 
         map.addLayer({
           "id": list[i].id,
@@ -650,12 +652,11 @@ class MapPage extends Component {
       // playback(0);
     });
     let _this = this;
-    for(let i = 0;i<list.length;i++){
-      map.on('click', list[i].id, function(e) {
+    for(let i = 0;i<list2.length;i++){
+      map.on('click', list2[i].id, function(e) {
         var coordinates = e.features[0].geometry.coordinates;
-        let showInfo = list[i].showInfo;
         _this.setState({
-          itemNow: list[i],
+          itemNow: list2[i],
         })
 
         new mapboxgl.Popup()
@@ -663,21 +664,11 @@ class MapPage extends Component {
           // .setHTML(showInfo)
           .addTo(map)
           .setDOMContent(popupRef.current);
-        // document.getElementById('btn')
-        //   .addEventListener('click', function(){
-        //     let cardImg = list[i].cardImg;
-        //     let cardContent = list[i].cardContent;
-        //     _this.setState({
-        //       knowledgeUrl: cardImg,
-        //       knowledgeContent: cardContent,
-        //     });
-        //     _this.showModal()
-        //   });
       });
-      map.on('mouseenter', list[i].id, function() {
+      map.on('mouseenter', list2[i].id, function() {
         map.getCanvas().style.cursor = 'pointer';
       });
-      map.on('mouseleave', list[i].id, function() {
+      map.on('mouseleave', list2[i].id, function() {
         map.getCanvas().style.cursor = '';
       });
     }

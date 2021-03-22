@@ -12,7 +12,7 @@ import { judgeUrl, getLocalData } from '@/utils/common.js';
 import router from 'umi/router';
 import { connect } from 'dva';
 import classnames from 'classnames';
-import header from '@/assets/header.jpg';
+import header from '@/assets/images/header.png';
 import zhedalogo from '@/assets/zhedalogo.png';
 import xueyuanlogo from '@/assets/images/xueyuan-white.png';
 import logobiaoti from '@/assets/images/logobiaoti.png';
@@ -59,6 +59,28 @@ class Header extends Component {
           <span>退出</span>
         </Menu.Item>
       </Menu>;
+    const menu_more = (
+      <Menu>
+        <Menu.Item>
+          <div className={styles.font_module}>文军长征</div>
+        </Menu.Item>
+        <Menu.Item>
+          <div className={styles.font_module}>决胜小康</div>
+        </Menu.Item>
+        <Menu.Item>
+          <div className={styles.font_module}>百花齐放</div>
+        </Menu.Item>
+        <Menu.Item>
+          <div className={styles.font_module}>理论学习</div>
+        </Menu.Item>
+        <Menu.Item>
+          <div className={styles.font_module}>微视频学习</div>
+        </Menu.Item>
+        <Menu.Item>
+          <div className={styles.font_module}>我想对党说</div>
+        </Menu.Item>
+      </Menu>
+    );
 
     return (
       <div
@@ -67,42 +89,85 @@ class Header extends Component {
           styles.active : '')}
       >
         <div className={classnames(styles.header_first)}
-             // style={{ backgroundImage: `url(${header})`}}
         >
           <div className={styles.head_logo}>
             <img src={xueyuanlogo} className={styles.xueyuan_logo} alt="" />
-            <img src={logobiaoti} className={styles.logo_biaoti} alt="" />
+            {/*<img src={logobiaoti} className={styles.logo_biaoti} alt="" />*/}
             {/*<div>*/}
             {/*  <a href='/management'>*/}
             {/*    <span style={{}}>管理页面</span>*/}
             {/*  </a>*/}
             {/*</div>*/}
           </div>
-          {
-            window.location.pathname=='/'?
-              <div>
-                <div>
-                  <img className={styles.xuexi2} src={xuexi2}>
-                  </img>
-                </div>
-              </div>:
-              <div>
-                <div>
-                  <img className={styles.xuexi3} src={xuexi3}>
-                  </img>
-                </div>
-                <Icon type="caret-down" style={{color:"white"}}/>
-              </div>
-          }
-          {window.location.pathname!='/'&&(
-            this.state.moduleVisible?
-              <Icon type="caret-up" style={{color:"white"}}
-                    onClick={()=>this.iconOnClick()}
-              />:
-              <Icon type="caret-down" style={{color:"white"}}
-                    onClick={()=>this.iconOnClick()}
-              />
-          )}
+          <div className={styles.font_div}>
+            <Row justify="space-between" style={{marginBottom:"10px"}}>
+              <Col span={4} style={{borderRight:"1px solid #e5c387"}}>
+                <div className={styles.font_style}>党史新学</div>
+              </Col>
+              <Col span={4} style={{borderRight:"1px solid #e5c387"}}>
+                <div className={styles.font_style}>建设中国</div>
+              </Col>
+              <Col span={4} style={{borderRight:"1px solid #e5c387"}}>
+                <div className={styles.font_style}>中特之路</div>
+              </Col>
+              <Col span={4} style={{}}>
+                <div className={styles.font_style}>改革复兴</div>
+              </Col>
+              <Col span={6} style={{}}>
+                <Dropdown overlay={menu_more}>
+                  <div className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                    <Icon style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}} type='right' />
+                    <div style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}}>更多模块</div>
+                  </div>
+                </Dropdown>
+              </Col>
+              {/*<Col span={4}>*/}
+              {/*  <div className={styles.font_style}>文军长征</div>*/}
+              {/*</Col>*/}
+            </Row>
+            {/*<Row justify="space-between">*/}
+            {/*  <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>*/}
+            {/*    <div className={styles.font_style}>决胜小康</div>*/}
+            {/*  </Col>*/}
+            {/*  <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>*/}
+            {/*    <div className={styles.font_style}>百花齐放</div>*/}
+            {/*  </Col>*/}
+            {/*  <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>*/}
+            {/*    <div className={styles.font_style}>理论学习</div>*/}
+            {/*  </Col>*/}
+            {/*  <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>*/}
+            {/*    <div className={styles.font_style}>微视频学习</div>*/}
+            {/*  </Col>*/}
+            {/*  <Col span={4}>*/}
+            {/*    <div className={styles.font_style}>我想对党说</div>*/}
+            {/*  </Col>*/}
+            {/*</Row>*/}
+          </div>
+          {/*{*/}
+          {/*  window.location.pathname=='/'?*/}
+          {/*    <div>*/}
+          {/*      <div>*/}
+          {/*        <img className={styles.xuexi2} src={xuexi2}>*/}
+          {/*        </img>*/}
+          {/*      </div>*/}
+          {/*    </div>:*/}
+          {/*    <div>*/}
+          {/*      <div>*/}
+          {/*        <img className={styles.xuexi3} src={xuexi3}>*/}
+          {/*        </img>*/}
+          {/*      </div>*/}
+          {/*      <Icon type="caret-down" style={{color:"white"}}/>*/}
+          {/*    </div>*/}
+          {/*}*/}
+          {/*{window.location.pathname!='/'&&(*/}
+          {/*  this.state.moduleVisible?*/}
+          {/*    <Icon type="caret-up" style={{color:"white"}}*/}
+          {/*          onClick={()=>this.iconOnClick()}*/}
+          {/*    />:*/}
+          {/*    <Icon type="caret-down" style={{color:"white"}}*/}
+          {/*          onClick={()=>this.iconOnClick()}*/}
+          {/*    />*/}
+          {/*)}*/}
           {getLocalData({ dataName: 'userName' }) ? (
             <Dropdown overlay={menu} trigger={['click']}>
               <div className={styles.head_user}>
@@ -110,6 +175,7 @@ class Header extends Component {
                 {/*  <Avatar size="small" icon="user" src={avatar} />*/}
                 {/*</div>*/}
                 <div className={styles.head_user_name}>
+                  <img src={getLocalData({ dataName: 'avatar' })}/>
                   <span>{getLocalData({ dataName: 'userName' })}</span>
                 </div>
               </div>
@@ -129,53 +195,10 @@ class Header extends Component {
             </div>
           )}
         </div>
-        {
-          this.state.moduleVisible?
-            <div>
-              <div className={styles.header_divider}>
-                <div className={styles.divider}>
-                </div>
-              </div>
-              <div className={classnames(styles.header_second)}>
-                <div className={styles.font_div}>
-                  <Row justify="space-between" style={{marginBottom:"10px"}}>
-                    <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>
-                      <div className={styles.font_style}>党史新学</div>
-                    </Col>
-                    <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>
-                      <div className={styles.font_style}>建设中国</div>
-                    </Col>
-                    <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>
-                      <div className={styles.font_style}>中特之路</div>
-                    </Col>
-                    <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>
-                      <div className={styles.font_style}>改革复兴</div>
-                    </Col>
-                    <Col span={4}>
-                      <div className={styles.font_style}>文军长征</div>
-                    </Col>
-                  </Row>
-                  <Row justify="space-between">
-                    <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>
-                      <div className={styles.font_style}>决胜小康</div>
-                    </Col>
-                    <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>
-                      <div className={styles.font_style}>百花齐放</div>
-                    </Col>
-                    <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>
-                      <div className={styles.font_style}>理论学习</div>
-                    </Col>
-                    <Col span={4} style={{marginRight:"20px", borderRight:"1px solid #e5c387"}}>
-                      <div className={styles.font_style}>微视频学习</div>
-                    </Col>
-                    <Col span={4}>
-                      <div className={styles.font_style}>我想对党说</div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-            </div>:null
-        }
+            {/*<div>*/}
+            {/*    <div className={styles.divider}>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
       </div>
     );
