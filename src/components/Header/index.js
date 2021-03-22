@@ -35,6 +35,36 @@ class Header extends Component {
     //   this.props.dispatch({ type: 'userInfo/getUserData' });
     // }
   }
+  componentWillMount() {   //初始化时在页面加载完成前执行
+
+    this.appendMeta()
+
+  }
+
+  componentWillReceiveProps(){  //刷新页面时执行
+
+    this.appendMeta()
+
+  }
+
+  appendMeta = () =>{
+    //在head标签插入meta标签，解决在生产环境链接失效问题
+    const metaTag = document.getElementsByTagName('meta');
+    let isHasTag = true;
+    for(let i=0;i<metaTag.length;i++){   //避免重复插入meta标签
+      const httpEquiv = metaTag[i].httpEquiv;
+      if(httpEquiv == 'Content-Security-Policy'){
+        isHasTag = false;
+      }
+    }
+    if(isHasTag){
+      const headItem = document.head;
+      let oMeta = document.createElement('meta');
+      oMeta.setAttribute('name','referrer');
+      oMeta.content = 'never';
+      headItem.appendChild(oMeta)
+    }
+  }
   // 登出
   resetUserData(){
     this.props.dispatch({ type: 'userInfo/userLogout' })
@@ -175,8 +205,8 @@ class Header extends Component {
                 {/*  <Avatar size="small" icon="user" src={avatar} />*/}
                 {/*</div>*/}
                 <div className={styles.head_user_name}>
-                  <img src={getLocalData({ dataName: 'avatar' })}/>
-                  <span>{getLocalData({ dataName: 'userName' })}</span>
+                  <img src={getLocalData({ dataName: 'avatar' })} className={styles.img_style}/>
+                  {/*<span>{getLocalData({ dataName: 'userName' })}</span>*/}
                 </div>
               </div>
             </Dropdown>
@@ -195,10 +225,10 @@ class Header extends Component {
             </div>
           )}
         </div>
-            {/*<div>*/}
-            {/*    <div className={styles.divider}>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+            <div>
+                <div className={styles.divider}>
+                </div>
+            </div>
 
       </div>
     );
