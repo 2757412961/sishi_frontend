@@ -372,13 +372,17 @@ class MapPage extends Component {
         opacity: 1,
         fontSize: 17,
       },
-      knowledgeUrl:'',
+      knowledgeUrl:p1,
       //list[0].cardImg,
-      knowledgeContent:'',
+      knowledgeContent:'中国共产党第一次全国代表大会于1921年7月23日至1921年8月3日在上海法租界贝勒路树德里3号（后称望志路106号，现改兴业路76号）和浙江嘉兴南湖召开。出席大会的各地代表共12人。',
       //list[0].cardContent,
       // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
       more:true,
       startQuestion:false,
+      startArticle:false,
+      startPicture:false,
+      startVideo:false,
+      startAudio:false,
     };
 
   }
@@ -607,43 +611,43 @@ class MapPage extends Component {
       for (let i=0;i<list.length;i++) {
         map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
 
-        map.addLayer({
-          "id": list[i].id,
-          "type": "symbol",
-          "source": {
-            "type": "geojson",
-            "data": {
-              "type": "FeatureCollection",
-              "features": [{
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": list[i].lonlat,
-                }
-              }]
-            }
-          },
-          "layout": {
-            "icon-image": list[i].id,
-            "icon-optional":false,
-            "icon-ignore-placement": true,
-            // "text-ignore-placement": true,
-            "text-allow-overlap": true,
-            "text-field": list[i].value,
-            "text-anchor": 'left',
-            "text-offset": [1,0.1],
-            // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-            "text-size": [
-              "interpolate", ["linear"], ["zoom"],
-              3,20,
-              17,38
-            ],
-          },
-          paint: {
-            "text-color": 'rgb(255,0,0)',
-          }
-
-        });
+        // map.addLayer({
+        //   "id": list[i].id,
+        //   "type": "symbol",
+        //   "source": {
+        //     "type": "geojson",
+        //     "data": {
+        //       "type": "FeatureCollection",
+        //       "features": [{
+        //         "type": "Feature",
+        //         "geometry": {
+        //           "type": "Point",
+        //           "coordinates": list[i].lonlat,
+        //         }
+        //       }]
+        //     }
+        //   },
+        //   "layout": {
+        //     "icon-image": list[i].id,
+        //     "icon-optional":false,
+        //     "icon-ignore-placement": true,
+        //     // "text-ignore-placement": true,
+        //     "text-allow-overlap": true,
+        //     "text-field": list[i].value,
+        //     "text-anchor": 'left',
+        //     "text-offset": [1,0.1],
+        //     // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+        //     "text-size": [
+        //       "interpolate", ["linear"], ["zoom"],
+        //       3,20,
+        //       17,38
+        //     ],
+        //   },
+        //   paint: {
+        //     "text-color": 'rgb(255,0,0)',
+        //   }
+        //
+        // });
       }
       // playback(0);
     });
@@ -759,6 +763,16 @@ class MapPage extends Component {
         <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
           答题
         </Button>
+        <Button  key="back" onClick={()=>{this.setState({startArticle:true})}}>
+          文章
+        </Button>
+        <Button  key="back" onClick={()=>{this.setState({startPicture:true})}}>
+          图片
+        </Button>
+        <Button  key="back" onClick={()=>{this.setState({startVideo:true})}}>
+          视频
+        </Button>
+        {/*答题*/}
         <Modal visible={this.state.startQuestion}
                centered
               width={1000}
@@ -866,182 +880,98 @@ class MapPage extends Component {
             <div className={styles.bottom}></div>
           </div>
         </Modal>
-        <Modal visible={this.state.modalVisble}
-               destroyOnClose={true}
-               forceRender={true}
-               title="互动页面"
+        {/*文章*/}
+        <Modal visible={this.state.startArticle}
                centered
-               style={{top:'3em',color:'black',fontStyle:{},height:'70vh', width:'70vw'}}
-               // bodyStyle={{height:'70vh', width:'70vw'}}
-               maskStyle={{backgroundColor: 'rgba(198,170,145,0.1)' ,top:'5em',}}
-               className={styles.modal}
-               onOk={()=>this.setState({modalVisble:false})}
-               onCancel={()=>this.setState({modalVisble:false})}
-               footer={false}
+               width={1000}
+               mask={true}
+               maskClosable={true}
+          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+               title={null}
+               onCancel={()=>this.setState({startArticle:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
         >
-          <Tabs
-            defaultActiveKey="1"
-            activeKey={this.state.activeKey}
-          >
-
-            <TabPane
-              tab={
-                <span>
-                        <Icon type="book" />
-                          文章
-                      </span>
-              }
-              key="1"
-            >
+          <div className={styles.modal}>
+            {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
+            <div className={styles.topArticle}></div>
+            <div className="d-iframe">
               <Card style={{ width: '100' }}
+                    title={"中共一大"}
                     cover={
                       <img
                         alt="example"
                         src={this.state.knowledgeUrl}
                       />
                     }
-                    >
+              >
                 {this.state.knowledgeContent}
               </Card>
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
-                        <Icon type="picture" />
-                         图片
-                      </span>
-              }
-              key="2"
-            >
+            </div>
+          </div>
+        </Modal>
+        {/*图片*/}
+        <Modal visible={this.state.startPicture}
+               centered
+               width={1000}
+               mask={true}
+               maskClosable={true}
+          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+               title={null}
+               onCancel={()=>this.setState({startPicture:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            <div className={styles.topPicture}></div>
+            <div className="d-iframe">
               <div style={{padding: 40, background: "#ececec"}} >
+                {/*<div style={styles.out}>*/}
+
+                {/*</div>*/}
                 <Slider {...this.carousel_settings} >
-                  <div>
-                    <img  src={yay} />
+                  <div style={styles.out}>
+                    <img  src={yay} style={{height: '100%', width:'100%' }} />
                   </div>
                   <div>
-                    <img  src={yaa} style={{height: 250, width:400 }}/>
+                    <img  src={yaa} style={{height: '100%', width:'100%' }}/>
                   </div>
                 </Slider>
               </div>
-
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
-                        <Icon type="video-camera" />
-                          视频
-                      </span>
-              }
-              key="3"
-            >
-              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
-                     controls="controls">
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+            </div>
+          </div>
+        </Modal>
+        {/*视频*/}
+        <Modal visible={this.state.startVideo}
+               centered
+               width={1000}
+               mask={true}
+               maskClosable={true}
+          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+               title={null}
+               onCancel={()=>this.setState({startVideo:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            <div className={styles.topVideo}></div>
+            <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                   controls="controls">
+              {/*<source src="./1.mp4"*/}
+              {/*/>*/}
+              {/*<source src="./1.mp4"*/}
+              {/*/>*/}
+              <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
               />
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                />
-              </video>
-              {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
-              {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
-              {/*</video>*/}
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
-                        <Icon type="question" />
-                          答题
-                      </span>
-              }
-              key="4"
-            >
-
-              <Card   title={this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}>
-                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                  <Row>
-                    <Col span={12}>
-                      <Checkbox    value={'A'}>
-                        {'A  '+(question[recent]?question[recent].optionA:'')}
-                      </Checkbox>
-                    </Col>
-                    <Col span={12}>
-                      <Checkbox    value={'B'}>
-                        {'B  '+(question[recent]?question[recent].optionB:'')}
-                      </Checkbox>
-                    </Col>
-                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                      <Checkbox    value={'C'}>
-                        {'C  '+(question[recent]?question[recent].optionC:'')}
-                      </Checkbox>
-                    </Col>:""}
-                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                      <Col span={12}>
-                        <Checkbox    value={'D'}>
-                          {'D  '+(question[recent]?question[recent].optionD:'')}
-                          {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                        </Checkbox>
-                      </Col>:''}
-                  </Row>
-                </Checkbox.Group>
-              </Card>
-              <Button  key="submit"
-                       type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
-                if(this.state.value==rightAnswer){
-                  this.setState({grade:this.state.grade+1});
-                }
-                this.setState({answer:true})
-                if(this.state.questionNumber==allNumber)
-                {
-                  alert("答题结束")
-                }
-                       }}>提交</Button>
-              {this.state.answer==true?
-                (<h1>正确答案是</h1>):''}
-              {this.state.answer==true?
-                (<Card type="inner" title={answer[rightAnswer]} />):''}
-              <Row gutter={16}>
-                <Col span={8}>
-                  <Button  key="back" onClick={()=>{this.setState({questionNumber: this.state.questionNumber-1})}}>
-                    上一题
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <Button
-                    key="submit"
-                    type="primary"
-                    onClick={()=> {
-                      // this.setState({modalVisble:false})
-                      if(this.state.questionNumber==allNumber){
-                        return
-                      }
-                      if(this.state.answer==false){
-                        alert('你还未提交本题答案')
-                      }
-                      else{
-                        this.setState({deadline:Date.now() +  1000 * 60})
-                        this.setState({questionNumber: this.state.questionNumber+1})
-                        this.setState({answer:false})
-                      }
-                    }}>
-                    下一题
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <h2><span>{this.state.questionNumber}</span>/
-                    <span>{allNumber}</span></h2>
-                  {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
-                </Col>
-              </Row>
-              {this.state.questionNumber==allNumber&&this.state.answer?
-                (<div>
-                  <div className={styles.try}></div>
-                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
-            </TabPane>
-
-          </Tabs>
+              <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+              />
+            </video>
+            <div className="d-iframe">
+            </div>
+          </div>
         </Modal>
         <div id='verticalTimeLine' className={styles.verticalTimeLine}>
           <VerticalTimeline
