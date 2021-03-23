@@ -47,6 +47,11 @@ import c6 from '@/assets/test/c6.jpg';
 import c7 from '@/assets/test/c7.jpg';
 import c8 from '@/assets/test/c8.jpg';
 import c9 from '@/assets/test/c9.jpg';
+import layer from '@/assets/test/layer.png';
+import reback from '@/assets/test/reback.png';
+import ditu from '@/assets/test/地图.PNG';
+import dixing from '@/assets/test/地形.PNG';
+import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -366,9 +371,7 @@ function forList(treeList){
       temp.text=treeList[i].label;
       temp.value=treeList[i].label;
       temp.time=treeList[i].time;
-      temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-        '于'+treeList[i].time+'在<span>'+treeList[i].label+'</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-        '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>';
+      temp.showInfo=des[i].showInfo;
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       list.push(temp);
@@ -530,106 +533,6 @@ class MapPage extends Component {
         // console.log('tree',tree);
         list = forList(tagTree);
       }
-
-      const myDeckLayer = new MapboxLayer({
-        id: 'arc',
-        type: ArcLayer,
-        data: flyline,
-        getSourcePosition: d => d.coord[0],
-        getTargetPosition: d => d.coord[1],
-        getSourceColor: d => [255, 0, 0],
-        getTargetColor: d => [255, 0, 0],
-        getWidth: 2.3,
-
-        // animate:({
-        //   interval: 0.8,
-        //   trailLength: 2,
-        //   duration: 1
-        // })
-      });
-      map.on('load', () => {
-        map.addLayer(myDeckLayer)
-      })
-
-      //加载中共一大（上海，嘉兴地点）的火花图标
-      map.on('load', function() {
-        for (let i = 0; i < list.length; i++) {
-          map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
-
-          map.addLayer({
-            "id": list[i].id,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": list[i].lonlat,
-                  }
-                }]
-              }
-            },
-            "layout": {
-              "icon-image": list[i].id,
-              "icon-optional": false,
-              "icon-ignore-placement": true,
-              // "text-ignore-placement": true,
-              "text-allow-overlap": true,
-              "text-field": list[i].value,
-              "text-anchor": 'left',
-              "text-offset": [1, 0.1],
-              // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-              "text-size": [
-                "interpolate", ["linear"], ["zoom"],
-                3, 20,
-                17, 38
-              ],
-            },
-            paint: {
-              "text-color": 'rgb(255,0,0)',
-            }
-
-          });
-        }
-        // playback(0);
-      });
-      let _this = this;
-      for (let i = 0; i < list.length; i++) {
-        map.on('click', list[i].id, function(e) {
-          var coordinates = e.features[0].geometry.coordinates;
-          let showInfo = list[i].showInfo;
-          console.log("listt", list);
-          _this.setState({
-            itemNow: list[i],
-          })
-
-          new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            // .setHTML(showInfo)
-            .addTo(map)
-            .setDOMContent(popupRef.current);
-          // document.getElementById('btn')
-          //   .addEventListener('click', function(){
-          //     let cardImg = list[i].cardImg;
-          //     let cardContent = list[i].cardContent;
-          //     _this.setState({
-          //       knowledgeUrl: cardImg,
-          //       knowledgeContent: cardContent,
-          //     });
-          //     _this.showModal()
-          //   });
-        });
-        map.on('mouseenter', list[i].id, function() {
-          map.getCanvas().style.cursor = 'pointer';
-        });
-        map.on('mouseleave', list[i].id, function() {
-          map.getCanvas().style.cursor = '';
-        });
-      }
-      this.map = map;
     });
 
     // let nav = new mapboxgl.NavigationControl({
@@ -1362,6 +1265,7 @@ class MapPage extends Component {
                 {/*  ))*/}
                 {/*}*/}
               </div>
+              {/*<Button className={styles.layer} icon={layer}> </Button>*/}
               {/*<div id='features' className={styles.features}>
                 <section id='一大上海' className={styles.selection}>
                   <h3>中共一大上海</h3>
