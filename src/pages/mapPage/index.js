@@ -177,7 +177,7 @@ const variants={open: { opacity: 1, x: 0 },
 //     label:"党史新学@中共九大@北京",
 //   },
 // ];
-let list=[];
+
 var chapters = {
   '一大-上海': {
     bearing: 0,
@@ -321,12 +321,9 @@ function forList(treeList){
       temp.id=treeList[i].label;
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
-      temp.text=treeList[i].label;
-      temp.value=treeList[i].label;
+      temp.text=treeList[i].label.split('@')[0];
+      temp.value=treeList[i].label.replace('@','');
       temp.time=treeList[i].time;
-      temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-        '于'+treeList[i].time+'在<span>'+treeList[i].label+'</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-        '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>';
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       list.push(temp);
@@ -340,7 +337,7 @@ class MapPage extends Component {
     super(props);
     this.state = {
       activeKey: "1",
-      itemNow:list[0],
+      itemNow:null,
       collapsed: false,
       modalVisble: false,
       deadline: Date.now() +  1000 * 60,
@@ -378,6 +375,8 @@ class MapPage extends Component {
       startPicture:false,
       startVideo:false,
       startAudio:false,
+      list:[],
+      listTime:[],
     };
 
   }
@@ -439,11 +438,20 @@ class MapPage extends Component {
     // console.log('treeList',treeList);
     dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
       console.log('res',res);
+      let listHere = [], listHere2 = [];
       if(res&&res.success){
         let tagTree=res.list;
         // let tree=forTree(tagTree);
         // console.log('tree',tree);
-        list=forList(tagTree);
+        listHere=forList(tagTree);
+        listHere2=forList(tagTree);
+        let listTime = listHere;
+        listTime.splice(0,1);
+        console.log("listTime", listTime);
+        this.setState({
+          list:listHere2,
+          listTime:listTime,
+        })
       }
 
       const myDeckLayer = new MapboxLayer({
@@ -468,11 +476,10 @@ class MapPage extends Component {
 
       //加载中共一大（上海，嘉兴地点）的火花图标
       map.on('load', function() {
-        for (let i=0;i<list.length;i++) {
-          map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
-
+        for (let i=0;i<listHere.length;i++) {
+          map.addImage(listHere[i].id, pulsingDot, { pixelRatio: 2 });
           map.addLayer({
-            "id": list[i].id,
+            "id": listHere[i].id,
             "type": "symbol",
             "source": {
               "type": "geojson",
@@ -482,18 +489,18 @@ class MapPage extends Component {
                   "type": "Feature",
                   "geometry": {
                     "type": "Point",
-                    "coordinates": list[i].lonlat,
+                    "coordinates": listHere[i].lonlat,
                   }
                 }]
               }
             },
             "layout": {
-              "icon-image": list[i].id,
+              "icon-image": listHere[i].id,
               "icon-optional": false,
               "icon-ignore-placement": true,
               // "text-ignore-placement": true,
               "text-allow-overlap": true,
-              "text-field": list[i].value,
+              "text-field": listHere[i].value,
               "text-anchor": 'left',
               "text-offset": [1,0.1],
               // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
@@ -512,13 +519,11 @@ class MapPage extends Component {
         // playback(0);
       });
       let _this = this;
-      for(let i = 0;i<list.length;i++){
-        map.on('click', list[i].id, function(e) {
+      for(let i = 0;i<listHere.length;i++){
+        map.on('click', listHere[i].id, function(e) {
           var coordinates = e.features[0].geometry.coordinates;
-          let showInfo = list[i].showInfo;
-          console.log("listt", list);
           _this.setState({
-            itemNow: list[i],
+            itemNow: listHere[i],
           })
 
           new mapboxgl.Popup()
@@ -526,21 +531,11 @@ class MapPage extends Component {
             // .setHTML(showInfo)
             .addTo(map)
             .setDOMContent(popupRef.current);
-          // document.getElementById('btn')
-          //   .addEventListener('click', function(){
-          //     let cardImg = list[i].cardImg;
-          //     let cardContent = list[i].cardContent;
-          //     _this.setState({
-          //       knowledgeUrl: cardImg,
-          //       knowledgeContent: cardContent,
-          //     });
-          //     _this.showModal()
-          //   });
         });
-        map.on('mouseenter', list[i].id, function() {
+        map.on('mouseenter', listHere[i].id, function() {
           map.getCanvas().style.cursor = 'pointer';
         });
-        map.on('mouseleave', list[i].id, function() {
+        map.on('mouseleave', listHere[i].id, function() {
           map.getCanvas().style.cursor = '';
         });
       }
@@ -668,13 +663,27 @@ class MapPage extends Component {
       value: e,
     });
   };
+  //子时间轴（中共一大）
   moreOnClick=()=>{
     let temp = this.state.more;
     if(temp){
-      list.splice(1, 0, ...subList);
+      let tempList = this.state.listTime;
+      let subList = [];
+      subList[0] = this.state.list[0];
+      subList[0]['sub'] = true;
+      subList[1] = this.state.list[1];
+      subList[1]['sub'] = true;
+      tempList.splice(1, 0, ...subList);
+      this.setState({
+        listTime:tempList,
+      })
     }
     else{
-      list.splice(1, 3);
+      let tempList = this.state.listTime;
+      tempList.splice(1, 2);
+      this.setState({
+        listTime:tempList,
+      })
     }
     this.setState({
       more:!temp
@@ -688,52 +697,14 @@ class MapPage extends Component {
   };
 
   render(){
-    let question1='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
-    let answer=['A.大连','B.旅顺','C.平壤','D.花园口'];
-    let rightAnswer=1;
-    // const {dispatch}=this.props;
-    // dispatch({ type: 'mapPage/getTagTree'});
-    // dispatch({ type: 'mapPage/getQuestion'});
-    // console.log('dispatch',dispatch);
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
-    //debugger
-    // let tree=[];
-    // function forTree1(treeList){
-    //   for (let i in treeList){
-    //     console.log('i',i);
-    //     if(treeList[i].children.length>0){
-    //       forTree(treeList[i].children)
-    //     }else{
-    //       tree.push(treeList[i])
-    //     }
-    //   }
-    //   return tree
-    // }
-    tree=[];
     const {tagTree,question}=mapPage;
-    // let list1=forTree(tagTree);
-    list=forList(tagTree);
-    console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
     console.log('tagTree',tagTree);
+    console.log('tagName',this.state.tagName);
     //遍历tagTree;
-    let tree=[];
-    function forTree(treeList){
-      for (let i in treeList){
-        console.log('i',i);
-        if(treeList[i].children.length>0){
-          forTree(treeList[i].children)
-        }else{
-          tree.push(treeList[i])
-        }
-      }
-      return tree
-    }
-    //遍历树生成的数组treeList
-    // let treeList=forTree(tagTree);
-    const {unCheckStyle,checkStyle} = this.state;
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
@@ -925,10 +896,6 @@ class MapPage extends Component {
             <div className={styles.topVideo}></div>
             <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
                    controls="controls">
-              {/*<source src="./1.mp4"*/}
-              {/*/>*/}
-              {/*<source src="./1.mp4"*/}
-              {/*/>*/}
               <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
               />
               <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
@@ -942,8 +909,8 @@ class MapPage extends Component {
           <VerticalTimeline
             // layout='1-column-left'
           >
-            {list.map((item)=> (
-                item['sub']?
+            {this.state.listTime.map((item)=> (
+              item['sub']?
                   <VerticalTimelineElement
                     id={item['id']}
                     style={{fontSize:"15px", size:"10px", textAlign: "center"}}
@@ -953,15 +920,15 @@ class MapPage extends Component {
                     contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
                     iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
                     dateClassName={ styles.date }
-                    icon={<Icon type="schedule" />}
+                    onTimelineElementClick={()=> this.oneClick(item) }
+                    // icon={<Icon type="schedule" />}
                     // icon={<Icon type="book" />}
                   >
                     <div style={{fontWeight:"bold"}}>
-                      {item['text']}
+                      {item['value']}
                     </div>
                     {
-                      item['text']=='1921年7月-中共一大'&&
-                      <div><Button onClick={this.moreOnClick}>{this.state.more?<span>更多</span>:<span>收回</span>}</Button></div>
+                      item['text']=='中共一大'
                     }
                   </VerticalTimelineElement>:
                   <VerticalTimelineElement
@@ -973,16 +940,19 @@ class MapPage extends Component {
                     contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
                     iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
                     dateClassName={ styles.date }
-                    onTimelineElementClick={()=>this.oneClick(item) }
+                    onTimelineElementClick={()=>(
+                        item['text']=='中共一大'?
+                          this.moreOnClick():
+                      this.oneClick(item)) }
                     icon={<Icon type="schedule" />}
                   >
                     <div style={{fontWeight:"bold"}}>
                       {item['text']}
                     </div>
-                    {
-                      item['text']=='1921年7月-中共一大'&&
-                      <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(177,46,46)"}} />:<Icon type="arrow-up" style={{color:"rgba(177,46,46)"}} />}</div></div>
-                    }
+                    {/*{*/}
+                    {/*  item['text']=='中共一大'&&*/}
+                    {/*  <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(177,46,46)"}} />:<Icon type="arrow-up" style={{color:"rgba(177,46,46)"}} />}</div></div>*/}
+                    {/*}*/}
                   </VerticalTimelineElement>
               )
             )
@@ -1008,28 +978,28 @@ class MapPage extends Component {
                 <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
                 :null}
               <Row style={{width:"240px",top:"10px"}} justify="space-between">
-                <Col span={2} onClick={()=>this.showModal("1")}>
+                <Col span={2} onClick={()=>{this.setState({startArticle:true})}}>
                   <Icon className={styles.popup} type="book" />
                 </Col>
-                <Col span={4} onClick={()=>this.showModal("1")}>
+                <Col span={4} onClick={()=>{this.setState({startArticle:true})}}>
                   文章
                 </Col>
-                <Col span={2} onClick={()=>this.showModal("2")}>
+                <Col span={2} onClick={()=>{this.setState({startPicture:true})}}>
                   <Icon className={styles.popup} type="picture" />
                 </Col>
-                <Col span={4} onClick={()=>this.showModal("2")}>
+                <Col span={4} onClick={()=>{this.setState({startPicture:true})}}>
                   图片
                 </Col>
-                <Col span={2} onClick={()=>this.showModal("3")}>
+                <Col span={2} onClick={()=>{this.setState({startVideo:true})}}>
                   <Icon className={styles.popup} type="video-camera" />
                 </Col>
-                <Col span={4} onClick={()=>this.showModal("3")}>
+                <Col span={4} onClick={()=>{this.setState({startVideo:true})}}>
                   视频
                 </Col>
-                <Col span={2} onClick={()=>this.showModal("4")}>
+                <Col span={2} onClick={()=>this.setState({startQuestion:true})}>
                   <Icon className={styles.popup} type="question" />
                 </Col>
-                <Col span={4} onClick={()=>this.showModal("4")}>
+                <Col span={4} onClick={()=>this.setState({startQuestion:true})}>
                   答题
                 </Col>
               </Row>
