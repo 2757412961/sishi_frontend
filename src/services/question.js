@@ -1,5 +1,10 @@
 import requestHeard from '../utils/requestHeard';
 //标签接口
+//标签树排序
+//获取排序标签树
+export function getTagTreeSortByTime(tagName) {
+  return requestHeard({ url: '/tag/compareTime/'+tagName, method: 'GET'});
+}
 //获取标签树
 export function getTagTree(tagName,userName) {
   return requestHeard({ url: '/tag/tree', method: 'GET'});
@@ -15,8 +20,8 @@ export function getQuestionsByTag(tagName) {
 }
 
 // 添加用户积分，改写用户答题状态
-export function updateQuestionStatus(tagName,userName) {
-  return requestHeard({ url: '/useranswer', method: 'PUT',data:{tagName,userName} });
+export function updateQuestionStatus(tag_name,user_name) {
+  return requestHeard({ url: '/useranswer?tag_name='+tag_name+'&user_name='+user_name, method: 'PUT' });
 }
 
 // 获取所有问题列表
@@ -33,8 +38,10 @@ export function getAllQuestion() {
  */
 //视频管理接口
 //根据tagName获取视频列表
-export function getVideoByTag({ tagName,start=0,length=10 }) {
-  return requestHeard({ url: '/videos/tagName'+tagName, method: 'GET', data: { start,length } });
+export function getVideoByTag(tagName) {
+  let start=0,length=100;
+  debugger
+  return requestHeard({ url: '/videos/tagName/'+tagName, method: 'GET', data: { start,length } });
 }
 
 // 获取视频列表

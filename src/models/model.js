@@ -2,7 +2,8 @@ import {setAuthority} from '@/utils/authority';
 import {reloadAuthorized} from '@/utils/Authorized';
 import {
   getQuestionsByTag, getAudioByTag, getVideoByTag,
-  getArticlesByTag, getTagTree, getAllQuestion, updateQuestionStatus, getAudioList, getVideoList,
+  getArticlesByTag, getTagTree, getAllQuestion, updateQuestionStatus,
+  getAudioList, getVideoList,getTagTreeSortByTime,
 } from '@/services/question';
 import { getUserData } from '@/services/service';
 export default {
@@ -62,6 +63,18 @@ export default {
   },
   effects: {
     //获取标签树
+    * getTagTreeSortByTime({payload},{call, put}) {
+      const response = yield call(getTagTreeSortByTime,payload.tagName);
+      console.log('tagTree',response.list);
+      if (response.success) {
+        yield put({
+          type: 'setTagTree',
+          payload: response.list,
+        });
+      }
+      return response;
+    },
+    //获取标签树
     * getTagTree({payload},{call, put}) {
       const response = yield call(getTagTree);
       console.log('tagTree',response.list);
@@ -97,23 +110,26 @@ export default {
 
     //获取视频通过tagName
     * getVideoByTag({payload}, {call, put}) {
-      //const response = yield call(getVideoByTag, "党史新学@中共一大");
-      const response = yield call(getVideoList);
+      console.log('payload',payload);
+      const response = yield call(getVideoByTag, payload);
+      // const response = yield call(getVideoList);
       console.log('response',response);
     },
 
     //获取音频通过tagName
     * getAudioByTag({payload}, {call, put}) {
-      //const response = yield call(getAudioByTag, "党史新学@中共一大");
-      const response = yield call(getAudioList);
+      const response = yield call(getAudioByTag, "党史新学@中共一大");
+      // const response = yield call(getAudioList);
       console.log('response',response);
     },
 
     //更新用户积分
     *updateUserGrades({payload}, {call, put}){
-      const response1=yield call(getUserData,payload);
-      console.log(response1);
-      const response = yield call(updateQuestionStatus, payload);
+      // const response1=yield call(getUserData,payload);
+      // console.log(response1);
+      const {tag_name,user_name}=payload;
+      debugger
+      const response = yield call(updateQuestionStatus, tag_name,user_name);
     }
   },
 
