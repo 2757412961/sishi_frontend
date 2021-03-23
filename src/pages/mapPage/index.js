@@ -369,7 +369,7 @@ function forList(treeList){
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
       temp.text=treeList[i].label;
-      temp.value=treeList[i].label;
+      temp.value=treeList[i].label.replace('@','');
       temp.time=treeList[i].time;
       temp.showInfo=des[i].showInfo;
       temp.cardContent=treeList[i].tagName;
@@ -417,12 +417,13 @@ class MapPage extends Component {
       knowledgeContent: '中国共产党第一次全国代表大会于1921年7月23日至1921年8月3日在上海法租界贝勒路树德里3号（后称望志路106号，现改兴业路76号）和浙江嘉兴南湖召开。出席大会的各地代表共12人。',
       //list[0].cardContent,
       // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
-      more: true,
-      startQuestion: false,
-      startArticle: false,
-      startPicture: false,
-      startVideo: false,
-      startAudio: false,
+      more:true,
+      startQuestion:false,
+      startArticle:false,
+      startPicture:false,
+      startVideo:false,
+      startAudio:false,
+      tagName:'',
     };
 
   }
@@ -533,6 +534,107 @@ class MapPage extends Component {
         // console.log('tree',tree);
         list = forList(tagTree);
       }
+
+      const myDeckLayer = new MapboxLayer({
+        id: 'arc',
+        type: ArcLayer,
+        data: flyline,
+        getSourcePosition: d => d.coord[0],
+        getTargetPosition: d => d.coord[1],
+        getSourceColor: d => [255, 0, 0],
+        getTargetColor: d => [255, 0, 0],
+        getWidth: 2.3,
+
+        // animate:({
+        //   interval: 0.8,
+        //   trailLength: 2,
+        //   duration: 1
+        // })
+      });
+      map.on('load', () => {
+        map.addLayer(myDeckLayer)
+      })
+
+      //加载中共一大（上海，嘉兴地点）的火花图标
+      map.on('load', function() {
+        for (let i = 0; i < list.length; i++) {
+          map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
+
+          map.addLayer({
+            "id": list[i].id,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": list[i].lonlat,
+                  }
+                }]
+              }
+            },
+            "layout": {
+              "icon-image": list[i].id,
+              "icon-optional": false,
+              "icon-ignore-placement": true,
+              // "text-ignore-placement": true,
+              "text-allow-overlap": true,
+              "text-field": list[i].value,
+              "text-anchor": 'left',
+              "text-offset": [1, 0.1],
+              // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+              "text-size": [
+                "interpolate", ["linear"], ["zoom"],
+                3, 20,
+                17, 38
+              ],
+            },
+            paint: {
+              "text-color": 'rgb(255,0,0)',
+            }
+
+          });
+        }
+        // playback(0);
+      });
+      let _this = this;
+      for (let i = 0; i < list.length; i++) {
+        map.on('click', list[i].id, function(e) {
+          var coordinates = e.features[0].geometry.coordinates;
+          let showInfo = list[i].showInfo;
+          console.log("listt", list);
+          _this.setState({
+            itemNow: list[i],
+            tagName:list[i].tagName,
+          })
+
+          new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            // .setHTML(showInfo)
+            .addTo(map)
+            .setDOMContent(popupRef.current);
+          // document.getElementById('btn')
+          //   .addEventListener('click', function(){
+          //     let cardImg = list[i].cardImg;
+          //     let cardContent = list[i].cardContent;
+          //     _this.setState({
+          //       knowledgeUrl: cardImg,
+          //       knowledgeContent: cardContent,
+          //     });
+          //     _this.showModal()
+          //   });
+        });
+        map.on('mouseenter', list[i].id, function() {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', list[i].id, function() {
+          map.getCanvas().style.cursor = '';
+        });
+      }
+      this.map = map;
     });
 
     // let nav = new mapboxgl.NavigationControl({
@@ -582,80 +684,6 @@ class MapPage extends Component {
       var bounds = element.getBoundingClientRect();
       return bounds.top < window.innerHeight && bounds.bottom > 0;
     }
-
-    /*map.on('loaded', async () => {
-      //添加一大到九大坐标点
-      const pointLayer = new PointLayer()
-        .source(point, {
-          parser: {
-            type: 'json',
-            x:'lng',
-            y:'lat'
-          }
-        })
-        .color('red')
-        .shape('circle')
-        .size(26)
-        .animate({rings:2})
-        .active(true)
-        .style({
-          opacity: 1.0
-        });
-      //添加一大到九大坐标点名称
-      const textLayer = new PointLayer()
-        .source(point, {
-          parser: {
-            type: 'json',
-            x:'lng',
-            y:'lat'
-          }
-        })
-        .color('red')
-        .shape('name','text')
-        .size(17)
-        .style({
-          textAnchor: 'bottom-left', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-          textOffset: [ 3, -3 ], // 文本相对锚点的偏移量 [水平, 垂直]
-          spacing: 2, // 字符间距
-          padding: [ 1, 1 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-          stroke: 'red', // 描边颜色
-          strokeWidth: 0.1, // 描边宽度
-          strokeOpacity: 1.0
-        });
-      //添加参加一大各代表的流向图
-      const lineLayer = new LineLayer()
-        .source(flyline, {
-          parser: {
-            type: 'json',
-            coordinates: "coord",
-          }
-        })
-        .color('red')
-        .shape('arc3d')
-        .size(2)
-        .active(true)
-        .animate({
-          interval: 0.8,
-          trailLength: 2,
-          duration: 1
-        })
-        .style({
-          opacity: 1.0,
-          stroke: 'white',
-        });
-      map.addLayer(pointLayer);
-      map.addLayer(textLayer);
-      map.addLayer(lineLayer);
-
-      pointLayer.on('click', function(e) {
-        var html = '<p>Hello World!</p>\n  <p>There is in China</p>';
-
-        new Scene.Popup().setLnglat([116.38748691963224,39.90337460887406]).setHTML(html).addTo(map);
-      })
-
-
-
-    });*/
 
     var size = 100;
     var pulsingDot = {
@@ -861,18 +889,17 @@ class MapPage extends Component {
     })
     this.map = map;
   }
-
-  showModal = (activeKey) => {
+  showModal=(activeKey)=>{
     this.setState({
-      modalVisble: true,
-      activeKey: activeKey,
+      modalVisble:true,
+      activeKey:activeKey,
     });
     console.log(this.state.modalVisble)
   }
   oneClick = (item) => {
     let _this = this;
-    console.log("map", _this.map, item);
-    if (_this.map) {
+    console.log("map", _this.map,item);
+    if(_this.map){
       _this.map.flyTo({
         center: item.lonlat,
         zoom: 16,
@@ -901,201 +928,178 @@ class MapPage extends Component {
     this.forceUpdate();
   };
 
-  render() {
-    let question1 = '中日甲午战争中，日军野蛮屠杀和平居民的地点是';
-    let answer = ['A.大连', 'B.旅顺', 'C.平壤', 'D.花园口'];
-    let rightAnswer = 1;
-    // const {dispatch}=this.props;
-    // dispatch({ type: 'mapPage/getTagTree'});
-    // dispatch({ type: 'mapPage/getQuestion'});
-    // console.log('dispatch',dispatch);
-    const { mapPage } = this.props;
-    console.log('mapPage', mapPage);
-    //debugger
-    // let tree=[];
-    // function forTree1(treeList){
-    //   for (let i in treeList){
-    //     console.log('i',i);
-    //     if(treeList[i].children.length>0){
-    //       forTree(treeList[i].children)
-    //     }else{
-    //       tree.push(treeList[i])
-    //     }
-    //   }
-    //   return tree
-    // }
-    tree = [];
-    const { tagTree, question } = mapPage;
-    // let list1=forTree(tagTree);
-    list = forList(tagTree);
-    console.log('listRender', list);
-    let allNumber = question.length;
-    let recent = this.state.questionNumber - 1
-    console.log('tagTree', tagTree);
-    console.log('tagName', this.state.tagName);
+  render(){
+    const {mapPage}=this.props;
+    console.log('mapPage',mapPage);
+    const {tagTree,question}=mapPage;
+    list=forList(tagTree);
+    console.log('listRender',list);
+    let allNumber=question.length;
+    let recent=this.state.questionNumber-1
+    console.log('tagTree',tagTree);
+    console.log('tagName',this.state.tagName);
     //遍历tagTree;
-    return (
-      <Authorized authority={['NORMAL', 'admin']} noMatch={noMatch}>
-        <Layout className={styles.normal}>
-          <Sider style={{ backgroundColor: 'rgba(155,100,20,0.5)', overflow: 'auto' }} width={400}>
-            {/*答题*/}
-            <Modal visible={this.state.startQuestion}
-                   centered
-                   width={1000}
-                   mask={true}
-                   maskClosable={true}
+  return (
+    <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
+    <Layout className={styles.normal}>
+      <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
+        {/*答题*/}
+        <Modal visible={this.state.startQuestion}
+               centered
+              width={1000}
+               mask={true}
+               maskClosable={true}
               // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-                   title={null}
-                   onCancel={() => this.setState({ startQuestion: false })}
-                   footer={null}
-                   closable={true}
-                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-            >
-              <div className={styles.modal}>
-                <div className={styles.top}></div>
-                <div className="d-iframe">
-                  {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
-                  {/*        className="iframe-style"></iframe>*/}
-                  <div className={styles.web}>
-                    <h1>{this.state.questionNumber + "." + (question[recent] ? question[recent].questionContent : '')}</h1>
-                    <div className={styles.radio}>
-                      <Checkbox.Group onChange={this.onChange} style={{ top: '3em', left: '3em' }}>
-                        <Row>
-                          <Col span={12}>
-                            <Checkbox value={'A'}>
-                              {'A  ' + (question[recent] ? question[recent].optionA : '')}
-                            </Checkbox>
-                          </Col>
-                          <Col span={12}>
-                            <Checkbox value={'B'}>
-                              {'B  ' + (question[recent] ? question[recent].optionB : '')}
-                            </Checkbox>
-                          </Col>
-                          {question[recent] && question[recent].hasOwnProperty('optionC') ? <Col span={12}>
-                            <Checkbox value={'C'}>
-                              {'C  ' + (question[recent] ? question[recent].optionC : '')}
-                            </Checkbox>
-                          </Col> : ""}
-                          {question[recent] && question[recent].hasOwnProperty('optionD') ?
-                            <Col span={12}>
-                              <Checkbox value={'D'}>
-                                {'D  ' + (question[recent] ? question[recent].optionD : '')}
-                                {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                              </Checkbox>
-                            </Col> : ''}
-                        </Row>
-                      </Checkbox.Group>
-                      <img src="" />
-                    </div>
-                  </div>
-                  {this.state.answer == true ?
-                    (<h1>正确答案是</h1>) : ''}
-                  {this.state.answer == true ?
-                    (<Card type="inner" title={(question[recent] ? question[recent].answer : '')} />) : ''}
-                  <Row gutter={16}>
+               title={null}
+               onCancel={()=>this.setState({startQuestion:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            <div className={styles.top}></div>
+            <div className="d-iframe">
+              {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
+              {/*        className="iframe-style"></iframe>*/}
+              <div className={styles.web} >
+                <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
+                <div className={styles.radio}>
+                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                  <Row>
                     <Col span={12}>
-                      <Button key="submit"
-                              type="primary" style={{ backgroundColor: 'rgb(255,0,0)' }}
-                              onClick={() => {
-                                let string = this.state.value.toString();
-                                if (string == (question[recent] ? question[recent].answer : '')) {
-                                  this.setState({ grade: this.state.grade + 1 });
-                                }
-                                this.setState({ answer: true })
-                                if (this.state.questionNumber == allNumber) {
-                                  alert("答题结束")
-                                }
-                              }}>提交</Button>
+                  <Checkbox    value={'A'}>
+                    {'A  '+(question[recent]?question[recent].optionA:'')}
+                  </Checkbox>
                     </Col>
                     <Col span={12}>
-                      <Button
-                        key="submit"
-                        type="primary"
-                        onClick={() => {
-                          if (this.state.questionNumber == allNumber && this.state.answer == true) {
-                            this.setState({ startQuestion: false })
-                            this.setState({ questionNumber: 1 })
-                            const { dispatch } = this.props;
-                            dispatch({ type: 'mapPage/updateUserGrades', payload: this.state.grade });
-                            return
-                          }
-                          if (this.state.answer == false) {
-                            alert('你还未提交本题答案')
-                          } else {
-                            this.setState({ deadline: Date.now() + 1000 * 60 })
-                            this.setState({ questionNumber: this.state.questionNumber + 1 })
-                            this.setState({ answer: false })
-                          }
-                        }}>
-                        下一题
-                      </Button>
+                  <Checkbox    value={'B'}>
+                    {'B  '+(question[recent]?question[recent].optionB:'')}
+                  </Checkbox>
                     </Col>
-                    {/*<Col span={8}>*/}
-                    {/*  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>*/}
-                    {/*  <h1><span>{this.state.questionNumber}</span>/*/}
-                    {/*    <span>{allNumber}</span></h1>*/}
-                    {/*  /!*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*!/*/}
-                    {/*</Col>*/}
+                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
+                  <Checkbox    value={'C'}>
+                    {'C  '+(question[recent]?question[recent].optionC:'')}
+                  </Checkbox>
+                    </Col>:""}
+                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                    <Col span={12}>
+                  <Checkbox    value={'D'}>
+                    {'D  '+(question[recent]?question[recent].optionD:'')}
+                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                  </Checkbox>
+                    </Col>:''}
                   </Row>
-                  {this.state.questionNumber == allNumber && this.state.answer ?
-                    (<div>
-                      <div className={styles.try}></div>
-                      <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1>
-                    </div>) : ''}
+                </Checkbox.Group>
+                  <img src=""/>
+                </div>
+              </div>
+              {this.state.answer==true?
+                (<h1>正确答案是</h1>):''}
+              {this.state.answer==true?
+                (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Button  key="submit"
+                           type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
+                           onClick={()=>{
+                             let string=this.state.value.toString();
+                             if(string==(question[recent]?question[recent].answer:''))
+                             {
+                               this.setState({grade:this.state.grade+1});
+                             }
+                             this.setState({answer:true})
+                             if(this.state.questionNumber==allNumber) {
+                               let username=getLocalData({dataName:'userName'});
+                               this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
+                               alert("答题结束")
+                             }}}>提交</Button>
+                </Col>
+                <Col span={12}>
+                  <Button
+                    key="submit"
+                    type="primary"
+                    onClick={()=> {
+                      if(this.state.questionNumber==allNumber&&this.state.answer==true){
+                        this.setState({startQuestion:false})
+                        this.setState({questionNumber: 1})
+                        return
+                      }
+                      if(this.state.answer==false){
+                        alert('你还未提交本题答案')
+                      } else{
+                        this.setState({deadline:Date.now() +  1000 * 60})
+                        this.setState({questionNumber: this.state.questionNumber+1})
+                        this.setState({answer:false})
+                      }
+                    }}>
+                    下一题
+                  </Button>
+                </Col>
+                {/*<Col span={8}>*/}
+                {/*  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>*/}
+                {/*  <h1><span>{this.state.questionNumber}</span>/*/}
+                {/*    <span>{allNumber}</span></h1>*/}
+                {/*  /!*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*!/*/}
+                {/*</Col>*/}
+              </Row>
+              {this.state.questionNumber==allNumber&&this.state.answer?
+                (<div>
+                  <div className={styles.try}></div>
+                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
 
-                </div>
-                <div className={styles.bottom}></div>
-              </div>
-            </Modal>
-            {/*文章*/}
-            <Modal visible={this.state.startArticle}
-                   centered
-                   width={1000}
-                   mask={true}
-                   maskClosable={true}
-              // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-                   title={null}
-                   onCancel={() => this.setState({ startArticle: false })}
-                   footer={null}
-                   closable={true}
-                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-            >
-              <div className={styles.modal}>
-                {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
-                <div className={styles.topArticle}></div>
-                <div className="d-iframe">
-                  <Card style={{ width: '100' }}
-                        title={"中共一大"}
-                        cover={
-                          <img
-                            alt="example"
-                            src={this.state.knowledgeUrl}
-                          />
-                        }
-                  >
-                    {this.state.knowledgeContent}
-                  </Card>
-                </div>
-              </div>
-            </Modal>
-            {/*图片*/}
-            <Modal visible={this.state.startPicture}
-                   centered
-                   width={1000}
-                   mask={true}
-                   maskClosable={true}
-              // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-                   title={null}
-                   onCancel={() => this.setState({ startPicture: false })}
-                   footer={null}
-                   closable={true}
-                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-            >
-              <div className={styles.modal}>
-                <div className={styles.topPicture}></div>
-                <div className="d-iframe">
-                  <div style={{ padding: 40, background: "#ececec" }}>
-                    {/*<div style={styles.out}>*/}
+            </div>
+            <div className={styles.bottom}></div>
+          </div>
+        </Modal>
+        {/*文章*/}
+        <Modal visible={this.state.startArticle}
+               centered
+               width={1000}
+               mask={true}
+               maskClosable={true}
+          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+               title={null}
+               onCancel={()=>this.setState({startArticle:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
+            <div className={styles.topArticle}></div>
+            <div className="d-iframe">
+              <Card style={{ width: '100' }}
+                    title={"中共一大"}
+                    cover={
+                      <img
+                        alt="example"
+                        src={this.state.knowledgeUrl}
+                      />
+                    }
+              >
+                {this.state.knowledgeContent}
+              </Card>
+            </div>
+          </div>
+        </Modal>
+        {/*图片*/}
+        <Modal visible={this.state.startPicture}
+               centered
+               width={1000}
+               mask={true}
+               maskClosable={true}
+          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+               title={null}
+               onCancel={()=>this.setState({startPicture:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            <div className={styles.topPicture}></div>
+            <div className="d-iframe">
+              <div style={{padding: 40, background: "#ececec"}} >
+                {/*<div style={styles.out}>*/}
 
                     {/*</div>*/}
                     <Slider {...this.carousel_settings} >
@@ -1265,7 +1269,6 @@ class MapPage extends Component {
                 {/*  ))*/}
                 {/*}*/}
               </div>
-              {/*<Button className={styles.layer} icon={layer}> </Button>*/}
               {/*<div id='features' className={styles.features}>
                 <section id='一大上海' className={styles.selection}>
                   <h3>中共一大上海</h3>
