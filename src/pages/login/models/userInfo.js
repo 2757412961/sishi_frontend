@@ -311,9 +311,11 @@ export default {
         yield put({
           type: 'getUserData',
         });
+        console.log("response", response);
         setLoalData({dataName: 'token', dataList: response.token});
         setLoalData({dataName: 'userId', dataList: response.userId});
         setLoalData({dataName: 'userName', dataList: response.userName});
+        setLoalData({dataName: 'avatar', dataList: response.avatar});
         if(response.userName!='admin'){
           setAuthority('NORMAL');
         }
@@ -354,7 +356,7 @@ export default {
       // yield call(logoutUser);
       reloadAuthorized();
       const {redirect} = getPageQuery();
-      delLoalData(['token', 'userId', 'userName']);
+      delLoalData(['token', 'userId', 'userName', 'avatar']);
       //现在用户权限为游客
       setAuthority('guest');
       // redirect
