@@ -330,7 +330,7 @@ function forList(treeList){
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
       temp.text=treeList[i].label;
-      temp.value=treeList[i].label;
+      temp.value=treeList[i].label.replace('@','');
       temp.time=treeList[i].time;
       temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
         '于'+treeList[i].time+'在<span>'+treeList[i].label+'</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
