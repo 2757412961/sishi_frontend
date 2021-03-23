@@ -154,6 +154,9 @@ class ArticleModal extends Component {
   //5.由于图片上传、视频上传项目中都是单独走的接口，需要一个上传的方法
   myUploadFn = (param) => {
 
+    alert("该接口暂时不能使用！！！");
+    return;
+
     console.log('param', param);
     const serverURL = "/v1.0/api/video/form";//upload 是接口地址
     const xhr = new XMLHttpRequest();
