@@ -41,7 +41,6 @@ import 'react-vertical-timeline-component/style.min.css';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
 const Authorized = RenderAuthorized(getAuthority());
@@ -386,6 +385,7 @@ class MapPage extends Component {
       startPicture:false,
       startVideo:false,
       startAudio:false,
+      tagName:'',
     };
 
   }
@@ -527,6 +527,7 @@ class MapPage extends Component {
           console.log("listt", list);
           _this.setState({
             itemNow: list[i],
+            tagName:list[i].tagName,
           })
 
           new mapboxgl.Popup()
@@ -771,6 +772,8 @@ class MapPage extends Component {
                              }
                              this.setState({answer:true})
                              if(this.state.questionNumber==allNumber) {
+                               let username=getLocalData({dataName:'userName'});
+                               this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
                                alert("答题结束")
                              }}}>提交</Button>
                 </Col>
@@ -976,10 +979,15 @@ class MapPage extends Component {
                 <Col span={4} onClick={()=>{this.setState({startPicture:true})}}>
                   图片
                 </Col>
-                <Col span={2} onClick={()=>{this.setState({startVideo:true})}}>
+                <Col span={2} onClick={()=>{this.setState({startVideo:true})
+                  this.props.dispatch({type:'mapPage/getVideoByTag',payload:this.state.tagName})
+                }
+                }>
                   <Icon className={styles.popup} type="video-camera" />
                 </Col>
-                <Col span={4} onClick={()=>{this.setState({startVideo:true})}}>
+                <Col span={4} onClick={()=>{this.setState({startVideo:true});
+                this.props.dispatch({type:'mapPage/getVideoByTag',payload:this.state.tagName})
+                }}>
                   视频
                 </Col>
                 <Col span={2} onClick={()=>this.setState({startQuestion:true})}>
