@@ -608,6 +608,7 @@ class MapPage extends Component {
           console.log("listt", list);
           _this.setState({
             itemNow: list[i],
+            tagName:list[i].tagName,
           })
 
           new mapboxgl.Popup()
@@ -1021,8 +1022,6 @@ class MapPage extends Component {
                       if(this.state.questionNumber==allNumber&&this.state.answer==true){
                         this.setState({startQuestion:false})
                         this.setState({questionNumber: 1})
-                        const {dispatch}=this.props;
-                        dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
                         return
                       }
                       if(this.state.answer==false){
