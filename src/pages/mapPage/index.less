@@ -35,9 +35,13 @@
     }
   }
 }
+.siderStyle{
+  background:url("../../assets/images/wenli.jfif");
+  overflow:auto;
+}
 .popupDiv{
   .popup{
-    color: rgba(255,0,0);
+    color: rgba(177,46,46);
     padding-right: 5px;
   }
   :global{
@@ -47,9 +51,11 @@
   }
 }
 .date{
-  color: rgba(155,20,20);
+  color: rgba(177,46,46);
   margin-right: 20px;
   margin-left: 20px;
+  text-align: center;
+  width: 80%;
 }
 .verticalTimeLine{
   overflow-y: scroll;
@@ -124,6 +130,11 @@ h2 {
   color: red;
   margin-left: 23%;
   margin-top: 10%;
+}
+:global{
+  .ant-layout-sider-trigger{
+    background: rgba(177,46,46);
+  }
 }
 .web {
   .ant-modal-content {

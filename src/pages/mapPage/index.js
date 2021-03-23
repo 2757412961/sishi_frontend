@@ -25,14 +25,6 @@ import {ArcLayer} from '@deck.gl/layers';
 import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import p1 from '@/assets/test/1.jpg';
-import p2 from '@/assets/test/2.jpg';
-import p3 from '@/assets/test/3.jpg';
-import tupian from '../../assets/icon/图片.png';
-import shipin from '@/assets/icon/视频.png';
-import yinpin from '@/assets/icon/音频.png';
-import wenzhang from '@/assets/icon/文章.png';
-import dati from '@/assets/icon/答题.png';
-import dangshi from '@/assets/dangshi.PNG'
 import yay from '@/assets/unnamed.jpg'
 import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
@@ -349,7 +341,7 @@ class MapPage extends Component {
     this.state = {
       activeKey: "1",
       itemNow:list[0],
-      _collapsed: false,
+      collapsed: false,
       modalVisble: false,
       deadline: Date.now() +  1000 * 60,
       value:1,
@@ -689,6 +681,11 @@ class MapPage extends Component {
     })
     this.forceUpdate();
   };
+  onCollapse = collapsed => {
+    console.log(collapsed);
+    let temp = this.state.collapsed;
+    this.setState({ collapsed:!temp });
+  };
 
   render(){
     let question1='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
@@ -740,20 +737,7 @@ class MapPage extends Component {
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
-      <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
-        <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
-          答题
-        </Button>
-        <Button  key="back" onClick={()=>{this.setState({startArticle:true})}}>
-          文章
-        </Button>
-        <Button  key="back" onClick={()=>{this.setState({startPicture:true})}}>
-          图片
-        </Button>
-        <Button  key="back" onClick={()=>{this.setState({startVideo:true})}}>
-          视频
-        </Button>
-        {/*答题*/}
+      <Sider className={styles.siderStyle} width={400} collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0}>
         <Modal visible={this.state.startQuestion}
                centered
               width={1000}
@@ -962,16 +946,19 @@ class MapPage extends Component {
                 item['sub']?
                   <VerticalTimelineElement
                     id={item['id']}
-                    style={{fontSize:"15px", size:"10px"}}
+                    style={{fontSize:"15px", size:"10px", textAlign: "center"}}
                     className="vertical-timeline-element--education"
-                    date="2006 - 2008"
-                    contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                    date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                    contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46)' }}
                     contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                    iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
+                    iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
                     dateClassName={ styles.date }
+                    icon={<Icon type="schedule" />}
                     // icon={<Icon type="book" />}
                   >
-                    {item['text']}
+                    <div style={{fontWeight:"bold"}}>
+                      {item['text']}
+                    </div>
                     {
                       item['text']=='1921年7月-中共一大'&&
                       <div><Button onClick={this.moreOnClick}>{this.state.more?<span>更多</span>:<span>收回</span>}</Button></div>
@@ -979,19 +966,22 @@ class MapPage extends Component {
                   </VerticalTimelineElement>:
                   <VerticalTimelineElement
                     id={item['id']}
-                    style={{fontSize:"15px", size:"10px"}}
+                    style={{fontSize:"15px", size:"10px", textAlign:"center"}}
                     className="vertical-timeline-element--education"
-                    date="2006 - 2008"
-                    contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                    contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                    iconStyle={{ background: 'rgb(155, 20, 20)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px"  }}
+                    date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                    contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
+                    contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
+                    iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
                     dateClassName={ styles.date }
                     onTimelineElementClick={()=>this.oneClick(item) }
+                    icon={<Icon type="schedule" />}
                   >
-                    {item['text']}
+                    <div style={{fontWeight:"bold"}}>
+                      {item['text']}
+                    </div>
                     {
                       item['text']=='1921年7月-中共一大'&&
-                      <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(155,20,20,1)"}} />:<Icon type="arrow-up" style={{color:"rgba(155,20,20,1)"}} />}</div></div>
+                      <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(177,46,46)"}} />:<Icon type="arrow-up" style={{color:"rgba(177,46,46)"}} />}</div></div>
                     }
                   </VerticalTimelineElement>
               )
@@ -1014,7 +1004,9 @@ class MapPage extends Component {
         <div className={styles.normal}>
           <div className={styles.mapContainer}  id="onlineMapping">
             <div  ref={popupRef} className={styles.popupDiv}>
-              {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
+              {this.state.itemNow?
+                <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
+                :null}
               <Row style={{width:"240px",top:"10px"}} justify="space-between">
                 <Col span={2} onClick={()=>this.showModal("1")}>
                   <Icon className={styles.popup} type="book" />
@@ -1051,6 +1043,12 @@ class MapPage extends Component {
             {/*  ))*/}
             {/*}*/}
           </div>
+          <Icon
+            style={{position:"absolute", fontSize:"30px"}}
+            className='trigger'
+            type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+            onClick={this.onCollapse}
+          />
           <div id='features' className={styles.features}>
             <section id='一大上海' className={styles.selection}>
               <h3>中共一大上海</h3>
