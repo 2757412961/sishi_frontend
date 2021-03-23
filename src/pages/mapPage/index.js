@@ -1142,7 +1142,7 @@ class MapPage extends Component {
       </Sider>
       <Content>
         <div className={styles.normal}>
-          <div className={styles.mapContainer}  id="student-map">
+          <div className={styles.mapContainer}  id="onlineMapping">
             <div  ref={popupRef} className={styles.popupDiv}>
               {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
               <Row style={{width:"240px",top:"10px"}} justify="space-between">
