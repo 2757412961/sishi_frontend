@@ -37,8 +37,9 @@ export default {
     },
     //设置知识卡片
     setKnowledge(state,{payload}){
-      return{...state,knowledgeContent:payload.knowledgeContent,
-        knowledgeUrl:payload.knowledgeUrl,}
+      debugger
+      return{...state,knowledgeContent:payload.articleContent,
+       }
     },
     //设置音频
     setAudio(state,{payload}){
@@ -103,8 +104,15 @@ export default {
     },
     //获取知识卡片
     * getKnowLedge({payload}, {call, put}) {
-      const response = yield call(getArticlesByTag, "党史新学@中共一大");
+      const response = yield call(getArticlesByTag, payload);
       console.log('response',response);
+      debugger
+      if (response.success) {
+        yield put({
+          type: 'setKnowledge',
+          payload: response.articles[0],
+        });
+      }
 
     },
 
