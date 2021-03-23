@@ -38,7 +38,6 @@ import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -51,8 +50,8 @@ const { Content, Sider } = Layout;
 const noMatch=<Redirect to={`/login?redirect=${window.location.href}`} />;
 const variants={open: { opacity: 1, x: 0 },
   closed: { opacity: 0, x: "-100%" },}
-//
-//
+
+
 // const list = [
 //   {
 //     id:'一大-上海',
@@ -429,47 +428,7 @@ class MapPage extends Component {
         "source": "osm-tiles2",
       }
     ];
-    // let treeList=forTree(tagTree);
-    // console.log('treeList',treeList);
-    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
-      console.log('res',res);
-      if(res&&res.success){
-        let tagTree=res.list;
-        // let tree=forTree(tagTree);
-        // console.log('tree',tree);
-        list=forList(tagTree);
-      }
-    });
-    /*const map = new Scene({
-      id: 'student-map',
-      /!** 渲染的地图会有一个antv的logo,可以让其消失 *!/
-      logoVisible: false,
-      map: new Mapbox({
-        // container: 'onlineMapping',
-        style: {
-          "version": 8,
-          "sprite": localhost + "/MapBoxGL/css/sprite",
-          "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-          "sources": sources,
-          "layers": layers,
-        },
-        center: [ 121.52, 31.04 ],  //上海经纬度坐标
-        zoom: 3,
-        token:'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg'
-      }),
-      // map: new Mapbox({
-      //   container: 'onlineMapping',
-      //   style: {
-      //     "version": 8,
-      //     "sprite": localhost + "/MapBoxGL/css/sprite",
-      //     "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-      //     "sources": sources,
-      //     "layers": layers,
-      //   },
-      //   center: [ 121.52, 31.04 ],  //上海经纬度坐标
-      //   zoom: 3,
-      // })
-    });*/
+
     const map = new mapboxgl.Map({
       container: 'onlineMapping',
       style: {
@@ -484,6 +443,118 @@ class MapPage extends Component {
       pitch:30,
       bearing: 10,
     });
+    // let treeList=forTree(tagTree);
+    // console.log('treeList',treeList);
+    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
+      console.log('res',res);
+      if(res&&res.success){
+        let tagTree=res.list;
+        // let tree=forTree(tagTree);
+        // console.log('tree',tree);
+        list=forList(tagTree);
+      }
+
+      const myDeckLayer = new MapboxLayer({
+        id: 'arc',
+        type: ArcLayer,
+        data: flyline,
+        getSourcePosition: d => d.coord[0],
+        getTargetPosition: d => d.coord[1],
+        getSourceColor: d => [255, 0, 0],
+        getTargetColor: d => [255, 0, 0],
+        getWidth: 2.3,
+
+        // animate:({
+        //   interval: 0.8,
+        //   trailLength: 2,
+        //   duration: 1
+        // })
+      });
+      map.on('load', ()=> {
+        map.addLayer(myDeckLayer)
+      })
+
+      //加载中共一大（上海，嘉兴地点）的火花图标
+      map.on('load', function() {
+        for (let i=0;i<list.length;i++) {
+          map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
+
+          map.addLayer({
+            "id": list[i].id,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": list[i].lonlat,
+                  }
+                }]
+              }
+            },
+            "layout": {
+              "icon-image": list[i].id,
+              "icon-optional": false,
+              "icon-ignore-placement": true,
+              // "text-ignore-placement": true,
+              "text-allow-overlap": true,
+              "text-field": list[i].value,
+              "text-anchor": 'left',
+              "text-offset": [1,0.1],
+              // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+              "text-size": [
+                "interpolate", ["linear"], ["zoom"],
+                3,20,
+                17,38
+              ],
+            },
+            paint: {
+              "text-color": 'rgb(255,0,0)',
+            }
+
+          });
+        }
+        // playback(0);
+      });
+      let _this = this;
+      for(let i = 0;i<list.length;i++){
+        map.on('click', list[i].id, function(e) {
+          var coordinates = e.features[0].geometry.coordinates;
+          let showInfo = list[i].showInfo;
+          console.log("listt", list);
+          _this.setState({
+            itemNow: list[i],
+          })
+
+          new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            // .setHTML(showInfo)
+            .addTo(map)
+            .setDOMContent(popupRef.current);
+          // document.getElementById('btn')
+          //   .addEventListener('click', function(){
+          //     let cardImg = list[i].cardImg;
+          //     let cardContent = list[i].cardContent;
+          //     _this.setState({
+          //       knowledgeUrl: cardImg,
+          //       knowledgeContent: cardContent,
+          //     });
+          //     _this.showModal()
+          //   });
+        });
+        map.on('mouseenter', list[i].id, function() {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', list[i].id, function() {
+          map.getCanvas().style.cursor = '';
+        });
+      }
+      this.map = map;
+    });
+
     // let nav = new mapboxgl.NavigationControl({
     //   //是否显示指南针按钮，默认为true
     //   "showCompass": true,
@@ -529,80 +600,6 @@ class MapPage extends Component {
       var bounds = element.getBoundingClientRect();
       return bounds.top < window.innerHeight && bounds.bottom > 0;
     }
-
-    /*map.on('loaded', async () => {
-      //添加一大到九大坐标点
-      const pointLayer = new PointLayer()
-        .source(point, {
-          parser: {
-            type: 'json',
-            x:'lng',
-            y:'lat'
-          }
-        })
-        .color('red')
-        .shape('circle')
-        .size(26)
-        .animate({rings:2})
-        .active(true)
-        .style({
-          opacity: 1.0
-        });
-      //添加一大到九大坐标点名称
-      const textLayer = new PointLayer()
-        .source(point, {
-          parser: {
-            type: 'json',
-            x:'lng',
-            y:'lat'
-          }
-        })
-        .color('red')
-        .shape('name','text')
-        .size(17)
-        .style({
-          textAnchor: 'bottom-left', // 文本相对锚点的位置 center|left|right|top|bottom|top-left
-          textOffset: [ 3, -3 ], // 文本相对锚点的偏移量 [水平, 垂直]
-          spacing: 2, // 字符间距
-          padding: [ 1, 1 ], // 文本包围盒 padding [水平，垂直]，影响碰撞检测结果，避免相邻文本靠的太近
-          stroke: 'red', // 描边颜色
-          strokeWidth: 0.1, // 描边宽度
-          strokeOpacity: 1.0
-        });
-      //添加参加一大各代表的流向图
-      const lineLayer = new LineLayer()
-        .source(flyline, {
-          parser: {
-            type: 'json',
-            coordinates: "coord",
-          }
-        })
-        .color('#ff6b34')
-        .shape('arc3d')
-        .size(2)
-        .active(true)
-        .animate({
-          interval: 2,
-          trailLength: 2,
-          duration: 1
-        })
-        .style({
-          opacity: 1.0,
-          stroke: 'white',
-        });
-      map.addLayer(pointLayer);
-      map.addLayer(textLayer);
-      map.addLayer(lineLayer);
-
-      pointLayer.on('click', function(e) {
-        var html = '<p>Hello World!</p>\n  <p>There is in China</p>';
-
-        new Scene.Popup().setLnglat([116.38748691963224,39.90337460887406]).setHTML(html).addTo(map);
-      })
-
-
-
-    });*/
 
     var size = 100;
     var pulsingDot = {
@@ -651,134 +648,7 @@ class MapPage extends Component {
         return true;
       }
     };
-    //加载中共一大（上海，嘉兴地点）的火花图标
-    map.on('load', function() {
-      /*map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
-        if(error) throw  error;
-        for(let i = 0;i<list.length;i++){
-          map.addImage(list[i].id, image);
-          map.addLayer({
-            "id": list[i].id,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": list[i].lonlat,
-                  }
-                }]
-              }
-            },
-            "layout": {
-              "icon-image": list[i].id,
-              "icon-size": [
-                "interpolate", ["linear"], ["zoom"],
-                3,0.1,
-                17,0.8
-              ],
-              "icon-ignore-placement": true,
-            }
-          });
-        }
-      });*/
-      for (let i=0;i<list.length;i++) {
-        map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
-        map.addLayer({
-          "id": list[i].id,
-          "type": "symbol",
-          "source": {
-            "type": "geojson",
-            "data": {
-              "type": "FeatureCollection",
-              "features": [{
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": list[i].lonlat,
-                }
-              }]
-            }
-          },
-          "layout": {
-            "icon-image": list[i].id,
-            "icon-optional": false,
-            "icon-ignore-placement": true,
-            // "text-ignore-placement": true,
-            "text-allow-overlap": true,
-            "text-field": list[i].value,
-            "text-anchor": 'left',
-            "text-offset": [1,0.1],
-            // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-            "text-size": [
-              "interpolate", ["linear"], ["zoom"],
-              3,20,
-              17,38
-            ],
-          },
-          paint: {
-            "text-color": 'rgb(255,0,0)',
-          }
 
-        });
-      }
-      // playback(0);
-    });
-    let _this = this;
-    for(let i = 0;i<list.length;i++){
-      map.on('click', list[i].id, function(e) {
-        var coordinates = e.features[0].geometry.coordinates;
-        let showInfo = list[i].showInfo;
-        _this.setState({
-          itemNow: list[i],
-        })
-
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          // .setHTML(showInfo)
-          .addTo(map)
-          .setDOMContent(popupRef.current);
-        // document.getElementById('btn')
-        //   .addEventListener('click', function(){
-        //     let cardImg = list[i].cardImg;
-        //     let cardContent = list[i].cardContent;
-        //     _this.setState({
-        //       knowledgeUrl: cardImg,
-        //       knowledgeContent: cardContent,
-        //     });
-        //     _this.showModal()
-        //   });
-      });
-      map.on('mouseenter', list[i].id, function() {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', list[i].id, function() {
-        map.getCanvas().style.cursor = '';
-      });
-    }
-    const myDeckLayer = new MapboxLayer({
-      id: 'arc',
-      type: ArcLayer,
-      data: flyline,
-      getSourcePosition: d => d.coord[0],
-      getTargetPosition: d => d.coord[1],
-      getSourceColor: d => [255, 0, 0],
-      getTargetColor: d => [255, 0, 0],
-      getWidth: 2.3,
-
-      // animate:({
-      //   interval: 0.8,
-      //   trailLength: 2,
-      //   duration: 1
-      // })
-    });
-    map.on('load', ()=> {
-      map.addLayer(myDeckLayer)
-    })
-    this.map = map;
   }
   showModal=(activeKey)=>{
     this.setState({
