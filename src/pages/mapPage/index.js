@@ -467,17 +467,6 @@ class MapPage extends Component {
         "source": "osm-tiles2",
       }
     ];
-    // let treeList=forTree(tagTree);
-    // console.log('treeList',treeList);
-    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: { tagName: '党史新学' } }).then((res) => {
-      console.log('res', res);
-      if (res && res.success) {
-        let tagTree = res.list;
-        // let tree=forTree(tagTree);
-        // console.log('tree',tree);
-        list = forList(tagTree);
-      }
-    });
     /*const map = new Scene({
       id: 'student-map',
       /!** 渲染的地图会有一个antv的logo,可以让其消失 *!/
@@ -604,8 +593,6 @@ class MapPage extends Component {
       for (let i = 0; i < list.length; i++) {
         map.on('click', list[i].id, function(e) {
           var coordinates = e.features[0].geometry.coordinates;
-          let showInfo = list[i].showInfo;
-          console.log("listt", list);
           _this.setState({
             itemNow: list[i],
             tagName:list[i].tagName,
