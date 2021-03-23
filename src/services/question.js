@@ -1,5 +1,10 @@
 import requestHeard from '../utils/requestHeard';
 //标签接口
+//标签树排序
+//获取排序标签树
+export function getTagTreeSortByTime(tagName) {
+  return requestHeard({ url: '/tag/compareTime/'+tagName, method: 'GET'});
+}
 //获取标签树
 export function getTagTree(tagName,userName) {
   return requestHeard({ url: '/tag/tree', method: 'GET'});

@@ -2,7 +2,8 @@ import {setAuthority} from '@/utils/authority';
 import {reloadAuthorized} from '@/utils/Authorized';
 import {
   getQuestionsByTag, getAudioByTag, getVideoByTag,
-  getArticlesByTag, getTagTree, getAllQuestion, updateQuestionStatus, getAudioList, getVideoList,
+  getArticlesByTag, getTagTree, getAllQuestion, updateQuestionStatus,
+  getAudioList, getVideoList,getTagTreeSortByTime,
 } from '@/services/question';
 import { getUserData } from '@/services/service';
 export default {
@@ -61,6 +62,18 @@ export default {
     },
   },
   effects: {
+    //获取标签树
+    * getTagTreeSortByTime({payload},{call, put}) {
+      const response = yield call(getTagTreeSortByTime,payload.tagName);
+      console.log('tagTree',response.list);
+      if (response.success) {
+        yield put({
+          type: 'setTagTree',
+          payload: response.list,
+        });
+      }
+      return response;
+    },
     //获取标签树
     * getTagTree({payload},{call, put}) {
       const response = yield call(getTagTree);

@@ -14,9 +14,11 @@ import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
-import { Scene, LineLayer,Control,PolygonLayer,PointLayer,ImageLayer } from '@antv/l7';
+import point from '@/assets/pointData/point.json';
+import { Scene, LineLayer,Control,PolygonLayer,PointLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
-
+import {MapboxLayer} from '@deck.gl/mapbox';
+import {ArcLayer} from '@deck.gl/layers';
 // import {motion} from 'framer-motion';
 // // @import '~video-react/styles/scss/video-react';
 // import {Player} from 'video-react'
@@ -48,141 +50,141 @@ const { Content, Sider } = Layout;
 const noMatch=<Redirect to={`/login?redirect=${window.location.href}`} />;
 const variants={open: { opacity: 1, x: 0 },
   closed: { opacity: 0, x: "-100%" },}
-//
-//
-const list2 = [
-  {
-    id:'一大-上海',
-    lonlat:[121.47069346816863, 31.22206084685108],
-    text:'1921年7月-中共一大上海',
-    value: '中共一大上海',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共一大</h2>' +
-      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p1,
-    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-    label:"党史新学@中共一大@上海",
-  },
-  {
-    id:'一大-嘉兴',
-    lonlat:[120.75580305351667, 30.75747193181725],
-    text:'1921年7月-中共一大',
-    value: '中共一大嘉兴',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共一大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p1,
-    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-    label:"党史新学@中共一大@嘉兴",
-  },
-  {
-    id:'二大-上海',
-    lonlat:[121.46214132313253, 31.2260623329518],
-    text: '1922年7月-中共二大',
-    value: '中共二大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共二大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第二次全国代表大会，简称中共二大',
-    label:"党史新学@中共二大@上海",
-  },
-  {
-    id:'三大-广州',
-    lonlat:[113.29062697510238, 23.121680862715294],
-    text: '1923年6月-中共三大',
-    value: '中共三大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共三大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p3,
-    cardContent:'中国共产党第三次全国代表大会，简称中共三大',
-    label:"党史新学@中共三大@广州",
-  },
-  {
-    id:'四大-上海',
-    lonlat:[121.48020351895462,31.25728522799882],
-    text: '1925年1月-中共四大',
-    value: '中共四大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共四大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第四次全国代表大会，简称中共四大',
-    label:"党史新学@中共四大@上海",
-  },
-  {
-    id:'五大-武汉',
-    lonlat:[114.29318634011975,30.553569642526185],
-    text: '1927年4月-中共五大',
-    value: '中共五大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共五大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第五次全国代表大会，简称中共五大',
-    label:"党史新学@中共五大@武汉",
-  },
-  {
-    id:'六大-俄罗斯',
-    lonlat:[37.153974181328664,55.535728582753336],
-    text: '1928年6月-中共六大',
-    value: '中共六大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共六大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第六次全国代表大会，简称中共六大',
-    label:"党史新学@中共六大@俄罗斯",
-  },
-  {
-    id:'七大-延安',
-    lonlat:[109.46267096678156,36.618757084621336],
-    text: '1945年4月-中共七大',
-    value: '中共七大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共七大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第七次全国代表大会，简称中共七大',
-    label:"党史新学@中共七大@延安",
-  },
-  {
-    id:'八大-政协礼堂',
-    lonlat:[116.35780179933835,39.91833919135752],
-    text: '1956年9月-中共八大',
-    value: '中共八大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共八大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第八次全国代表大会，简称中共八大',
-    label:"党史新学@中共八大@北京",
-  },{
-    id:'九大-人民大会堂',
-    lonlat:[116.38748691963224,39.90337460887406],
-    text: '1969年4月-中共九大',
-    value: '中共九大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共九大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p2,
-    cardContent:'中国共产党第九次全国代表大会，简称中共九大',
-    label:"党史新学@中共九大@北京",
-  },
-];
+
+
+// const list = [
+//   {
+//     id:'一大-上海',
+//     lonlat:[121.47069346816863, 31.22206084685108],
+//     text:'1921年7月-中共一大上海',
+//     value: '中共一大上海',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共一大</h2>' +
+//       '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
+//       '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
+//       '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p1,
+//     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+//     label:"党史新学@中共一大@上海",
+//   },
+//   {
+//     id:'一大-嘉兴',
+//     lonlat:[120.75580305351667, 30.75747193181725],
+//     text:'1921年7月-中共一大',
+//     value: '中共一大嘉兴',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共一大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p1,
+//     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
+//     label:"党史新学@中共一大@嘉兴",
+//   },
+//   {
+//     id:'二大-上海',
+//     lonlat:[121.46214132313253, 31.2260623329518],
+//     text: '1922年7月-中共二大',
+//     value: '中共二大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共二大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第二次全国代表大会，简称中共二大',
+//     label:"党史新学@中共二大@上海",
+//   },
+//   {
+//     id:'三大-广州',
+//     lonlat:[113.29062697510238, 23.121680862715294],
+//     text: '1923年6月-中共三大',
+//     value: '中共三大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共三大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p3,
+//     cardContent:'中国共产党第三次全国代表大会，简称中共三大',
+//     label:"党史新学@中共三大@广州",
+//   },
+//   {
+//     id:'四大-上海',
+//     lonlat:[121.48020351895462,31.25728522799882],
+//     text: '1925年1月-中共四大',
+//     value: '中共四大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共四大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第四次全国代表大会，简称中共四大',
+//     label:"党史新学@中共四大@上海",
+//   },
+//   {
+//     id:'五大-武汉',
+//     lonlat:[114.29318634011975,30.553569642526185],
+//     text: '1927年4月-中共五大',
+//     value: '中共五大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共五大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第五次全国代表大会，简称中共五大',
+//     label:"党史新学@中共五大@武汉",
+//   },
+//   {
+//     id:'六大-俄罗斯',
+//     lonlat:[37.153974181328664,55.535728582753336],
+//     text: '1928年6月-中共六大',
+//     value: '中共六大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共六大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第六次全国代表大会，简称中共六大',
+//     label:"党史新学@中共六大@俄罗斯",
+//   },
+//   {
+//     id:'七大-延安',
+//     lonlat:[109.46267096678156,36.618757084621336],
+//     text: '1945年4月-中共七大',
+//     value: '中共七大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共七大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第七次全国代表大会，简称中共七大',
+//     label:"党史新学@中共七大@延安",
+//   },
+//   {
+//     id:'八大-政协礼堂',
+//     lonlat:[116.35780179933835,39.91833919135752],
+//     text: '1956年9月-中共八大',
+//     value: '中共八大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共八大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第八次全国代表大会，简称中共八大',
+//     label:"党史新学@中共八大@北京",
+//   },{
+//     id:'九大-人民大会堂',
+//     lonlat:[116.38748691963224,39.90337460887406],
+//     text: '1969年4月-中共九大',
+//     value: '中共九大',
+//     showInfo: '<div className={styles.markerTop}>' +
+//       '<h2>中共九大</h2>' +
+//       '<p><a id="btn">点击进入学习卡片</a></p>' +
+//       '</div>',
+//     cardImg:p2,
+//     cardContent:'中国共产党第九次全国代表大会，简称中共九大',
+//     label:"党史新学@中共九大@北京",
+//   },
+// ];
 let list=[];
 var chapters = {
   '一大-上海': {
@@ -337,7 +339,6 @@ function forList(treeList){
       temp.cardImg=p1;
       list.push(temp);
     }
-    console.log("treelist", list);
   }
   return list;
 }
@@ -424,47 +425,142 @@ class MapPage extends Component {
         "source": "osm-tiles2",
       }
     ];
+
+    const map = new mapboxgl.Map({
+      container: 'onlineMapping',
+      style: {
+        "version": 8,
+        "sprite": localhost + "/MapBoxGL/css/sprite",
+        "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+        "sources": sources,
+        "layers": layers,
+      },
+      center: [121.52, 31.04],  //上海经纬度坐标
+      zoom: 3,
+      pitch:30,
+      bearing: 10,
+    });
     // let treeList=forTree(tagTree);
     // console.log('treeList',treeList);
-    dispatch({ type: 'mapPage/getTagTree'}).then((res)=>{
+    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
       console.log('res',res);
       if(res&&res.success){
         let tagTree=res.list;
-        let tree=forTree(tagTree);
-        console.log('tree',tree);
-        list=forList(tree);
+        // let tree=forTree(tagTree);
+        // console.log('tree',tree);
+        list=forList(tagTree);
       }
+
+      const myDeckLayer = new MapboxLayer({
+        id: 'arc',
+        type: ArcLayer,
+        data: flyline,
+        getSourcePosition: d => d.coord[0],
+        getTargetPosition: d => d.coord[1],
+        getSourceColor: d => [255, 0, 0],
+        getTargetColor: d => [255, 0, 0],
+        getWidth: 2.3,
+
+        // animate:({
+        //   interval: 0.8,
+        //   trailLength: 2,
+        //   duration: 1
+        // })
+      });
+      map.on('load', ()=> {
+        map.addLayer(myDeckLayer)
+      })
+
+      //加载中共一大（上海，嘉兴地点）的火花图标
+      map.on('load', function() {
+        for (let i=0;i<list.length;i++) {
+          map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
+
+          map.addLayer({
+            "id": list[i].id,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": list[i].lonlat,
+                  }
+                }]
+              }
+            },
+            "layout": {
+              "icon-image": list[i].id,
+              "icon-optional": false,
+              "icon-ignore-placement": true,
+              // "text-ignore-placement": true,
+              "text-allow-overlap": true,
+              "text-field": list[i].value,
+              "text-anchor": 'left',
+              "text-offset": [1,0.1],
+              // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+              "text-size": [
+                "interpolate", ["linear"], ["zoom"],
+                3,20,
+                17,38
+              ],
+            },
+            paint: {
+              "text-color": 'rgb(255,0,0)',
+            }
+
+          });
+        }
+        // playback(0);
+      });
+      let _this = this;
+      for(let i = 0;i<list.length;i++){
+        map.on('click', list[i].id, function(e) {
+          var coordinates = e.features[0].geometry.coordinates;
+          let showInfo = list[i].showInfo;
+          console.log("listt", list);
+          _this.setState({
+            itemNow: list[i],
+          })
+
+          new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            // .setHTML(showInfo)
+            .addTo(map)
+            .setDOMContent(popupRef.current);
+          // document.getElementById('btn')
+          //   .addEventListener('click', function(){
+          //     let cardImg = list[i].cardImg;
+          //     let cardContent = list[i].cardContent;
+          //     _this.setState({
+          //       knowledgeUrl: cardImg,
+          //       knowledgeContent: cardContent,
+          //     });
+          //     _this.showModal()
+          //   });
+        });
+        map.on('mouseenter', list[i].id, function() {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', list[i].id, function() {
+          map.getCanvas().style.cursor = '';
+        });
+      }
+      this.map = map;
     });
-    const map = new Scene({
-      id: 'student-map',
-      /** 渲染的地图会有一个antv的logo,可以让其消失 */
-      logoVisible: false,
-      map: new Mapbox({
-        // container: 'onlineMapping',
-        style: {
-          "version": 8,
-          "sprite": localhost + "/MapBoxGL/css/sprite",
-          "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-          "sources": sources,
-          "layers": layers,
-        },
-        center: [ 121.52, 31.04 ],  //上海经纬度坐标
-        zoom: 3,
-        token:'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg'
-      }),
-      // map: new Mapbox({
-      //   container: 'onlineMapping',
-      //   style: {
-      //     "version": 8,
-      //     "sprite": localhost + "/MapBoxGL/css/sprite",
-      //     "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-      //     "sources": sources,
-      //     "layers": layers,
-      //   },
-      //   center: [ 121.52, 31.04 ],  //上海经纬度坐标
-      //   zoom: 3,
-      // })
-    });
+
+    // let nav = new mapboxgl.NavigationControl({
+    //   //是否显示指南针按钮，默认为true
+    //   "showCompass": true,
+    //   //是否显示缩放按钮，默认为true
+    //   "showZoom":true
+    // });
+    // //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
+    // map.addControl(nav, 'top-left');
+    // On every scroll event, check which element is on screen
     document.getElementById('verticalTimeLine').onscroll = function() {
       console.log("verticalTimeLine", 1234)
       var chapterNames = Object.keys(chapters);
@@ -501,29 +597,6 @@ class MapPage extends Component {
       var bounds = element.getBoundingClientRect();
       return bounds.top < window.innerHeight && bounds.bottom > 0;
     }
-
-    map.on('loaded', async () => {
-      const lineLayer = new LineLayer()
-        .source(flyline, {
-          parser: {
-            type: 'json',
-            coordinates: "coord",
-          }
-        })
-        .color('#ff6b34')
-        .shape('arc3d')
-        .size(2)
-        .active(true)
-        .animate({
-          interval: 2,
-          trailLength: 2,
-          duration: 1
-        })
-        .style({
-          opacity: 1.0
-        });
-      map.addLayer(lineLayer);
-    });
 
     var size = 100;
     var pulsingDot = {
@@ -573,106 +646,6 @@ class MapPage extends Component {
       }
     };
 
-    //加载中共一大（上海，嘉兴地点）的火花图标
-    map.on('load', function() {
-      /*map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
-        if(error) throw  error;
-        for(let i = 0;i<list.length;i++){
-          map.addImage(list[i].id, image);
-          map.addLayer({
-            "id": list[i].id,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": list[i].lonlat,
-                  }
-                }]
-              }
-            },
-            "layout": {
-              "icon-image": list[i].id,
-              "icon-size": [
-                "interpolate", ["linear"], ["zoom"],
-                3,0.1,
-                17,0.8
-              ],
-              "icon-ignore-placement": true,
-            }
-          });
-        }
-      });*/
-      for (let i=0;i<list.length;i++) {
-        map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
-        console.log("list", list);
-
-        map.addLayer({
-          "id": list[i].id,
-          "type": "symbol",
-          "source": {
-            "type": "geojson",
-            "data": {
-              "type": "FeatureCollection",
-              "features": [{
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": list[i].lonlat,
-                }
-              }]
-            }
-          },
-          "layout": {
-            "icon-image": list[i].id,
-            "icon-optional": false,
-            "icon-ignore-placement": true,
-            // "text-ignore-placement": true,
-            "text-allow-overlap": true,
-            "text-field": list[i].value,
-            "text-anchor": 'left',
-            "text-offset": [1,0.1],
-            // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-            "text-size": [
-              "interpolate", ["linear"], ["zoom"],
-              3,20,
-              17,38
-            ],
-          },
-          paint: {
-            "text-color": 'rgb(255,0,0)',
-          }
-
-        });
-      }
-      // playback(0);
-    });
-    let _this = this;
-    for(let i = 0;i<list2.length;i++){
-      map.on('click', list2[i].id, function(e) {
-        var coordinates = e.features[0].geometry.coordinates;
-        _this.setState({
-          itemNow: list2[i],
-        })
-
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          // .setHTML(showInfo)
-          .addTo(map)
-          .setDOMContent(popupRef.current);
-      });
-      map.on('mouseenter', list2[i].id, function() {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', list2[i].id, function() {
-        map.getCanvas().style.cursor = '';
-      });
-    }
-    this.map = map;
   }
   showModal=(activeKey)=>{
     this.setState({
@@ -739,305 +712,360 @@ class MapPage extends Component {
     // }
     tree=[];
     const {tagTree,question}=mapPage;
-    let list1=forTree(tagTree);
-    list=forList(list1);
+    // let list1=forTree(tagTree);
+    list=forList(tagTree);
     console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
+    console.log('tagTree',tagTree);
+    //遍历tagTree;
+    let tree=[];
+    function forTree(treeList){
+      for (let i in treeList){
+        console.log('i',i);
+        if(treeList[i].children.length>0){
+          forTree(treeList[i].children)
+        }else{
+          tree.push(treeList[i])
+        }
+      }
+      return tree
+    }
+    //遍历树生成的数组treeList
+    // let treeList=forTree(tagTree);
     const {unCheckStyle,checkStyle} = this.state;
-  return (
-    <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
-    <Layout className={styles.normal}>
-      <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
-        <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
-          答题
-        </Button>
-        <Modal visible={this.state.startQuestion}
-               centered
+    return (
+      <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
+        <Layout className={styles.normal}>
+          <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
+            <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
+              答题
+            </Button>
+            <Modal visible={this.state.startQuestion}
+                   centered
               //  style={{top:'3em',height:'500px'}}
-              width={1000}
+                   width={1000}
               // // bodyStyle={{backgroundImage:}}
               //  className={styles.modal}
               //  closable={false}
               //  keyboard={true}
-               mask={true}
-               maskClosable={true}
+                   mask={true}
+                   maskClosable={true}
               // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-               title={null}
-               onCancel={this.handleCancel}
-               footer={null}
-               closable={false}
-               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-        >
-          <div className={styles.modal}>
-            <div className={styles.top}></div>
-            <div className="d-iframe">
-              {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
-              {/*        className="iframe-style"></iframe>*/}
-              <div className={styles.web} >
-                <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
-                <div className={styles.radio}>
-                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                  <Row>
-                    <Col span={12}>
-                  <Checkbox    value={'A'}>
-                    {'A  '+(question[recent]?question[recent].optionA:'')}
-                  </Checkbox>
+                   title={null}
+                   onCancel={this.handleCancel}
+                   footer={null}
+                   closable={false}
+                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+            >
+              <div className={styles.modal}>
+                <div className={styles.top}></div>
+                <div className="d-iframe">
+                  {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
+                  {/*        className="iframe-style"></iframe>*/}
+                  <div className={styles.web} >
+                    <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
+                    <div className={styles.radio}>
+                      <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                        <Row>
+                          <Col span={12}>
+                            <Checkbox    value={'A'}>
+                              {'A  '+(question[recent]?question[recent].optionA:'')}
+                            </Checkbox>
+                          </Col>
+                          <Col span={12}>
+                            <Checkbox    value={'B'}>
+                              {'B  '+(question[recent]?question[recent].optionB:'')}
+                            </Checkbox>
+                          </Col>
+                          {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
+                            <Checkbox    value={'C'}>
+                              {'C  '+(question[recent]?question[recent].optionC:'')}
+                            </Checkbox>
+                          </Col>:""}
+                          {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                            <Col span={12}>
+                              <Checkbox    value={'D'}>
+                                {'D  '+(question[recent]?question[recent].optionD:'')}
+                                {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                              </Checkbox>
+                            </Col>:''}
+                        </Row>
+                      </Checkbox.Group>
+                      <img src=""/>
+                    </div>
+                  </div>
+                  {this.state.answer==true?
+                    (<h1>正确答案是</h1>):''}
+                  {this.state.answer==true?
+                    (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
+                  <Row gutter={16}>
+                    <Col span={8}>
+                      <Button  key="submit"
+                               type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
+                               onClick={()=>{
+                                 let string=this.state.value.toString();
+                                 if(string==(question[recent]?question[recent].answer:''))
+                                 {
+                                   this.setState({grade:this.state.grade+1});
+                                 }
+                                 this.setState({answer:true})
+                                 if(this.state.questionNumber==allNumber) {
+                                   alert("答题结束")
+                                 }}}>提交</Button>
                     </Col>
-                    <Col span={12}>
-                  <Checkbox    value={'B'}>
-                    {'B  '+(question[recent]?question[recent].optionB:'')}
-                  </Checkbox>
+                    <Col span={8}>
+                      <Button
+                        key="submit"
+                        type="primary"
+                        onClick={()=> {
+                          if(this.state.questionNumber==allNumber&&this.state.answer==true){
+                            this.setState({startQuestion:false})
+                            this.setState({questionNumber: 1})
+                            const {dispatch}=this.props;
+                            dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
+                            return
+                          }
+                          if(this.state.answer==false){
+                            alert('你还未提交本题答案')
+                          } else{
+                            this.setState({deadline:Date.now() +  1000 * 60})
+                            this.setState({questionNumber: this.state.questionNumber+1})
+                            this.setState({answer:false})
+                          }
+                        }}>
+                        下一题
+                      </Button>
                     </Col>
-                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                  <Checkbox    value={'C'}>
-                    {'C  '+(question[recent]?question[recent].optionC:'')}
-                  </Checkbox>
-                    </Col>:""}
-                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                    <Col span={12}>
-                  <Checkbox    value={'D'}>
-                    {'D  '+(question[recent]?question[recent].optionD:'')}
-                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                  </Checkbox>
-                    </Col>:''}
+                    <Col span={8}>
+                      <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>
+                      <h1><span>{this.state.questionNumber}</span>/
+                        <span>{allNumber}</span></h1>
+                      {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
+                    </Col>
                   </Row>
-                </Checkbox.Group>
-                  <img src=""/>
+                  {this.state.questionNumber==allNumber&&this.state.answer?
+                    (<div>
+                      <div className={styles.try}></div>
+                      <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
+
                 </div>
+                <div className={styles.bottom}></div>
               </div>
-              {this.state.answer==true?
-                (<h1>正确答案是</h1>):''}
-              {this.state.answer==true?
-                (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
-              <Row gutter={16}>
-                <Col span={8}>
-                  <Button  key="submit"
-                           type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
-                           onClick={()=>{
-                             let string=this.state.value.toString();
-                             if(string==(question[recent]?question[recent].answer:''))
-                             {
-                               this.setState({grade:this.state.grade+1});
-                             }
-                             this.setState({answer:true})
-                             if(this.state.questionNumber==allNumber) {
-                               alert("答题结束")
-                             }}}>提交</Button>
-                </Col>
-                <Col span={8}>
-                  <Button
-                    key="submit"
-                    type="primary"
-                    onClick={()=> {
-                      if(this.state.questionNumber==allNumber&&this.state.answer==true){
-                        this.setState({startQuestion:false})
-                        this.setState({questionNumber: 1})
-                        const {dispatch}=this.props;
-                        dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
-                        return
-                      }
-                      if(this.state.answer==false){
-                        alert('你还未提交本题答案')
-                      } else{
-                        this.setState({deadline:Date.now() +  1000 * 60})
-                        this.setState({questionNumber: this.state.questionNumber+1})
-                        this.setState({answer:false})
-                      }
-                    }}>
-                    下一题
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>
-                  <h1><span>{this.state.questionNumber}</span>/
-                    <span>{allNumber}</span></h1>
-                  {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
-                </Col>
-              </Row>
-              {this.state.questionNumber==allNumber&&this.state.answer?
-                (<div>
-                  <div className={styles.try}></div>
-                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
+            </Modal>
+            <Modal visible={this.state.modalVisble}
+                   destroyOnClose={true}
+                   forceRender={true}
+                   title="互动页面"
+                   centered
+                   style={{top:'3em',color:'black',fontStyle:{},height:'70vh', width:'70vw'}}
+              // bodyStyle={{height:'70vh', width:'70vw'}}
+                   maskStyle={{backgroundColor: 'rgba(198,170,145,0.1)' ,top:'5em',}}
+                   className={styles.modal}
+                   onOk={()=>this.setState({modalVisble:false})}
+                   onCancel={()=>this.setState({modalVisble:false})}
+                   footer={false}
+            >
+              <Tabs
+                defaultActiveKey="1"
+                activeKey={this.state.activeKey}
+              >
 
-            </div>
-            <div className={styles.bottom}></div>
-          </div>
-        </Modal>
-        <Modal visible={this.state.modalVisble}
-               destroyOnClose={true}
-               forceRender={true}
-               title="互动页面"
-               centered
-               style={{top:'3em',color:'black',fontStyle:{},height:'70vh', width:'70vw'}}
-               // bodyStyle={{height:'70vh', width:'70vw'}}
-               maskStyle={{backgroundColor: 'rgba(198,170,145,0.1)' ,top:'5em',}}
-               className={styles.modal}
-               onOk={()=>this.setState({modalVisble:false})}
-               onCancel={()=>this.setState({modalVisble:false})}
-               footer={false}
-        >
-          <Tabs
-            defaultActiveKey="1"
-            activeKey={this.state.activeKey}
-          >
-
-            <TabPane
-              tab={
-                <span>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="book" />
                           文章
                       </span>
-              }
-              key="1"
-            >
-              <Card style={{ width: '100' }}
-                    cover={
-                      <img
-                        alt="example"
-                        src={this.state.knowledgeUrl}
-                      />
-                    }
-                    >
-                {this.state.knowledgeContent}
-              </Card>
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
+                  }
+                  key="1"
+                >
+                  <Card style={{ width: '100' }}
+                        cover={
+                          <img
+                            alt="example"
+                            src={this.state.knowledgeUrl}
+                          />
+                        }
+                  >
+                    {this.state.knowledgeContent}
+                  </Card>
+                </TabPane>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="picture" />
                          图片
                       </span>
-              }
-              key="2"
-            >
-              <div style={{padding: 40, background: "#ececec"}} >
-                <Slider {...this.carousel_settings} >
-                  <div>
-                    <img  src={yay} />
+                  }
+                  key="2"
+                >
+                  <div style={{padding: 40, background: "#ececec"}} >
+                    <Slider {...this.carousel_settings} >
+                      <div>
+                        <img  src={yay} />
+                      </div>
+                      <div>
+                        <img  src={yaa} style={{height: 250, width:400 }}/>
+                      </div>
+                    </Slider>
                   </div>
-                  <div>
-                    <img  src={yaa} style={{height: 250, width:400 }}/>
-                  </div>
-                </Slider>
-              </div>
 
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
+                </TabPane>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="video-camera" />
                           视频
                       </span>
-              }
-              key="3"
-            >
-              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
-                     controls="controls">
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                {/*<source src="./1.mp4"*/}
-                {/*/>*/}
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-              />
-                <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                />
-              </video>
-              {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
-              {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
-              {/*</video>*/}
-            </TabPane>
-            <TabPane
-              tab={
-                <span>
+                  }
+                  key="3"
+                >
+                  <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                         controls="controls">
+                    {/*<source src="./1.mp4"*/}
+                    {/*/>*/}
+                    {/*<source src="./1.mp4"*/}
+                    {/*/>*/}
+                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                    />
+                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                    />
+                  </video>
+                  {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
+                  {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
+                  {/*</video>*/}
+                </TabPane>
+                <TabPane
+                  tab={
+                    <span>
                         <Icon type="question" />
                           答题
                       </span>
-              }
-              key="4"
-            >
+                  }
+                  key="4"
+                >
 
-              <Card   title={this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}>
-                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                  <Row>
-                    <Col span={12}>
-                      <Checkbox    value={'A'}>
-                        {'A  '+(question[recent]?question[recent].optionA:'')}
-                      </Checkbox>
+                  <Card   title={this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}>
+                    <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                      <Row>
+                        <Col span={12}>
+                          <Checkbox    value={'A'}>
+                            {'A  '+(question[recent]?question[recent].optionA:'')}
+                          </Checkbox>
+                        </Col>
+                        <Col span={12}>
+                          <Checkbox    value={'B'}>
+                            {'B  '+(question[recent]?question[recent].optionB:'')}
+                          </Checkbox>
+                        </Col>
+                        {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
+                          <Checkbox    value={'C'}>
+                            {'C  '+(question[recent]?question[recent].optionC:'')}
+                          </Checkbox>
+                        </Col>:""}
+                        {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                          <Col span={12}>
+                            <Checkbox    value={'D'}>
+                              {'D  '+(question[recent]?question[recent].optionD:'')}
+                              {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                            </Checkbox>
+                          </Col>:''}
+                      </Row>
+                    </Checkbox.Group>
+                    {/*<Radio.Group onChange={this.onChange} value={this.state.value}>*/}
+                    {/*  <Radio   style={radioStyle} value={0}>*/}
+                    {/*    {answer[0]}*/}
+                    {/*  </Radio>*/}
+                    {/*  <Radio   style={radioStyle} value={1}>*/}
+                    {/*    {answer[1]}*/}
+                    {/*  </Radio>*/}
+                    {/*  <Radio   style={radioStyle} value={2}>*/}
+                    {/*    {answer[2]}*/}
+                    {/*  </Radio>*/}
+                    {/*  <Radio   style={radioStyle} value={3}>*/}
+                    {/*    {answer[3]}*/}
+                    {/*    /!*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*!/*/}
+                    {/*  </Radio>*/}
+                    {/*</Radio.Group>*/}
+                  </Card>
+                  <Button  key="submit"
+                           type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
+                    if(this.state.value==rightAnswer){
+                      this.setState({grade:this.state.grade+1});
+                    }
+                    this.setState({answer:true})
+                    if(this.state.questionNumber==allNumber)
+                    {
+                      alert("答题结束")
+                    }
+                  }}>提交</Button>
+                  {this.state.answer==true?
+                    (<h1>正确答案是</h1>):''}
+                  {this.state.answer==true?
+                    (<Card type="inner" title={answer[rightAnswer]} />):''}
+                  <Row gutter={16}>
+                    <Col span={8}>
+                      <Button  key="back" onClick={()=>{this.setState({questionNumber: this.state.questionNumber-1})}}>
+                        上一题
+                      </Button>
                     </Col>
-                    <Col span={12}>
-                      <Checkbox    value={'B'}>
-                        {'B  '+(question[recent]?question[recent].optionB:'')}
-                      </Checkbox>
+                    <Col span={8}>
+                      <Button
+                        key="submit"
+                        type="primary"
+                        onClick={()=> {
+                          // this.setState({modalVisble:false})
+                          if(this.state.questionNumber==allNumber){
+                            return
+                          }
+                          if(this.state.answer==false){
+                            alert('你还未提交本题答案')
+                          }
+                          else{
+                            this.setState({deadline:Date.now() +  1000 * 60})
+                            this.setState({questionNumber: this.state.questionNumber+1})
+                            this.setState({answer:false})
+                          }
+                        }}>
+                        下一题
+                      </Button>
                     </Col>
-                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                      <Checkbox    value={'C'}>
-                        {'C  '+(question[recent]?question[recent].optionC:'')}
-                      </Checkbox>
-                    </Col>:""}
-                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                      <Col span={12}>
-                        <Checkbox    value={'D'}>
-                          {'D  '+(question[recent]?question[recent].optionD:'')}
-                          {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                        </Checkbox>
-                      </Col>:''}
+                    <Col span={8}>
+                      <h2><span>{this.state.questionNumber}</span>/
+                        <span>{allNumber}</span></h2>
+                      {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
+                    </Col>
                   </Row>
-                </Checkbox.Group>
-              </Card>
-              <Button  key="submit"
-                       type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
-                if(this.state.value==rightAnswer){
-                  this.setState({grade:this.state.grade+1});
-                }
-                this.setState({answer:true})
-                if(this.state.questionNumber==allNumber)
-                {
-                  alert("答题结束")
-                }
-                       }}>提交</Button>
-              {this.state.answer==true?
-                (<h1>正确答案是</h1>):''}
-              {this.state.answer==true?
-                (<Card type="inner" title={answer[rightAnswer]} />):''}
-              <Row gutter={16}>
-                <Col span={8}>
-                  <Button  key="back" onClick={()=>{this.setState({questionNumber: this.state.questionNumber-1})}}>
-                    上一题
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <Button
-                    key="submit"
-                    type="primary"
-                    onClick={()=> {
-                      // this.setState({modalVisble:false})
-                      if(this.state.questionNumber==allNumber){
-                        return
-                      }
-                      if(this.state.answer==false){
-                        alert('你还未提交本题答案')
-                      }
-                      else{
-                        this.setState({deadline:Date.now() +  1000 * 60})
-                        this.setState({questionNumber: this.state.questionNumber+1})
-                        this.setState({answer:false})
-                      }
-                    }}>
-                    下一题
-                  </Button>
-                </Col>
-                <Col span={8}>
-                  <h2><span>{this.state.questionNumber}</span>/
-                    <span>{allNumber}</span></h2>
-                  {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
-                </Col>
-              </Row>
-              {this.state.questionNumber==allNumber&&this.state.answer?
-                (<div>
-                  <div className={styles.try}></div>
-                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
-            </TabPane>
+                  {this.state.questionNumber==allNumber&&this.state.answer?
+                    (<div>
+                      <div className={styles.try}></div>
+                      <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
+                </TabPane>
+                <TabPane
+                  tab={
+                    <span>
+                        <Icon type="video-camera" />
+                          视频
+                      </span>
+                  }
+                  key="3"
+                >
+                  <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                         controls="controls">
+                    {/*<source src="./1.mp4"*/}
+                    {/*/>*/}
+                    {/*<source src="./1.mp4"*/}
+                    {/*/>*/}
+                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                    />
+                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                    />
+                  </video>
+                  {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
+                  {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
+                  {/*</video>*/}
+                </TabPane>
 
           </Tabs>
         </Modal>
@@ -1099,9 +1127,11 @@ class MapPage extends Component {
       </Sider>
       <Content>
         <div className={styles.normal}>
-          <div className={styles.mapContainer}  id="student-map">
+          <div className={styles.mapContainer}  id="onlineMapping">
             <div  ref={popupRef} className={styles.popupDiv}>
-              {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
+              {this.state.itemNow?
+                <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
+                :null}
               <Row style={{width:"240px",top:"10px"}} justify="space-between">
                 <Col span={2} onClick={()=>this.showModal("1")}>
                   <Icon className={styles.popup} type="book" />
