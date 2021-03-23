@@ -330,7 +330,7 @@ function forList(treeList){
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
       temp.text=treeList[i].label;
-      temp.value=treeList[i].label;
+      temp.value=treeList[i].label.replace('@','');
       temp.time=treeList[i].time;
       temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
         '于'+treeList[i].time+'在<span>'+treeList[i].label+'</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
@@ -691,68 +691,20 @@ class MapPage extends Component {
   };
 
   render(){
-    let question1='中日甲午战争中，日军野蛮屠杀和平居民的地点是';
-    let answer=['A.大连','B.旅顺','C.平壤','D.花园口'];
-    let rightAnswer=1;
-    // const {dispatch}=this.props;
-    // dispatch({ type: 'mapPage/getTagTree'});
-    // dispatch({ type: 'mapPage/getQuestion'});
-    // console.log('dispatch',dispatch);
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
-    //debugger
-    // let tree=[];
-    // function forTree1(treeList){
-    //   for (let i in treeList){
-    //     console.log('i',i);
-    //     if(treeList[i].children.length>0){
-    //       forTree(treeList[i].children)
-    //     }else{
-    //       tree.push(treeList[i])
-    //     }
-    //   }
-    //   return tree
-    // }
-    tree=[];
     const {tagTree,question}=mapPage;
-    // let list1=forTree(tagTree);
     list=forList(tagTree);
     console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
     console.log('tagTree',tagTree);
+    console.log('tagName',this.state.tagName);
     //遍历tagTree;
-    let tree=[];
-    function forTree(treeList){
-      for (let i in treeList){
-        console.log('i',i);
-        if(treeList[i].children.length>0){
-          forTree(treeList[i].children)
-        }else{
-          tree.push(treeList[i])
-        }
-      }
-      return tree
-    }
-    //遍历树生成的数组treeList
-    // let treeList=forTree(tagTree);
-    const {unCheckStyle,checkStyle} = this.state;
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
       <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
-        <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
-          答题
-        </Button>
-        <Button  key="back" onClick={()=>{this.setState({startArticle:true})}}>
-          文章
-        </Button>
-        <Button  key="back" onClick={()=>{this.setState({startPicture:true})}}>
-          图片
-        </Button>
-        <Button  key="back" onClick={()=>{this.setState({startVideo:true})}}>
-          视频
-        </Button>
         {/*答题*/}
         <Modal visible={this.state.startQuestion}
                centered
@@ -941,10 +893,6 @@ class MapPage extends Component {
             <div className={styles.topVideo}></div>
             <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
                    controls="controls">
-              {/*<source src="./1.mp4"*/}
-              {/*/>*/}
-              {/*<source src="./1.mp4"*/}
-              {/*/>*/}
               <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
               />
               <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
@@ -1016,28 +964,28 @@ class MapPage extends Component {
             <div  ref={popupRef} className={styles.popupDiv}>
               {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
               <Row style={{width:"240px",top:"10px"}} justify="space-between">
-                <Col span={2} onClick={()=>this.showModal("1")}>
+                <Col span={2} onClick={()=>{this.setState({startArticle:true})}}>
                   <Icon className={styles.popup} type="book" />
                 </Col>
-                <Col span={4} onClick={()=>this.showModal("1")}>
+                <Col span={4} onClick={()=>{this.setState({startArticle:true})}}>
                   文章
                 </Col>
-                <Col span={2} onClick={()=>this.showModal("2")}>
+                <Col span={2} onClick={()=>{this.setState({startPicture:true})}}>
                   <Icon className={styles.popup} type="picture" />
                 </Col>
-                <Col span={4} onClick={()=>this.showModal("2")}>
+                <Col span={4} onClick={()=>{this.setState({startPicture:true})}}>
                   图片
                 </Col>
-                <Col span={2} onClick={()=>this.showModal("3")}>
+                <Col span={2} onClick={()=>{this.setState({startVideo:true})}}>
                   <Icon className={styles.popup} type="video-camera" />
                 </Col>
-                <Col span={4} onClick={()=>this.showModal("3")}>
+                <Col span={4} onClick={()=>{this.setState({startVideo:true})}}>
                   视频
                 </Col>
-                <Col span={2} onClick={()=>this.showModal("4")}>
+                <Col span={2} onClick={()=>this.setState({startQuestion:true})}>
                   <Icon className={styles.popup} type="question" />
                 </Col>
-                <Col span={4} onClick={()=>this.showModal("4")}>
+                <Col span={4} onClick={()=>this.setState({startQuestion:true})}>
                   答题
                 </Col>
               </Row>
