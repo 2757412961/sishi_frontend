@@ -15,7 +15,7 @@ class ArticleModal extends Component {
       editorState: BraftEditor.createEditorState(null),
       mediaItems: [
         {
-          id: 1,
+          id: "rtsrtd89-59s",
           type: 'IMAGE',
           url: 'https://margox.cn/wp-content/uploads/2018/09/IMG_9508.jpg'
         }, {
@@ -41,6 +41,25 @@ class ArticleModal extends Component {
     this.initMediaItems();
   }
 
+  // Braft editor
+  initMediaItems = () => {
+    request({
+      url: '/v1.0/api/tagResource/mediaItems',
+      method: 'GET',
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.setState({mediaItems: res.list})
+        message.success('更新媒体资源成功');
+      } else {
+        this.setState({mediaItems: []})
+        message.error('更新媒体资源失败,' + res.message);
+      }
+    });
+  }
+
   setModalVisible = (val) => {
     this.setState({modalVisible: val});
   };
@@ -55,12 +74,6 @@ class ArticleModal extends Component {
 
   resetModal = () => {
     this.props.form.resetFields();
-  }
-
-
-  // Braft editor
-  initMediaItems = () => {
-
   }
 
   handleEditorChange = (editorState) => {
@@ -138,6 +151,69 @@ class ArticleModal extends Component {
     `;
   }
 
+  //5.由于图片上传、视频上传项目中都是单独走的接口，需要一个上传的方法
+  myUploadFn = (param) => {
+
+    alert("该接口暂时不能使用！！！");
+    return;
+
+    console.log('param', param);
+    const serverURL = "/v1.0/api/video/form";//upload 是接口地址
+    const xhr = new XMLHttpRequest();
+    const fd = new FormData();
+
+    const successFn = (response) => {
+      // 假设服务端直接返回文件上传后的地址
+      // 上传成功后调用param.success并传入上传后的文件地址
+      const upLoadObject = JSON.parse(response && response.currentTarget && response.currentTarget.response);
+      console.log('response', response);
+      console.log('upLoadObject', upLoadObject);
+      console.log('xhr.responseText', xhr.responseText);
+      console.log('responseText', JSON.parse(xhr.responseText));
+      param.success({
+        url: upLoadObject&&upLoadObject.audioContent && upLoadObject.pictureContent && upLoadObject.videoContent,
+        meta: {
+          id: upLoadObject && upLoadObject.videoId,
+          title: upLoadObject && upLoadObject.videoTitle,
+          alt: upLoadObject && upLoadObject.videoTitle,
+          loop: false, // 指定音视频是否循环播放
+          autoPlay: false, // 指定音视频是否自动播放
+          controls: false, // 指定音视频是否显示控制栏
+          poster: '', // 指定视频播放器的封面
+        }
+      })
+    };
+
+    const progressFn = (event) => {
+      // 上传进度发生变化时调用param.progress
+      param.progress(event.loaded / event.total * 100)
+
+    };
+
+    const errorFn = (response) => {
+      // 上传发生错误时调用param.error
+      param.error({
+        msg: 'unable to upload.'
+      })
+    };
+
+    xhr.upload.addEventListener("progress", progressFn, false);
+    xhr.addEventListener("load", successFn, false);
+    xhr.addEventListener("error", errorFn, false);
+    xhr.addEventListener("abort", errorFn, false);
+
+    // 发送上传请求 ---------------------------------------
+    let formData = this.props.form.getFieldsValue();
+    fd.append("tagName", formData.tagName);
+    fd.append("videoTitle", formData.articleTitle);
+    fd.append("videoSource", formData.articleAuthor);
+    fd.append("videoFile", param.file);
+
+    // fd.append('file', param.file);
+    xhr.open('POST', serverURL, true);
+    // xhr.setRequestHeader("X-Auth-Token", User.getToken());//header中token的设置
+    xhr.send(fd)
+  };
 
   // submit
   handleSubmit = e => {
@@ -247,7 +323,7 @@ class ArticleModal extends Component {
                 placeholder="请输入正文内容"
                 onChange={this.handleEditorChange}
                 extendControls={extendControls}
-                media={{accepts: mediaAccepts, items: this.state.mediaItems}}/>
+                media={{accepts: mediaAccepts, items: this.state.mediaItems, uploadFn: this.myUploadFn}}/>
             </Form.Item>
 
           </Form>
