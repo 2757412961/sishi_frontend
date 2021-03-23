@@ -38,7 +38,15 @@ import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-
+import c1 from '@/assets/test/c1.jpg';
+import c2 from '@/assets/test/c2.jpg';
+import c3 from '@/assets/test/c3.jpg';
+import c4 from '@/assets/test/c4.jpg';
+import c5 from '@/assets/test/c5.jpg';
+import c6 from '@/assets/test/c6.jpg';
+import c7 from '@/assets/test/c7.jpg';
+import c8 from '@/assets/test/c8.jpg';
+import c9 from '@/assets/test/c9.jpg';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -252,6 +260,31 @@ var chapters = {
     pitch: 10
   }
 };
+let des = [
+  { "showInfo":"<div><h3>中共一大上海会址</h3><img src={c1} /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
+      "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
+  { "showInfo":"<div><h3>中共一大嘉兴南湖会址</h3><img src={c1} /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
+      "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
+  { "showInfo":"<div><h3>中共二大会址</h3><img src={c2}  /><p>中国共产党第二次全国代表大会，简称中共二大，" +
+      "于1922年7月16日至23日在上海召开。</p></div>"},
+  { "showInfo":"<div><h3>中共三大会址</h3><img src={c3}  />" +
+      "<p>中国共产党第三次全国代表大会，简称中共三大，于1923年6月12日至20日在广州召开。</p></div>"},
+  { "showInfo":"<div><h3>中共四大会址</h3><img src={c4} />" +
+      "<p>中国共产党第四次全国代表大会，简称中共四大，于1925年1月11日至22日在上海召开。</p></div>"},
+  { "showInfo":"<div><h3>中共五大会址</h3><img src={c5} />" +
+      "<p>中国共产党第五次全国代表大会，简称中共五大，于1927年4月27日至5月9日在武汉武昌都府堤召开。</p></div>"},
+  { "showInfo":"<div><h3>中共六大会址</h3><img src={c6} />" +
+      "<p>中国共产党第六次全国代表大会，简称中共六大，于1928年6月18日至7月11日在俄罗斯莫斯科市中心西南约40公里的五一村召开。</p></div>"},
+  { "showInfo":"<div><h3>中共七大会址</h3><img src={c7} />" +
+      "<p>中国共产党第七次全国代表大会，简称中共七大，于1945年4月23日至6月11日在延安杨家岭革命旧址中央大礼堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共八大会址</h3><img src={c8} />" +
+      "<p>中国共产党第八次全国代表大会，简称中共八大，于1956年9月15日至27日在北京全国政协礼堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共九大会址</h3><img src={c9} />" +
+      "<p>中国共产党第九次全国代表大会，简称中共九大，于1969年4月1日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十大会址</h3><img src={c9} />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+]
+
 
 const popupRef = React.createRef();
 
@@ -326,6 +359,7 @@ function forList(treeList){
   let list=[];
   for (let i in treeList){
     if(treeList[i].hasOwnProperty('geoCoordinates')){
+      debugger
       let temp={};
       temp.id=treeList[i].label;
       temp.lonlat=treeList[i].geoCoordinates;
@@ -333,9 +367,7 @@ function forList(treeList){
       temp.text=treeList[i].label;
       temp.value=treeList[i].label;
       temp.time=treeList[i].time;
-      temp.showInfo='<div className={styles.markerTop}><h2>'+treeList[i].label+'</h2></div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-        '于'+treeList[i].time+'在<span>'+treeList[i].label+'</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-        '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p></div>';
+      temp.showInfo=des[i].showInfo;
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       list.push(temp);
@@ -727,8 +759,36 @@ class MapPage extends Component {
       // playback(0);
     });
     let _this = this;
+    var popup = new mapboxgl.Popup({closeOnClick:false,closeButton:false})
+    for(let i = 0;i<list.length;i++){
+      map.on('mouseenter', list[i].id, function(e) {
+        map.getCanvas().style.cursor = 'pointer';
+        var coordinates = e.features[0].geometry.coordinates;
+        let showInfo = list[i].showInfo;
+//closeOnClick:false,closeButton:true
+          popup.setLngLat(coordinates)
+          popup.setHTML(showInfo)
+          popup.addTo(map)
+        // .setDOMContent(popupRef.current);
+        // document.getElementById('btn')
+        //   .addEventListener('click', function(){
+        //     let cardImg = list[i].cardImg;
+        //     let cardContent = list[i].cardContent;
+        //     _this.setState({
+        //       knowledgeUrl: cardImg,
+        //       knowledgeContent: cardContent,
+        //     });
+        //     _this.showModal()
+        //   });
+      });
+      map.on('mouseleave', list[i].id, function() {
+        map.getCanvas().style.cursor = '';
+        popup.remove();
+      });
+    }
     for(let i = 0;i<list.length;i++){
       map.on('click', list[i].id, function(e) {
+        popup.remove();
         var coordinates = e.features[0].geometry.coordinates;
         let showInfo = list[i].showInfo;
         _this.setState({
@@ -767,7 +827,7 @@ class MapPage extends Component {
       getSourceColor: d => [255, 0, 0],
       getTargetColor: d => [255, 0, 0],
       getWidth: 2.3,
-
+      // getText:d => d.text,
       // animate:({
       //   interval: 0.8,
       //   trailLength: 2,
@@ -1348,7 +1408,7 @@ class MapPage extends Component {
                 {/*  ))*/}
                 {/*}*/}
               </div>
-              <div id='features' className={styles.features}>
+              {/*<div id='features' className={styles.features}>
                 <section id='一大上海' className={styles.selection}>
                   <h3>中共一大上海</h3>
                   <p>November 1895. London is shrouded in fog and Sherlock Holmes and Watson pass time restlessly awaiting a
@@ -1414,7 +1474,7 @@ class MapPage extends Component {
                     where he promises additional plans for the submarine in exchange for money. The plan works and Holmes
                     and Watson catch both criminals.</p>
                 </section>
-              </div>
+              </div>*/}
               {/*<div className={styles.dangshi_div1} style={{display: this.state.first ? 'block': 'none'}}>*/}
               {/*  <img  src={dangshi} className={styles.dangshi} />*/}
               {/*  <div className={styles.dangshi_font}>*/}
