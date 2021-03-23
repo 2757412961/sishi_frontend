@@ -375,20 +375,23 @@ class MapPage extends Component {
         opacity: 1,
         fontSize: 17,
       },
-      knowledgeUrl:'',
+      knowledgeUrl:p1,
       //list[0].cardImg,
-      knowledgeContent:'',
+      knowledgeContent:'中国共产党第一次全国代表大会于1921年7月23日至1921年8月3日在上海法租界贝勒路树德里3号（后称望志路106号，现改兴业路76号）和浙江嘉兴南湖召开。出席大会的各地代表共12人。',
       //list[0].cardContent,
       // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
       more:true,
       startQuestion:false,
+      startArticle:false,
+      startPicture:false,
+      startVideo:false,
+      startAudio:false,
     };
 
   }
 
   componentDidMount() {
     const {dispatch}=this.props;
-    dispatch({ type: 'mapPage/getTagTree'});
     dispatch({ type: 'mapPage/getQuestion'});
     // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
     dispatch({ type: 'mapPage/getVideoByTag'});
@@ -734,340 +737,222 @@ class MapPage extends Component {
     //遍历树生成的数组treeList
     // let treeList=forTree(tagTree);
     const {unCheckStyle,checkStyle} = this.state;
-    return (
-      <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
-        <Layout className={styles.normal}>
-          <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
-            <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
-              答题
-            </Button>
-            <Modal visible={this.state.startQuestion}
-                   centered
-              //  style={{top:'3em',height:'500px'}}
-                   width={1000}
-              // // bodyStyle={{backgroundImage:}}
-              //  className={styles.modal}
-              //  closable={false}
-              //  keyboard={true}
-                   mask={true}
-                   maskClosable={true}
+  return (
+    <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
+    <Layout className={styles.normal}>
+      <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
+        <Button  key="back" onClick={()=>{this.setState({startQuestion:true})}}>
+          答题
+        </Button>
+        <Button  key="back" onClick={()=>{this.setState({startArticle:true})}}>
+          文章
+        </Button>
+        <Button  key="back" onClick={()=>{this.setState({startPicture:true})}}>
+          图片
+        </Button>
+        <Button  key="back" onClick={()=>{this.setState({startVideo:true})}}>
+          视频
+        </Button>
+        {/*答题*/}
+        <Modal visible={this.state.startQuestion}
+               centered
+              width={1000}
+               mask={true}
+               maskClosable={true}
               // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-                   title={null}
-                   onCancel={this.handleCancel}
-                   footer={null}
-                   closable={false}
-                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-            >
-              <div className={styles.modal}>
-                <div className={styles.top}></div>
-                <div className="d-iframe">
-                  {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
-                  {/*        className="iframe-style"></iframe>*/}
-                  <div className={styles.web} >
-                    <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
-                    <div className={styles.radio}>
-                      <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                        <Row>
-                          <Col span={12}>
-                            <Checkbox    value={'A'}>
-                              {'A  '+(question[recent]?question[recent].optionA:'')}
-                            </Checkbox>
-                          </Col>
-                          <Col span={12}>
-                            <Checkbox    value={'B'}>
-                              {'B  '+(question[recent]?question[recent].optionB:'')}
-                            </Checkbox>
-                          </Col>
-                          {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                            <Checkbox    value={'C'}>
-                              {'C  '+(question[recent]?question[recent].optionC:'')}
-                            </Checkbox>
-                          </Col>:""}
-                          {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                            <Col span={12}>
-                              <Checkbox    value={'D'}>
-                                {'D  '+(question[recent]?question[recent].optionD:'')}
-                                {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                              </Checkbox>
-                            </Col>:''}
-                        </Row>
-                      </Checkbox.Group>
-                      <img src=""/>
-                    </div>
-                  </div>
-                  {this.state.answer==true?
-                    (<h1>正确答案是</h1>):''}
-                  {this.state.answer==true?
-                    (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Button  key="submit"
-                               type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
-                               onClick={()=>{
-                                 let string=this.state.value.toString();
-                                 if(string==(question[recent]?question[recent].answer:''))
-                                 {
-                                   this.setState({grade:this.state.grade+1});
-                                 }
-                                 this.setState({answer:true})
-                                 if(this.state.questionNumber==allNumber) {
-                                   alert("答题结束")
-                                 }}}>提交</Button>
+               title={null}
+               onCancel={()=>this.setState({startQuestion:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            <div className={styles.top}></div>
+            <div className="d-iframe">
+              {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
+              {/*        className="iframe-style"></iframe>*/}
+              <div className={styles.web} >
+                <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
+                <div className={styles.radio}>
+                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                  <Row>
+                    <Col span={12}>
+                  <Checkbox    value={'A'}>
+                    {'A  '+(question[recent]?question[recent].optionA:'')}
+                  </Checkbox>
                     </Col>
-                    <Col span={8}>
-                      <Button
-                        key="submit"
-                        type="primary"
-                        onClick={()=> {
-                          if(this.state.questionNumber==allNumber&&this.state.answer==true){
-                            this.setState({startQuestion:false})
-                            this.setState({questionNumber: 1})
-                            const {dispatch}=this.props;
-                            dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
-                            return
-                          }
-                          if(this.state.answer==false){
-                            alert('你还未提交本题答案')
-                          } else{
-                            this.setState({deadline:Date.now() +  1000 * 60})
-                            this.setState({questionNumber: this.state.questionNumber+1})
-                            this.setState({answer:false})
-                          }
-                        }}>
-                        下一题
-                      </Button>
+                    <Col span={12}>
+                  <Checkbox    value={'B'}>
+                    {'B  '+(question[recent]?question[recent].optionB:'')}
+                  </Checkbox>
                     </Col>
-                    <Col span={8}>
-                      <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>
-                      <h1><span>{this.state.questionNumber}</span>/
-                        <span>{allNumber}</span></h1>
-                      {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
-                    </Col>
+                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
+                  <Checkbox    value={'C'}>
+                    {'C  '+(question[recent]?question[recent].optionC:'')}
+                  </Checkbox>
+                    </Col>:""}
+                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                    <Col span={12}>
+                  <Checkbox    value={'D'}>
+                    {'D  '+(question[recent]?question[recent].optionD:'')}
+                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                  </Checkbox>
+                    </Col>:''}
                   </Row>
-                  {this.state.questionNumber==allNumber&&this.state.answer?
-                    (<div>
-                      <div className={styles.try}></div>
-                      <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
-
+                </Checkbox.Group>
+                  <img src=""/>
                 </div>
-                <div className={styles.bottom}></div>
               </div>
-            </Modal>
-            <Modal visible={this.state.modalVisble}
-                   destroyOnClose={true}
-                   forceRender={true}
-                   title="互动页面"
-                   centered
-                   style={{top:'3em',color:'black',fontStyle:{},height:'70vh', width:'70vw'}}
-              // bodyStyle={{height:'70vh', width:'70vw'}}
-                   maskStyle={{backgroundColor: 'rgba(198,170,145,0.1)' ,top:'5em',}}
-                   className={styles.modal}
-                   onOk={()=>this.setState({modalVisble:false})}
-                   onCancel={()=>this.setState({modalVisble:false})}
-                   footer={false}
-            >
-              <Tabs
-                defaultActiveKey="1"
-                activeKey={this.state.activeKey}
-              >
-
-                <TabPane
-                  tab={
-                    <span>
-                        <Icon type="book" />
-                          文章
-                      </span>
-                  }
-                  key="1"
-                >
-                  <Card style={{ width: '100' }}
-                        cover={
-                          <img
-                            alt="example"
-                            src={this.state.knowledgeUrl}
-                          />
-                        }
-                  >
-                    {this.state.knowledgeContent}
-                  </Card>
-                </TabPane>
-                <TabPane
-                  tab={
-                    <span>
-                        <Icon type="picture" />
-                         图片
-                      </span>
-                  }
-                  key="2"
-                >
-                  <div style={{padding: 40, background: "#ececec"}} >
-                    <Slider {...this.carousel_settings} >
-                      <div>
-                        <img  src={yay} />
-                      </div>
-                      <div>
-                        <img  src={yaa} style={{height: 250, width:400 }}/>
-                      </div>
-                    </Slider>
-                  </div>
-
-                </TabPane>
-                <TabPane
-                  tab={
-                    <span>
-                        <Icon type="video-camera" />
-                          视频
-                      </span>
-                  }
-                  key="3"
-                >
-                  <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
-                         controls="controls">
-                    {/*<source src="./1.mp4"*/}
-                    {/*/>*/}
-                    {/*<source src="./1.mp4"*/}
-                    {/*/>*/}
-                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                    />
-                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                    />
-                  </video>
-                  {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
-                  {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
-                  {/*</video>*/}
-                </TabPane>
-                <TabPane
-                  tab={
-                    <span>
-                        <Icon type="question" />
-                          答题
-                      </span>
-                  }
-                  key="4"
-                >
-
-                  <Card   title={this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}>
-                    <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                      <Row>
-                        <Col span={12}>
-                          <Checkbox    value={'A'}>
-                            {'A  '+(question[recent]?question[recent].optionA:'')}
-                          </Checkbox>
-                        </Col>
-                        <Col span={12}>
-                          <Checkbox    value={'B'}>
-                            {'B  '+(question[recent]?question[recent].optionB:'')}
-                          </Checkbox>
-                        </Col>
-                        {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                          <Checkbox    value={'C'}>
-                            {'C  '+(question[recent]?question[recent].optionC:'')}
-                          </Checkbox>
-                        </Col>:""}
-                        {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                          <Col span={12}>
-                            <Checkbox    value={'D'}>
-                              {'D  '+(question[recent]?question[recent].optionD:'')}
-                              {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                            </Checkbox>
-                          </Col>:''}
-                      </Row>
-                    </Checkbox.Group>
-                    {/*<Radio.Group onChange={this.onChange} value={this.state.value}>*/}
-                    {/*  <Radio   style={radioStyle} value={0}>*/}
-                    {/*    {answer[0]}*/}
-                    {/*  </Radio>*/}
-                    {/*  <Radio   style={radioStyle} value={1}>*/}
-                    {/*    {answer[1]}*/}
-                    {/*  </Radio>*/}
-                    {/*  <Radio   style={radioStyle} value={2}>*/}
-                    {/*    {answer[2]}*/}
-                    {/*  </Radio>*/}
-                    {/*  <Radio   style={radioStyle} value={3}>*/}
-                    {/*    {answer[3]}*/}
-                    {/*    /!*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*!/*/}
-                    {/*  </Radio>*/}
-                    {/*</Radio.Group>*/}
-                  </Card>
+              {this.state.answer==true?
+                (<h1>正确答案是</h1>):''}
+              {this.state.answer==true?
+                (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
+              <Row gutter={16}>
+                <Col span={12}>
                   <Button  key="submit"
-                           type="primary" style={{bottom:'0em',left:'29em',backgroundColor:'rgb(255,0,0)'}} onClick={()=>{
-                    if(this.state.value==rightAnswer){
-                      this.setState({grade:this.state.grade+1});
-                    }
-                    this.setState({answer:true})
-                    if(this.state.questionNumber==allNumber)
-                    {
-                      alert("答题结束")
-                    }
-                  }}>提交</Button>
-                  {this.state.answer==true?
-                    (<h1>正确答案是</h1>):''}
-                  {this.state.answer==true?
-                    (<Card type="inner" title={answer[rightAnswer]} />):''}
-                  <Row gutter={16}>
-                    <Col span={8}>
-                      <Button  key="back" onClick={()=>{this.setState({questionNumber: this.state.questionNumber-1})}}>
-                        上一题
-                      </Button>
-                    </Col>
-                    <Col span={8}>
-                      <Button
-                        key="submit"
-                        type="primary"
-                        onClick={()=> {
-                          // this.setState({modalVisble:false})
-                          if(this.state.questionNumber==allNumber){
-                            return
-                          }
-                          if(this.state.answer==false){
-                            alert('你还未提交本题答案')
-                          }
-                          else{
-                            this.setState({deadline:Date.now() +  1000 * 60})
-                            this.setState({questionNumber: this.state.questionNumber+1})
-                            this.setState({answer:false})
-                          }
-                        }}>
-                        下一题
-                      </Button>
-                    </Col>
-                    <Col span={8}>
-                      <h2><span>{this.state.questionNumber}</span>/
-                        <span>{allNumber}</span></h2>
-                      {/*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*/}
-                    </Col>
-                  </Row>
-                  {this.state.questionNumber==allNumber&&this.state.answer?
-                    (<div>
-                      <div className={styles.try}></div>
-                      <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
-                </TabPane>
-                <TabPane
-                  tab={
-                    <span>
-                        <Icon type="video-camera" />
-                          视频
-                      </span>
-                  }
-                  key="3"
-                >
-                  <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
-                         controls="controls">
-                    {/*<source src="./1.mp4"*/}
-                    {/*/>*/}
-                    {/*<source src="./1.mp4"*/}
-                    {/*/>*/}
-                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                    />
-                    <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                    />
-                  </video>
-                  {/*<video height="400" poster="http://www.youname.com/images/first.png" autoplay="autoplay">*/}
-                  {/*  <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"/>*/}
-                  {/*</video>*/}
-                </TabPane>
+                           type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
+                           onClick={()=>{
+                             let string=this.state.value.toString();
+                             if(string==(question[recent]?question[recent].answer:''))
+                             {
+                               this.setState({grade:this.state.grade+1});
+                             }
+                             this.setState({answer:true})
+                             if(this.state.questionNumber==allNumber) {
+                               alert("答题结束")
+                             }}}>提交</Button>
+                </Col>
+                <Col span={12}>
+                  <Button
+                    key="submit"
+                    type="primary"
+                    onClick={()=> {
+                      if(this.state.questionNumber==allNumber&&this.state.answer==true){
+                        this.setState({startQuestion:false})
+                        this.setState({questionNumber: 1})
+                        const {dispatch}=this.props;
+                        dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
+                        return
+                      }
+                      if(this.state.answer==false){
+                        alert('你还未提交本题答案')
+                      } else{
+                        this.setState({deadline:Date.now() +  1000 * 60})
+                        this.setState({questionNumber: this.state.questionNumber+1})
+                        this.setState({answer:false})
+                      }
+                    }}>
+                    下一题
+                  </Button>
+                </Col>
+                {/*<Col span={8}>*/}
+                {/*  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>*/}
+                {/*  <h1><span>{this.state.questionNumber}</span>/*/}
+                {/*    <span>{allNumber}</span></h1>*/}
+                {/*  /!*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*!/*/}
+                {/*</Col>*/}
+              </Row>
+              {this.state.questionNumber==allNumber&&this.state.answer?
+                (<div>
+                  <div className={styles.try}></div>
+                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
 
-          </Tabs>
+            </div>
+            <div className={styles.bottom}></div>
+          </div>
+        </Modal>
+        {/*文章*/}
+        <Modal visible={this.state.startArticle}
+               centered
+               width={1000}
+               mask={true}
+               maskClosable={true}
+          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+               title={null}
+               onCancel={()=>this.setState({startArticle:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
+            <div className={styles.topArticle}></div>
+            <div className="d-iframe">
+              <Card style={{ width: '100' }}
+                    title={"中共一大"}
+                    cover={
+                      <img
+                        alt="example"
+                        src={this.state.knowledgeUrl}
+                      />
+                    }
+              >
+                {this.state.knowledgeContent}
+              </Card>
+            </div>
+          </div>
+        </Modal>
+        {/*图片*/}
+        <Modal visible={this.state.startPicture}
+               centered
+               width={1000}
+               mask={true}
+               maskClosable={true}
+          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+               title={null}
+               onCancel={()=>this.setState({startPicture:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            <div className={styles.topPicture}></div>
+            <div className="d-iframe">
+              <div style={{padding: 40, background: "#ececec"}} >
+                {/*<div style={styles.out}>*/}
+
+                {/*</div>*/}
+                <Slider {...this.carousel_settings} >
+                  <div style={styles.out}>
+                    <img  src={yay} style={{height: '100%', width:'100%' }} />
+                  </div>
+                  <div>
+                    <img  src={yaa} style={{height: '100%', width:'100%' }}/>
+                  </div>
+                </Slider>
+              </div>
+            </div>
+          </div>
+        </Modal>
+        {/*视频*/}
+        <Modal visible={this.state.startVideo}
+               centered
+               width={1000}
+               mask={true}
+               maskClosable={true}
+          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+               title={null}
+               onCancel={()=>this.setState({startVideo:false})}
+               footer={null}
+               closable={true}
+               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+        >
+          <div className={styles.modal}>
+            <div className={styles.topVideo}></div>
+            <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
+                   controls="controls">
+              {/*<source src="./1.mp4"*/}
+              {/*/>*/}
+              {/*<source src="./1.mp4"*/}
+              {/*/>*/}
+              <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+              />
+              <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+              />
+            </video>
+            <div className="d-iframe">
+            </div>
+          </div>
         </Modal>
         <div id='verticalTimeLine' className={styles.verticalTimeLine}>
           <VerticalTimeline
@@ -1129,9 +1014,7 @@ class MapPage extends Component {
         <div className={styles.normal}>
           <div className={styles.mapContainer}  id="onlineMapping">
             <div  ref={popupRef} className={styles.popupDiv}>
-              {this.state.itemNow?
-                <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
-                :null}
+              {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
               <Row style={{width:"240px",top:"10px"}} justify="space-between">
                 <Col span={2} onClick={()=>this.showModal("1")}>
                   <Icon className={styles.popup} type="book" />
