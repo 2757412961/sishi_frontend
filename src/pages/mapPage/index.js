@@ -266,9 +266,9 @@ var chapters = {
   }
 };
 let des = [
-  { "showInfo":"<div><h3>中共一大上海会址</h3><img src={c1} /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
+  { "showInfo":"<div ><h3>中共一大上海会址</h3><div style={styles.popup1}></div><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
       "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
-  { "showInfo":"<div><h3>中共一大嘉兴南湖会址</h3><img src={c1} /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
+  { "showInfo":"<div><h3>中共一大嘉兴南湖会址</h3><img style={styles.popup1} src={c1} /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
       "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
   { "showInfo":"<div><h3>中共二大会址</h3><img src={c2}  /><p>中国共产党第二次全国代表大会，简称中共二大，" +
       "于1922年7月16日至23日在上海召开。</p></div>"},
@@ -590,7 +590,36 @@ class MapPage extends Component {
         // playback(0);
       });
       let _this = this;
+      this.map = map;
+      var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
       for (let i = 0; i < list.length; i++) {
+        map.on('mouseenter', list[i].id, function(e) {
+          map.getCanvas().style.cursor = 'pointer';
+          var coordinates = e.features[0].geometry.coordinates;
+          let showInfo = list[i].showInfo;
+//closeOnClick:false,closeButton:true
+          popup.setLngLat(coordinates)
+          popup.setHTML(showInfo)
+          popup.addTo(map)
+          // .setDOMContent(popupRef.current);
+          // document.getElementById('btn')
+          //   .addEventListener('click', function(){
+          //     let cardImg = list[i].cardImg;
+          //     let cardContent = list[i].cardContent;
+          //     _this.setState({
+          //       knowledgeUrl: cardImg,
+          //       knowledgeContent: cardContent,
+          //     });
+          //     _this.showModal()
+          //   });
+        });
+        map.on('mouseleave', list[i].id, function() {
+          map.getCanvas().style.cursor = '';
+          popup.remove();
+        });
+      }
+      for (let i = 0; i < list.length; i++) {
+        popup.remove();
         map.on('click', list[i].id, function(e) {
           var coordinates = e.features[0].geometry.coordinates;
           _this.setState({
@@ -614,14 +643,13 @@ class MapPage extends Component {
           //     _this.showModal()
           //   });
         });
-        map.on('mouseenter', list[i].id, function() {
-          map.getCanvas().style.cursor = 'pointer';
-        });
-        map.on('mouseleave', list[i].id, function() {
-          map.getCanvas().style.cursor = '';
-        });
+        // map.on('mouseenter', list[i].id, function() {
+        //   map.getCanvas().style.cursor = 'pointer';
+        // });
+        // map.on('mouseleave', list[i].id, function() {
+        //   map.getCanvas().style.cursor = '';
+        // });
       }
-      this.map = map;
     });
 
     // let nav = new mapboxgl.NavigationControl({
@@ -720,141 +748,141 @@ class MapPage extends Component {
       }
     };
     //加载中共一大（上海，嘉兴地点）的火花图标
-    map.on('load', function() {
-      /*map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
-        if(error) throw  error;
-        for(let i = 0;i<list.length;i++){
-          map.addImage(list[i].id, image);
-          map.addLayer({
-            "id": list[i].id,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": list[i].lonlat,
-                  }
-                }]
-              }
-            },
-            "layout": {
-              "icon-image": list[i].id,
-              "icon-size": [
-                "interpolate", ["linear"], ["zoom"],
-                3,0.1,
-                17,0.8
-              ],
-              "icon-ignore-placement": true,
-            }
-          });
-        }
-      });*/
-      for (let i = 0; i < list.length; i++) {
-        map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
-        map.addLayer({
-          "id": list[i].id,
-          "type": "symbol",
-          "source": {
-            "type": "geojson",
-            "data": {
-              "type": "FeatureCollection",
-              "features": [{
-                "type": "Feature",
-                "geometry": {
-                  "type": "Point",
-                  "coordinates": list[i].lonlat,
-                }
-              }]
-            }
-          },
-          "layout": {
-            "icon-image": list[i].id,
-            "icon-optional": false,
-            "icon-ignore-placement": true,
-            // "text-ignore-placement": true,
-            "text-allow-overlap": true,
-            "text-field": list[i].value,
-            "text-anchor": 'left',
-            "text-offset": [1, 0.1],
-            // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-            "text-size": [
-              "interpolate", ["linear"], ["zoom"],
-              3, 20,
-              17, 38
-            ],
-          },
-          paint: {
-            "text-color": 'rgb(255,0,0)',
-          }
-
-        });
-      }
-      // playback(0);
-    });
-    let _this = this;
-    var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
-    for (let i = 0; i < list.length; i++) {
-      map.on('mouseenter', list[i].id, function(e) {
-        map.getCanvas().style.cursor = 'pointer';
-        var coordinates = e.features[0].geometry.coordinates;
-        let showInfo = list[i].showInfo;
-//closeOnClick:false,closeButton:true
-        popup.setLngLat(coordinates)
-        popup.setHTML(showInfo)
-        popup.addTo(map)
-        // .setDOMContent(popupRef.current);
-        // document.getElementById('btn')
-        //   .addEventListener('click', function(){
-        //     let cardImg = list[i].cardImg;
-        //     let cardContent = list[i].cardContent;
-        //     _this.setState({
-        //       knowledgeUrl: cardImg,
-        //       knowledgeContent: cardContent,
-        //     });
-        //     _this.showModal()
-        //   });
-      });
-      map.on('mouseleave', list[i].id, function() {
-        map.getCanvas().style.cursor = '';
-        popup.remove();
-      });
-    }
-    for (let i = 0; i < list.length; i++) {
-      map.on('click', list[i].id, function(e) {
-        popup.remove();
-        var coordinates = e.features[0].geometry.coordinates;
-        let showInfo = list[i].showInfo;
-        _this.setState({
-          itemNow: list[i],
-        })
-
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          // .setHTML(showInfo)
-          .addTo(map)
-          .setDOMContent(popupRef.current);
-        // document.getElementById('btn')
-        //   .addEventListener('click', function(){
-        //     let cardImg = list[i].cardImg;
-        //     let cardContent = list[i].cardContent;
-        //     _this.setState({
-        //       knowledgeUrl: cardImg,
-        //       knowledgeContent: cardContent,
-        //     });
-        //     _this.showModal()
-        //   });
-      });
-      map.on('mouseenter', list[i].id, function() {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', list[i].id, function() {
-        map.getCanvas().style.cursor = '';
-      });
-    }
+//     map.on('load', function() {
+//       /*map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
+//         if(error) throw  error;
+//         for(let i = 0;i<list.length;i++){
+//           map.addImage(list[i].id, image);
+//           map.addLayer({
+//             "id": list[i].id,
+//             "type": "symbol",
+//             "source": {
+//               "type": "geojson",
+//               "data": {
+//                 "type": "FeatureCollection",
+//                 "features": [{
+//                   "type": "Feature",
+//                   "geometry": {
+//                     "type": "Point",
+//                     "coordinates": list[i].lonlat,
+//                   }
+//                 }]
+//               }
+//             },
+//             "layout": {
+//               "icon-image": list[i].id,
+//               "icon-size": [
+//                 "interpolate", ["linear"], ["zoom"],
+//                 3,0.1,
+//                 17,0.8
+//               ],
+//               "icon-ignore-placement": true,
+//             }
+//           });
+//         }
+//       });*/
+//       for (let i = 0; i < list.length; i++) {
+//         map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
+//         map.addLayer({
+//           "id": list[i].id,
+//           "type": "symbol",
+//           "source": {
+//             "type": "geojson",
+//             "data": {
+//               "type": "FeatureCollection",
+//               "features": [{
+//                 "type": "Feature",
+//                 "geometry": {
+//                   "type": "Point",
+//                   "coordinates": list[i].lonlat,
+//                 }
+//               }]
+//             }
+//           },
+//           "layout": {
+//             "icon-image": list[i].id,
+//             "icon-optional": false,
+//             "icon-ignore-placement": true,
+//             // "text-ignore-placement": true,
+//             "text-allow-overlap": true,
+//             "text-field": list[i].value,
+//             "text-anchor": 'left',
+//             "text-offset": [1, 0.1],
+//             // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+//             "text-size": [
+//               "interpolate", ["linear"], ["zoom"],
+//               3, 20,
+//               17, 38
+//             ],
+//           },
+//           paint: {
+//             "text-color": 'rgb(255,0,0)',
+//           }
+//
+//         });
+//       }
+//       // playback(0);
+//     });
+//     let _this = this;
+//     var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
+//     for (let i = 0; i < list.length; i++) {
+//       map.on('mouseenter', list[i].id, function(e) {
+//         map.getCanvas().style.cursor = 'pointer';
+//         var coordinates = e.features[0].geometry.coordinates;
+//         let showInfo = list[i].showInfo;
+// //closeOnClick:false,closeButton:true
+//         popup.setLngLat(coordinates)
+//         popup.setHTML(showInfo)
+//         popup.addTo(map)
+//         // .setDOMContent(popupRef.current);
+//         // document.getElementById('btn')
+//         //   .addEventListener('click', function(){
+//         //     let cardImg = list[i].cardImg;
+//         //     let cardContent = list[i].cardContent;
+//         //     _this.setState({
+//         //       knowledgeUrl: cardImg,
+//         //       knowledgeContent: cardContent,
+//         //     });
+//         //     _this.showModal()
+//         //   });
+//       });
+//       map.on('mouseleave', list[i].id, function() {
+//         map.getCanvas().style.cursor = '';
+//         popup.remove();
+//       });
+//     }
+//     for (let i = 0; i < list.length; i++) {
+//       map.on('click', list[i].id, function(e) {
+//         popup.remove();
+//         var coordinates = e.features[0].geometry.coordinates;
+//         let showInfo = list[i].showInfo;
+//         _this.setState({
+//           itemNow: list[i],
+//         })
+//
+//         new mapboxgl.Popup()
+//           .setLngLat(coordinates)
+//           // .setHTML(showInfo)
+//           .addTo(map)
+//           .setDOMContent(popupRef.current);
+//         // document.getElementById('btn')
+//         //   .addEventListener('click', function(){
+//         //     let cardImg = list[i].cardImg;
+//         //     let cardContent = list[i].cardContent;
+//         //     _this.setState({
+//         //       knowledgeUrl: cardImg,
+//         //       knowledgeContent: cardContent,
+//         //     });
+//         //     _this.showModal()
+//         //   });
+//       });
+//       map.on('mouseenter', list[i].id, function() {
+//         map.getCanvas().style.cursor = 'pointer';
+//       });
+//       map.on('mouseleave', list[i].id, function() {
+//         map.getCanvas().style.cursor = '';
+//       });
+//     }
     const myDeckLayer = new MapboxLayer({
       id: 'arc',
       type: ArcLayer,
@@ -918,7 +946,7 @@ class MapPage extends Component {
   render(){
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
-    const {tagTree,question}=mapPage;
+    const {tagTree,question,knowledgeContent}=mapPage;
     list=forList(tagTree);
     console.log('listRender',list);
     let allNumber=question.length;
@@ -931,6 +959,7 @@ class MapPage extends Component {
     <Layout className={styles.normal}>
       <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
         {/*答题*/}
+        {/**/}
         <Modal visible={this.state.startQuestion}
                centered
               width={1000}
@@ -943,13 +972,17 @@ class MapPage extends Component {
                closable={true}
                wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
         >
-          <div className={styles.modal}>
+          <div className={styles.question}>
             <div className={styles.top}></div>
+            <div className={styles.headerRow}>
+              <span class={styles.big}>{this.state.questionNumber}</span>
+              /{allNumber}
+            </div>
             <div className="d-iframe">
               {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
               {/*        className="iframe-style"></iframe>*/}
               <div className={styles.web} >
-                <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
+                <p>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</p>
                 <div className={styles.radio}>
                 <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                   <Row>
@@ -981,7 +1014,7 @@ class MapPage extends Component {
                 </div>
               </div>
               {this.state.answer==true?
-                (<h1>正确答案是</h1>):''}
+                (<h3>正确答案是</h3>):''}
               {this.state.answer==true?
                 (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
               <Row gutter={16}>
@@ -1003,7 +1036,7 @@ class MapPage extends Component {
                 </Col>
                 <Col span={12}>
                   <Button
-                    key="submit"
+                    key="submit" style={{backgroundColor:'rgb(255,0,0)'}}
                     type="primary"
                     onClick={()=> {
                       if(this.state.questionNumber==allNumber&&this.state.answer==true){
@@ -1054,18 +1087,18 @@ class MapPage extends Component {
           <div className={styles.modal}>
             {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
             <div className={styles.topArticle}></div>
-            <div className="d-iframe">
-              <Card style={{ width: '100' }}
-                    title={"中共一大"}
-                    cover={
-                      <img
-                        alt="example"
-                        src={this.state.knowledgeUrl}
-                      />
-                    }
-              >
-                {this.state.knowledgeContent}
-              </Card>
+            <div className="d-iframe" dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >
+              {/*<Card style={{ width: '100' }}*/}
+              {/*      title={"中共一大"}*/}
+              {/*      cover={*/}
+              {/*        <img*/}
+              {/*          alt="example"*/}
+              {/*          src={this.state.knowledgeUrl}*/}
+              {/*        />*/}
+              {/*      }*/}
+              {/*>*/}
+              {/*  {this.state.knowledgeContent}*/}
+              {/*</Card>*/}
             </div>
           </div>
         </Modal>
@@ -1210,39 +1243,50 @@ class MapPage extends Component {
                   {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
                   <Row style={{ width: "240px", top: "10px" }} justify="space-between">
                     <Col span={2} onClick={() => {
-                      this.setState({ startArticle: true })
+                      this.setState({ startArticle: true });
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
                     }}>
                       <Icon className={styles.popup} type="book" />
                     </Col>
                     <Col span={4} onClick={() => {
                       this.setState({ startArticle: true })
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
                     }}>
                       文章
                     </Col>
                     <Col span={2} onClick={() => {
                       this.setState({ startPicture: true })
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
                     }}>
                       <Icon className={styles.popup} type="picture" />
                     </Col>
                     <Col span={4} onClick={() => {
                       this.setState({ startPicture: true })
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
                     }}>
                       图片
                     </Col>
                     <Col span={2} onClick={() => {
                       this.setState({ startVideo: true })
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
                     }}>
                       <Icon className={styles.popup} type="video-camera" />
                     </Col>
                     <Col span={4} onClick={() => {
                       this.setState({ startVideo: true })
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
                     }}>
                       视频
                     </Col>
-                    <Col span={2} onClick={() => this.setState({ startQuestion: true })}>
+                    <Col span={2} onClick={() => {this.setState({ startQuestion: true });
+                      this.props.dispatch({type: 'mapPage/getQuestion', payload: this.state.tagName});}
+                    }>
                       <Icon className={styles.popup} type="question" />
                     </Col>
-                    <Col span={4} onClick={() => this.setState({ startQuestion: true })}>
+                    <Col span={4} onClick={() => {
+                      this.setState({ startQuestion: true });
+                      this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
+                    }}>
                       答题
                     </Col>
                   </Row>
