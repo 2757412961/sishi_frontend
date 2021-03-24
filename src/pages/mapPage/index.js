@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel } from 'antd';
+import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel,Divider } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -41,7 +41,7 @@ import c8 from '@/assets/test/c8.jpg';
 import c9 from '@/assets/test/c9.jpg';
 import layer from '@/assets/test/layer.png';
 import reback from '@/assets/test/reback.png';
-import ditu from '@/assets/test/地图.PNG';
+import jiedao from '@/assets/test/街道.PNG';
 import dixing from '@/assets/test/地形.PNG';
 import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
@@ -406,6 +406,8 @@ class MapPage extends Component {
       },
       knowledgeUrl: p1,
       //list[0].cardImg,
+      layerValue:false,
+      mapUrl: 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63',
       knowledgeContent: '中国共产党第一次全国代表大会于1921年7月23日至1921年8月3日在上海法租界贝勒路树德里3号（后称望志路106号，现改兴业路76号）和浙江嘉兴南湖召开。出席大会的各地代表共12人。',
       //list[0].cardContent,
       // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
@@ -441,7 +443,7 @@ class MapPage extends Component {
     let sources = {
       "osm-tiles1": {
         "type": "raster",
-        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
+        'tiles': [this.state.mapUrl],
         'tileSize': 256
       },
       "osm-tiles2": {
@@ -474,7 +476,7 @@ class MapPage extends Component {
       center: [121.52, 31.04],  //上海经纬度坐标
       zoom: 3,
       pitch: 30,
-      bearing: 10,
+      // bearing: 10,
     });
     // let treeList=forTree(tagTree);
     // console.log('treeList',treeList);
@@ -911,6 +913,41 @@ class MapPage extends Component {
     let temp = this.state.collapsed;
     this.setState({ collapsed:!temp });
   };
+  layerClick = () => {
+    this.setState({
+      layerValue: !this.state.layerValue
+    })
+  }
+  diTuClick = (id,e) => {
+    if(id==='vec'){
+      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      this.setState({
+        mapUrl: this.state.mapUrl,
+      })
+    } else if(id==='img'){
+      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      this.setState({
+        mapUrl: this.state.mapUrl
+      })
+    } else{
+      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      this.setState({
+        mapUrl: this.state.mapUrl,
+      })
+    }
+    let diTuList = ['vec','img','ter']
+    for(let i=0;i<diTuList.length;i++){
+      if(id===diTuList[i]){
+        document.getElementById(id).style.border = ('2px solid red');
+        //#4185d0
+      }
+      else {
+        document.getElementById(diTuList[i]).style.border = ('');
+      }
+    }
+    this.componentDidMount()
+    // this.map.setStyle('')
+  }
 
   render(){
     const {mapPage}=this.props;
@@ -1349,6 +1386,40 @@ class MapPage extends Component {
                     and Watson catch both criminals.</p>
                 </section>
               </div>*/}
+              <div className={styles.layer_icon} onClick={this.layerClick}>
+                <img src={layer} className={styles.layer_img}/>
+              </div>
+              <div className={styles.layer_div} style={{display: this.state.layerValue ? 'block': 'none'}}>
+                <Row>
+                  <Col span={21}>
+                    <h3>选择底图</h3>
+                  </Col>
+                  <Col span={3}>
+                    <Button icon="close" onClick={this.layerClick} className={styles.layer_close}> </Button>
+                  </Col>
+                </Row>
+                <Divider style={{marginTop:7,marginBottom:10}} />
+                <Row style={{marginLeft:3}}>
+                  <Col span={8} style={{fontSize:7, color:'#0078A8'}}>
+                    <div className={styles.img_div} onClick={(e) =>this.diTuClick('vec',e)} id="vec">
+                      <img src={jiedao} className={styles.layer_ditu} />
+                    </div>
+                    <div style={{marginLeft:25,marginTop:13}}>街道图</div>
+                  </Col>
+                  <Col span={8} style={{fontSize:7, color:'#0078A8'}}>
+                    <div  onClick={(e) =>this.diTuClick('img',e)} id="img">
+                      <img src={yingxiang} className={styles.layer_ditu} />
+                    </div>
+                    <div style={{marginLeft:25,marginTop:13}}>影像图</div>
+                  </Col>
+                  <Col span={8} style={{fontSize:7, color:'#0078A8'}}>
+                    <div  onClick={(e) =>this.diTuClick('ter',e)} id="ter">
+                      <img src={dixing} className={styles.layer_ditu} />
+                    </div>
+                    <div style={{marginLeft:25,marginTop:13}}>地形图</div>
+                  </Col>
+                </Row>
+              </div>
             </div>
           </Content>
         </Layout>
