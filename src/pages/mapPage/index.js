@@ -1014,7 +1014,7 @@ class MapPage extends Component {
                 </div>
               </div>
               {this.state.answer==true?
-                (<h1>正确答案是</h1>):''}
+                (<h3>正确答案是</h3>):''}
               {this.state.answer==true?
                 (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
               <Row gutter={16}>
@@ -1087,8 +1087,7 @@ class MapPage extends Component {
           <div className={styles.modal}>
             {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
             <div className={styles.topArticle}></div>
-            <div className="d-iframe">
-              {knowledgeContent}
+            <div className="d-iframe" dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >
               {/*<Card style={{ width: '100' }}*/}
               {/*      title={"中共一大"}*/}
               {/*      cover={*/}
