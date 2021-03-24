@@ -83,7 +83,7 @@ class Header extends Component {
 
     const menu = <Menu>
         <Menu.Item key="0">
-          <Link to="/userManagement/myProfile">个人中心</Link>
+          <Link to="/userCenter">个人中心</Link>
         </Menu.Item>
         <Menu.Item key="1" onClick={this.resetUserData.bind(this)}>
           <span>退出</span>
