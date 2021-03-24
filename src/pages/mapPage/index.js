@@ -30,6 +30,20 @@ import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
+import c1 from '@/assets/test/c1.jpg';
+import c2 from '@/assets/test/c2.jpg';
+import c3 from '@/assets/test/c3.jpg';
+import c4 from '@/assets/test/c4.jpg';
+import c5 from '@/assets/test/c5.jpg';
+import c6 from '@/assets/test/c6.jpg';
+import c7 from '@/assets/test/c7.jpg';
+import c8 from '@/assets/test/c8.jpg';
+import c9 from '@/assets/test/c9.jpg';
+import layer from '@/assets/test/layer.png';
+import reback from '@/assets/test/reback.png';
+import ditu from '@/assets/test/地图.PNG';
+import dixing from '@/assets/test/地形.PNG';
+import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -243,6 +257,31 @@ var chapters = {
     pitch: 10
   }
 };
+let des = [
+  { "showInfo":"<div><h3>中共一大上海会址</h3><img src={c1} /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
+      "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
+  { "showInfo":"<div><h3>中共一大嘉兴南湖会址</h3><img src={c1} /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
+      "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
+  { "showInfo":"<div><h3>中共二大会址</h3><img src={c2}  /><p>中国共产党第二次全国代表大会，简称中共二大，" +
+      "于1922年7月16日至23日在上海召开。</p></div>"},
+  { "showInfo":"<div><h3>中共三大会址</h3><img src={c3}  />" +
+      "<p>中国共产党第三次全国代表大会，简称中共三大，于1923年6月12日至20日在广州召开。</p></div>"},
+  { "showInfo":"<div><h3>中共四大会址</h3><img src={c4} />" +
+      "<p>中国共产党第四次全国代表大会，简称中共四大，于1925年1月11日至22日在上海召开。</p></div>"},
+  { "showInfo":"<div><h3>中共五大会址</h3><img src={c5} />" +
+      "<p>中国共产党第五次全国代表大会，简称中共五大，于1927年4月27日至5月9日在武汉武昌都府堤召开。</p></div>"},
+  { "showInfo":"<div><h3>中共六大会址</h3><img src={c6} />" +
+      "<p>中国共产党第六次全国代表大会，简称中共六大，于1928年6月18日至7月11日在俄罗斯莫斯科市中心西南约40公里的五一村召开。</p></div>"},
+  { "showInfo":"<div><h3>中共七大会址</h3><img src={c7} />" +
+      "<p>中国共产党第七次全国代表大会，简称中共七大，于1945年4月23日至6月11日在延安杨家岭革命旧址中央大礼堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共八大会址</h3><img src={c8} />" +
+      "<p>中国共产党第八次全国代表大会，简称中共八大，于1956年9月15日至27日在北京全国政协礼堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共九大会址</h3><img src={c9} />" +
+      "<p>中国共产党第九次全国代表大会，简称中共九大，于1969年4月1日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十大会址</h3><img src={c9} />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+]
+
 
 const popupRef = React.createRef();
 
@@ -322,8 +361,9 @@ function forList(treeList){
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
       temp.text=treeList[i].label.split('@')[0];
-      temp.value=treeList[i].label.replace('@','');
+      temp.value=treeList[i].label;
       temp.time=treeList[i].time;
+      temp.showInfo=des[i].showInfo;
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       list.push(temp);
@@ -340,12 +380,12 @@ class MapPage extends Component {
       itemNow:null,
       collapsed: false,
       modalVisble: false,
-      deadline: Date.now() +  1000 * 60,
-      value:1,
-      grade:0,
-      answer:false,
+      deadline: Date.now() + 1000 * 60,
+      value: 1,
+      grade: 0,
+      answer: false,
       first: false,
-      questionNumber:1,
+      questionNumber: 1,
       carousel_settings: {
         dots: true,
         infinite: true,
@@ -364,9 +404,9 @@ class MapPage extends Component {
         opacity: 1,
         fontSize: 17,
       },
-      knowledgeUrl:p1,
+      knowledgeUrl: p1,
       //list[0].cardImg,
-      knowledgeContent:'中国共产党第一次全国代表大会于1921年7月23日至1921年8月3日在上海法租界贝勒路树德里3号（后称望志路106号，现改兴业路76号）和浙江嘉兴南湖召开。出席大会的各地代表共12人。',
+      knowledgeContent: '中国共产党第一次全国代表大会于1921年7月23日至1921年8月3日在上海法租界贝勒路树德里3号（后称望志路106号，现改兴业路76号）和浙江嘉兴南湖召开。出席大会的各地代表共12人。',
       //list[0].cardContent,
       // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
       more:true,
@@ -382,16 +422,17 @@ class MapPage extends Component {
   }
 
   componentDidMount() {
-    const {dispatch}=this.props;
-    dispatch({ type: 'mapPage/getQuestion'});
+    const { dispatch } = this.props;
+    dispatch({ type: 'mapPage/getTagTree' });
+    dispatch({ type: 'mapPage/getQuestion' });
     // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
-    dispatch({ type: 'mapPage/getVideoByTag'});
-    dispatch({ type: 'mapPage/getAudioByTag'});
-    console.log('dispatch',dispatch);
-    const {mapPage}=this.props;
-    console.log('mapPage',mapPage);
-    const {tagTree}=mapPage;
-    console.log('tagTree',tagTree);
+    dispatch({ type: 'mapPage/getVideoByTag' });
+    dispatch({ type: 'mapPage/getAudioByTag' });
+    console.log('dispatch', dispatch);
+    const { mapPage } = this.props;
+    console.log('mapPage', mapPage);
+    const { tagTree } = mapPage;
+    console.log('tagTree', tagTree);
     //遍历tagTree;
     let tree;
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
@@ -431,7 +472,7 @@ class MapPage extends Component {
       },
       center: [121.52, 31.04],  //上海经纬度坐标
       zoom: 3,
-      pitch:30,
+      pitch: 30,
       bearing: 10,
     });
     // let treeList=forTree(tagTree);
@@ -574,7 +615,7 @@ class MapPage extends Component {
     };*/
     var activeChapterName = '一大-上海';
     function setActiveChapter(chapterName) {
-      if (chapterName === activeChapterName){
+      if (chapterName === activeChapterName) {
         return
       }
       map.flyTo(chapters[chapterName]);
@@ -637,22 +678,23 @@ class MapPage extends Component {
     };
 
   }
-  showModal=(activeKey)=>{
+
+  showModal = (activeKey) => {
     this.setState({
-      modalVisble:true,
-      activeKey:activeKey,
+      modalVisble: true,
+      activeKey: activeKey,
     });
     console.log(this.state.modalVisble)
   }
   oneClick = (item) => {
     let _this = this;
-    console.log("map", _this.map,item);
-    if(_this.map){
+    console.log("map", _this.map, item);
+    if (_this.map) {
       _this.map.flyTo({
-        center:item.lonlat,
+        center: item.lonlat,
         zoom: 16,
         speed: 1,
-        pitch:20,
+        pitch: 20,
         // curve: 3,
       })
     }
@@ -696,401 +738,456 @@ class MapPage extends Component {
     this.setState({ collapsed:!temp });
   };
 
-  render(){
-    const {mapPage}=this.props;
-    console.log('mapPage',mapPage);
-    const {tagTree,question}=mapPage;
-    let allNumber=question.length;
-    let recent=this.state.questionNumber-1
-    console.log('tagTree',tagTree);
-    console.log('tagName',this.state.tagName);
+  render() {
+    let question1 = '中日甲午战争中，日军野蛮屠杀和平居民的地点是';
+    let answer = ['A.大连', 'B.旅顺', 'C.平壤', 'D.花园口'];
+    let rightAnswer = 1;
+    // const {dispatch}=this.props;
+    // dispatch({ type: 'mapPage/getTagTree'});
+    // dispatch({ type: 'mapPage/getQuestion'});
+    // console.log('dispatch',dispatch);
+    const { mapPage } = this.props;
+    console.log('mapPage', mapPage);
+    //debugger
+    // let tree=[];
+    // function forTree1(treeList){
+    //   for (let i in treeList){
+    //     console.log('i',i);
+    //     if(treeList[i].children.length>0){
+    //       forTree(treeList[i].children)
+    //     }else{
+    //       tree.push(treeList[i])
+    //     }
+    //   }
+    //   return tree
+    // }
+    tree = [];
+    const { tagTree, question } = mapPage;
+    // let list1=forTree(tagTree);
+    let allNumber = question.length;
+    let recent = this.state.questionNumber - 1
+    console.log('tagTree', tagTree);
+    console.log('tagName', this.state.tagName);
     //遍历tagTree;
-  return (
-    <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
-    <Layout className={styles.normal}>
-      <Sider className={styles.siderStyle} width={400} collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0}>
-        <Modal visible={this.state.startQuestion}
-               centered
-              width={1000}
-               mask={true}
-               maskClosable={true}
+    return (
+      <Authorized authority={['NORMAL', 'admin']} noMatch={noMatch}>
+        <Layout className={styles.normal}>
+          <Sider className={styles.siderStyle} width={400} collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0}>
+            {/*答题*/}
+            <Modal visible={this.state.startQuestion}
+                   centered
+                   width={1000}
+                   mask={true}
+                   maskClosable={true}
               // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-               title={null}
-               onCancel={()=>this.setState({startQuestion:false})}
-               footer={null}
-               closable={true}
-               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-        >
-          <div className={styles.modal}>
-            <div className={styles.top}></div>
-            <div className="d-iframe">
-              {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
-              {/*        className="iframe-style"></iframe>*/}
-              <div className={styles.web} >
-                <h1>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</h1>
-                <div className={styles.radio}>
-                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                  <Row>
+                   title={null}
+                   onCancel={() => this.setState({ startQuestion: false })}
+                   footer={null}
+                   closable={true}
+                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+            >
+              <div className={styles.modal}>
+                <div className={styles.top}></div>
+                <div className="d-iframe">
+                  {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
+                  {/*        className="iframe-style"></iframe>*/}
+                  <div className={styles.web}>
+                    <h1>{this.state.questionNumber + "." + (question[recent] ? question[recent].questionContent : '')}</h1>
+                    <div className={styles.radio}>
+                      <Checkbox.Group onChange={this.onChange} style={{ top: '3em', left: '3em' }}>
+                        <Row>
+                          <Col span={12}>
+                            <Checkbox value={'A'}>
+                              {'A  ' + (question[recent] ? question[recent].optionA : '')}
+                            </Checkbox>
+                          </Col>
+                          <Col span={12}>
+                            <Checkbox value={'B'}>
+                              {'B  ' + (question[recent] ? question[recent].optionB : '')}
+                            </Checkbox>
+                          </Col>
+                          {question[recent] && question[recent].hasOwnProperty('optionC') ? <Col span={12}>
+                            <Checkbox value={'C'}>
+                              {'C  ' + (question[recent] ? question[recent].optionC : '')}
+                            </Checkbox>
+                          </Col> : ""}
+                          {question[recent] && question[recent].hasOwnProperty('optionD') ?
+                            <Col span={12}>
+                              <Checkbox value={'D'}>
+                                {'D  ' + (question[recent] ? question[recent].optionD : '')}
+                                {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
+                              </Checkbox>
+                            </Col> : ''}
+                        </Row>
+                      </Checkbox.Group>
+                      <img src="" />
+                    </div>
+                  </div>
+                  {this.state.answer == true ?
+                    (<h1>正确答案是</h1>) : ''}
+                  {this.state.answer == true ?
+                    (<Card type="inner" title={(question[recent] ? question[recent].answer : '')} />) : ''}
+                  <Row gutter={16}>
                     <Col span={12}>
-                  <Checkbox    value={'A'}>
-                    {'A  '+(question[recent]?question[recent].optionA:'')}
-                  </Checkbox>
+                      <Button key="submit"
+                              type="primary" style={{ backgroundColor: 'rgb(255,0,0)' }}
+                              onClick={() => {
+                                let string = this.state.value.toString();
+                                if (string == (question[recent] ? question[recent].answer : '')) {
+                                  this.setState({ grade: this.state.grade + 1 });
+                                }
+                                this.setState({ answer: true })
+                                if (this.state.questionNumber == allNumber) {
+                                  alert("答题结束")
+                                }
+                              }}>提交</Button>
                     </Col>
                     <Col span={12}>
-                  <Checkbox    value={'B'}>
-                    {'B  '+(question[recent]?question[recent].optionB:'')}
-                  </Checkbox>
+                      <Button
+                        key="submit"
+                        type="primary"
+                        onClick={() => {
+                          if (this.state.questionNumber == allNumber && this.state.answer == true) {
+                            this.setState({ startQuestion: false })
+                            this.setState({ questionNumber: 1 })
+                            const { dispatch } = this.props;
+                            dispatch({ type: 'mapPage/updateUserGrades', payload: this.state.grade });
+                            return
+                          }
+                          if (this.state.answer == false) {
+                            alert('你还未提交本题答案')
+                          } else {
+                            this.setState({ deadline: Date.now() + 1000 * 60 })
+                            this.setState({ questionNumber: this.state.questionNumber + 1 })
+                            this.setState({ answer: false })
+                          }
+                        }}>
+                        下一题
+                      </Button>
                     </Col>
-                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                  <Checkbox    value={'C'}>
-                    {'C  '+(question[recent]?question[recent].optionC:'')}
-                  </Checkbox>
-                    </Col>:""}
-                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                    <Col span={12}>
-                  <Checkbox    value={'D'}>
-                    {'D  '+(question[recent]?question[recent].optionD:'')}
-                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                  </Checkbox>
-                    </Col>:''}
+                    {/*<Col span={8}>*/}
+                    {/*  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>*/}
+                    {/*  <h1><span>{this.state.questionNumber}</span>/*/}
+                    {/*    <span>{allNumber}</span></h1>*/}
+                    {/*  /!*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*!/*/}
+                    {/*</Col>*/}
                   </Row>
-                </Checkbox.Group>
-                  <img src=""/>
+                  {this.state.questionNumber == allNumber && this.state.answer ?
+                    (<div>
+                      <div className={styles.try}></div>
+                      <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1>
+                    </div>) : ''}
+
+                </div>
+                <div className={styles.bottom}></div>
+              </div>
+            </Modal>
+            {/*文章*/}
+            <Modal visible={this.state.startArticle}
+                   centered
+                   width={1000}
+                   mask={true}
+                   maskClosable={true}
+              // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+                   title={null}
+                   onCancel={() => this.setState({ startArticle: false })}
+                   footer={null}
+                   closable={true}
+                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+            >
+              <div className={styles.modal}>
+                {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
+                <div className={styles.topArticle}></div>
+                <div className="d-iframe">
+                  <Card style={{ width: '100' }}
+                        title={"中共一大"}
+                        cover={
+                          <img
+                            alt="example"
+                            src={this.state.knowledgeUrl}
+                          />
+                        }
+                  >
+                    {this.state.knowledgeContent}
+                  </Card>
                 </div>
               </div>
-              {this.state.answer==true?
-                (<h1>正确答案是</h1>):''}
-              {this.state.answer==true?
-                (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Button  key="submit"
-                           type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
-                           onClick={()=>{
-                             let string=this.state.value.toString();
-                             if(string==(question[recent]?question[recent].answer:''))
-                             {
-                               this.setState({grade:this.state.grade+1});
-                             }
-                             this.setState({answer:true})
-                             if(this.state.questionNumber==allNumber) {
-                               alert("答题结束")
-                             }}}>提交</Button>
-                </Col>
-                <Col span={12}>
-                  <Button
-                    key="submit"
-                    type="primary"
-                    onClick={()=> {
-                      if(this.state.questionNumber==allNumber&&this.state.answer==true){
-                        this.setState({startQuestion:false})
-                        this.setState({questionNumber: 1})
-                        const {dispatch}=this.props;
-                        dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
-                        return
-                      }
-                      if(this.state.answer==false){
-                        alert('你还未提交本题答案')
-                      } else{
-                        this.setState({deadline:Date.now() +  1000 * 60})
-                        this.setState({questionNumber: this.state.questionNumber+1})
-                        this.setState({answer:false})
-                      }
-                    }}>
-                    下一题
-                  </Button>
-                </Col>
-                {/*<Col span={8}>*/}
-                {/*  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>*/}
-                {/*  <h1><span>{this.state.questionNumber}</span>/*/}
-                {/*    <span>{allNumber}</span></h1>*/}
-                {/*  /!*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*!/*/}
-                {/*</Col>*/}
-              </Row>
-              {this.state.questionNumber==allNumber&&this.state.answer?
-                (<div>
-                  <div className={styles.try}></div>
-                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
+            </Modal>
+            {/*图片*/}
+            <Modal visible={this.state.startPicture}
+                   centered
+                   width={1000}
+                   mask={true}
+                   maskClosable={true}
+              // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+                   title={null}
+                   onCancel={() => this.setState({ startPicture: false })}
+                   footer={null}
+                   closable={true}
+                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+            >
+              <div className={styles.modal}>
+                <div className={styles.topPicture}></div>
+                <div className="d-iframe">
+                  <div style={{ padding: 40, background: "#ececec" }}>
+                    {/*<div style={styles.out}>*/}
 
-            </div>
-            <div className={styles.bottom}></div>
-          </div>
-        </Modal>
-        {/*文章*/}
-        <Modal visible={this.state.startArticle}
-               centered
-               width={1000}
-               mask={true}
-               maskClosable={true}
-          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-               title={null}
-               onCancel={()=>this.setState({startArticle:false})}
-               footer={null}
-               closable={true}
-               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-        >
-          <div className={styles.modal}>
-            {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
-            <div className={styles.topArticle}></div>
-            <div className="d-iframe">
-              <Card style={{ width: '100' }}
-                    title={"中共一大"}
-                    cover={
-                      <img
-                        alt="example"
-                        src={this.state.knowledgeUrl}
-                      />
-                    }
-              >
-                {this.state.knowledgeContent}
-              </Card>
-            </div>
-          </div>
-        </Modal>
-        {/*图片*/}
-        <Modal visible={this.state.startPicture}
-               centered
-               width={1000}
-               mask={true}
-               maskClosable={true}
-          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-               title={null}
-               onCancel={()=>this.setState({startPicture:false})}
-               footer={null}
-               closable={true}
-               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-        >
-          <div className={styles.modal}>
-            <div className={styles.topPicture}></div>
-            <div className="d-iframe">
-              <div style={{padding: 40, background: "#ececec"}} >
-                {/*<div style={styles.out}>*/}
-
-                {/*</div>*/}
-                <Slider {...this.carousel_settings} >
-                  <div style={styles.out}>
-                    <img  src={yay} style={{height: '100%', width:'100%' }} />
+                    {/*</div>*/}
+                    <Slider {...this.carousel_settings} >
+                      <div style={styles.out}>
+                        <img src={yay} style={{ height: '100%', width: '100%' }} />
+                      </div>
+                      <div>
+                        <img src={yaa} style={{ height: '100%', width: '100%' }} />
+                      </div>
+                    </Slider>
                   </div>
-                  <div>
-                    <img  src={yaa} style={{height: '100%', width:'100%' }}/>
-                  </div>
-                </Slider>
+                </div>
               </div>
+            </Modal>
+            {/*视频*/}
+            <Modal visible={this.state.startVideo}
+                   centered
+                   width={1000}
+                   mask={true}
+                   maskClosable={true}
+              // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+                   title={null}
+                   onCancel={() => this.setState({ startVideo: false })}
+                   footer={null}
+                   closable={true}
+                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+            >
+              <div className={styles.modal}>
+                <div className={styles.topVideo}></div>
+                <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
+                       autoPlay="autoplay" preload="none"
+                       controls="controls">
+                  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                  />
+                  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
+                  />
+                </video>
+                <div className="d-iframe">
+                </div>
+              </div>
+            </Modal>
+            <div id='verticalTimeLine' className={styles.verticalTimeLine}>
+              <VerticalTimeline
+                // layout='1-column-left'
+              >
+                {this.state.listTime.map((item)=> (
+                    item['sub']?
+                      <VerticalTimelineElement
+                        id={item['id']}
+                        style={{fontSize:"15px", size:"10px", textAlign: "center"}}
+                        className="vertical-timeline-element--education"
+                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                        contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46)' }}
+                        contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
+                        dateClassName={ styles.date }
+                        onTimelineElementClick={()=> this.oneClick(item) }
+                        // icon={<Icon type="schedule" />}
+                        // icon={<Icon type="book" />}
+                      >
+                        <div style={{fontWeight:"bold"}}>
+                          {item['value']}
+                        </div>
+                        {
+                          item['text']=='中共一大'
+                        }
+                      </VerticalTimelineElement>:
+                      <VerticalTimelineElement
+                        id={item['id']}
+                        style={{fontSize:"15px", size:"10px", textAlign:"center"}}
+                        className="vertical-timeline-element--education"
+                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                        contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
+                        contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
+                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
+                        dateClassName={ styles.date }
+                        onTimelineElementClick={()=>(
+                          item['text']=='中共一大'?
+                            this.moreOnClick():
+                            this.oneClick(item)) }
+                        icon={<Icon type="schedule" />}
+                      >
+                        <div style={{fontWeight:"bold"}}>
+                          {item['text']}
+                        </div>
+                        {/*{*/}
+                        {/*  item['text']=='中共一大'&&*/}
+                        {/*  <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(177,46,46)"}} />:<Icon type="arrow-up" style={{color:"rgba(177,46,46)"}} />}</div></div>*/}
+                        {/*}*/}
+                      </VerticalTimelineElement>
+                  )
+                )
+                }
+              </VerticalTimeline>
             </div>
-          </div>
-        </Modal>
-        {/*视频*/}
-        <Modal visible={this.state.startVideo}
-               centered
-               width={1000}
-               mask={true}
-               maskClosable={true}
-          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-               title={null}
-               onCancel={()=>this.setState({startVideo:false})}
-               footer={null}
-               closable={true}
-               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-        >
-          <div className={styles.modal}>
-            <div className={styles.topVideo}></div>
-            <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png" autoPlay="autoplay" preload="none"
-                   controls="controls">
-              <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-              />
-              <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-              />
-            </video>
-            <div className="d-iframe">
-            </div>
-          </div>
-        </Modal>
-        <div id='verticalTimeLine' className={styles.verticalTimeLine}>
-          <VerticalTimeline
-            // layout='1-column-left'
-          >
-            {this.state.listTime.map((item)=> (
-              item['sub']?
-                  <VerticalTimelineElement
-                    id={item['id']}
-                    style={{fontSize:"15px", size:"10px", textAlign: "center"}}
-                    className="vertical-timeline-element--education"
-                    date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
-                    contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46)' }}
-                    contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                    iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
-                    dateClassName={ styles.date }
-                    onTimelineElementClick={()=> this.oneClick(item) }
-                    // icon={<Icon type="schedule" />}
-                    // icon={<Icon type="book" />}
-                  >
-                    <div style={{fontWeight:"bold"}}>
-                      {item['value']}
-                    </div>
-                    {
-                      item['text']=='中共一大'
-                    }
-                  </VerticalTimelineElement>:
-                  <VerticalTimelineElement
-                    id={item['id']}
-                    style={{fontSize:"15px", size:"10px", textAlign:"center"}}
-                    className="vertical-timeline-element--education"
-                    date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
-                    contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
-                    contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
-                    iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
-                    dateClassName={ styles.date }
-                    onTimelineElementClick={()=>(
-                        item['text']=='中共一大'?
-                          this.moreOnClick():
-                      this.oneClick(item)) }
-                    icon={<Icon type="schedule" />}
-                  >
-                    <div style={{fontWeight:"bold"}}>
-                      {item['text']}
-                    </div>
-                    {/*{*/}
-                    {/*  item['text']=='中共一大'&&*/}
-                    {/*  <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(177,46,46)"}} />:<Icon type="arrow-up" style={{color:"rgba(177,46,46)"}} />}</div></div>*/}
-                    {/*}*/}
-                  </VerticalTimelineElement>
-              )
-            )
-          }
-        </VerticalTimeline>
-        </div>
-        {/*<Timeline className={styles.timeline}>{*/}
-        {/*  list.map((item)=> (*/}
-        {/*    <div onClick={ (e) => this.oneClick(e, item)}>*/}
-        {/*      /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
-        {/*      <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>*/}
-        {/*    </div>*/}
-        {/*    )*/}
-        {/*  )*/}
-        {/*}*/}
-        {/*</Timeline>*/}
-      </Sider>
-      <Content>
-        <div className={styles.normal}>
-          <div className={styles.mapContainer}  id="onlineMapping">
-            <div  ref={popupRef} className={styles.popupDiv}>
-              {this.state.itemNow?
-                <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
-                :null}
-              <Row style={{width:"240px",top:"10px"}} justify="space-between">
-                <Col span={2} onClick={()=>{this.setState({startArticle:true})}}>
-                  <Icon className={styles.popup} type="book" />
-                </Col>
-                <Col span={4} onClick={()=>{this.setState({startArticle:true})}}>
-                  文章
-                </Col>
-                <Col span={2} onClick={()=>{this.setState({startPicture:true})}}>
-                  <Icon className={styles.popup} type="picture" />
-                </Col>
-                <Col span={4} onClick={()=>{this.setState({startPicture:true})}}>
-                  图片
-                </Col>
-                <Col span={2} onClick={()=>{this.setState({startVideo:true})}}>
-                  <Icon className={styles.popup} type="video-camera" />
-                </Col>
-                <Col span={4} onClick={()=>{this.setState({startVideo:true})}}>
-                  视频
-                </Col>
-                <Col span={2} onClick={()=>this.setState({startQuestion:true})}>
-                  <Icon className={styles.popup} type="question" />
-                </Col>
-                <Col span={4} onClick={()=>this.setState({startQuestion:true})}>
-                  答题
-                </Col>
-              </Row>
-            </div>
-            {/*{*/}
-            {/*  list.map((item, index)=>(*/}
-            {/*    <div  ref={popupRef[index]}>*/}
-            {/*      /!*<span>{item.id}</span>*!/*/}
-            {/*      <Icon type="book" />*/}
+            {/*<Timeline className={styles.timeline}>{*/}
+            {/*  list.map((item)=> (*/}
+            {/*    <div onClick={ (e) => this.oneClick(e, item)}>*/}
+            {/*      /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
+            {/*      <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>*/}
             {/*    </div>*/}
-            {/*  ))*/}
+            {/*    )*/}
+            {/*  )*/}
             {/*}*/}
-          </div>
-          <Icon
-            style={{position:"absolute", fontSize:"30px"}}
-            className='trigger'
-            type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-            onClick={this.onCollapse}
-          />
-          <div id='features' className={styles.features}>
-            <section id='一大上海' className={styles.selection}>
-              <h3>中共一大上海</h3>
-              <p>November 1895. London is shrouded in fog and Sherlock Holmes and Watson pass time restlessly awaiting a
-                new case. "The London criminal is certainly a dull fellow," Sherlock bemoans. "There have been numerous
-                petty thefts," Watson offers in response. Just then a telegram arrives from Sherlock's brother Mycroft
-                with a mysterious case.</p>
-            </section>
-            <section id='一大嘉兴' className={styles.selection}>
-              <h3>中共一大嘉兴</h3>
-              <p>Arthur Cadogan West was found dead, head crushed in on train tracks at Aldgate Station at 6AM Tuesday
-                morning. West worked at Woolwich Arsenal on the Bruce-Partington submarine, a secret military project.
-                Plans for the submarine had been stolen and seven of the ten missing papers were found in West's
-                possession. Mycroft implores Sherlock to take the case and recover the three missing papers.</p>
-            </section>
-            <section id='二大上海' className={styles.selection}>
-              <h3>中共二大上海</h3>
-              <p>Holmes and Watson's investigations take them across London. Sherlock deduces that West was murdered
-                elsewhere, then moved to Aldgate Station to create the illusion that he was crushed on the tracks by a
-                train. On their way to Woolwich Sherlock dispatches a telegram to Mycroft at London Bridge: "Send list
-                of all foreign spies known to be in England, with full address."</p>
-            </section>
-            <section id='三大广州' className={styles.selection}>
-              <h3>中共三大广州</h3>
-              <p>While investigating at Woolwich Arsenal Sherlock learns that West did not have the three
-                keys&mdash;door, office, and safe&mdash;necessary to steal the papers. The train station clerk mentions
-                seeing an agitated West boarding the 8:15 train to London Bridge. Sherlock suspects West of following
-                someone who had access to the Woolwich chief's keyring with all three keys.</p>
-            </section>
-            <section id='四大上海' className={styles.selection}>
-              <h3>中共四大上海</h3>
-              <p>Mycroft responds to Sherlock's telegram and mentions several spies. Hugo Oberstein of 13 Caulfield
-                Gardens catches Sherlock's eye. He heads to the nearby Gloucester Road station to investigate and learns
-                that the windows of Caulfield Gardens open over rail tracks where trains stop frequently.</p>
-            </section>
-            <section id='五大武汉' className={styles.selection}>
-              <h3>中共五大武汉</h3>
-              <p>Holmes deduces that the murderer placed West atop a stopped train at Caulfield Gardens. The train
-                traveled to Aldgate Station before West's body finally toppled off. Backtracking to the criminal's
-                apartment, Holmes finds a series of classified ads from <em>The Daily Telegraph</em> stashed away. All
-                are under the name Pierrot: "Monday night after nine. Two taps. Only ourselves. Do not be so suspicious.
-                Payment in hard cash when goods delivered."</p>
-            </section>
-            <section id='七大延安' className={styles.selection}>
-              <h3>中共七大延安</h3>
-              <p>Holmes and Watson head to The Daily Telegraph and place an ad to draw out the criminal. It reads:
-                "To-night. Same hour. Same place. Two taps. Most vitally important. Your own safety at stake. Pierrot."
-                The trap works and Holmes catches the criminal: Colonel Valentine Walter, the brother of Woolwich
-                Arsenal's chief. He confesses to working for Hugo Oberstein to obtain the submarine plans in order to
-                pay off his debts.</p>
-            </section>
-            <section id='八大北京' className={styles.selection}>
-              <h3>中共八大北京</h3>
-              <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
-                where he promises additional plans for the submarine in exchange for money. The plan works and Holmes
-                and Watson catch both criminals.</p>
-              <small id="citation">
-                Adapted from <a href='http://www.gutenberg.org/files/2346/2346-h/2346-h.htm'>Project Gutenberg</a>
-              </small>
-            </section>
-            <section id='九大北京' className={styles.selection}>
-              <h3>中共九大北京</h3>
-              <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
-                where he promises additional plans for the submarine in exchange for money. The plan works and Holmes
-                and Watson catch both criminals.</p>
-            </section>
-          </div>
-        </div>
-      </Content>
-    </Layout>
-    </Authorized>
-  );}
+            {/*</Timeline>*/}
+          </Sider>
+          <Content>
+            <div className={styles.normal}>
+              <div className={styles.mapContainer} id="onlineMapping">
+                <div ref={popupRef} className={styles.popupDiv}>
+                  {this.state.itemNow?
+                    <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
+                    :null}
+                  <Row style={{ width: "240px", top: "10px" }} justify="space-between">
+                    <Col span={2} onClick={() => {
+                      this.setState({ startArticle: true })
+                    }}>
+                      <Icon className={styles.popup} type="book" />
+                    </Col>
+                    <Col span={4} onClick={() => {
+                      this.setState({ startArticle: true })
+                    }}>
+                      文章
+                    </Col>
+                    <Col span={2} onClick={() => {
+                      this.setState({ startPicture: true })
+                    }}>
+                      <Icon className={styles.popup} type="picture" />
+                    </Col>
+                    <Col span={4} onClick={() => {
+                      this.setState({ startPicture: true })
+                    }}>
+                      图片
+                    </Col>
+                    <Col span={2} onClick={() => {
+                      this.setState({ startVideo: true })
+                    }}>
+                      <Icon className={styles.popup} type="video-camera" />
+                    </Col>
+                    <Col span={4} onClick={() => {
+                      this.setState({ startVideo: true })
+                    }}>
+                      视频
+                    </Col>
+                    <Col span={2} onClick={() => this.setState({ startQuestion: true })}>
+                      <Icon className={styles.popup} type="question" />
+                    </Col>
+                    <Col span={4} onClick={() => this.setState({ startQuestion: true })}>
+                      答题
+                    </Col>
+                  </Row>
+                </div>
+                {/*{*/}
+                {/*  list.map((item, index)=>(*/}
+                {/*    <div  ref={popupRef[index]}>*/}
+                {/*      /!*<span>{item.id}</span>*!/*/}
+                {/*      <Icon type="book" />*/}
+                {/*    </div>*/}
+                {/*  ))*/}
+                {/*}*/}
+              </div>
+              <Icon
+                style={{position:"absolute", fontSize:"30px"}}
+                className='trigger'
+                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                onClick={this.onCollapse}
+              />
+              {/*<Button className={styles.layer} icon={layer}> </Button>*/}
+              {/*<div id='features' className={styles.features}>
+                <section id='一大上海' className={styles.selection}>
+                  <h3>中共一大上海</h3>
+                  <p>November 1895. London is shrouded in fog and Sherlock Holmes and Watson pass time restlessly
+                    awaiting a
+                    new case. "The London criminal is certainly a dull fellow," Sherlock bemoans. "There have been
+                    numerous
+                    petty thefts," Watson offers in response. Just then a telegram arrives from Sherlock's brother
+                    Mycroft
+                    with a mysterious case.</p>
+                </section>
+                <section id='一大嘉兴' className={styles.selection}>
+                  <h3>中共一大嘉兴</h3>
+                  <p>Arthur Cadogan West was found dead, head crushed in on train tracks at Aldgate Station at 6AM
+                    Tuesday
+                    morning. West worked at Woolwich Arsenal on the Bruce-Partington submarine, a secret military
+                    project.
+                    Plans for the submarine had been stolen and seven of the ten missing papers were found in West's
+                    possession. Mycroft implores Sherlock to take the case and recover the three missing papers.</p>
+                </section>
+                <section id='二大上海' className={styles.selection}>
+                  <h3>中共二大上海</h3>
+                  <p>Holmes and Watson's investigations take them across London. Sherlock deduces that West was murdered
+                    elsewhere, then moved to Aldgate Station to create the illusion that he was crushed on the tracks by
+                    a
+                    train. On their way to Woolwich Sherlock dispatches a telegram to Mycroft at London Bridge: "Send
+                    list
+                    of all foreign spies known to be in England, with full address."</p>
+                </section>
+                <section id='三大广州' className={styles.selection}>
+                  <h3>中共三大广州</h3>
+                  <p>While investigating at Woolwich Arsenal Sherlock learns that West did not have the three
+                    keys&mdash;door, office, and safe&mdash;necessary to steal the papers. The train station clerk
+                    mentions
+                    seeing an agitated West boarding the 8:15 train to London Bridge. Sherlock suspects West of
+                    following
+                    someone who had access to the Woolwich chief's keyring with all three keys.</p>
+                </section>
+                <section id='四大上海' className={styles.selection}>
+                  <h3>中共四大上海</h3>
+                  <p>Mycroft responds to Sherlock's telegram and mentions several spies. Hugo Oberstein of 13 Caulfield
+                    Gardens catches Sherlock's eye. He heads to the nearby Gloucester Road station to investigate and
+                    learns
+                    that the windows of Caulfield Gardens open over rail tracks where trains stop frequently.</p>
+                </section>
+                <section id='五大武汉' className={styles.selection}>
+                  <h3>中共五大武汉</h3>
+                  <p>Holmes deduces that the murderer placed West atop a stopped train at Caulfield Gardens. The train
+                    traveled to Aldgate Station before West's body finally toppled off. Backtracking to the criminal's
+                    apartment, Holmes finds a series of classified ads from <em>The Daily Telegraph</em> stashed away.
+                    All
+                    are under the name Pierrot: "Monday night after nine. Two taps. Only ourselves. Do not be so
+                    suspicious.
+                    Payment in hard cash when goods delivered."</p>
+                </section>
+                <section id='七大延安' className={styles.selection}>
+                  <h3>中共七大延安</h3>
+                  <p>Holmes and Watson head to The Daily Telegraph and place an ad to draw out the criminal. It reads:
+                    "To-night. Same hour. Same place. Two taps. Most vitally important. Your own safety at stake.
+                    Pierrot."
+                    The trap works and Holmes catches the criminal: Colonel Valentine Walter, the brother of Woolwich
+                    Arsenal's chief. He confesses to working for Hugo Oberstein to obtain the submarine plans in order
+                    to
+                    pay off his debts.</p>
+                </section>
+                <section id='八大北京' className={styles.selection}>
+                  <h3>中共八大北京</h3>
+                  <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
+                    where he promises additional plans for the submarine in exchange for money. The plan works and
+                    Holmes
+                    and Watson catch both criminals.</p>
+                  <small id="citation">
+                    Adapted from <a href='http://www.gutenberg.org/files/2346/2346-h/2346-h.htm'>Project Gutenberg</a>
+                  </small>
+                </section>
+                <section id='九大北京' className={styles.selection}>
+                  <h3>中共九大北京</h3>
+                  <p>Walter writes to Oberstein and convinces him to meet in the smoking room of the Charing Cross Hotel
+                    where he promises additional plans for the submarine in exchange for money. The plan works and
+                    Holmes
+                    and Watson catch both criminals.</p>
+                </section>
+              </div>*/}
+            </div>
+          </Content>
+        </Layout>
+      </Authorized>
+    );
+  }
 }
 
 export default connect(({ mapPage }) => ({
