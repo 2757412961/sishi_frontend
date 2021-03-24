@@ -125,10 +125,6 @@ export default class ArticleTable extends Component {
   }
 
   previewHTML = (text, record) => {
-    if (window.previewWindow) {
-      window.previewWindow.close();
-    }
-
     window.previewWindow = window.open();
     window.previewWindow.document.write(record.articleContent);
     window.previewWindow.document.close();
