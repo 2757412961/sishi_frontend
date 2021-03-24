@@ -40,7 +40,6 @@ export function getAllQuestion() {
 //根据tagName获取视频列表
 export function getVideoByTag(tagName) {
   let start=0,length=100;
-  debugger
   return requestHeard({ url: '/videos/tagName/'+tagName, method: 'GET', data: { start,length } });
 }
 
@@ -60,7 +59,8 @@ export function getAudioList({ start=0,length=10 }) {
   return requestHeard({ url: '/audios', method: 'GET', data: { start,length } });
 }
 //根据tagName获取文章列表
-export function getArticlesByTag({ tagName,start=0,length=10 }) {
-  return requestHeard({ url: '/articles/tagName'+tagName, method: 'GET', data: { start,length } });
+export function getArticlesByTag(tagName) {
+  let start=0,length=100;
+  return requestHeard({ url: '/articles/tagName/'+tagName, method: 'GET', data: { start,length } });
 }
 
