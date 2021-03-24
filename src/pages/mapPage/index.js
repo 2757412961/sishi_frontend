@@ -379,7 +379,26 @@ function forList(treeList){
   }
   return list;
 }
-
+function translate(arg) {
+  let num=[];
+  for(let i in arg){
+    let temp=0;
+    if(arg[i]=='A'){
+      temp=0;
+    }
+    if(arg[i]=='B'){
+      temp=1;
+    }
+    if(arg[i]=='C'){
+      temp=2;
+    }
+    if(arg[i]=='D'){
+      temp=3;
+    }
+    num.push(temp);
+  }
+  return num;
+};
 class MapPage extends Component {
   constructor(props) {
     super(props);
@@ -619,8 +638,8 @@ class MapPage extends Component {
         });
       }
       for (let i = 0; i < list.length; i++) {
-        popup.remove();
         map.on('click', list[i].id, function(e) {
+          popup.remove();
           var coordinates = e.features[0].geometry.coordinates;
           _this.setState({
             itemNow: list[i],
@@ -984,7 +1003,7 @@ class MapPage extends Component {
               <div className={styles.web} >
                 <p>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</p>
                 <div className={styles.radio}>
-                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                <Checkbox.Group id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                   <Row>
                     <Col span={12}>
                   <Checkbox    value={'A'}>
@@ -1022,17 +1041,34 @@ class MapPage extends Component {
                   <Button  key="submit"
                            type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
                            onClick={()=>{
+                             debugger
+                             let checked=document.getElementsByClassName("ant-checkbox-inner");
+                             // checked[0].style.backgroundColor='rgb(0,255,0)';
                              let string=this.state.value.toString();
+                             let arg=question[recent]?question[recent].answer:'';
+                             arg=arg.split("");
+                             let translate1=translate(arg);
                              if(string==(question[recent]?question[recent].answer:''))
                              {
-                               this.setState({grade:this.state.grade+1});
+                               if(this.state.answer==false){
+                               this.setState({grade:this.state.grade+1});}
+                               for(let i in translate1){
+                                 let id=translate1[i];
+                                 checked[id].style.backgroundColor='#3dc076';
+                               }
+                             }else{
+                               for(let i in translate1){
+                                 let id=translate1[i];
+                                 checked[id].style.backgroundColor='#D93C3D';
+                               }
                              }
-                             this.setState({answer:true})
+                             this.setState({answer:true});
                              if(this.state.questionNumber==allNumber) {
                                let username=getLocalData({dataName:'userName'});
                                this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
                                alert("答题结束")
-                             }}}>提交</Button>
+                             }}
+                           }>提交</Button>
                 </Col>
                 <Col span={12}>
                   <Button
@@ -1047,6 +1083,8 @@ class MapPage extends Component {
                       if(this.state.answer==false){
                         alert('你还未提交本题答案')
                       } else{
+                        let checked=document.getElementsByClassName("ant-checkbox-inner");
+                        checked[0].style.backgroundColor='#1890ff';
                         this.setState({deadline:Date.now() +  1000 * 60})
                         this.setState({questionNumber: this.state.questionNumber+1})
                         this.setState({answer:false})
