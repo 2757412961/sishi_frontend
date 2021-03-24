@@ -37,8 +37,9 @@ export default {
     },
     //设置知识卡片
     setKnowledge(state,{payload}){
-      return{...state,knowledgeContent:payload.knowledgeContent,
-        knowledgeUrl:payload.knowledgeUrl,}
+      debugger
+      return{...state,knowledgeContent:payload.articleContent,
+       }
     },
     //设置音频
     setAudio(state,{payload}){
@@ -103,30 +104,40 @@ export default {
     },
     //获取知识卡片
     * getKnowLedge({payload}, {call, put}) {
-      const response = yield call(getArticlesByTag, "党史新学@中共一大");
+      const response = yield call(getArticlesByTag, payload);
       console.log('response',response);
+      debugger
+      if (response.success) {
+        yield put({
+          type: 'setKnowledge',
+          payload: response.articles[0],
+        });
+      }
 
     },
 
     //获取视频通过tagName
     * getVideoByTag({payload}, {call, put}) {
-      //const response = yield call(getVideoByTag, "党史新学@中共一大");
-      const response = yield call(getVideoList);
+      console.log('payload',payload);
+      const response = yield call(getVideoByTag, payload);
+      // const response = yield call(getVideoList);
       console.log('response',response);
     },
 
     //获取音频通过tagName
     * getAudioByTag({payload}, {call, put}) {
-      //const response = yield call(getAudioByTag, "党史新学@中共一大");
-      const response = yield call(getAudioList);
+      const response = yield call(getAudioByTag, "党史新学@中共一大");
+      // const response = yield call(getAudioList);
       console.log('response',response);
     },
 
     //更新用户积分
     *updateUserGrades({payload}, {call, put}){
-      const response1=yield call(getUserData,payload);
-      console.log(response1);
-      const response = yield call(updateQuestionStatus, payload);
+      // const response1=yield call(getUserData,payload);
+      // console.log(response1);
+      const {tag_name,user_name}=payload;
+      debugger
+      const response = yield call(updateQuestionStatus, tag_name,user_name);
     }
   },
 

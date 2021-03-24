@@ -20,8 +20,8 @@ export function getQuestionsByTag(tagName) {
 }
 
 // 添加用户积分，改写用户答题状态
-export function updateQuestionStatus(tagName,userName) {
-  return requestHeard({ url: '/useranswer', method: 'PUT',data:{tagName,userName} });
+export function updateQuestionStatus(tag_name,user_name) {
+  return requestHeard({ url: '/useranswer?tag_name='+tag_name+'&user_name='+user_name, method: 'PUT' });
 }
 
 // 获取所有问题列表
@@ -38,8 +38,9 @@ export function getAllQuestion() {
  */
 //视频管理接口
 //根据tagName获取视频列表
-export function getVideoByTag({ tagName,start=0,length=10 }) {
-  return requestHeard({ url: '/videos/tagName'+tagName, method: 'GET', data: { start,length } });
+export function getVideoByTag(tagName) {
+  let start=0,length=100;
+  return requestHeard({ url: '/videos/tagName/'+tagName, method: 'GET', data: { start,length } });
 }
 
 // 获取视频列表
@@ -58,7 +59,8 @@ export function getAudioList({ start=0,length=10 }) {
   return requestHeard({ url: '/audios', method: 'GET', data: { start,length } });
 }
 //根据tagName获取文章列表
-export function getArticlesByTag({ tagName,start=0,length=10 }) {
-  return requestHeard({ url: '/articles/tagName'+tagName, method: 'GET', data: { start,length } });
+export function getArticlesByTag(tagName) {
+  let start=0,length=100;
+  return requestHeard({ url: '/articles/tagName/'+tagName, method: 'GET', data: { start,length } });
 }
 
