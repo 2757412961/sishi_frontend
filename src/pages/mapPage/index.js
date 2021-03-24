@@ -25,14 +25,6 @@ import {ArcLayer} from '@deck.gl/layers';
 import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import p1 from '@/assets/test/1.jpg';
-import p2 from '@/assets/test/2.jpg';
-import p3 from '@/assets/test/3.jpg';
-import tupian from '../../assets/icon/图片.png';
-import shipin from '@/assets/icon/视频.png';
-import yinpin from '@/assets/icon/音频.png';
-import wenzhang from '@/assets/icon/文章.png';
-import dati from '@/assets/icon/答题.png';
-import dangshi from '@/assets/dangshi.PNG'
 import yay from '@/assets/unnamed.jpg'
 import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
@@ -199,7 +191,7 @@ const variants={open: { opacity: 1, x: 0 },
 //     label:"党史新学@中共九大@北京",
 //   },
 // ];
-let list=[];
+
 var chapters = {
   '一大-上海': {
     bearing: 0,
@@ -268,25 +260,25 @@ var chapters = {
 let des = [
   { "showInfo":"<div ><h3>中共一大上海会址</h3><div style={styles.popup1}></div><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
       "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
-  { "showInfo":"<div><h3>中共一大嘉兴南湖会址</h3><img style={styles.popup1} src={c1} /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
+  { "showInfo":"<div><h3>中共一大嘉兴南湖会址</h3><img width=220px' src="+c1+" /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
       "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
-  { "showInfo":"<div><h3>中共二大会址</h3><img src={c2}  /><p>中国共产党第二次全国代表大会，简称中共二大，" +
+  { "showInfo":"<div><h3>中共二大会址</h3><img width=220px' src="+c2+" /><p>中国共产党第二次全国代表大会，简称中共二大，" +
       "于1922年7月16日至23日在上海召开。</p></div>"},
-  { "showInfo":"<div><h3>中共三大会址</h3><img src={c3}  />" +
+  { "showInfo":"<div><h3>中共三大会址</h3><img width=220px' src="+c3+" />" +
       "<p>中国共产党第三次全国代表大会，简称中共三大，于1923年6月12日至20日在广州召开。</p></div>"},
-  { "showInfo":"<div><h3>中共四大会址</h3><img src={c4} />" +
+  { "showInfo":"<div><h3>中共四大会址</h3><img width=220px' src="+c4+" />" +
       "<p>中国共产党第四次全国代表大会，简称中共四大，于1925年1月11日至22日在上海召开。</p></div>"},
-  { "showInfo":"<div><h3>中共五大会址</h3><img src={c5} />" +
+  { "showInfo":"<div><h3>中共五大会址</h3><img width=220px' src="+c5+" />" +
       "<p>中国共产党第五次全国代表大会，简称中共五大，于1927年4月27日至5月9日在武汉武昌都府堤召开。</p></div>"},
-  { "showInfo":"<div><h3>中共六大会址</h3><img src={c6} />" +
+  { "showInfo":"<div><h3>中共六大会址</h3><img width=220px' src="+c6+" />" +
       "<p>中国共产党第六次全国代表大会，简称中共六大，于1928年6月18日至7月11日在俄罗斯莫斯科市中心西南约40公里的五一村召开。</p></div>"},
-  { "showInfo":"<div><h3>中共七大会址</h3><img src={c7} />" +
+  { "showInfo":"<div><h3>中共七大会址</h3><img width=220px' src="+c7+" />" +
       "<p>中国共产党第七次全国代表大会，简称中共七大，于1945年4月23日至6月11日在延安杨家岭革命旧址中央大礼堂召开。</p></div>"},
-  { "showInfo":"<div><h3>中共八大会址</h3><img src={c8} />" +
+  { "showInfo":"<div><h3>中共八大会址</h3><img width=220px' src="+c8+" />" +
       "<p>中国共产党第八次全国代表大会，简称中共八大，于1956年9月15日至27日在北京全国政协礼堂召开。</p></div>"},
-  { "showInfo":"<div><h3>中共九大会址</h3><img src={c9} />" +
+  { "showInfo":"<div><h3>中共九大会址</h3><img width=220px' src="+c9+" />" +
       "<p>中国共产党第九次全国代表大会，简称中共九大，于1969年4月1日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十大会址</h3><img src={c9} />" +
+  { "showInfo":"<div><h3>中共十大会址</h3><img width=220px' src="+c9+" />" +
       "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
 ]
 
@@ -368,8 +360,8 @@ function forList(treeList){
       temp.id=treeList[i].label;
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
-      temp.text=treeList[i].label;
-      temp.value=treeList[i].label.replace('@','');
+      temp.text=treeList[i].label.split('@')[0];
+      temp.value=treeList[i].label;
       temp.time=treeList[i].time;
       temp.showInfo=des[i].showInfo;
       temp.cardContent=treeList[i].tagName;
@@ -385,8 +377,8 @@ class MapPage extends Component {
     super(props);
     this.state = {
       activeKey: "1",
-      itemNow: list[0],
-      _collapsed: false,
+      itemNow:null,
+      collapsed: false,
       modalVisble: false,
       deadline: Date.now() + 1000 * 60,
       value: 1,
@@ -423,6 +415,8 @@ class MapPage extends Component {
       startPicture:false,
       startVideo:false,
       startAudio:false,
+      list:[],
+      listTime:[],
       tagName:'',
     };
 
@@ -467,38 +461,7 @@ class MapPage extends Component {
         "source": "osm-tiles2",
       }
     ];
-    /*const map = new Scene({
-      id: 'student-map',
-      /!** 渲染的地图会有一个antv的logo,可以让其消失 *!/
-      logoVisible: false,
-      map: new Mapbox({
-        // container: 'onlineMapping',
-        style: {
-          "version": 8,
-          "sprite": localhost + "/MapBoxGL/css/sprite",
-          "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-          "sources": sources,
-          "layers": layers,
-        },
-        center: [ 121.52, 31.04 ],  //上海经纬度坐标
-        zoom: 3,
-        pitch:30,
-        bearing: 10,
-        token:'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg'
-      }),
-      // map: new Mapbox({
-      //   container: 'onlineMapping',
-      //   style: {
-      //     "version": 8,
-      //     "sprite": localhost + "/MapBoxGL/css/sprite",
-      //     "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-      //     "sources": sources,
-      //     "layers": layers,
-      //   },
-      //   center: [ 121.52, 31.04 ],  //上海经纬度坐标
-      //   zoom: 3,
-      // })
-    });*/
+
     const map = new mapboxgl.Map({
       container: 'onlineMapping',
       style: {
@@ -515,13 +478,22 @@ class MapPage extends Component {
     });
     // let treeList=forTree(tagTree);
     // console.log('treeList',treeList);
-    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: { tagName: '党史新学' } }).then((res) => {
-      console.log('res', res);
-      if (res && res.success) {
-        let tagTree = res.list;
+    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
+      console.log('res',res);
+      let listHere = [], listHere2 = [];
+      if(res&&res.success){
+        let tagTree=res.list;
         // let tree=forTree(tagTree);
         // console.log('tree',tree);
-        list = forList(tagTree);
+        listHere=forList(tagTree);
+        listHere2=forList(tagTree);
+        let listTime = listHere;
+        listTime.splice(0,1);
+        console.log("listTime", listTime);
+        this.setState({
+          list:listHere2,
+          listTime:listTime,
+        })
       }
 
       const myDeckLayer = new MapboxLayer({
@@ -540,17 +512,17 @@ class MapPage extends Component {
         //   duration: 1
         // })
       });
-      map.on('load', () => {
+      map.on('load', ()=> {
         map.addLayer(myDeckLayer)
       })
 
+      console.log("listHere", listHere);
       //加载中共一大（上海，嘉兴地点）的火花图标
       map.on('load', function() {
-        for (let i = 0; i < list.length; i++) {
-          map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
-
+        for (let i=0;i<listHere.length;i++) {
+          map.addImage(listHere[i].id, pulsingDot, { pixelRatio: 2 });
           map.addLayer({
-            "id": list[i].id,
+            "id": listHere[i].id,
             "type": "symbol",
             "source": {
               "type": "geojson",
@@ -560,25 +532,25 @@ class MapPage extends Component {
                   "type": "Feature",
                   "geometry": {
                     "type": "Point",
-                    "coordinates": list[i].lonlat,
+                    "coordinates": listHere[i].lonlat,
                   }
                 }]
               }
             },
             "layout": {
-              "icon-image": list[i].id,
+              "icon-image": listHere[i].id,
               "icon-optional": false,
               "icon-ignore-placement": true,
               // "text-ignore-placement": true,
               "text-allow-overlap": true,
-              "text-field": list[i].value,
+              "text-field": listHere[i].value,
               "text-anchor": 'left',
-              "text-offset": [1, 0.1],
+              "text-offset": [1,0.1],
               // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
               "text-size": [
                 "interpolate", ["linear"], ["zoom"],
-                3, 20,
-                17, 38
+                3,20,
+                17,38
               ],
             },
             paint: {
@@ -590,41 +562,27 @@ class MapPage extends Component {
         // playback(0);
       });
       let _this = this;
-      this.map = map;
       var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
-      for (let i = 0; i < list.length; i++) {
-        map.on('mouseenter', list[i].id, function(e) {
+      for (let i = 0; i < listHere.length; i++) {
+        map.on('mouseenter', listHere[i].id, function(e) {
           map.getCanvas().style.cursor = 'pointer';
           var coordinates = e.features[0].geometry.coordinates;
-          let showInfo = list[i].showInfo;
-//closeOnClick:false,closeButton:true
+          let showInfo = listHere[i].showInfo;
           popup.setLngLat(coordinates)
           popup.setHTML(showInfo)
           popup.addTo(map)
-          // .setDOMContent(popupRef.current);
-          // document.getElementById('btn')
-          //   .addEventListener('click', function(){
-          //     let cardImg = list[i].cardImg;
-          //     let cardContent = list[i].cardContent;
-          //     _this.setState({
-          //       knowledgeUrl: cardImg,
-          //       knowledgeContent: cardContent,
-          //     });
-          //     _this.showModal()
-          //   });
         });
-        map.on('mouseleave', list[i].id, function() {
+        map.on('mouseleave', listHere[i].id, function() {
           map.getCanvas().style.cursor = '';
           popup.remove();
         });
       }
-      for (let i = 0; i < list.length; i++) {
-        popup.remove();
-        map.on('click', list[i].id, function(e) {
+
+      for(let i = 0;i<listHere.length;i++){
+        map.on('click', listHere[i].id, function(e) {
           var coordinates = e.features[0].geometry.coordinates;
           _this.setState({
-            itemNow: list[i],
-            tagName:list[i].tagName,
+            itemNow: listHere[i],
           })
 
           new mapboxgl.Popup()
@@ -632,24 +590,15 @@ class MapPage extends Component {
             // .setHTML(showInfo)
             .addTo(map)
             .setDOMContent(popupRef.current);
-          // document.getElementById('btn')
-          //   .addEventListener('click', function(){
-          //     let cardImg = list[i].cardImg;
-          //     let cardContent = list[i].cardContent;
-          //     _this.setState({
-          //       knowledgeUrl: cardImg,
-          //       knowledgeContent: cardContent,
-          //     });
-          //     _this.showModal()
-          //   });
         });
-        // map.on('mouseenter', list[i].id, function() {
-        //   map.getCanvas().style.cursor = 'pointer';
-        // });
-        // map.on('mouseleave', list[i].id, function() {
-        //   map.getCanvas().style.cursor = '';
-        // });
+        map.on('mouseenter', listHere[i].id, function() {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', listHere[i].id, function() {
+          map.getCanvas().style.cursor = '';
+        });
       }
+      this.map = map;
     });
 
     // let nav = new mapboxgl.NavigationControl({
@@ -930,25 +879,43 @@ class MapPage extends Component {
       value: e,
     });
   };
-  moreOnClick = () => {
+  //子时间轴（中共一大）
+  moreOnClick=()=>{
     let temp = this.state.more;
-    if (temp) {
-      list.splice(1, 0, ...subList);
-    } else {
-      list.splice(1, 3);
+    if(temp){
+      let tempList = this.state.listTime;
+      let subList = [];
+      subList[0] = this.state.list[0];
+      subList[0]['sub'] = true;
+      subList[1] = this.state.list[1];
+      subList[1]['sub'] = true;
+      tempList.splice(1, 0, ...subList);
+      this.setState({
+        listTime:tempList,
+      })
+    }
+    else{
+      let tempList = this.state.listTime;
+      tempList.splice(1, 2);
+      this.setState({
+        listTime:tempList,
+      })
     }
     this.setState({
-      more: !temp
+      more:!temp
     })
     this.forceUpdate();
+  };
+  onCollapse = collapsed => {
+    console.log(collapsed);
+    let temp = this.state.collapsed;
+    this.setState({ collapsed:!temp });
   };
 
   render(){
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
     const {tagTree,question,knowledgeContent}=mapPage;
-    list=forList(tagTree);
-    console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
     console.log('tagTree',tagTree);
@@ -957,7 +924,7 @@ class MapPage extends Component {
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
-      <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
+      <Sider collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
         {/*答题*/}
         {/**/}
         <Modal visible={this.state.startQuestion}
@@ -1165,60 +1132,50 @@ class MapPage extends Component {
               <VerticalTimeline
                 // layout='1-column-left'
               >
-                {list.map((item) => (
-                    item['sub'] ?
+                {this.state.listTime.map((item)=> (
+                    item['sub']?
                       <VerticalTimelineElement
                         id={item['id']}
-                        style={{ fontSize: "15px", size: "10px" }}
+                        style={{fontSize:"15px", size:"10px", textAlign: "center"}}
                         className="vertical-timeline-element--education"
-                        date="2006 - 2008"
-                        contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                        contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                        iconStyle={{
-                          background: 'rgb(155, 20, 20)',
-                          color: '#fff',
-                          width: '20px',
-                          height: "20px",
-                          top: "20px",
-                          marginLeft: "-10px"
-                        }}
-                        dateClassName={styles.date}
+                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
+                        dateClassName={ styles.date }
+                        onTimelineElementClick={()=> this.oneClick(item) }
+                        // icon={<Icon type="schedule" />}
                         // icon={<Icon type="book" />}
                       >
-                        {item['text']}
+                        <div style={{fontWeight:"bold"}}>
+                          {item['value']}
+                        </div>
                         {
-                          item['text'] == '1921年7月-中共一大' &&
-                          <div><Button onClick={this.moreOnClick}>{this.state.more ? <span>更多</span> :
-                            <span>收回</span>}</Button></div>
+                          item['text']=='中共一大'
                         }
-                      </VerticalTimelineElement> :
+                      </VerticalTimelineElement>:
                       <VerticalTimelineElement
                         id={item['id']}
-                        style={{ fontSize: "15px", size: "10px" }}
+                        style={{fontSize:"15px", size:"10px", textAlign:"center"}}
                         className="vertical-timeline-element--education"
-                        date="2006 - 2008"
-                        contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                        contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                        iconStyle={{
-                          background: 'rgb(155, 20, 20)',
-                          color: '#fff',
-                          width: '40px',
-                          height: "40px",
-                          top: "20px",
-                          marginLeft: "-20px"
-                        }}
-                        dateClassName={styles.date}
-                        onTimelineElementClick={() => this.oneClick(item)}
+                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                        contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
+                        contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
+                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
+                        dateClassName={ styles.date }
+                        onTimelineElementClick={()=>(
+                          item['text']=='中共一大'?
+                            this.moreOnClick():
+                            this.oneClick(item)) }
+                        icon={<Icon type="schedule" />}
                       >
-                        {item['text']}
-                        {
-                          item['text'] == '1921年7月-中共一大' &&
-                          <div>
-                            <div onClick={this.moreOnClick}>{this.state.more ?
-                              <Icon type="arrow-down" style={{ color: "rgba(155,20,20,1)" }} /> :
-                              <Icon type="arrow-up" style={{ color: "rgba(155,20,20,1)" }} />}</div>
-                          </div>
-                        }
+                        <div style={{fontWeight:"bold"}}>
+                          {item['text']}
+                        </div>
+                        {/*{*/}
+                        {/*  item['text']=='中共一大'&&*/}
+                        {/*  <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(177,46,46)"}} />:<Icon type="arrow-up" style={{color:"rgba(177,46,46)"}} />}</div></div>*/}
+                        {/*}*/}
                       </VerticalTimelineElement>
                   )
                 )
@@ -1240,7 +1197,9 @@ class MapPage extends Component {
             <div className={styles.normal}>
               <div className={styles.mapContainer} id="onlineMapping">
                 <div ref={popupRef} className={styles.popupDiv}>
-                  {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
+                  {this.state.itemNow?
+                    <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
+                    :null}
                   <Row style={{ width: "240px", top: "10px" }} justify="space-between">
                     <Col span={2} onClick={() => {
                       this.setState({ startArticle: true });
@@ -1300,6 +1259,13 @@ class MapPage extends Component {
                 {/*  ))*/}
                 {/*}*/}
               </div>
+              <Icon
+                style={{position:"absolute", fontSize:"30px"}}
+                className='trigger'
+                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                onClick={this.onCollapse}
+              />
+              {/*<Button className={styles.layer} icon={layer}> </Button>*/}
               {/*<div id='features' className={styles.features}>
                 <section id='一大上海' className={styles.selection}>
                   <h3>中共一大上海</h3>
