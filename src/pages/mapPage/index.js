@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel } from 'antd';
+import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel,Divider } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -41,7 +41,7 @@ import c8 from '@/assets/test/c8.jpg';
 import c9 from '@/assets/test/c9.jpg';
 import layer from '@/assets/test/layer.png';
 import reback from '@/assets/test/reback.png';
-import ditu from '@/assets/test/地图.PNG';
+import jiedao from '@/assets/test/街道.PNG';
 import dixing from '@/assets/test/地形.PNG';
 import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
@@ -361,7 +361,7 @@ function forList(treeList){
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
       temp.text=treeList[i].label.split('@')[0];
-      temp.value=treeList[i].label;
+      temp.value=treeList[i].label.replace('@','');
       temp.time=treeList[i].time;
       temp.showInfo=des[i].showInfo;
       temp.cardContent=treeList[i].tagName;
@@ -371,7 +371,26 @@ function forList(treeList){
   }
   return list;
 }
-
+function translate(arg) {
+  let num=[];
+  for(let i in arg){
+    let temp=0;
+    if(arg[i]=='A'){
+      temp=0;
+    }
+    if(arg[i]=='B'){
+      temp=1;
+    }
+    if(arg[i]=='C'){
+      temp=2;
+    }
+    if(arg[i]=='D'){
+      temp=3;
+    }
+    num.push(temp);
+  }
+  return num;
+};
 class MapPage extends Component {
   constructor(props) {
     super(props);
@@ -406,6 +425,8 @@ class MapPage extends Component {
       },
       knowledgeUrl: p1,
       //list[0].cardImg,
+      layerValue:false,
+      mapUrl: 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63',
       knowledgeContent: '中国共产党第一次全国代表大会于1921年7月23日至1921年8月3日在上海法租界贝勒路树德里3号（后称望志路106号，现改兴业路76号）和浙江嘉兴南湖召开。出席大会的各地代表共12人。',
       //list[0].cardContent,
       // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
@@ -441,7 +462,7 @@ class MapPage extends Component {
     let sources = {
       "osm-tiles1": {
         "type": "raster",
-        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
+        'tiles': [this.state.mapUrl],
         'tileSize': 256
       },
       "osm-tiles2": {
@@ -474,7 +495,7 @@ class MapPage extends Component {
       center: [121.52, 31.04],  //上海经纬度坐标
       zoom: 3,
       pitch: 30,
-      bearing: 10,
+      // bearing: 10,
     });
     // let treeList=forTree(tagTree);
     // console.log('treeList',treeList);
@@ -580,9 +601,11 @@ class MapPage extends Component {
 
       for(let i = 0;i<listHere.length;i++){
         map.on('click', listHere[i].id, function(e) {
+          popup.remove();
           var coordinates = e.features[0].geometry.coordinates;
           _this.setState({
             itemNow: listHere[i],
+            tagName:listHere[i].tagName,
           })
 
           new mapboxgl.Popup()
@@ -911,6 +934,41 @@ class MapPage extends Component {
     let temp = this.state.collapsed;
     this.setState({ collapsed:!temp });
   };
+  layerClick = () => {
+    this.setState({
+      layerValue: !this.state.layerValue
+    })
+  }
+  diTuClick = (id,e) => {
+    if(id==='vec'){
+      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      this.setState({
+        mapUrl: this.state.mapUrl,
+      })
+    } else if(id==='img'){
+      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      this.setState({
+        mapUrl: this.state.mapUrl
+      })
+    } else{
+      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      this.setState({
+        mapUrl: this.state.mapUrl,
+      })
+    }
+    let diTuList = ['vec','img','ter']
+    for(let i=0;i<diTuList.length;i++){
+      if(id===diTuList[i]){
+        document.getElementById(id).style.border = ('2px solid red');
+        //#4185d0
+      }
+      else {
+        document.getElementById(diTuList[i]).style.border = ('');
+      }
+    }
+    this.componentDidMount()
+    // this.map.setStyle('')
+  }
 
   render(){
     const {mapPage}=this.props;
@@ -951,7 +1009,7 @@ class MapPage extends Component {
               <div className={styles.web} >
                 <p>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</p>
                 <div className={styles.radio}>
-                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                <Checkbox.Group id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                   <Row>
                     <Col span={12}>
                   <Checkbox    value={'A'}>
@@ -989,17 +1047,34 @@ class MapPage extends Component {
                   <Button  key="submit"
                            type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
                            onClick={()=>{
+                             debugger
+                             let checked=document.getElementsByClassName("ant-checkbox-inner");
+                             // checked[0].style.backgroundColor='rgb(0,255,0)';
                              let string=this.state.value.toString();
+                             let arg=question[recent]?question[recent].answer:'';
+                             arg=arg.split("");
+                             let translate1=translate(arg);
                              if(string==(question[recent]?question[recent].answer:''))
                              {
-                               this.setState({grade:this.state.grade+1});
+                               if(this.state.answer==false){
+                               this.setState({grade:this.state.grade+1});}
+                               for(let i in translate1){
+                                 let id=translate1[i];
+                                 checked[id].style.backgroundColor='#3dc076';
+                               }
+                             }else{
+                               for(let i in translate1){
+                                 let id=translate1[i];
+                                 checked[id].style.backgroundColor='#D93C3D';
+                               }
                              }
-                             this.setState({answer:true})
+                             this.setState({answer:true});
                              if(this.state.questionNumber==allNumber) {
                                let username=getLocalData({dataName:'userName'});
                                this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
                                alert("答题结束")
-                             }}}>提交</Button>
+                             }}
+                           }>提交</Button>
                 </Col>
                 <Col span={12}>
                   <Button
@@ -1014,6 +1089,15 @@ class MapPage extends Component {
                       if(this.state.answer==false){
                         alert('你还未提交本题答案')
                       } else{
+                        let checked=document.getElementsByClassName("ant-checkbox-inner");
+                        let arg=question[recent]?question[recent].answer:'';
+                        arg=arg.split("");
+                        let translate1=translate(arg);
+                        debugger
+                        for(let i in translate1){
+                          let id=translate1[i];
+                          checked[id].style.backgroundColor='rgb(255,255,255,1)';
+                        }
                         this.setState({deadline:Date.now() +  1000 * 60})
                         this.setState({questionNumber: this.state.questionNumber+1})
                         this.setState({answer:false})
@@ -1349,6 +1433,40 @@ class MapPage extends Component {
                     and Watson catch both criminals.</p>
                 </section>
               </div>*/}
+              <div className={styles.layer_icon} onClick={this.layerClick}>
+                <img src={layer} className={styles.layer_img}/>
+              </div>
+              <div className={styles.layer_div} style={{display: this.state.layerValue ? 'block': 'none'}}>
+                <Row>
+                  <Col span={21}>
+                    <h3>选择底图</h3>
+                  </Col>
+                  <Col span={3}>
+                    <Button icon="close" onClick={this.layerClick} className={styles.layer_close}> </Button>
+                  </Col>
+                </Row>
+                <Divider style={{marginTop:7,marginBottom:10}} />
+                <Row style={{marginLeft:3}}>
+                  <Col span={8} style={{fontSize:7, color:'#0078A8'}}>
+                    <div className={styles.img_div} onClick={(e) =>this.diTuClick('vec',e)} id="vec">
+                      <img src={jiedao} className={styles.layer_ditu} />
+                    </div>
+                    <div style={{marginLeft:25,marginTop:13}}>街道图</div>
+                  </Col>
+                  <Col span={8} style={{fontSize:7, color:'#0078A8'}}>
+                    <div  onClick={(e) =>this.diTuClick('img',e)} id="img">
+                      <img src={yingxiang} className={styles.layer_ditu} />
+                    </div>
+                    <div style={{marginLeft:25,marginTop:13}}>影像图</div>
+                  </Col>
+                  <Col span={8} style={{fontSize:7, color:'#0078A8'}}>
+                    <div  onClick={(e) =>this.diTuClick('ter',e)} id="ter">
+                      <img src={dixing} className={styles.layer_ditu} />
+                    </div>
+                    <div style={{marginLeft:25,marginTop:13}}>地形图</div>
+                  </Col>
+                </Row>
+              </div>
             </div>
           </Content>
         </Layout>
