@@ -37,6 +37,7 @@ export default class ArticleTable extends Component {
           align: 'center',
           sorter: (a, b) => a.articleContent.length - b.articleContent.length,
           sortDirections: ['descend', 'ascend'],
+          ellipsis: true,
         },
         {
           title: 'Article Publish Time',
