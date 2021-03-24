@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Button, Checkbox, Cascader, Col} from 'antd';
+import {Modal, Form, Input, Button, Upload, Icon, message} from 'antd';
+import {Link} from "react-router-dom";
+import request from "@/utils/request";
 
 class TagResourceModal extends Component {
   constructor(props) {
@@ -7,9 +9,12 @@ class TagResourceModal extends Component {
     this.state = {
       modalVisible: false,
       confirmLoading: false,
-      cascadeValue: []
     };
   }
+
+  setModalVisible = (val) => {
+    this.setState({modalVisible: val});
+  };
 
   showModal = () => {
     this.setModalVisible(true);
@@ -23,26 +28,36 @@ class TagResourceModal extends Component {
     this.props.form.resetFields();
   }
 
-  setModalVisible = (val) => {
-    this.setState({modalVisible: val});
-  };
-
-  setConfirmLoading = (val) => {
-    this.setState({confirmLoading: val});
-  };
-
+  // submit
   handleSubmit = e => {
     e.preventDefault();
+
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        console.log(this.props.form.getFieldsValue())
+        console.log(this.props.form.getFieldsValue());
+        let {resourceId} = this.props.form.getFieldsValue();
+
+        request({
+          url: '/v1.0/api/tagResources/' + resourceId,
+          method: 'GET',
+          autoAdd: false, //不添加v1.0
+        }).then((res) => {
+          console.log(res);
+
+          if (res.success) {
+            if (res.tagResources.length == 0){
+              message.success('关联表中无此资源ID');
+              return;
+            }
+            this.props.setCascadeValue(res.tagResources[0].tagName.split('@'));
+            this.closeModal();
+            message.success('查询成功');
+          } else {
+            message.error('查询失败,' + res.message);
+          }
+        })
       }
     });
-  };
-
-  onChangeCascade = (val) => {
-    this.setState({cascadeValue: val});
   };
 
   render() {
@@ -56,35 +71,27 @@ class TagResourceModal extends Component {
     };
     const {getFieldDecorator} = this.props.form;
 
+
     return (
       <>
-        <Button type="primary" onClick={this.showModal}>新增标签</Button>
+        <Button type="primary" onClick={this.showModal}>查询资源</Button>
 
         <Modal
-          title="新增标签资源"
+          title="查询资源"
+          // width={1200}
           visible={this.state.modalVisible}
           onCancel={this.closeModal}
           footer={[
             <Button key='cancel' htmlType="button" onClick={this.closeModal}>取消</Button>,
             <Button key='reset' type="danger" htmlType="button" onClick={this.resetModal}>重置</Button>,
-            <Button key='submit' type="primary" htmlType="submit" onClick={this.handleSubmit}>提交</Button>,
+            <Button key='submit' type="primary" htmlType="submit" onClick={this.handleSubmit}>查询</Button>,
           ]}
           destroyOnClose={true}>
 
           <Form name="basic" {...layout}>
-            <Form.Item label="标签路径" name="tagPath">
-              {getFieldDecorator('tagPath', {rules: [{required: true, message: '请输入标签路径!'},]})(
-                <Cascader
-                  placeholder="请选择标签"
-                  onChange={this.onChangeCascade}
-                  options={this.props.cascadeOptions}
-                  changeOnSelect/>
-              )}
-            </Form.Item>
-
-            <Form.Item label="新建标签名称" name="tagName">
-              {getFieldDecorator('tagName', {rules: [{required: true, message: '请输入新建标签名称!'},]})(
-                <Input placeholder="请输入新建标签名称"/>
+            <Form.Item label="资源 ID" name="resourceId">
+              {getFieldDecorator('resourceId', {rules: [{required: true, message: '请输入资源ID!'},]})(
+                <Input placeholder="请输入资源ID"/>
               )}
             </Form.Item>
           </Form>
