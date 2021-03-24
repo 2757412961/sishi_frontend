@@ -22,7 +22,6 @@ import MapinfoTable from './components/mapinfo/mapinfoTable';
 import MapinfoModal from './components/mapinfo/mapinfoModal';
 import QuestionTable from './components/question/questionTable';
 import QuestionModal from './components/question/questionModal';
-import Editor from './components/editor';
 import EditorZjh from './components/editorZjh';
 import Index from './components/zTestCommunite'
 import Children1 from "@/pages/management/components/zTestCommunite/Children1";
@@ -157,10 +156,10 @@ class Management extends Component {
                   <span>用户表</span>
                   <Link to='/management/user'/>
                 </Menu.Item>
-                <Menu.Item key="10">
-                  <span>答题记录关联表</span>
-                  <Link to='/management/userAnswer'/>
-                </Menu.Item>
+                {/*<Menu.Item key="10">*/}
+                {/*  <span>答题记录关联表</span>*/}
+                {/*  <Link to='/management/userAnswer'/>*/}
+                {/*</Menu.Item>*/}
               </SubMenu>
             </Menu>
           </Sider>
@@ -221,9 +220,9 @@ class Management extends Component {
                 <Route path='/management/user'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>用户表</h1></Col>
                 </Route>
-                <Route path='/management/userAnswer'>
-                  <Col span={8} style={{textAlign: 'center'}}><h1>答题记录表</h1></Col>
-                </Route>
+                {/*<Route path='/management/userAnswer'>*/}
+                {/*  <Col span={8} style={{textAlign: 'center'}}><h1>答题记录表</h1></Col>*/}
+                {/*</Route>*/}
               </Row>
             </Header>
 
@@ -258,9 +257,9 @@ class Management extends Component {
                 <Route path='/management/user' exact>
                   <Index {...this.state} ref={ch => this.userTable = ch} updateCascade={this.updateCascade}/>
                 </Route>
-                <Route path='/management/userAnswer' exact>
-                  <EditorZjh {...this.state} ref={ch => this.userAnswerTable = ch} updateCascade={this.updateCascade}/>
-                </Route>
+                {/*<Route path='/management/userAnswer' exact>*/}
+                {/*  <EditorZjh {...this.state} ref={ch => this.userAnswerTable = ch} updateCascade={this.updateCascade}/>*/}
+                {/*</Route>*/}
               </Card>
             </Content>
             <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>

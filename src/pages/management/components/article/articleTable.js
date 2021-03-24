@@ -56,6 +56,14 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
+          title: 'Preview',
+          key: 'preview',
+          align: 'center',
+          render: (text, record) => (
+            <Button icon="link" onClick={() => this.previewHTML(text, record)}>Preview</Button>
+          ),
+        },
+        {
           title: 'Action',
           key: 'action',
           align: 'center',
@@ -114,6 +122,16 @@ export default class ArticleTable extends Component {
         message.error('更新文章表格失败,' + res.message);
       }
     });
+  }
+
+  previewHTML = (text, record) => {
+    if (window.previewWindow) {
+      window.previewWindow.close();
+    }
+
+    window.previewWindow = window.open();
+    window.previewWindow.document.write(record.articleContent);
+    window.previewWindow.document.close();
   }
 
   deleteRecord = (text, record) => {
