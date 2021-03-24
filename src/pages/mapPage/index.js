@@ -1090,7 +1090,14 @@ class MapPage extends Component {
                         alert('你还未提交本题答案')
                       } else{
                         let checked=document.getElementsByClassName("ant-checkbox-inner");
-                        checked[0].style.backgroundColor='#1890ff';
+                        let arg=question[recent]?question[recent].answer:'';
+                        arg=arg.split("");
+                        let translate1=translate(arg);
+                        debugger
+                        for(let i in translate1){
+                          let id=translate1[i];
+                          checked[id].style.backgroundColor='rgb(255,255,255,1)';
+                        }
                         this.setState({deadline:Date.now() +  1000 * 60})
                         this.setState({questionNumber: this.state.questionNumber+1})
                         this.setState({answer:false})
