@@ -43,6 +43,10 @@ class Management extends Component {
     this.updateCascade();
   }
 
+  setCascadeValue = (val) => {
+    this.setState({cascadeValue: val})
+  }
+
   updateCascade = () => {
     request({
       url: '/v1.0/api/tag/tree',
@@ -194,7 +198,7 @@ class Management extends Component {
                 </Route>
                 <Route path='/management/tagResource'>
                   <Col span={8} style={{textAlign: 'center'}}><h1>标签资源关联</h1></Col>
-                  <Col span={8} style={{textAlign: 'right'}}><TagResourceModal cascadeValue={this.state.cascadeValue}
+                  <Col span={8} style={{textAlign: 'right'}}><TagResourceModal setCascadeValue={this.setCascadeValue}
                                                                                updateAllTable={this.updateAllTable}/></Col>
                 </Route>
                 <Route path='/management/article'>
