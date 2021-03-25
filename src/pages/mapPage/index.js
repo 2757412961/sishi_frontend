@@ -1047,10 +1047,13 @@ class MapPage extends Component {
                   <Button  key="submit"
                            type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
                            onClick={()=>{
-                             debugger
+                             let checked1=document.getElementById("choose");
+                             // let checked=document.getElementsByClassName("ant-checkbox-checked");
                              let checked=document.getElementsByClassName("ant-checkbox-inner");
                              // checked[0].style.backgroundColor='rgb(0,255,0)';
+                             debugger
                              let string=this.state.value.toString();
+                             string=string.replace(/,/g,'');
                              let arg=question[recent]?question[recent].answer:'';
                              arg=arg.split("");
                              let translate1=translate(arg);
@@ -1058,15 +1061,24 @@ class MapPage extends Component {
                              {
                                if(this.state.answer==false){
                                this.setState({grade:this.state.grade+1});}
-                               for(let i in translate1){
-                                 let id=translate1[i];
-                                 checked[id].style.backgroundColor='#3dc076';
+                               // checked[i].classList[1]=(styles.correct);
+                               let id=0;
+                               let i=0;
+                               while(i<translate1.length){
+                                  id=translate1[i]-i;
+                                 document.getElementsByClassName("ant-checkbox-inner")[id].setAttribute('class',styles.correct);
+                                 i++;
+                                 // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
                                }
                              }else{
-                               for(let i in translate1){
-                                 let id=translate1[i];
-                                 checked[id].style.backgroundColor='#D93C3D';
-                               }
+                               let id=0;
+                               let i=0;
+                               for( i=0;i<translate1.length;i++){
+                                 id=translate1[i]-i;
+                                 let temp=document.getElementsByClassName("ant-checkbox-inner")[id];
+                                 if(document.getElementsByClassName("ant-checkbox-inner")[id]) {
+                                   document.getElementsByClassName("ant-checkbox-inner")[id].setAttribute('class', styles.wrong);
+                                 }}
                              }
                              this.setState({answer:true});
                              if(this.state.questionNumber==allNumber) {
@@ -1089,14 +1101,31 @@ class MapPage extends Component {
                       if(this.state.answer==false){
                         alert('你还未提交本题答案')
                       } else{
-                        let checked=document.getElementsByClassName("ant-checkbox-inner");
                         let arg=question[recent]?question[recent].answer:'';
                         arg=arg.split("");
                         let translate1=translate(arg);
+                        let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
+                        let checked1=document.getElementsByClassName('ant-checkbox');
+                        for (let i=0;i<checked1.length;i++){
+                          document.getElementsByClassName('ant-checkbox')[i].classList.remove('ant-checkbox-checked');
+                        }
+                        for(let i=0;i<checked.length;i++){
+                          if(document.getElementsByClassName(styles.correct).length>0)
+                          {document.getElementsByClassName(styles.correct)[i].setAttribute('class','ant-checkbox-inner');
+                          }
+                          else{
+                            if(document.getElementsByClassName(styles.wrong)[i]){
+                            document.getElementsByClassName(styles.wrong)[i].setAttribute('class','ant-checkbox-inner');
+                            }
+                          }
+                          // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
+                        }
+                        //let checked=document.getElementById("choose");
+                        let state = document.getElementsByTagName("input");
+                        state[0].getAttribute("checked");
                         debugger
-                        for(let i in translate1){
-                          let id=translate1[i];
-                          checked[id].style.backgroundColor='rgb(255,255,255,1)';
+                        for(let i=0;i<state.length;i++){
+                          document.getElementsByTagName("input")[i].checked=false;
                         }
                         this.setState({deadline:Date.now() +  1000 * 60})
                         this.setState({questionNumber: this.state.questionNumber+1})
