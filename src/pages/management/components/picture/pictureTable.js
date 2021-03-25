@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 export default class PictureTable extends Component {
   constructor(props) {
@@ -56,6 +57,19 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
+          title: 'Public',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
+            </>
+          ),
+        },
+        {
           title: 'Action',
           key: 'action',
           align: 'center',
@@ -73,6 +87,7 @@ export default class PictureTable extends Component {
           pictureContent: 'ggg',
           picturePublishTime: 4894189,
           pictureCreateTime: 32,
+          isPublic: false,
         },
         {
           pictureId: '2',
@@ -81,6 +96,7 @@ export default class PictureTable extends Component {
           pictureContent: 'h d',
           picturePublishTime: 4894189,
           pictureCreateTime: 123,
+          isPublic: false,
         },
       ],
     };
@@ -100,6 +116,10 @@ export default class PictureTable extends Component {
       url: requestUrl,
       method: 'GET',
       autoAdd: false, //不添加v1.0
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
       data: {
         length: 1000
       }
@@ -135,6 +155,27 @@ export default class PictureTable extends Component {
         message.success('删除图片成功');
       } else {
         message.error('删除图片失败,' + res.message);
+      }
+    });
+  }
+
+  updatePublicState = (text, record) => {
+    request({
+      url: '/v1.0/api/picture/public/' + record.pictureId,
+      method: 'PUT',
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.updateTable();
+        message.success('更新状态成功');
+      } else {
+        message.error('更新状态失败,' + res.message);
       }
     });
   }

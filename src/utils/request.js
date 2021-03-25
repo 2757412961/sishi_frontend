@@ -33,7 +33,11 @@ const fetch = (options) => {
         return axios.post(url, data, { timeout: 1000 * 20 });
       }
     case 'put':
-      return axios.put(url, data, { timeout: 1000 * 20 });
+      if (headers) {
+        return axios.put(url, data, { headers: headers, timeout: 1000 * 20 });
+      } else {
+        return axios.put(url, data, { timeout: 1000 * 20 });
+      }
     default:
       return axios(options);
   }
