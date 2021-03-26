@@ -434,6 +434,7 @@ class MapPage extends Component {
     console.log('mapPage', mapPage);
     const { tagTree } = mapPage;
     console.log('tagTree', tagTree);
+
     //遍历tagTree;
     let tree;
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
