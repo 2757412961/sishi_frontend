@@ -439,6 +439,7 @@ class MapPage extends Component {
       list:[],
       listTime:[],
       tagName:'',
+      pictures:[],
     };
 
   }
@@ -992,7 +993,44 @@ class MapPage extends Component {
                maskClosable={true}
               // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
                title={null}
-               onCancel={()=>this.setState({startQuestion:false})}
+               onCancel={()=>{
+                 this.setState({startQuestion:false})
+                 if(this.state.questionNumber==allNumber&&this.state.answer==true){
+                   let arg=question[recent]?question[recent].answer:'';
+                   arg=arg.split("");
+                   debugger
+                   let translate1=translate(arg);
+                   let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
+                   let checked1=document.getElementsByClassName('ant-checkbox');
+                   for (let i=0;i<checked1.length;i++){
+                     document.getElementsByClassName('ant-checkbox')[i].classList.remove('ant-checkbox-checked');
+                     document.getElementsByClassName('ant-checkbox-wrapper')[i].classList.remove('ant-checkbox-wrapper-checked');
+                   }
+                   for(let i=0;i<checked.length;i++){
+                     if(document.getElementsByClassName(styles.correct).length>0)
+                     {document.getElementsByClassName(styles.correct)[i].setAttribute('class','ant-checkbox-inner');
+                     }
+                     else{
+                       if(document.getElementsByClassName(styles.wrong)[i]){
+                         document.getElementsByClassName(styles.wrong)[i].setAttribute('class','ant-checkbox-inner');
+                       }
+                     }
+                     // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
+                   }
+                   //let checked=document.getElementById("choose");
+                   let state = document.getElementsByTagName("input");
+                   state[0].getAttribute("checked");
+                   for(let i=0;i<state.length;i++){
+                     document.getElementsByTagName("input")[i].checked=false;
+                     //document.getElementsByTagName("input")[i].setAttribute('checked','false');
+                   }
+                   // $("input[type=checkbox]").removeAttr("checked");
+                   this.setState({deadline:Date.now() +  1000 * 60})
+                   this.setState({questionNumber: 1})
+                   this.setState({answer:false})
+                   return
+                 }
+               }}
                footer={null}
                closable={true}
                wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
@@ -1045,6 +1083,7 @@ class MapPage extends Component {
               <Row gutter={16}>
                 <Col span={12}>
                   <Button  key="submit"
+                           centered
                            type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
                            onClick={()=>{
                              let checked1=document.getElementById("choose");
@@ -1088,11 +1127,13 @@ class MapPage extends Component {
                              }}
                            }>提交</Button>
                 </Col>
-                <Col span={12}>
+                <Col span={12} style={{alignContent:'center',alignItems:'center'}}>
                   <Button
+                    centered
                     key="submit" style={{backgroundColor:'rgb(255,0,0)'}}
                     type="primary"
                     onClick={()=> {
+
                       if(this.state.questionNumber==allNumber&&this.state.answer==true){
                         this.setState({startQuestion:false})
                         this.setState({questionNumber: 1})
@@ -1108,6 +1149,7 @@ class MapPage extends Component {
                         let checked1=document.getElementsByClassName('ant-checkbox');
                         for (let i=0;i<checked1.length;i++){
                           document.getElementsByClassName('ant-checkbox')[i].classList.remove('ant-checkbox-checked');
+                          document.getElementsByClassName('ant-checkbox-wrapper')[i].classList.remove('ant-checkbox-wrapper-checked');
                         }
                         for(let i=0;i<checked.length;i++){
                           if(document.getElementsByClassName(styles.correct).length>0)
@@ -1123,10 +1165,15 @@ class MapPage extends Component {
                         //let checked=document.getElementById("choose");
                         let state = document.getElementsByTagName("input");
                         state[0].getAttribute("checked");
-                        debugger
                         for(let i=0;i<state.length;i++){
                           document.getElementsByTagName("input")[i].checked=false;
+                          //document.getElementsByTagName("input")[i].setAttribute('checked','false');
                         }
+                        debugger
+                        let i1=document.getElementById("choose").value;
+                        document.getElementById("choose").value="";
+                        console.log(i1);
+                        // $("input[type=checkbox]").removeAttr("checked");
                         this.setState({deadline:Date.now() +  1000 * 60})
                         this.setState({questionNumber: this.state.questionNumber+1})
                         this.setState({answer:false})
@@ -1203,12 +1250,13 @@ class MapPage extends Component {
 
                     {/*</div>*/}
                     <Slider {...this.carousel_settings} >
-                      <div style={styles.out}>
-                        <img src={yay} style={{ height: '100%', width: '100%' }} />
-                      </div>
-                      <div>
-                        <img src={yaa} style={{ height: '100%', width: '100%' }} />
-                      </div>
+                      {this.state.pictures}
+                      {/*<div style={styles.out}>*/}
+                      {/*  <img src={yay} style={{ height: '100%', width: '100%' }} />*/}
+                      {/*</div>*/}
+                      {/*<div>*/}
+                      {/*  <img src={yaa} style={{ height: '100%', width: '100%' }} />*/}
+                      {/*</div>*/}
                     </Slider>
                   </div>
                 </div>
@@ -1328,19 +1376,37 @@ class MapPage extends Component {
                     </Col>
                     <Col span={2} onClick={() => {
                       this.setState({ startPicture: true })
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                      this.setState({ startPicture: true })
+                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                        console.log('res');
+                      });
                     }}>
                       <Icon className={styles.popup} type="picture" />
                     </Col>
                     <Col span={4} onClick={() => {
-                      this.setState({ startPicture: true })
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                      this.setState({ startPicture: true });
+                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                        debugger
+                        if(res.success) {
+                          let pictures=res.pictures;
+                          let picturesAll=pictures.map((item)=>{
+                            return(<div style={styles.out}>
+                              <h2>{item.pictureTitle}</h2>
+                              <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
+                            </div>)
+                          });
+                          this.setState({pictures:picturesAll})
+                        }
+                        console.log('res');
+                      });
                     }}>
                       图片
                     </Col>
                     <Col span={2} onClick={() => {
                       this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
+                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                        console.log('res');
+                      });
                     }}>
                       <Icon className={styles.popup} type="video-camera" />
                     </Col>
