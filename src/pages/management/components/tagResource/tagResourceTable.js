@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Table, Tag} from 'antd';
+import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 export default class TagResourceTable extends Component {
   constructor(props) {
@@ -21,16 +22,6 @@ export default class TagResourceTable extends Component {
           align: 'center',
           sorter: (a, b) => a.tagName.length - b.tagName.length,
           sortDirections: ['descend', 'ascend'],
-          render: (text, record, index) => (
-            <>
-              {record.tagName.split('@')
-                .map(tag => {
-                  return (
-                    <Tag color="green"> {tag}</Tag>
-                  );
-                })}
-            </>
-          ),
         },
         {
           title: 'Resource ID',
@@ -52,27 +43,9 @@ export default class TagResourceTable extends Component {
       dataSource: [
         {
           tagId: '1',
-          tagName: '党史新学@中共一大',
-          resourceId: '123',
-          resourceType: "tb_question"
-        },
-        {
-          tagId: '2',
-          tagName: '新中国史@十四五计划',
-          resourceId: '54',
-          resourceType: "tb_article"
-        },
-        {
-          tagId: '3',
-          tagName: '改革开放史@建立经济特区@kang',
-          resourceId: '164523',
-          resourceType: "tb_audio"
-        },
-        {
-          tagId: '4',
-          tagName: '社会主义发展史@中国特色社会主义@ad@test',
-          resourceId: '16453',
-          resourceType: "tb_picture"
+          tagName: 'test',
+          resourceId: 'test',
+          resourceType: 'ggg',
         },
       ],
     };
@@ -81,29 +54,31 @@ export default class TagResourceTable extends Component {
   }
 
   updateTable = () => {
-    // if (this.props.cascadeValue.length == 0) {
-    //   request({
-    //     url: '/v1.0/api/tags',
-    //     method: 'GET',
-    //     autoAdd: false, //不添加v1.0
-    //   }).then((res) => {
-    //     console.log(res);
-    //
-    //     this.setState({dataSource: res.list})
-    //   });
-    // } else {
-    //   request({
-    //     url: '/v1.0/api/tag/' + this.props.cascadeValue.join('@'),
-    //     method: 'GET',
-    //     autoAdd: false, //不添加v1.0
-    //   }).then((res) => {
-    //     console.log(res);
-    //
-    //     if (res.hasOwnProperty("tagName")) {
-    //       this.setState({dataSource: [res]})
-    //     }
-    //   });
-    // }
+    let requestUrl = '';
+    if (this.props.cascadeValue.length === 0) {
+      requestUrl = '/v1.0/api/tagResources';
+    } else {
+      requestUrl = '/v1.0/api/tagResources/tagName/' + this.props.cascadeValue.join('@');
+    }
+
+    request({
+      url: requestUrl,
+      method: 'GET',
+      autoAdd: false, //不添加v1.0
+      data: {
+        length: 1000
+      }
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.setState({dataSource: res.tagResources})
+        message.success('更新关联表格成功');
+      } else {
+        this.setState({dataSource: []})
+        message.error('更新关联表格失败,' + res.message);
+      }
+    });
   }
 
   render() {

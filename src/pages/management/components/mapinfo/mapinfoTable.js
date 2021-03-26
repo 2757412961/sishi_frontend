@@ -37,7 +37,6 @@ export default class MapinfoTable extends Component {
           align: 'center',
           sorter: (a, b) => a.mapLat - b.mapLat,
           sortDirections: ['descend', 'ascend'],
-          ellipsis: true,
         },
         {
           title: 'Map Time',
