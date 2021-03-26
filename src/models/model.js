@@ -3,7 +3,7 @@ import {reloadAuthorized} from '@/utils/Authorized';
 import {
   getQuestionsByTag, getAudioByTag, getVideoByTag,
   getArticlesByTag, getTagTree, getAllQuestion, updateQuestionStatus,
-  getAudioList, getVideoList,getTagTreeSortByTime,
+  getAudioList, getVideoList,getTagTreeSortByTime,getPicturesByTag
 } from '@/services/question';
 import { getUserData } from '@/services/service';
 export default {
@@ -129,6 +129,14 @@ export default {
       const response = yield call(getAudioByTag, "党史新学@中共一大");
       // const response = yield call(getAudioList);
       console.log('response',response);
+    },
+    //获取图片通过tagName
+    * getPictureByTag({payload}, {call, put}) {
+      debugger
+      const response = yield call(getPicturesByTag, payload);
+      // const response = yield call(getAudioList);
+      console.log('response',response);
+      return response;
     },
 
     //更新用户积分

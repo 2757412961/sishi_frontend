@@ -63,4 +63,10 @@ export function getArticlesByTag(tagName) {
   let start=0,length=100;
   return requestHeard({ url: '/articles/tagName/'+tagName, method: 'GET', data: { start,length } });
 }
+//获取图片列表
+//根据tagName获取图片列表
+export function getPicturesByTag(tagName) {
+  return requestHeard({ url: '/pictures/tagName/'+tagName, method: 'GET'});
+}
+
 
