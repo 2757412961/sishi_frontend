@@ -9,14 +9,14 @@ export default class PictureTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Picture ID',
+          title: '图片 ID',
           dataIndex: 'pictureId',
           key: 'pictureId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Picture Title',
+          title: '图片标题',
           dataIndex: 'pictureTitle',
           key: 'pictureTitle',
           align: 'center',
@@ -24,7 +24,7 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Picture Source',
+          title: '图片来源',
           dataIndex: 'pictureSource',
           key: 'pictureSource',
           align: 'center',
@@ -32,7 +32,7 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Picture Content',
+          title: '图片内容',
           dataIndex: 'pictureContent',
           key: 'pictureContent',
           align: 'center',
@@ -41,7 +41,7 @@ export default class PictureTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Picture Publish Time',
+          title: '图片发布时间',
           dataIndex: 'picturePublishTime',
           key: 'picturePublishTime',
           align: 'center',
@@ -49,7 +49,7 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
+          title: '图片创建时间',
           dataIndex: 'pictureCreateTime',
           key: 'pictureCreateTime',
           align: 'center',
@@ -57,7 +57,7 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Public',
+          title: '公开',
           dataIndex: 'isPublic',
           key: 'isPublic',
           align: 'center',
@@ -70,11 +70,11 @@ export default class PictureTable extends Component {
           ),
         },
         {
-          title: 'Action',
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],

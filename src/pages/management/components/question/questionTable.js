@@ -8,14 +8,14 @@ export default class QuestionTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Question ID',
+          title: '题目 ID',
           dataIndex: 'questionId',
           key: 'questionId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Question Content',
+          title: '题目内容',
           dataIndex: 'questionContent',
           key: 'questionContent',
           align: 'center',
@@ -24,7 +24,7 @@ export default class QuestionTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Option A',
+          title: '选项 A',
           dataIndex: 'optionA',
           key: 'optionA',
           align: 'center',
@@ -32,7 +32,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Option B',
+          title: '选项 B',
           dataIndex: 'optionB',
           key: 'optionB',
           align: 'center',
@@ -40,7 +40,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Option C',
+          title: '选项 C',
           dataIndex: 'optionC',
           key: 'optionC',
           align: 'center',
@@ -48,7 +48,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Option D',
+          title: '选项 D',
           dataIndex: 'optionD',
           key: 'optionD',
           align: 'center',
@@ -56,7 +56,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Option E',
+          title: '选项 E',
           dataIndex: 'optionE',
           key: 'optionE',
           align: 'center',
@@ -64,7 +64,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Answer',
+          title: '答案',
           dataIndex: 'answer',
           key: 'answer',
           align: 'center',
@@ -72,11 +72,24 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Action',
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],

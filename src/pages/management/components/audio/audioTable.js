@@ -8,14 +8,14 @@ export default class AudioTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Audio ID',
+          title: '音频 ID',
           dataIndex: 'audioId',
           key: 'audioId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Audio Title',
+          title: '音频标题',
           dataIndex: 'audioTitle',
           key: 'audioTitle',
           align: 'center',
@@ -23,7 +23,7 @@ export default class AudioTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Audio Source',
+          title: '音频来源',
           dataIndex: 'audioSource',
           key: 'audioSource',
           align: 'center',
@@ -31,7 +31,7 @@ export default class AudioTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Audio Content',
+          title: '音频内容',
           dataIndex: 'audioContent',
           key: 'audioContent',
           align: 'center',
@@ -40,7 +40,7 @@ export default class AudioTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Audio Publish Time',
+          title: '音频发布时间',
           dataIndex: 'audioPublishTime',
           key: 'audioPublishTime',
           align: 'center',
@@ -48,7 +48,7 @@ export default class AudioTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
+          title: '音频创建时间',
           dataIndex: 'audioCreateTime',
           key: 'audioCreateTime',
           align: 'center',
@@ -56,11 +56,24 @@ export default class AudioTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Action',
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],

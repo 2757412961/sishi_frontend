@@ -8,14 +8,14 @@ export default class VideoTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Video ID',
+          title: '视频 ID',
           dataIndex: 'videoId',
           key: 'videoId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Video Title',
+          title: '视频标题',
           dataIndex: 'videoTitle',
           key: 'videoTitle',
           align: 'center',
@@ -23,7 +23,7 @@ export default class VideoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Video Source',
+          title: '视频来源',
           dataIndex: 'videoSource',
           key: 'videoSource',
           align: 'center',
@@ -31,7 +31,7 @@ export default class VideoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Video Content',
+          title: '视频内容',
           dataIndex: 'videoContent',
           key: 'videoContent',
           align: 'center',
@@ -40,7 +40,7 @@ export default class VideoTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Video Publish Time',
+          title: '视频发布时间',
           dataIndex: 'videoPublishTime',
           key: 'videoPublishTime',
           align: 'center',
@@ -48,7 +48,7 @@ export default class VideoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
+          title: '视频创建时间',
           dataIndex: 'videoCreateTime',
           key: 'videoCreateTime',
           align: 'center',
@@ -56,11 +56,24 @@ export default class VideoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Action',
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],

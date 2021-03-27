@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table, message, Button,} from 'antd';
+import {Table, message, Button, Tag,} from 'antd';
 import request from "@/utils/request";
 
 export default class ArticleTable extends Component {
@@ -8,14 +8,14 @@ export default class ArticleTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Article ID',
+          title: '文章 ID',
           dataIndex: 'articleId',
           key: 'articleId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Article Title',
+          title: '文章标题',
           dataIndex: 'articleTitle',
           key: 'articleTitle',
           align: 'center',
@@ -23,7 +23,7 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Article Author',
+          title: '文章作者',
           dataIndex: 'articleAuthor',
           key: 'articleAuthor',
           align: 'center',
@@ -31,7 +31,7 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Article Content',
+          title: '文章内容',
           dataIndex: 'articleContent',
           key: 'articleContent',
           align: 'center',
@@ -40,7 +40,7 @@ export default class ArticleTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Article Publish Time',
+          title: '文章发布时间',
           dataIndex: 'articlePublishTime',
           key: 'articlePublishTime',
           align: 'center',
@@ -48,7 +48,7 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Article Create Time',
+          title: '文章创建时间',
           dataIndex: 'articleCreateTime',
           key: 'articleCreateTime',
           align: 'center',
@@ -56,19 +56,32 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Preview',
+          title: '文章预览',
           key: 'preview',
           align: 'center',
           render: (text, record) => (
-            <Button icon="link" onClick={() => this.previewHTML(text, record)}>Preview</Button>
+            <Button icon="link" onClick={() => this.previewHTML(text, record)}>预览</Button>
           ),
         },
         {
-          title: 'Action',
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],
@@ -133,14 +146,6 @@ export default class ArticleTable extends Component {
             '    ',
           articlePublishTime: 4894189,
           articleCreateTime: 32,
-        },
-        {
-          articleId: '2',
-          articleAuthor: 'tst',
-          articleTitle: 'qwe',
-          articleContent: 'h d',
-          articlePublishTime: 4894189,
-          articleCreateTime: 123,
         },
       ],
     };

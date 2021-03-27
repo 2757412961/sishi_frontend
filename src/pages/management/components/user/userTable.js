@@ -9,14 +9,14 @@ export default class UserTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'User ID',
+          title: '用户 ID',
           dataIndex: 'userId',
           key: 'userId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'User Name',
+          title: '用户姓名',
           dataIndex: 'userName',
           key: 'userName',
           align: 'center',
@@ -24,7 +24,7 @@ export default class UserTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Email',
+          title: '邮箱',
           dataIndex: 'email',
           key: 'pictureSource',
           align: 'center',
@@ -32,7 +32,7 @@ export default class UserTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Score',
+          title: '得分',
           dataIndex: 'score',
           key: 'score',
           align: 'center',
@@ -40,7 +40,7 @@ export default class UserTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Party Branch',
+          title: '党支部',
           dataIndex: 'partyBranch',
           key: 'partyBranch',
           align: 'center',
@@ -48,7 +48,7 @@ export default class UserTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
+          title: '创建时间',
           dataIndex: 'createTime',
           key: 'createTime',
           align: 'center',
@@ -56,7 +56,7 @@ export default class UserTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Update Time',
+          title: '更新时间',
           dataIndex: 'updateTime',
           key: 'updateTime',
           align: 'center',

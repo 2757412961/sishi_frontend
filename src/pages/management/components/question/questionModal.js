@@ -111,29 +111,29 @@ class QuestionModal extends Component {
               )}
             </Form.Item>
 
-            <Form.Item label="选项A" name="optionA">
+            <Form.Item label="选项 A" name="optionA">
               {getFieldDecorator('optionA',)(
-                <Input placeholder="请输入选项A"/>
+                <Input placeholder="请输入选项 A"/>
               )}
             </Form.Item>
-            <Form.Item label="选项B" name="optionB">
+            <Form.Item label="选项 B" name="optionB">
               {getFieldDecorator('optionB',)(
-                <Input placeholder="请输入选项B"/>
+                <Input placeholder="请输入选项 B"/>
               )}
             </Form.Item>
-            <Form.Item label="选项C" name="optionC">
+            <Form.Item label="选项 C" name="optionC">
               {getFieldDecorator('optionC',)(
-                <Input placeholder="请输入选项C"/>
+                <Input placeholder="请输入选项 C"/>
               )}
             </Form.Item>
-            <Form.Item label="选项D" name="optionD">
+            <Form.Item label="选项 D" name="optionD">
               {getFieldDecorator('optionD',)(
-                <Input placeholder="请输入选项D"/>
+                <Input placeholder="请输入选项 D"/>
               )}
             </Form.Item>
-            <Form.Item label="选项E" name="optionE">
+            <Form.Item label="选项 E" name="optionE">
               {getFieldDecorator('optionE',)(
-                <Input placeholder="请输入选项E"/>
+                <Input placeholder="请输入选项 E"/>
               )}
             </Form.Item>
 
