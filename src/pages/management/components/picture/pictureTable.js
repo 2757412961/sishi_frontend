@@ -41,7 +41,7 @@ export default class PictureTable extends Component {
           ellipsis: true,
         },
         {
-          title: '事件时间',
+          title: '事件发生时间',
           dataIndex: 'eventTime',
           key: 'eventTime',
           align: 'center',
