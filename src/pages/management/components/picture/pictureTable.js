@@ -41,6 +41,14 @@ export default class PictureTable extends Component {
           ellipsis: true,
         },
         {
+          title: '事件时间',
+          dataIndex: 'eventTime',
+          key: 'eventTime',
+          align: 'center',
+          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
           title: '图片发布时间',
           dataIndex: 'picturePublishTime',
           key: 'picturePublishTime',
@@ -55,6 +63,14 @@ export default class PictureTable extends Component {
           align: 'center',
           sorter: (a, b) => a.pictureCreateTime - b.pictureCreateTime,
           sortDirections: ['descend', 'ascend'],
+        },
+        {
+          title: '图片预览',
+          key: 'preview',
+          align: 'center',
+          render: (text, record) => (
+            <Button icon="link" onClick={() => this.previewPicture(text, record)}>预览</Button>
+          ),
         },
         {
           title: '公开',
@@ -102,6 +118,11 @@ export default class PictureTable extends Component {
     };
 
     this.updateTable();
+  }
+
+  previewPicture = (text, record) => {
+    window.previewWindow = window.open();
+    window.previewWindow.location = record.pictureContent;
   }
 
   updateTable = () => {

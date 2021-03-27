@@ -40,6 +40,14 @@ export default class VideoTable extends Component {
           ellipsis: true,
         },
         {
+          title: '事件时间',
+          dataIndex: 'eventTime',
+          key: 'eventTime',
+          align: 'center',
+          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
           title: '视频发布时间',
           dataIndex: 'videoPublishTime',
           key: 'videoPublishTime',
@@ -54,6 +62,14 @@ export default class VideoTable extends Component {
           align: 'center',
           sorter: (a, b) => a.videoCreateTime - b.videoCreateTime,
           sortDirections: ['descend', 'ascend'],
+        },
+        {
+          title: '视频预览',
+          key: 'preview',
+          align: 'center',
+          render: (text, record) => (
+            <Button icon="link" onClick={() => this.previewVideo(text, record)}>预览</Button>
+          ),
         },
         {
           title: '公开',
@@ -99,6 +115,11 @@ export default class VideoTable extends Component {
     };
 
     this.updateTable();
+  }
+
+  previewVideo = (text, record) => {
+    window.previewWindow = window.open();
+    window.previewWindow.location = record.videoContent;
   }
 
   updateTable = () => {

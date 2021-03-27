@@ -40,6 +40,14 @@ export default class ArticleTable extends Component {
           ellipsis: true,
         },
         {
+          title: '事件时间',
+          dataIndex: 'eventTime',
+          key: 'eventTime',
+          align: 'center',
+          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
           title: '文章发布时间',
           dataIndex: 'articlePublishTime',
           key: 'articlePublishTime',
@@ -153,6 +161,12 @@ export default class ArticleTable extends Component {
     this.updateTable();
   }
 
+  previewHTML = (text, record) => {
+    window.previewWindow = window.open();
+    window.previewWindow.document.write(record.articleContent);
+    window.previewWindow.document.close();
+  }
+
   updateTable = () => {
     let requestUrl = '';
     if (this.props.cascadeValue.length === 0) {
@@ -179,12 +193,6 @@ export default class ArticleTable extends Component {
         message.error('更新文章表格失败,' + res.message);
       }
     });
-  }
-
-  previewHTML = (text, record) => {
-    window.previewWindow = window.open();
-    window.previewWindow.document.write(record.articleContent);
-    window.previewWindow.document.close();
   }
 
   deleteRecord = (text, record) => {

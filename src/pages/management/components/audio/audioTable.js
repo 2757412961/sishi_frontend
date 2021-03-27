@@ -40,6 +40,14 @@ export default class AudioTable extends Component {
           ellipsis: true,
         },
         {
+          title: '事件时间',
+          dataIndex: 'eventTime',
+          key: 'eventTime',
+          align: 'center',
+          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
           title: '音频发布时间',
           dataIndex: 'audioPublishTime',
           key: 'audioPublishTime',
@@ -54,6 +62,14 @@ export default class AudioTable extends Component {
           align: 'center',
           sorter: (a, b) => a.audioCreateTime - b.audioCreateTime,
           sortDirections: ['descend', 'ascend'],
+        },
+        {
+          title: '音频预览',
+          key: 'preview',
+          align: 'center',
+          render: (text, record) => (
+            <Button icon="link" onClick={() => this.previewAudio(text, record)}>预览</Button>
+          ),
         },
         {
           title: '公开',
@@ -99,6 +115,11 @@ export default class AudioTable extends Component {
     };
 
     this.updateTable();
+  }
+
+  previewAudio = (text, record) => {
+    window.previewWindow = window.open();
+    window.previewWindow.location = record.audioContent;
   }
 
   updateTable = () => {
