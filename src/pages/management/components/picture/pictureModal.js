@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Button, Upload, Icon, message} from 'antd';
-import {Link} from "react-router-dom";
+import {Modal, Form, Input, Button, Upload, Icon, message, DatePicker} from 'antd';
 import request from "@/utils/request";
 import {getLocalData} from '@/utils/common.js';
 
@@ -59,12 +58,13 @@ class PictureModal extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log(this.props.form.getFieldsValue());
-        let {tagName, pictureTitle, pictureSource, pictureFile} = this.props.form.getFieldsValue();
+        let {tagName, pictureTitle, pictureSource, pictureFile, eventTime} = this.props.form.getFieldsValue();
         let formData = new FormData();
         formData.append("tagName", tagName);
         formData.append("pictureTitle", pictureTitle);
         formData.append("pictureSource", pictureSource);
         formData.append("pictureFile", this.state.pictureFile);
+        formData.append("eventTime", eventTime.format('YYYY-MM-DD'));
 
         this.setState({confirmLoading: true});
 
@@ -142,6 +142,12 @@ class PictureModal extends Component {
             <Form.Item label="图片来源" name="pictureSource">
               {getFieldDecorator('pictureSource', {rules: [{required: true, message: '请输入图片来源!'},]})(
                 <Input placeholder="请输入图片来源"/>
+              )}
+            </Form.Item>
+
+            <Form.Item label="事件发生时间" name="eventTime">
+              {getFieldDecorator('eventTime', {rules: [{required: true, message: '请输入事件发生时间!'},]})(
+                <DatePicker placeholder="请输入事件发生时间" format={'YYYY-MM-DD'}/>
               )}
             </Form.Item>
 

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Button, Upload, Icon, message} from 'antd';
-import {Link} from "react-router-dom";
+import {Modal, Form, Input, Button, Upload, DatePicker, Icon, message} from 'antd';
 import request from "@/utils/request";
 
 class AudioModal extends Component {
@@ -35,7 +34,7 @@ class AudioModal extends Component {
     console.log(file);
     console.log(file.type);
 
-    if (file.type !== 'audio/mp3'&&file.type !== 'audio/mpeg') {
+    if (file.type !== 'audio/mp3' && file.type !== 'audio/mpeg') {
       message.warning('文件格式不符合要求！');
       return false;
     }
@@ -57,12 +56,13 @@ class AudioModal extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log(this.props.form.getFieldsValue());
-        let {tagName, audioTitle, audioSource, audioFile} = this.props.form.getFieldsValue();
+        let {tagName, audioTitle, audioSource, audioFile, eventTime} = this.props.form.getFieldsValue();
         let formData = new FormData();
         formData.append("tagName", tagName);
         formData.append("audioTitle", audioTitle);
         formData.append("audioSource", audioSource);
         formData.append("audioFile", this.state.audioFile);
+        formData.append("eventTime", eventTime.format('YYYY-MM-DD'));
 
         this.setState({confirmLoading: true});
 
@@ -137,6 +137,12 @@ class AudioModal extends Component {
               {getFieldDecorator('audioSource', {rules: [{required: true, message: '请输入音频来源!'},]})(
                 <Input placeholder="请输入音频来源"/>
               )}
+            </Form.Item>
+
+            <Form.Item label="事件发生时间" name="eventTime">
+              {getFieldDecorator('eventTime', {rules: [{required: true, message: '请输入事件发生时间!'},]})(
+                <DatePicker placeholder="请输入事件发生时间" format={'YYYY-MM-DD'}  />
+                )}
             </Form.Item>
 
             <Form.Item label="音频文件" name="audioFile" extra="上传的音频仅支持MP3格式">
