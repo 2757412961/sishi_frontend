@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Modal, Form, Input, Button, Upload, Icon, message} from 'antd';
 import {Link} from "react-router-dom";
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 class PictureModal extends Component {
   constructor(props) {
@@ -70,6 +71,10 @@ class PictureModal extends Component {
         request({
           url: '/v1.0/api/picture/form',
           method: 'POST',
+          headers: {
+            userId: getLocalData({dataName: 'userId'}),
+            token: getLocalData({dataName: 'token'})
+          },
           data: formData,
           autoAdd: false, //不添加v1.0
         }).then((res) => {

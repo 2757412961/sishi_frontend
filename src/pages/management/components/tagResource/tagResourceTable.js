@@ -9,14 +9,14 @@ export default class TagResourceTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Tag ID',
+          title: '标签 ID',
           dataIndex: 'tagId',
           key: 'tagId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Tag Name',
+          title: '标签名',
           dataIndex: 'tagName',
           key: 'tagName',
           align: 'center',
@@ -24,14 +24,14 @@ export default class TagResourceTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Resource ID',
+          title: '资源 ID',
           dataIndex: 'resourceId',
           key: 'resourceId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Resource Type',
+          title: '资源类型',
           dataIndex: 'resourceType',
           key: 'resourceType',
           align: 'center',

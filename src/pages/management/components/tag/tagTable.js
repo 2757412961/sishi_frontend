@@ -8,14 +8,14 @@ export default class TagTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Tag ID',
+          title: '标签 ID',
           dataIndex: 'tagId',
           key: 'tagId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Tag Name',
+          title: '标签名',
           dataIndex: 'tagName',
           key: 'tagName',
           sorter: (a, b) => a.tagName.length - b.tagName.length,
@@ -31,11 +31,11 @@ export default class TagTable extends Component {
           ),
         },
         {
-          title: 'Action',
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],

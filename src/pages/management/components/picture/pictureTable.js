@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 export default class PictureTable extends Component {
   constructor(props) {
@@ -8,14 +9,14 @@ export default class PictureTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Picture ID',
+          title: '图片 ID',
           dataIndex: 'pictureId',
           key: 'pictureId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Picture Title',
+          title: '图片标题',
           dataIndex: 'pictureTitle',
           key: 'pictureTitle',
           align: 'center',
@@ -23,7 +24,7 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Picture Source',
+          title: '图片来源',
           dataIndex: 'pictureSource',
           key: 'pictureSource',
           align: 'center',
@@ -31,7 +32,7 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Picture Content',
+          title: '图片内容',
           dataIndex: 'pictureContent',
           key: 'pictureContent',
           align: 'center',
@@ -40,7 +41,15 @@ export default class PictureTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Picture Publish Time',
+          title: '事件时间',
+          dataIndex: 'eventTime',
+          key: 'eventTime',
+          align: 'center',
+          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
+          title: '图片发布时间',
           dataIndex: 'picturePublishTime',
           key: 'picturePublishTime',
           align: 'center',
@@ -48,7 +57,7 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
+          title: '图片创建时间',
           dataIndex: 'pictureCreateTime',
           key: 'pictureCreateTime',
           align: 'center',
@@ -56,11 +65,32 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Action',
+          title: '图片预览',
+          key: 'preview',
+          align: 'center',
+          render: (text, record) => (
+            <Button icon="link" onClick={() => this.previewPicture(text, record)}>预览</Button>
+          ),
+        },
+        {
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],
@@ -73,6 +103,7 @@ export default class PictureTable extends Component {
           pictureContent: 'ggg',
           picturePublishTime: 4894189,
           pictureCreateTime: 32,
+          isPublic: false,
         },
         {
           pictureId: '2',
@@ -81,11 +112,17 @@ export default class PictureTable extends Component {
           pictureContent: 'h d',
           picturePublishTime: 4894189,
           pictureCreateTime: 123,
+          isPublic: false,
         },
       ],
     };
 
     this.updateTable();
+  }
+
+  previewPicture = (text, record) => {
+    window.previewWindow = window.open();
+    window.previewWindow.location = record.pictureContent;
   }
 
   updateTable = () => {
@@ -100,6 +137,10 @@ export default class PictureTable extends Component {
       url: requestUrl,
       method: 'GET',
       autoAdd: false, //不添加v1.0
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
       data: {
         length: 1000
       }
@@ -135,6 +176,27 @@ export default class PictureTable extends Component {
         message.success('删除图片成功');
       } else {
         message.error('删除图片失败,' + res.message);
+      }
+    });
+  }
+
+  updatePublicState = (text, record) => {
+    request({
+      url: '/v1.0/api/picture/public/' + record.pictureId,
+      method: 'PUT',
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.updateTable();
+        message.success('更新状态成功');
+      } else {
+        message.error('更新状态失败,' + res.message);
       }
     });
   }
