@@ -1,12 +1,13 @@
 import React, { useState, useEffect, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel } from 'antd';
+import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel,Divider } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'dva';
 import axios from 'axios';
+import * as d3 from "d3";
 import { getLocalData } from '@/utils/common.js';
 import { MapContext, RotationControl, ScaleControl, ZoomControl } from 'react-mapbox-gl';
 import MapPageMap from './MapPageMap';
@@ -14,6 +15,7 @@ import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
+import line from '@/assets/pointData/line.geojson';
 import point from '@/assets/pointData/point.json';
 import { Scene, LineLayer,Control,PolygonLayer,PointLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
@@ -25,14 +27,6 @@ import {ArcLayer} from '@deck.gl/layers';
 import redflag from '@/assets/redflag.png';
 import eventcard from '@/assets/eventcard.png';
 import p1 from '@/assets/test/1.jpg';
-import p2 from '@/assets/test/2.jpg';
-import p3 from '@/assets/test/3.jpg';
-import tupian from '../../assets/icon/图片.png';
-import shipin from '@/assets/icon/视频.png';
-import yinpin from '@/assets/icon/音频.png';
-import wenzhang from '@/assets/icon/文章.png';
-import dati from '@/assets/icon/答题.png';
-import dangshi from '@/assets/dangshi.PNG'
 import yay from '@/assets/unnamed.jpg'
 import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
 import dangshi_background from '@/assets/dangshi_background.PNG'
@@ -47,9 +41,10 @@ import c6 from '@/assets/test/c6.jpg';
 import c7 from '@/assets/test/c7.jpg';
 import c8 from '@/assets/test/c8.jpg';
 import c9 from '@/assets/test/c9.jpg';
+import dangqi from '@/assets/test/党旗.png';
 import layer from '@/assets/test/layer.png';
 import reback from '@/assets/test/reback.png';
-import ditu from '@/assets/test/地图.PNG';
+import jiedao from '@/assets/test/街道.PNG';
 import dixing from '@/assets/test/地形.PNG';
 import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
@@ -199,7 +194,7 @@ const variants={open: { opacity: 1, x: 0 },
 //     label:"党史新学@中共九大@北京",
 //   },
 // ];
-let list=[];
+
 var chapters = {
   '一大-上海': {
     bearing: 0,
@@ -268,25 +263,25 @@ var chapters = {
 let des = [
   { "showInfo":"<div ><h3>中共一大上海会址</h3><div style={styles.popup1}></div><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
       "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
-  { "showInfo":"<div><h3>中共一大嘉兴南湖会址</h3><img style={styles.popup1} src={c1} /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
+  { "showInfo":"<div><h3>中共一大嘉兴南湖会址</h3><img width=220px' src="+c1+" /><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
       "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
-  { "showInfo":"<div><h3>中共二大会址</h3><img src={c2}  /><p>中国共产党第二次全国代表大会，简称中共二大，" +
+  { "showInfo":"<div><h3>中共二大会址</h3><img width=220px' src="+c2+" /><p>中国共产党第二次全国代表大会，简称中共二大，" +
       "于1922年7月16日至23日在上海召开。</p></div>"},
-  { "showInfo":"<div><h3>中共三大会址</h3><img src={c3}  />" +
+  { "showInfo":"<div><h3>中共三大会址</h3><img width=220px' src="+c3+" />" +
       "<p>中国共产党第三次全国代表大会，简称中共三大，于1923年6月12日至20日在广州召开。</p></div>"},
-  { "showInfo":"<div><h3>中共四大会址</h3><img src={c4} />" +
+  { "showInfo":"<div><h3>中共四大会址</h3><img width=220px' src="+c4+" />" +
       "<p>中国共产党第四次全国代表大会，简称中共四大，于1925年1月11日至22日在上海召开。</p></div>"},
-  { "showInfo":"<div><h3>中共五大会址</h3><img src={c5} />" +
+  { "showInfo":"<div><h3>中共五大会址</h3><img width=220px' src="+c5+" />" +
       "<p>中国共产党第五次全国代表大会，简称中共五大，于1927年4月27日至5月9日在武汉武昌都府堤召开。</p></div>"},
-  { "showInfo":"<div><h3>中共六大会址</h3><img src={c6} />" +
+  { "showInfo":"<div><h3>中共六大会址</h3><img width=220px' src="+c6+" />" +
       "<p>中国共产党第六次全国代表大会，简称中共六大，于1928年6月18日至7月11日在俄罗斯莫斯科市中心西南约40公里的五一村召开。</p></div>"},
-  { "showInfo":"<div><h3>中共七大会址</h3><img src={c7} />" +
+  { "showInfo":"<div><h3>中共七大会址</h3><img width=220px' src="+c7+" />" +
       "<p>中国共产党第七次全国代表大会，简称中共七大，于1945年4月23日至6月11日在延安杨家岭革命旧址中央大礼堂召开。</p></div>"},
-  { "showInfo":"<div><h3>中共八大会址</h3><img src={c8} />" +
+  { "showInfo":"<div><h3>中共八大会址</h3><img width=220px' src="+c8+" />" +
       "<p>中国共产党第八次全国代表大会，简称中共八大，于1956年9月15日至27日在北京全国政协礼堂召开。</p></div>"},
-  { "showInfo":"<div><h3>中共九大会址</h3><img src={c9} />" +
+  { "showInfo":"<div><h3>中共九大会址</h3><img width=220px' src="+c9+" />" +
       "<p>中国共产党第九次全国代表大会，简称中共九大，于1969年4月1日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十大会址</h3><img src={c9} />" +
+  { "showInfo":"<div><h3>中共十大会址</h3><img width=220px' src="+c9+" />" +
       "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
 ]
 
@@ -368,7 +363,7 @@ function forList(treeList){
       temp.id=treeList[i].label;
       temp.lonlat=treeList[i].geoCoordinates;
       temp.tagName=treeList[i].tagName;
-      temp.text=treeList[i].label;
+      temp.text=treeList[i].label.split('@')[0];
       temp.value=treeList[i].label.replace('@','');
       temp.time=treeList[i].time;
       temp.showInfo=des[i].showInfo;
@@ -379,14 +374,33 @@ function forList(treeList){
   }
   return list;
 }
-
+function translate(arg) {
+  let num=[];
+  for(let i in arg){
+    let temp=0;
+    if(arg[i]=='A'){
+      temp=0;
+    }
+    if(arg[i]=='B'){
+      temp=1;
+    }
+    if(arg[i]=='C'){
+      temp=2;
+    }
+    if(arg[i]=='D'){
+      temp=3;
+    }
+    num.push(temp);
+  }
+  return num;
+};
 class MapPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       activeKey: "1",
-      itemNow: list[0],
-      _collapsed: false,
+      itemNow:null,
+      collapsed: false,
       modalVisble: false,
       deadline: Date.now() + 1000 * 60,
       value: 1,
@@ -414,6 +428,8 @@ class MapPage extends Component {
       },
       knowledgeUrl: p1,
       //list[0].cardImg,
+      layerValue:false,
+      mapUrl: 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63',
       knowledgeContent: '中国共产党第一次全国代表大会于1921年7月23日至1921年8月3日在上海法租界贝勒路树德里3号（后称望志路106号，现改兴业路76号）和浙江嘉兴南湖召开。出席大会的各地代表共12人。',
       //list[0].cardContent,
       // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
@@ -423,7 +439,10 @@ class MapPage extends Component {
       startPicture:false,
       startVideo:false,
       startAudio:false,
+      list:[],
+      listTime:[],
       tagName:'',
+      pictures:[],
     };
 
   }
@@ -447,7 +466,7 @@ class MapPage extends Component {
     let sources = {
       "osm-tiles1": {
         "type": "raster",
-        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
+        'tiles': [this.state.mapUrl],
         'tileSize': 256
       },
       "osm-tiles2": {
@@ -467,38 +486,7 @@ class MapPage extends Component {
         "source": "osm-tiles2",
       }
     ];
-    /*const map = new Scene({
-      id: 'student-map',
-      /!** 渲染的地图会有一个antv的logo,可以让其消失 *!/
-      logoVisible: false,
-      map: new Mapbox({
-        // container: 'onlineMapping',
-        style: {
-          "version": 8,
-          "sprite": localhost + "/MapBoxGL/css/sprite",
-          "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-          "sources": sources,
-          "layers": layers,
-        },
-        center: [ 121.52, 31.04 ],  //上海经纬度坐标
-        zoom: 3,
-        pitch:30,
-        bearing: 10,
-        token:'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg'
-      }),
-      // map: new Mapbox({
-      //   container: 'onlineMapping',
-      //   style: {
-      //     "version": 8,
-      //     "sprite": localhost + "/MapBoxGL/css/sprite",
-      //     "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-      //     "sources": sources,
-      //     "layers": layers,
-      //   },
-      //   center: [ 121.52, 31.04 ],  //上海经纬度坐标
-      //   zoom: 3,
-      // })
-    });*/
+
     const map = new mapboxgl.Map({
       container: 'onlineMapping',
       style: {
@@ -511,17 +499,26 @@ class MapPage extends Component {
       center: [121.52, 31.04],  //上海经纬度坐标
       zoom: 3,
       pitch: 30,
-      bearing: 10,
+      // bearing: 10,
     });
     // let treeList=forTree(tagTree);
     // console.log('treeList',treeList);
-    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: { tagName: '党史新学' } }).then((res) => {
-      console.log('res', res);
-      if (res && res.success) {
-        let tagTree = res.list;
+    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
+      console.log('res',res);
+      let listHere = [], listHere2 = [];
+      if(res&&res.success){
+        let tagTree=res.list;
         // let tree=forTree(tagTree);
         // console.log('tree',tree);
-        list = forList(tagTree);
+        listHere=forList(tagTree);
+        listHere2=forList(tagTree);
+        let listTime = listHere;
+        listTime.splice(0,1);
+        console.log("listTime", listTime);
+        this.setState({
+          list:listHere2,
+          listTime:listTime,
+        })
       }
 
       const myDeckLayer = new MapboxLayer({
@@ -540,17 +537,17 @@ class MapPage extends Component {
         //   duration: 1
         // })
       });
-      map.on('load', () => {
+      map.on('load', ()=> {
         map.addLayer(myDeckLayer)
       })
 
+      console.log("listHere", listHere);
       //加载中共一大（上海，嘉兴地点）的火花图标
       map.on('load', function() {
-        for (let i = 0; i < list.length; i++) {
-          map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
-
+        for (let i=0;i<listHere.length;i++) {
+          map.addImage(listHere[i].id, pulsingDot, { pixelRatio: 2 });
           map.addLayer({
-            "id": list[i].id,
+            "id": listHere[i].id,
             "type": "symbol",
             "source": {
               "type": "geojson",
@@ -560,25 +557,26 @@ class MapPage extends Component {
                   "type": "Feature",
                   "geometry": {
                     "type": "Point",
-                    "coordinates": list[i].lonlat,
+                    "coordinates": listHere[i].lonlat,
                   }
                 }]
               }
             },
             "layout": {
-              "icon-image": list[i].id,
+              "icon-image": listHere[i].id,
               "icon-optional": false,
               "icon-ignore-placement": true,
               // "text-ignore-placement": true,
+              "icon-allow-overlap": true,
               "text-allow-overlap": true,
-              "text-field": list[i].value,
+              "text-field": listHere[i].value,
               "text-anchor": 'left',
-              "text-offset": [1, 0.1],
+              "text-offset": [1,0.1],
               // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
               "text-size": [
                 "interpolate", ["linear"], ["zoom"],
-                3, 20,
-                17, 38
+                3,20,
+                17,38
               ],
             },
             paint: {
@@ -590,41 +588,29 @@ class MapPage extends Component {
         // playback(0);
       });
       let _this = this;
-      this.map = map;
       var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
-      for (let i = 0; i < list.length; i++) {
-        map.on('mouseenter', list[i].id, function(e) {
+      for (let i = 0; i < listHere.length; i++) {
+        map.on('mouseenter', listHere[i].id, function(e) {
           map.getCanvas().style.cursor = 'pointer';
           var coordinates = e.features[0].geometry.coordinates;
-          let showInfo = list[i].showInfo;
-//closeOnClick:false,closeButton:true
+          let showInfo = listHere[i].showInfo;
           popup.setLngLat(coordinates)
           popup.setHTML(showInfo)
           popup.addTo(map)
-          // .setDOMContent(popupRef.current);
-          // document.getElementById('btn')
-          //   .addEventListener('click', function(){
-          //     let cardImg = list[i].cardImg;
-          //     let cardContent = list[i].cardContent;
-          //     _this.setState({
-          //       knowledgeUrl: cardImg,
-          //       knowledgeContent: cardContent,
-          //     });
-          //     _this.showModal()
-          //   });
         });
-        map.on('mouseleave', list[i].id, function() {
+        map.on('mouseleave', listHere[i].id, function() {
           map.getCanvas().style.cursor = '';
           popup.remove();
         });
       }
-      for (let i = 0; i < list.length; i++) {
-        popup.remove();
-        map.on('click', list[i].id, function(e) {
+
+      for(let i = 0;i<listHere.length;i++){
+        map.on('click', listHere[i].id, function(e) {
+          popup.remove();
           var coordinates = e.features[0].geometry.coordinates;
           _this.setState({
-            itemNow: list[i],
-            tagName:list[i].tagName,
+            itemNow: listHere[i],
+            tagName:listHere[i].tagName,
           })
 
           new mapboxgl.Popup()
@@ -632,24 +618,15 @@ class MapPage extends Component {
             // .setHTML(showInfo)
             .addTo(map)
             .setDOMContent(popupRef.current);
-          // document.getElementById('btn')
-          //   .addEventListener('click', function(){
-          //     let cardImg = list[i].cardImg;
-          //     let cardContent = list[i].cardContent;
-          //     _this.setState({
-          //       knowledgeUrl: cardImg,
-          //       knowledgeContent: cardContent,
-          //     });
-          //     _this.showModal()
-          //   });
         });
-        // map.on('mouseenter', list[i].id, function() {
-        //   map.getCanvas().style.cursor = 'pointer';
-        // });
-        // map.on('mouseleave', list[i].id, function() {
-        //   map.getCanvas().style.cursor = '';
-        // });
+        map.on('mouseenter', listHere[i].id, function() {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', listHere[i].id, function() {
+          map.getCanvas().style.cursor = '';
+        });
       }
+      this.map = map;
     });
 
     // let nav = new mapboxgl.NavigationControl({
@@ -902,6 +879,87 @@ class MapPage extends Component {
     map.on('load', () => {
       map.addLayer(myDeckLayer)
     })
+
+    map.on('load', function() {
+      d3.json(line,function(err,data) {
+        if (err) throw err;
+        var coordinates = data.features[0].geometry.coordinates;
+        data.features[0].geometry.coordinates = [coordinates[0]];
+        map.addSource('trace', {type:'geojson', data: data})
+        map.addLayer({
+          "id": "trace",
+          "type": "line",
+          "source": "trace",
+          "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+          },
+          "paint": {
+            "line-color": "red",
+            "line-opacity": 0.8,
+            "line-width": 5
+          }
+        });
+        map.jumpTo({'center': coordinates[0], 'zoom': 7});
+        map.setPitch(10);
+        //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
+        var marker = new mapboxgl.Marker()
+        var i = 0;
+        var timer = window.setInterval(function() {
+          if(i<coordinates.length) {
+            data.features[0].geometry.coordinates.push(coordinates[i]);
+            map.getSource('trace').setData(data);
+            map.panTo(coordinates[i]);
+            i++;
+            function animateMarker() {
+              marker.setLngLat(coordinates[i])
+              marker.addTo(map);
+              requestAnimationFrame(animateMarker);
+            }
+            requestAnimationFrame(animateMarker);
+          } else {
+            window.clearInterval(timer);
+          }
+        }, 100);
+      });
+      /*map.addLayer({
+        'id': 'lines',
+        'type': 'line',
+        'source': {
+          'type': 'geojson',
+          'data': {
+            'type': 'FeatureCollection',
+            'features': [{
+              'type': 'Feature',
+              'properties': {
+                'color':  '#33C9EB' // blue
+              },
+              'geometry': {
+                'type': 'LineString',
+                'coordinates': [
+                  [121.47069346816863, 31.22206084685108],
+                  [120.75580305351667, 30.75747193181725],
+                  [121.46214132313253, 31.2260623329518],
+                  [113.29062697510238, 23.121680862715294],
+                  [121.48020351895462, 31.25728522799882],
+                  [114.29318634011975, 30.553569642526185],
+                  [37.153974181328664, 55.535728582753336],
+                  [109.46267096678156, 36.618757084621336],
+                  [116.35780179933835, 39.91833919135752],
+                  [116.38748691963224, 39.90337460887406]
+                ]
+              }
+            }]
+          }
+        },
+        'paint': {
+          'line-width': 3,
+// Use a get expression (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-get)
+// to set the line-color to a feature property value.
+          'line-color': ['get', 'color']
+        }
+      });*/
+    });
     this.map = map;
   }
   showModal=(activeKey)=>{
@@ -930,25 +988,82 @@ class MapPage extends Component {
       value: e,
     });
   };
-  moreOnClick = () => {
+  //子时间轴（中共一大）
+  moreOnClick=()=>{
     let temp = this.state.more;
-    if (temp) {
-      list.splice(1, 0, ...subList);
-    } else {
-      list.splice(1, 3);
+    if(temp){
+      let tempList = this.state.listTime;
+      let subList = [];
+      subList[0] = this.state.list[0];
+      subList[0]['sub'] = true;
+      subList[1] = this.state.list[1];
+      subList[1]['sub'] = true;
+      tempList.splice(1, 0, ...subList);
+      this.setState({
+        listTime:tempList,
+      })
+    }
+    else{
+      let tempList = this.state.listTime;
+      tempList.splice(1, 2);
+      this.setState({
+        listTime:tempList,
+      })
     }
     this.setState({
-      more: !temp
+      more:!temp
     })
     this.forceUpdate();
   };
+  onCollapse = collapsed => {
+    console.log(collapsed);
+    let temp = this.state.collapsed;
+    this.setState({ collapsed:!temp });
+  };
+  componentWillUnmount() {
+    this.map.remove()
+  }
+  layerClick = () => {
+    this.setState({
+      layerValue: !this.state.layerValue
+    })
+  }
+  diTuClick = (id,e) => {
+    if(id==='vec'){
+      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      this.setState({
+        mapUrl: this.state.mapUrl,
+      })
+    } else if(id==='img'){
+      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      this.setState({
+        mapUrl: this.state.mapUrl
+      })
+    } else{
+      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      this.setState({
+        mapUrl: this.state.mapUrl,
+      })
+    }
+    let diTuList = ['vec','img','ter']
+    for(let i=0;i<diTuList.length;i++){
+      if(id===diTuList[i]){
+        document.getElementById(id).style.border = ('2px solid red');
+        //#4185d0
+      }
+      else {
+        document.getElementById(diTuList[i]).style.border = ('');
+      }
+    }
+    this.componentWillUnmount()
+    this.componentDidMount()
+    // this.map.setStyle('')
+  }
 
   render(){
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
     const {tagTree,question,knowledgeContent}=mapPage;
-    list=forList(tagTree);
-    console.log('listRender',list);
     let allNumber=question.length;
     let recent=this.state.questionNumber-1
     console.log('tagTree',tagTree);
@@ -957,7 +1072,7 @@ class MapPage extends Component {
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
-      <Sider style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
+      <Sider collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
         {/*答题*/}
         {/**/}
         <Modal visible={this.state.startQuestion}
@@ -967,7 +1082,44 @@ class MapPage extends Component {
                maskClosable={true}
               // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
                title={null}
-               onCancel={()=>this.setState({startQuestion:false})}
+               onCancel={()=>{
+                 this.setState({startQuestion:false})
+                 if(this.state.questionNumber==allNumber&&this.state.answer==true){
+                   let arg=question[recent]?question[recent].answer:'';
+                   arg=arg.split("");
+                   debugger
+                   let translate1=translate(arg);
+                   let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
+                   let checked1=document.getElementsByClassName('ant-checkbox');
+                   for (let i=0;i<checked1.length;i++){
+                     document.getElementsByClassName('ant-checkbox')[i].classList.remove('ant-checkbox-checked');
+                     document.getElementsByClassName('ant-checkbox-wrapper')[i].classList.remove('ant-checkbox-wrapper-checked');
+                   }
+                   for(let i=0;i<checked.length;i++){
+                     if(document.getElementsByClassName(styles.correct).length>0)
+                     {document.getElementsByClassName(styles.correct)[i].setAttribute('class','ant-checkbox-inner');
+                     }
+                     else{
+                       if(document.getElementsByClassName(styles.wrong)[i]){
+                         document.getElementsByClassName(styles.wrong)[i].setAttribute('class','ant-checkbox-inner');
+                       }
+                     }
+                     // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
+                   }
+                   //let checked=document.getElementById("choose");
+                   let state = document.getElementsByTagName("input");
+                   state[0].getAttribute("checked");
+                   for(let i=0;i<state.length;i++){
+                     document.getElementsByTagName("input")[i].checked=false;
+                     //document.getElementsByTagName("input")[i].setAttribute('checked','false');
+                   }
+                   // $("input[type=checkbox]").removeAttr("checked");
+                   this.setState({deadline:Date.now() +  1000 * 60})
+                   this.setState({questionNumber: 1})
+                   this.setState({answer:false})
+                   return
+                 }
+               }}
                footer={null}
                closable={true}
                wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
@@ -984,7 +1136,7 @@ class MapPage extends Component {
               <div className={styles.web} >
                 <p>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</p>
                 <div className={styles.radio}>
-                <Checkbox.Group onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                <Checkbox.Group id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                   <Row>
                     <Col span={12}>
                   <Checkbox    value={'A'}>
@@ -1020,25 +1172,57 @@ class MapPage extends Component {
               <Row gutter={16}>
                 <Col span={12}>
                   <Button  key="submit"
+                           centered
                            type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
                            onClick={()=>{
+                             let checked1=document.getElementById("choose");
+                             // let checked=document.getElementsByClassName("ant-checkbox-checked");
+                             let checked=document.getElementsByClassName("ant-checkbox-inner");
+                             // checked[0].style.backgroundColor='rgb(0,255,0)';
+                             debugger
                              let string=this.state.value.toString();
+                             string=string.replace(/,/g,'');
+                             let arg=question[recent]?question[recent].answer:'';
+                             arg=arg.split("");
+                             let translate1=translate(arg);
                              if(string==(question[recent]?question[recent].answer:''))
                              {
-                               this.setState({grade:this.state.grade+1});
+                               if(this.state.answer==false){
+                               this.setState({grade:this.state.grade+1});}
+                               // checked[i].classList[1]=(styles.correct);
+                               let id=0;
+                               let i=0;
+                               while(i<translate1.length){
+                                  id=translate1[i]-i;
+                                 document.getElementsByClassName("ant-checkbox-inner")[id].setAttribute('class',styles.correct);
+                                 i++;
+                                 // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
+                               }
+                             }else{
+                               let id=0;
+                               let i=0;
+                               for( i=0;i<translate1.length;i++){
+                                 id=translate1[i]-i;
+                                 let temp=document.getElementsByClassName("ant-checkbox-inner")[id];
+                                 if(document.getElementsByClassName("ant-checkbox-inner")[id]) {
+                                   document.getElementsByClassName("ant-checkbox-inner")[id].setAttribute('class', styles.wrong);
+                                 }}
                              }
-                             this.setState({answer:true})
+                             this.setState({answer:true});
                              if(this.state.questionNumber==allNumber) {
                                let username=getLocalData({dataName:'userName'});
                                this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
                                alert("答题结束")
-                             }}}>提交</Button>
+                             }}
+                           }>提交</Button>
                 </Col>
-                <Col span={12}>
+                <Col span={12} style={{alignContent:'center',alignItems:'center'}}>
                   <Button
+                    centered
                     key="submit" style={{backgroundColor:'rgb(255,0,0)'}}
                     type="primary"
                     onClick={()=> {
+
                       if(this.state.questionNumber==allNumber&&this.state.answer==true){
                         this.setState({startQuestion:false})
                         this.setState({questionNumber: 1})
@@ -1047,6 +1231,38 @@ class MapPage extends Component {
                       if(this.state.answer==false){
                         alert('你还未提交本题答案')
                       } else{
+                        let arg=question[recent]?question[recent].answer:'';
+                        arg=arg.split("");
+                        let translate1=translate(arg);
+                        let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
+                        let checked1=document.getElementsByClassName('ant-checkbox');
+                        for (let i=0;i<checked1.length;i++){
+                          document.getElementsByClassName('ant-checkbox')[i].classList.remove('ant-checkbox-checked');
+                          document.getElementsByClassName('ant-checkbox-wrapper')[i].classList.remove('ant-checkbox-wrapper-checked');
+                        }
+                        for(let i=0;i<checked.length;i++){
+                          if(document.getElementsByClassName(styles.correct).length>0)
+                          {document.getElementsByClassName(styles.correct)[i].setAttribute('class','ant-checkbox-inner');
+                          }
+                          else{
+                            if(document.getElementsByClassName(styles.wrong)[i]){
+                            document.getElementsByClassName(styles.wrong)[i].setAttribute('class','ant-checkbox-inner');
+                            }
+                          }
+                          // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
+                        }
+                        //let checked=document.getElementById("choose");
+                        let state = document.getElementsByTagName("input");
+                        state[0].getAttribute("checked");
+                        for(let i=0;i<state.length;i++){
+                          document.getElementsByTagName("input")[i].checked=false;
+                          //document.getElementsByTagName("input")[i].setAttribute('checked','false');
+                        }
+                        debugger
+                        let i1=document.getElementById("choose").value;
+                        document.getElementById("choose").value="";
+                        console.log(i1);
+                        // $("input[type=checkbox]").removeAttr("checked");
                         this.setState({deadline:Date.now() +  1000 * 60})
                         this.setState({questionNumber: this.state.questionNumber+1})
                         this.setState({answer:false})
@@ -1123,12 +1339,13 @@ class MapPage extends Component {
 
                     {/*</div>*/}
                     <Slider {...this.carousel_settings} >
-                      <div style={styles.out}>
-                        <img src={yay} style={{ height: '100%', width: '100%' }} />
-                      </div>
-                      <div>
-                        <img src={yaa} style={{ height: '100%', width: '100%' }} />
-                      </div>
+                      {this.state.pictures}
+                      {/*<div style={styles.out}>*/}
+                      {/*  <img src={yay} style={{ height: '100%', width: '100%' }} />*/}
+                      {/*</div>*/}
+                      {/*<div>*/}
+                      {/*  <img src={yaa} style={{ height: '100%', width: '100%' }} />*/}
+                      {/*</div>*/}
                     </Slider>
                   </div>
                 </div>
@@ -1165,60 +1382,50 @@ class MapPage extends Component {
               <VerticalTimeline
                 // layout='1-column-left'
               >
-                {list.map((item) => (
-                    item['sub'] ?
+                {this.state.listTime.map((item)=> (
+                    item['sub']?
                       <VerticalTimelineElement
                         id={item['id']}
-                        style={{ fontSize: "15px", size: "10px" }}
+                        style={{fontSize:"15px", size:"10px", textAlign: "center"}}
                         className="vertical-timeline-element--education"
-                        date="2006 - 2008"
-                        contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
+                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                        contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                        iconStyle={{
-                          background: 'rgb(155, 20, 20)',
-                          color: '#fff',
-                          width: '20px',
-                          height: "20px",
-                          top: "20px",
-                          marginLeft: "-10px"
-                        }}
-                        dateClassName={styles.date}
+                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
+                        dateClassName={ styles.date }
+                        onTimelineElementClick={()=> this.oneClick(item) }
+                        // icon={<Icon type="schedule" />}
                         // icon={<Icon type="book" />}
                       >
-                        {item['text']}
+                        <div style={{fontWeight:"bold"}}>
+                          {item['value']}
+                        </div>
                         {
-                          item['text'] == '1921年7月-中共一大' &&
-                          <div><Button onClick={this.moreOnClick}>{this.state.more ? <span>更多</span> :
-                            <span>收回</span>}</Button></div>
+                          item['text']=='中共一大'
                         }
-                      </VerticalTimelineElement> :
+                      </VerticalTimelineElement>:
                       <VerticalTimelineElement
                         id={item['id']}
-                        style={{ fontSize: "15px", size: "10px" }}
+                        style={{fontSize:"15px", size:"10px", textAlign:"center"}}
                         className="vertical-timeline-element--education"
-                        date="2006 - 2008"
-                        contentStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                        contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                        iconStyle={{
-                          background: 'rgb(155, 20, 20)',
-                          color: '#fff',
-                          width: '40px',
-                          height: "40px",
-                          top: "20px",
-                          marginLeft: "-20px"
-                        }}
-                        dateClassName={styles.date}
-                        onTimelineElementClick={() => this.oneClick(item)}
+                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                        contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
+                        contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
+                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
+                        dateClassName={ styles.date }
+                        onTimelineElementClick={()=>(
+                          item['text']=='中共一大'?
+                            this.moreOnClick():
+                            this.oneClick(item)) }
+                        icon={<Icon type="schedule" />}
                       >
-                        {item['text']}
-                        {
-                          item['text'] == '1921年7月-中共一大' &&
-                          <div>
-                            <div onClick={this.moreOnClick}>{this.state.more ?
-                              <Icon type="arrow-down" style={{ color: "rgba(155,20,20,1)" }} /> :
-                              <Icon type="arrow-up" style={{ color: "rgba(155,20,20,1)" }} />}</div>
-                          </div>
-                        }
+                        <div style={{fontWeight:"bold"}}>
+                          {item['text']}
+                        </div>
+                        {/*{*/}
+                        {/*  item['text']=='中共一大'&&*/}
+                        {/*  <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(177,46,46)"}} />:<Icon type="arrow-up" style={{color:"rgba(177,46,46)"}} />}</div></div>*/}
+                        {/*}*/}
                       </VerticalTimelineElement>
                   )
                 )
@@ -1240,7 +1447,9 @@ class MapPage extends Component {
             <div className={styles.normal}>
               <div className={styles.mapContainer} id="onlineMapping">
                 <div ref={popupRef} className={styles.popupDiv}>
-                  {/*<div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>*/}
+                  {this.state.itemNow?
+                    <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
+                    :null}
                   <Row style={{ width: "240px", top: "10px" }} justify="space-between">
                     <Col span={2} onClick={() => {
                       this.setState({ startArticle: true });
@@ -1256,19 +1465,37 @@ class MapPage extends Component {
                     </Col>
                     <Col span={2} onClick={() => {
                       this.setState({ startPicture: true })
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                      this.setState({ startPicture: true })
+                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                        console.log('res');
+                      });
                     }}>
                       <Icon className={styles.popup} type="picture" />
                     </Col>
                     <Col span={4} onClick={() => {
-                      this.setState({ startPicture: true })
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                      this.setState({ startPicture: true });
+                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                        debugger
+                        if(res.success) {
+                          let pictures=res.pictures;
+                          let picturesAll=pictures.map((item)=>{
+                            return(<div style={styles.out}>
+                              <h2>{item.pictureTitle}</h2>
+                              <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
+                            </div>)
+                          });
+                          this.setState({pictures:picturesAll})
+                        }
+                        console.log('res');
+                      });
                     }}>
                       图片
                     </Col>
                     <Col span={2} onClick={() => {
                       this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
+                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                        console.log('res');
+                      });
                     }}>
                       <Icon className={styles.popup} type="video-camera" />
                     </Col>
@@ -1300,6 +1527,13 @@ class MapPage extends Component {
                 {/*  ))*/}
                 {/*}*/}
               </div>
+              <Icon
+                style={{position:"absolute", fontSize:"30px"}}
+                className='trigger'
+                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                onClick={this.onCollapse}
+              />
+              {/*<Button className={styles.layer} icon={layer}> </Button>*/}
               {/*<div id='features' className={styles.features}>
                 <section id='一大上海' className={styles.selection}>
                   <h3>中共一大上海</h3>
@@ -1383,6 +1617,40 @@ class MapPage extends Component {
                     and Watson catch both criminals.</p>
                 </section>
               </div>*/}
+              <div className={styles.layer_icon} onClick={this.layerClick}>
+                <img src={layer} className={styles.layer_img}/>
+              </div>
+              <div className={styles.layer_div} style={{display: this.state.layerValue ? 'block': 'none'}}>
+                <Row>
+                  <Col span={21}>
+                    <h3>选择底图</h3>
+                  </Col>
+                  <Col span={3}>
+                    <Button icon="close" onClick={this.layerClick} className={styles.layer_close}> </Button>
+                  </Col>
+                </Row>
+                <Divider style={{marginTop:7,marginBottom:10}} />
+                <Row style={{marginLeft:3}}>
+                  <Col span={8} style={{fontSize:7, color:'#0078A8'}}>
+                    <div className={styles.img_div} onClick={(e) =>this.diTuClick('vec',e)} id="vec">
+                      <img src={jiedao} className={styles.layer_ditu} />
+                    </div>
+                    <div style={{marginLeft:25,marginTop:13}}>街道图</div>
+                  </Col>
+                  <Col span={8} style={{fontSize:7, color:'#0078A8'}}>
+                    <div  onClick={(e) =>this.diTuClick('img',e)} id="img">
+                      <img src={yingxiang} className={styles.layer_ditu} />
+                    </div>
+                    <div style={{marginLeft:25,marginTop:13}}>影像图</div>
+                  </Col>
+                  <Col span={8} style={{fontSize:7, color:'#0078A8'}}>
+                    <div  onClick={(e) =>this.diTuClick('ter',e)} id="ter">
+                      <img src={dixing} className={styles.layer_ditu} />
+                    </div>
+                    <div style={{marginLeft:25,marginTop:13}}>地形图</div>
+                  </Col>
+                </Row>
+              </div>
             </div>
           </Content>
         </Layout>

@@ -37,6 +37,7 @@ export default class ArticleTable extends Component {
           align: 'center',
           sorter: (a, b) => a.articleContent.length - b.articleContent.length,
           sortDirections: ['descend', 'ascend'],
+          ellipsis: true,
         },
         {
           title: 'Article Publish Time',
@@ -53,6 +54,14 @@ export default class ArticleTable extends Component {
           align: 'center',
           sorter: (a, b) => a.articleCreateTime - b.articleCreateTime,
           sortDirections: ['descend', 'ascend'],
+        },
+        {
+          title: 'Preview',
+          key: 'preview',
+          align: 'center',
+          render: (text, record) => (
+            <Button icon="link" onClick={() => this.previewHTML(text, record)}>Preview</Button>
+          ),
         },
         {
           title: 'Action',
@@ -113,6 +122,12 @@ export default class ArticleTable extends Component {
         message.error('更新文章表格失败,' + res.message);
       }
     });
+  }
+
+  previewHTML = (text, record) => {
+    window.previewWindow = window.open();
+    window.previewWindow.document.write(record.articleContent);
+    window.previewWindow.document.close();
   }
 
   deleteRecord = (text, record) => {
