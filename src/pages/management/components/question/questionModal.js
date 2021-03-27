@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Button, Upload, Icon, message} from 'antd';
+import {Modal, Form, Input, Button, Checkbox, Row, Col, message} from 'antd';
 import {Link} from "react-router-dom";
 import request from "@/utils/request";
 
@@ -48,7 +48,7 @@ class QuestionModal extends Component {
             optionC: formData.optionC,
             optionD: formData.optionD,
             optionE: formData.optionE,
-            answer: formData.answer,
+            answer: formData.answer.join(''),
           },
           autoAdd: false, //不添加v1.0
         }).then((res) => {
@@ -112,12 +112,12 @@ class QuestionModal extends Component {
             </Form.Item>
 
             <Form.Item label="选项 A" name="optionA">
-              {getFieldDecorator('optionA',)(
+              {getFieldDecorator('optionA', {rules: [{required: true, message: '请输入至少两个选项!'},]})(
                 <Input placeholder="请输入选项 A"/>
               )}
             </Form.Item>
             <Form.Item label="选项 B" name="optionB">
-              {getFieldDecorator('optionB',)(
+              {getFieldDecorator('optionB', {rules: [{required: true, message: '请输入至少两个选项!'},]})(
                 <Input placeholder="请输入选项 B"/>
               )}
             </Form.Item>
@@ -139,7 +139,15 @@ class QuestionModal extends Component {
 
             <Form.Item label="答案" name="answer">
               {getFieldDecorator('answer', {rules: [{required: true, message: '请输入答案!'},]})(
-                <Input placeholder="请输入答案"/>
+                <Checkbox.Group>
+                  <Row>
+                    <Col span={4}> <Checkbox value="A">A</Checkbox> </Col>
+                    <Col span={4}> <Checkbox value="B">B</Checkbox> </Col>
+                    <Col span={4}> <Checkbox value="C">C</Checkbox> </Col>
+                    <Col span={4}> <Checkbox value="D">D</Checkbox> </Col>
+                    <Col span={4}> <Checkbox value="E">E</Checkbox> </Col>
+                  </Row>
+                </Checkbox.Group>
               )}
             </Form.Item>
 
