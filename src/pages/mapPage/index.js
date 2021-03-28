@@ -439,12 +439,17 @@ class MapPage extends Component {
       list:[],
       listTime:[],
       tagName:'',
+      module:'',
     };
 
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
+    //保存当前模块名
+    this.setState({
+      module:this.props.location.query.module
+    });
     dispatch({ type: 'mapPage/getTagTree' });
     dispatch({ type: 'mapPage/getQuestion' });
     // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
@@ -983,7 +988,7 @@ class MapPage extends Component {
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
-      <Sider collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
+      <Sider className={styles.siderStyle}collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} width={400}>
         {/*答题*/}
         {/**/}
         <Modal visible={this.state.startQuestion}
