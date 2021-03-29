@@ -494,6 +494,10 @@ class MapPage extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
+    //保存当前模块名
+    this.setState({
+      module:this.props.location.query.module
+    });
     dispatch({ type: 'mapPage/getTagTree' });
     dispatch({ type: 'mapPage/getQuestion' });
     // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
@@ -504,6 +508,7 @@ class MapPage extends Component {
     console.log('mapPage', mapPage);
     const { tagTree } = mapPage;
     console.log('tagTree', tagTree);
+
     //遍历tagTree;
     let tree;
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
@@ -1062,7 +1067,7 @@ class MapPage extends Component {
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
-      <Sider collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
+      <Sider className={styles.siderStyle}collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} width={400}>
         {/*答题*/}
         {/**/}
         <Modal visible={this.state.startQuestion}
