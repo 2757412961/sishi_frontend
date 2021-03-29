@@ -280,9 +280,27 @@ let des = [
   { "showInfo":"<div><h3>中共八大会址</h3><img width=220px' src="+c8+" />" +
       "<p>中国共产党第八次全国代表大会，简称中共八大，于1956年9月15日至27日在北京全国政协礼堂召开。</p></div>"},
   { "showInfo":"<div><h3>中共九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第九次全国代表大会，简称中共九大，于1969年4月1日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+      "<p>中国共产党第九次全国代表大会，简称中共九大，于1969年4月1日至24日在北京人民大会堂召开。</p></div>"},
   { "showInfo":"<div><h3>中共十大会址</h3><img width=220px' src="+c9+" />" +
       "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十一大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十一次全国代表大会，简称中共十一大，于1977年8月12日至18日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十二大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十二次全国代表大会，简称中共十二大，于1982年9月1日至11日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十三大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十三次全国代表大会，简称中共十三大，于1987年10月25日至11月1日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十四大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十四次全国代表大会，简称中共十四大，于1992年10月12日至18日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十五大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十五次全国代表大会，简称中共十五大，于1997年9月12日至18日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十六大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十六次全国代表大会，简称中共十六大，于2002年11月8日至14日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十七大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十七次全国代表大会，简称中共十七大，于2007年10月15日至21日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十八大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十八次全国代表大会，简称中共十八大，于2012年11月8日至14日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
 ]
 
 
@@ -520,27 +538,6 @@ class MapPage extends Component {
           listTime:listTime,
         })
       }
-
-      const myDeckLayer = new MapboxLayer({
-        id: 'arc',
-        type: ArcLayer,
-        data: flyline,
-        getSourcePosition: d => d.coord[0],
-        getTargetPosition: d => d.coord[1],
-        getSourceColor: d => [255, 0, 0],
-        getTargetColor: d => [255, 0, 0],
-        getWidth: 2.3,
-
-        // animate:({
-        //   interval: 0.8,
-        //   trailLength: 2,
-        //   duration: 1
-        // })
-      });
-      map.on('load', ()=> {
-        map.addLayer(myDeckLayer)
-      })
-
       console.log("listHere", listHere);
       //加载中共一大（上海，嘉兴地点）的火花图标
       map.on('load', function() {
@@ -585,7 +582,6 @@ class MapPage extends Component {
 
           });
         }
-        // playback(0);
       });
       let _this = this;
       var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
@@ -637,45 +633,6 @@ class MapPage extends Component {
     // });
     // //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
     // map.addControl(nav, 'top-left');
-    // On every scroll event, check which element is on screen
-    document.getElementById('verticalTimeLine').onscroll = function() {
-      console.log("verticalTimeLine", 1234)
-      var chapterNames = Object.keys(chapters);
-      for (var i = 0; i < chapterNames.length; i++) {
-        var chapterName = chapterNames[i];
-        if (isElementOnScreen(chapterName)) {
-          setActiveChapter(chapterName);
-          break;
-        }
-      }
-    };
-    /*document.getElementById('features').onscroll = function() {
-      var chapterNames = Object.keys(chapters);
-      for (var i = 0; i < chapterNames.length; i++) {
-        var chapterName = chapterNames[i];
-        if (isElementOnScreen(chapterName)) {
-          setActiveChapter(chapterName);
-          break;
-        }
-      }
-    };*/
-    var activeChapterName = '一大-上海';
-
-    function setActiveChapter(chapterName) {
-      if (chapterName === activeChapterName) {
-        return
-      }
-      map.flyTo(chapters[chapterName]);
-      // document.getElementById(chapterName).style.opacity = 1;
-      // document.getElementById(activeChapterName).style.opacity = 0.25;
-      activeChapterName = chapterName;
-    }
-
-    function isElementOnScreen(id) {
-      var element = document.getElementById(id);
-      var bounds = element.getBoundingClientRect();
-      return bounds.top < window.innerHeight && bounds.bottom > 0;
-    }
 
     var size = 100;
     var pulsingDot = {
@@ -879,7 +836,13 @@ class MapPage extends Component {
     map.on('load', () => {
       map.addLayer(myDeckLayer)
     })
-
+    var el = document.createElement('div');
+    el.className = "marker";
+    el.style.backgroundSize = 'cover'
+    el.style.width='20px';
+    el.style.height='20px';
+    el.style.borderRadius = '50%';
+    el.style.backgroundImage = 'url('+dangqi+')'
     map.on('load', function() {
       d3.json(line,function(err,data) {
         if (err) throw err;
@@ -903,7 +866,7 @@ class MapPage extends Component {
         map.jumpTo({'center': coordinates[0], 'zoom': 7});
         map.setPitch(10);
         //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
-        var marker = new mapboxgl.Marker()
+        var marker = new mapboxgl.Marker(el)
         var i = 0;
         var timer = window.setInterval(function() {
           if(i<coordinates.length) {
@@ -911,12 +874,12 @@ class MapPage extends Component {
             map.getSource('trace').setData(data);
             map.panTo(coordinates[i]);
             i++;
-            function animateMarker() {
-              marker.setLngLat(coordinates[i])
-              marker.addTo(map);
-              requestAnimationFrame(animateMarker);
-            }
-            requestAnimationFrame(animateMarker);
+            // function animateMarker() {
+            //   marker.setLngLat(coordinates[i])
+            //   marker.addTo(map);
+            //   requestAnimationFrame(animateMarker);
+            // }
+            // requestAnimationFrame(animateMarker);
           } else {
             window.clearInterval(timer);
           }
