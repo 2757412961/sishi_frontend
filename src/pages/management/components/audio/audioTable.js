@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 export default class AudioTable extends Component {
   constructor(props) {
@@ -80,7 +81,7 @@ export default class AudioTable extends Component {
             <>
               {record.isPublic ?
                 <Tag color="blue">公开</Tag> :
-                <Button>点击公开</Button>}
+                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
             </>
           ),
         },
@@ -169,6 +170,27 @@ export default class AudioTable extends Component {
         message.success('删除音频成功');
       } else {
         message.error('删除音频失败,' + res.message);
+      }
+    });
+  }
+
+  updatePublicState = (text, record) => {
+    request({
+      url: '/v1.0/api/audio/public/' + record.audioId,
+      method: 'PUT',
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.updateTable();
+        message.success('更新状态成功');
+      } else {
+        message.error('更新状态失败,' + res.message);
       }
     });
   }
