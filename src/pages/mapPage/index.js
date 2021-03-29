@@ -938,12 +938,12 @@ class MapPage extends Component {
             map.getSource('trace').setData(data);
             map.panTo(coordinates[i]);
             i++;
-            function animateMarker() {
-              marker.setLngLat(coordinates[i])
-              marker.addTo(map);
-              requestAnimationFrame(animateMarker);
-            }
-            requestAnimationFrame(animateMarker);
+            // function animateMarker() {
+            //   marker.setLngLat(coordinates[i])
+            //   marker.addTo(map);
+            //   requestAnimationFrame(animateMarker);
+            // }
+            // requestAnimationFrame(animateMarker);
           } else {
             window.clearInterval(timer);
           }
