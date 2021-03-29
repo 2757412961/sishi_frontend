@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 export default class QuestionTable extends Component {
   constructor(props) {
@@ -8,14 +9,14 @@ export default class QuestionTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Question ID',
+          title: '题目 ID',
           dataIndex: 'questionId',
           key: 'questionId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Question Content',
+          title: '题目内容',
           dataIndex: 'questionContent',
           key: 'questionContent',
           align: 'center',
@@ -24,7 +25,7 @@ export default class QuestionTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Option A',
+          title: '选项 A',
           dataIndex: 'optionA',
           key: 'optionA',
           align: 'center',
@@ -32,7 +33,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Option B',
+          title: '选项 B',
           dataIndex: 'optionB',
           key: 'optionB',
           align: 'center',
@@ -40,7 +41,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Option C',
+          title: '选项 C',
           dataIndex: 'optionC',
           key: 'optionC',
           align: 'center',
@@ -48,7 +49,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Option D',
+          title: '选项 D',
           dataIndex: 'optionD',
           key: 'optionD',
           align: 'center',
@@ -56,7 +57,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Option E',
+          title: '选项 E',
           dataIndex: 'optionE',
           key: 'optionE',
           align: 'center',
@@ -64,7 +65,7 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Answer',
+          title: '答案',
           dataIndex: 'answer',
           key: 'answer',
           align: 'center',
@@ -72,11 +73,24 @@ export default class QuestionTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Action',
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],
@@ -142,6 +156,27 @@ export default class QuestionTable extends Component {
         message.success('删除题目成功');
       } else {
         message.error('删除题目失败,' + res.message);
+      }
+    });
+  }
+
+  updatePublicState = (text, record) => {
+    request({
+      url: '/v1.0/api/question/public/' + record.questionId,
+      method: 'PUT',
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.updateTable();
+        message.success('更新状态成功');
+      } else {
+        message.error('更新状态失败,' + res.message);
       }
     });
   }

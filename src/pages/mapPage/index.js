@@ -7,6 +7,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { connect } from 'dva';
 import axios from 'axios';
+import * as d3 from "d3";
 import { getLocalData } from '@/utils/common.js';
 import { MapContext, RotationControl, ScaleControl, ZoomControl } from 'react-mapbox-gl';
 import MapPageMap from './MapPageMap';
@@ -14,6 +15,7 @@ import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
+import line from '@/assets/pointData/line.geojson';
 import point from '@/assets/pointData/point.json';
 import { Scene, LineLayer,Control,PolygonLayer,PointLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
@@ -39,6 +41,7 @@ import c6 from '@/assets/test/c6.jpg';
 import c7 from '@/assets/test/c7.jpg';
 import c8 from '@/assets/test/c8.jpg';
 import c9 from '@/assets/test/c9.jpg';
+import dangqi from '@/assets/test/党旗.png';
 import layer from '@/assets/test/layer.png';
 import reback from '@/assets/test/reback.png';
 import jiedao from '@/assets/test/街道.PNG';
@@ -591,6 +594,7 @@ class MapPage extends Component {
               "icon-optional": false,
               "icon-ignore-placement": true,
               // "text-ignore-placement": true,
+              "icon-allow-overlap": true,
               "text-allow-overlap": true,
               "text-field": listHere[i].value,
               "text-anchor": 'left',
@@ -902,6 +906,87 @@ class MapPage extends Component {
     map.on('load', () => {
       map.addLayer(myDeckLayer)
     })
+
+    map.on('load', function() {
+      d3.json(line,function(err,data) {
+        if (err) throw err;
+        var coordinates = data.features[0].geometry.coordinates;
+        data.features[0].geometry.coordinates = [coordinates[0]];
+        map.addSource('trace', {type:'geojson', data: data})
+        map.addLayer({
+          "id": "trace",
+          "type": "line",
+          "source": "trace",
+          "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+          },
+          "paint": {
+            "line-color": "red",
+            "line-opacity": 0.8,
+            "line-width": 5
+          }
+        });
+        map.jumpTo({'center': coordinates[0], 'zoom': 7});
+        map.setPitch(10);
+        //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
+        var marker = new mapboxgl.Marker()
+        var i = 0;
+        var timer = window.setInterval(function() {
+          if(i<coordinates.length) {
+            data.features[0].geometry.coordinates.push(coordinates[i]);
+            map.getSource('trace').setData(data);
+            map.panTo(coordinates[i]);
+            i++;
+            function animateMarker() {
+              marker.setLngLat(coordinates[i])
+              marker.addTo(map);
+              requestAnimationFrame(animateMarker);
+            }
+            requestAnimationFrame(animateMarker);
+          } else {
+            window.clearInterval(timer);
+          }
+        }, 100);
+      });
+      /*map.addLayer({
+        'id': 'lines',
+        'type': 'line',
+        'source': {
+          'type': 'geojson',
+          'data': {
+            'type': 'FeatureCollection',
+            'features': [{
+              'type': 'Feature',
+              'properties': {
+                'color':  '#33C9EB' // blue
+              },
+              'geometry': {
+                'type': 'LineString',
+                'coordinates': [
+                  [121.47069346816863, 31.22206084685108],
+                  [120.75580305351667, 30.75747193181725],
+                  [121.46214132313253, 31.2260623329518],
+                  [113.29062697510238, 23.121680862715294],
+                  [121.48020351895462, 31.25728522799882],
+                  [114.29318634011975, 30.553569642526185],
+                  [37.153974181328664, 55.535728582753336],
+                  [109.46267096678156, 36.618757084621336],
+                  [116.35780179933835, 39.91833919135752],
+                  [116.38748691963224, 39.90337460887406]
+                ]
+              }
+            }]
+          }
+        },
+        'paint': {
+          'line-width': 3,
+// Use a get expression (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-get)
+// to set the line-color to a feature property value.
+          'line-color': ['get', 'color']
+        }
+      });*/
+    });
     this.map = map;
   }
   showModal=(activeKey)=>{
@@ -962,6 +1047,9 @@ class MapPage extends Component {
     let temp = this.state.collapsed;
     this.setState({ collapsed:!temp });
   };
+  componentWillUnmount() {
+    this.map.remove()
+  }
   layerClick = () => {
     this.setState({
       layerValue: !this.state.layerValue
@@ -994,6 +1082,7 @@ class MapPage extends Component {
         document.getElementById(diTuList[i]).style.border = ('');
       }
     }
+    this.componentWillUnmount()
     this.componentDidMount()
     // this.map.setStyle('')
   }

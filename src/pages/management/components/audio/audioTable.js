@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 export default class AudioTable extends Component {
   constructor(props) {
@@ -8,14 +9,14 @@ export default class AudioTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Audio ID',
+          title: '音频 ID',
           dataIndex: 'audioId',
           key: 'audioId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Audio Title',
+          title: '音频标题',
           dataIndex: 'audioTitle',
           key: 'audioTitle',
           align: 'center',
@@ -23,7 +24,7 @@ export default class AudioTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Audio Source',
+          title: '音频来源',
           dataIndex: 'audioSource',
           key: 'audioSource',
           align: 'center',
@@ -31,7 +32,7 @@ export default class AudioTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Audio Content',
+          title: '音频内容',
           dataIndex: 'audioContent',
           key: 'audioContent',
           align: 'center',
@@ -40,7 +41,15 @@ export default class AudioTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Audio Publish Time',
+          title: '事件发生时间',
+          dataIndex: 'eventTime',
+          key: 'eventTime',
+          align: 'center',
+          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
+          title: '音频发布时间',
           dataIndex: 'audioPublishTime',
           key: 'audioPublishTime',
           align: 'center',
@@ -48,7 +57,7 @@ export default class AudioTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
+          title: '音频创建时间',
           dataIndex: 'audioCreateTime',
           key: 'audioCreateTime',
           align: 'center',
@@ -56,11 +65,32 @@ export default class AudioTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Action',
+          title: '音频预览',
+          key: 'preview',
+          align: 'center',
+          render: (text, record) => (
+            <Button icon="link" onClick={() => this.previewAudio(text, record)}>预览</Button>
+          ),
+        },
+        {
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],
@@ -86,6 +116,11 @@ export default class AudioTable extends Component {
     };
 
     this.updateTable();
+  }
+
+  previewAudio = (text, record) => {
+    window.previewWindow = window.open();
+    window.previewWindow.location = record.audioContent;
   }
 
   updateTable = () => {
@@ -135,6 +170,27 @@ export default class AudioTable extends Component {
         message.success('删除音频成功');
       } else {
         message.error('删除音频失败,' + res.message);
+      }
+    });
+  }
+
+  updatePublicState = (text, record) => {
+    request({
+      url: '/v1.0/api/audio/public/' + record.audioId,
+      method: 'PUT',
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.updateTable();
+        message.success('更新状态成功');
+      } else {
+        message.error('更新状态失败,' + res.message);
       }
     });
   }

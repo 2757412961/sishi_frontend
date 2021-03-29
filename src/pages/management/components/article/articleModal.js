@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Button, Breadcrumb, message} from 'antd';
+import {Modal, Form, Input, Button, Breadcrumb, message, DatePicker} from 'antd';
 import {Link} from "react-router-dom";
 import BraftEditor from "braft-editor";
 import request from "@/utils/request";
@@ -227,6 +227,7 @@ class ArticleModal extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let formData = this.props.form.getFieldsValue();
+        console.log(formData);
 
         request({
           url: '/v1.0/api/article/tagName/' + formData.tagName,
@@ -234,7 +235,8 @@ class ArticleModal extends Component {
           data: {
             articleTitle: formData.articleTitle,
             articleAuthor: formData.articleAuthor,
-            articleContent: this.buildPreviewHtml()
+            articleContent: this.buildPreviewHtml(),
+            eventTime: formData.eventTime.format('YYYY-MM-DD'),
           },
           autoAdd: false, //不添加v1.0
         }).then((res) => {
@@ -314,6 +316,12 @@ class ArticleModal extends Component {
             <Form.Item label="文章作者" name="articleAuthor">
               {getFieldDecorator('articleAuthor', {rules: [{required: true, message: '请输入文章作者!'},]})(
                 <Input placeholder="请输入文章作者"/>
+              )}
+            </Form.Item>
+
+            <Form.Item label="事件发生时间" name="eventTime">
+              {getFieldDecorator('eventTime', {rules: [{required: true, message: '请输入事件发生时间!'},]})(
+                <DatePicker placeholder="请输入事件发生时间" format={'YYYY-MM-DD'}  />
               )}
             </Form.Item>
 

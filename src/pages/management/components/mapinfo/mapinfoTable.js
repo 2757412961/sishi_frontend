@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 export default class MapinfoTable extends Component {
   constructor(props) {
@@ -8,14 +9,14 @@ export default class MapinfoTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Map ID',
+          title: '地理信息 ID',
           dataIndex: 'mapId',
           key: 'mapId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Map Title',
+          title: '地理信息标题',
           dataIndex: 'mapTitle',
           key: 'mapTitle',
           align: 'center',
@@ -23,7 +24,7 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Map Lon',
+          title: '经度',
           dataIndex: 'mapLon',
           key: 'mapLon',
           align: 'center',
@@ -31,7 +32,7 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Map Lat',
+          title: '纬度',
           dataIndex: 'mapLat',
           key: 'mapLat',
           align: 'center',
@@ -39,7 +40,7 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Map Time',
+          title: '时间',
           dataIndex: 'mapTime',
           key: 'mapTime',
           align: 'center',
@@ -48,7 +49,7 @@ export default class MapinfoTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Map Publish Time',
+          title: '地理信息发布时间',
           dataIndex: 'mapPublishTime',
           key: 'mapPublishTime',
           align: 'center',
@@ -56,7 +57,7 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
+          title: '地理信息创建时间',
           dataIndex: 'mapCreateTime',
           key: 'mapCreateTime',
           align: 'center',
@@ -64,11 +65,24 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Action',
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],
@@ -145,6 +159,27 @@ export default class MapinfoTable extends Component {
         message.success('删除地理信息成功');
       } else {
         message.error('删除地理信息失败,' + res.message);
+      }
+    });
+  }
+
+  updatePublicState = (text, record) => {
+    request({
+      url: '/v1.0/api/mapinfo/public/' + record.mapId,
+      method: 'PUT',
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.updateTable();
+        message.success('更新状态成功');
+      } else {
+        message.error('更新状态失败,' + res.message);
       }
     });
   }

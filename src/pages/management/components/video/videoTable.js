@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 export default class VideoTable extends Component {
   constructor(props) {
@@ -8,14 +9,14 @@ export default class VideoTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Video ID',
+          title: '视频 ID',
           dataIndex: 'videoId',
           key: 'videoId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Video Title',
+          title: '视频标题',
           dataIndex: 'videoTitle',
           key: 'videoTitle',
           align: 'center',
@@ -23,7 +24,7 @@ export default class VideoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Video Source',
+          title: '视频来源',
           dataIndex: 'videoSource',
           key: 'videoSource',
           align: 'center',
@@ -31,7 +32,7 @@ export default class VideoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Video Content',
+          title: '视频内容',
           dataIndex: 'videoContent',
           key: 'videoContent',
           align: 'center',
@@ -40,7 +41,15 @@ export default class VideoTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Video Publish Time',
+          title: '事件发生时间',
+          dataIndex: 'eventTime',
+          key: 'eventTime',
+          align: 'center',
+          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
+          title: '视频发布时间',
           dataIndex: 'videoPublishTime',
           key: 'videoPublishTime',
           align: 'center',
@@ -48,7 +57,7 @@ export default class VideoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
+          title: '视频创建时间',
           dataIndex: 'videoCreateTime',
           key: 'videoCreateTime',
           align: 'center',
@@ -56,11 +65,32 @@ export default class VideoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Action',
+          title: '视频预览',
+          key: 'preview',
+          align: 'center',
+          render: (text, record) => (
+            <Button icon="link" onClick={() => this.previewVideo(text, record)}>预览</Button>
+          ),
+        },
+        {
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],
@@ -86,6 +116,11 @@ export default class VideoTable extends Component {
     };
 
     this.updateTable();
+  }
+
+  previewVideo = (text, record) => {
+    window.previewWindow = window.open();
+    window.previewWindow.location = record.videoContent;
   }
 
   updateTable = () => {
@@ -135,6 +170,27 @@ export default class VideoTable extends Component {
         message.success('删除视频成功');
       } else {
         message.error('删除视频失败,' + res.message);
+      }
+    });
+  }
+
+  updatePublicState = (text, record) => {
+    request({
+      url: '/v1.0/api/video/public/' + record.videoId,
+      method: 'PUT',
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.updateTable();
+        message.success('更新状态成功');
+      } else {
+        message.error('更新状态失败,' + res.message);
       }
     });
   }
