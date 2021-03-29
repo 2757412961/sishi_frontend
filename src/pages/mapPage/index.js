@@ -50,6 +50,7 @@ import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Image from 'react-mapbox-gl/src/image';
 
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
@@ -488,10 +489,38 @@ class MapPage extends Component {
       tagName: '',
       pictures: [],
       videos: [],
+      questionChoose:[],
+      answerAll:'',
     };
-
   }
-
+  choose=(num)=>{
+    let temp={};
+    let questionChoose=this.state.questionChoose;
+    debugger
+    let id=(num+1).toString();
+    if(questionChoose[num]){
+    if(questionChoose[num].hasOwnProperty('checked')){
+      if(questionChoose[num].checked) {
+        this.state.answerAll.replace(id,'');
+        if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
+          document.getElementById(id).classList.remove(styles.qanswerchoosable);
+        }
+      }else{
+        this.state.answerAll.concat(id);
+        if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
+          document.getElementById(id).classList.add(styles.qanswerchoosable);
+        }
+      }
+    }}
+    else{
+      temp.checked=true;
+      questionChoose[num]=temp;
+      if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
+        document.getElementById(id).classList.add(styles.chosen);
+      }
+      }
+    questionChoose[num].checked=!questionChoose[num].checked;
+  }
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({ type: 'mapPage/getTagTree' });
@@ -1112,20 +1141,67 @@ class MapPage extends Component {
                }}
                footer={null}
                closable={true}
+               style={{'height':'710px'}}
                wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
         >
-          <div className={styles.question}>
-            <div className={styles.top}></div>
-            <div className={styles.headerRow}>
-              <span class={styles.big}>{this.state.questionNumber}</span>
-              /{allNumber}
-            </div>
+          {/*<div className="d-iframe">*/}
+          {/*  /!*<iframe id="previewIframe" src="" frameBorder="0"*!/*/}
+          {/*  /!*        className="iframe-style"></iframe>*!/*/}
+          {/*  <div className={styles.web} >*/}
+          {/*<div className={styles.question}>*/}
+          {/*  <div className={styles.top}></div>*/}
+          {/*  <div className={styles.headerRow}>*/}
+          {/*    <span class={styles.big}>{this.state.questionNumber}</span>*/}
+          {/*    /{allNumber}*/}
+          {/*  </div>*/}
+          {/*  <div className={styles.question}>*/}
+          {/*    <div className={styles.qbody}><div>{question[recent]?question[recent].questionContent:''}</div></div>*/}
+          {/*    /!*<div className={styles.qanswer}>*!/*/}
+          {/*      <Row>*/}
+          {/*        <div id="1" className={styles.qanswer} onClick={this.choose(0)}>*/}
+                    {/*// ()=>{document.getElementsByClassName(styles.qanswer)[0].classList.add(styles.qanswerchoosable);}}*/}
+                    {/*//    onDoubleClick={()=>{document.getElementsByClassName(styles.qanswer)[0].classList.add(styles.false);}}>*/}
+          {/*          {'A  '+(question[recent]?question[recent].optionA:'')}*/}
+          {/*          <Image className={styles.icon} src='../../assets/false.png'></Image>*/}
+          {/*        </div>*/}
+          {/*      </Row>*/}
+          {/*      <Row>*/}
+          {/*        <div id="2" className={styles.qanswer}>*/}
+          {/*          {'B  '+(question[recent]?question[recent].optionB:'')}*/}
+          {/*        </div>*/}
+          {/*      </Row>*/}
+          {/*    {question[recent]&&question[recent].hasOwnProperty('optionC')?*/}
+          {/*      (<Row>*/}
+          {/*        <div id="3" className={styles.qanswer}>*/}
+          {/*          {'C  '+(question[recent]?question[recent].optionC:'')}*/}
+          {/*        </div>*/}
+          {/*      </Row>):''}*/}
+          {/*    {question[recent]&&question[recent].hasOwnProperty('optionD')?*/}
+          {/*      (<Row>*/}
+          {/*      <div id="4" className={styles.qanswer}>*/}
+          {/*        {'D  '+(question[recent]?question[recent].optionD:'')}*/}
+          {/*      </div>*/}
+          {/*      </Row>):''}*/}
+          {/*    /!*</div>*!/*/}
+          {/*    <div className={styles.actionRow}>*/}
+          {/*      <Button className={styles.preBtn} onClick={()=>{*/}
+
+          {/*      }}>上一题</Button>*/}
+          {/*      <Button className={styles.nextBtn} onClick={()=>{*/}
+
+          {/*      }}>确定</Button>*/}
+          {/*    </div>*/}
+          {/*  </div>*/}
+          {/*  <div className={styles.bottom}></div>*/}
+          {/*</div></div></div>*/}
             <div className="d-iframe">
               {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
               {/*        className="iframe-style"></iframe>*/}
               <div className={styles.web} >
                 <p>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</p>
                 <div className={styles.radio}>
+                  <div className={styles.question}>
+                    <div className={styles.top}></div>
                 <Checkbox.Group id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                   <Row>
                     <Col span={12}>
@@ -1153,6 +1229,7 @@ class MapPage extends Component {
                   </Row>
                 </Checkbox.Group>
                   <img src=""/>
+                </div>
                 </div>
               </div>
               {this.state.answer==true?
@@ -1275,7 +1352,7 @@ class MapPage extends Component {
 
             </div>
             <div className={styles.bottom}></div>
-          </div>
+          {/*</div>*/}
         </Modal>
         {/*文章*/}
         <Modal visible={this.state.startArticle}
