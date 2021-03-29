@@ -3,6 +3,7 @@ import axios from 'axios';
 import { message } from 'antd';
 import qs from 'qs';
 import router from 'umi/router';
+import {getLocalData} from '@/utils/common.js';
 
 // 设置网络超时
 // axios.defaults.timeout=1000 * 20;
@@ -14,6 +15,15 @@ const fetch = (options) => {
     headers,
     autoAdd = true,
   } = options;
+
+  // ------------------ zjh auth ------------------
+  let headersAdd = {
+    userId: getLocalData({dataName: 'userId'}),
+      token: getLocalData({dataName: 'token'})
+  }
+  headers = headersAdd;
+  // ------------------ zjh auth ------------------
+
   if (autoAdd) {
     url = '/v1.0/api' + url;
   }
@@ -25,7 +35,11 @@ const fetch = (options) => {
         return axios.get(url, { params: data, timeout: 1000 * 20 });
       }
     case 'delete':
-      return axios.delete(url, { params: data, timeout: 1000 * 20 });
+      if (headers) {
+        return axios.delete(url, { params: data, headers: headers, timeout: 1000 * 20 });
+      } else {
+        return axios.delete(url, { params: data, timeout: 1000 * 20 });
+      }
     case 'post':
       if (headers) {
         return axios.post(url, data, { headers: headers, timeout: 1000 * 20 });
