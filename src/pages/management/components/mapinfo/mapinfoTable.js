@@ -8,14 +8,14 @@ export default class MapinfoTable extends Component {
     this.state = {
       columns: [
         {
-          title: 'Map ID',
+          title: '地理信息 ID',
           dataIndex: 'mapId',
           key: 'mapId',
           align: 'center',
           render: text => <a>{text}</a>,
         },
         {
-          title: 'Map Title',
+          title: '地理信息标题',
           dataIndex: 'mapTitle',
           key: 'mapTitle',
           align: 'center',
@@ -23,7 +23,7 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Map Lon',
+          title: '经度',
           dataIndex: 'mapLon',
           key: 'mapLon',
           align: 'center',
@@ -31,7 +31,7 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Map Lat',
+          title: '纬度',
           dataIndex: 'mapLat',
           key: 'mapLat',
           align: 'center',
@@ -39,7 +39,7 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Map Time',
+          title: '时间',
           dataIndex: 'mapTime',
           key: 'mapTime',
           align: 'center',
@@ -48,7 +48,7 @@ export default class MapinfoTable extends Component {
           ellipsis: true,
         },
         {
-          title: 'Map Publish Time',
+          title: '地理信息发布时间',
           dataIndex: 'mapPublishTime',
           key: 'mapPublishTime',
           align: 'center',
@@ -56,7 +56,7 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Create Time',
+          title: '地理信息创建时间',
           dataIndex: 'mapCreateTime',
           key: 'mapCreateTime',
           align: 'center',
@@ -64,11 +64,24 @@ export default class MapinfoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: 'Action',
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button>点击公开</Button>}
+            </>
+          ),
+        },
+        {
+          title: '操作',
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>Delete</Button>
+            <Button type="danger" onClick={() => this.deleteRecord(text, record)}>删除</Button>
           ),
         },
       ],

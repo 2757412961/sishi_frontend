@@ -165,7 +165,7 @@ class Management extends Component {
                   <Link to='/management/mapinfo'/>
                 </Menu.Item>
               </SubMenu>
-              <SubMenu key="sub3" title="用户管理">
+              <SubMenu key="sub3" title="系统管理">
                 <Menu.Item key="9">
                   <span>用户</span>
                   <Link to='/management/user'/>

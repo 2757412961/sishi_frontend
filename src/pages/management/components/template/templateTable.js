@@ -52,7 +52,7 @@ export default class MapinfoTable extends Component {
           key: 'action',
           align: 'center',
           render: (text, record) => (
-            <a>Delete</a>
+            <a>删除</a>
           ),
         },
       ],
