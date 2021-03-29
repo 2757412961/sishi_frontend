@@ -280,7 +280,33 @@ let des = [
   { "showInfo":"<div><h3>中共八大会址</h3><img width=220px' src="+c8+" />" +
       "<p>中国共产党第八次全国代表大会，简称中共八大，于1956年9月15日至27日在北京全国政协礼堂召开。</p></div>"},
   { "showInfo":"<div><h3>中共九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第九次全国代表大会，简称中共九大，于1969年4月1日至24日在北京人民大会堂召开。</p></div>"},
+      "<p>中国共产党第九次全国代表大会，简称中共九大，于1969年4月1日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十一大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十二大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十三大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十四大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十五大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十六大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十七大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十八大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
+  { "showInfo":"<div><h3>中共十大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
   { "showInfo":"<div><h3>中共十大会址</h3><img width=220px' src="+c9+" />" +
       "<p>中国共产党第十次全国代表大会，简称中共十大，于1973年8月24日至28日在北京人民大会堂召开。</p></div>"},
   { "showInfo":"<div><h3>中共十一大会址</h3><img width=220px' src="+c9+" />" +
@@ -451,16 +477,17 @@ class MapPage extends Component {
       knowledgeContent: '中国共产党第一次全国代表大会于1921年7月23日至1921年8月3日在上海法租界贝勒路树德里3号（后称望志路106号，现改兴业路76号）和浙江嘉兴南湖召开。出席大会的各地代表共12人。',
       //list[0].cardContent,
       // current_url : 'http://192.168.2.2:89/media/videos/dangshi/05.mp4',
-      more:true,
-      startQuestion:false,
-      startArticle:false,
-      startPicture:false,
-      startVideo:false,
-      startAudio:false,
-      list:[],
-      listTime:[],
-      tagName:'',
-      pictures:[],
+      more: true,
+      startQuestion: false,
+      startArticle: false,
+      startPicture: false,
+      startVideo: false,
+      startAudio: false,
+      list: [],
+      listTime: [],
+      tagName: '',
+      pictures: [],
+      videos: [],
     };
 
   }
@@ -1131,7 +1158,7 @@ class MapPage extends Component {
               {this.state.answer==true?
                 (<h3>正确答案是</h3>):''}
               {this.state.answer==true?
-                (<Card type="inner" title={(question[recent]?question[recent].answer:'')} />):''}
+                (<h2> {(question[recent]?question[recent].answer:'')} </h2>):''}
               <Row gutter={16}>
                 <Col span={12}>
                   <Button  key="submit"
@@ -1329,15 +1356,27 @@ class MapPage extends Component {
             >
               <div className={styles.modal}>
                 <div className={styles.topVideo}></div>
-                <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
-                       autoPlay="autoplay" preload="none"
-                       controls="controls">
-                  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                  />
-                  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"
-                  />
-                </video>
+                {/*<video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"*/}
+                {/*       autoPlay="autoplay" preload="none"*/}
+                {/*       controls="controls">*/}
+                {/*  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"*/}
+                {/*  />*/}
+                {/*  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"*/}
+                {/*  />*/}
+                {/*</video>*/}
+                <div style={{padding: 40, background: "#ececec"}} >
                 <div className="d-iframe">
+                  <Slider {...this.carousel_settings} >
+                    {this.state.videos}
+                    {/*<div style={styles.out}>*/}
+                    {/*  <img src={yay} style={{ height: '100%', width: '100%' }} />*/}
+                    {/*</div>*/}
+                    {/*<div>*/}
+                    {/*  <img src={yaa} style={{ height: '100%', width: '100%' }} />*/}
+                    {/*</div>*/}
+                  </Slider>
+                </div>
+                  <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>共<span style={{color:'red'}}>{this.state.videos.length}</span>个</p>
                 </div>
               </div>
             </Modal>
@@ -1431,6 +1470,16 @@ class MapPage extends Component {
                       this.setState({ startPicture: true })
                       this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
                         console.log('res');
+                        if(res.success) {
+                          let pictures=res.pictures;
+                          let picturesAll=pictures.map((item)=>{
+                            return(<div style={styles.out}>
+                              <h2>{item.pictureTitle}</h2>
+                              <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
+                            </div>)
+                          });
+                          this.setState({pictures:picturesAll})
+                        }
                       });
                     }}>
                       <Icon className={styles.popup} type="picture" />
@@ -1456,15 +1505,56 @@ class MapPage extends Component {
                     </Col>
                     <Col span={2} onClick={() => {
                       this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
-                        console.log('res');
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
+                        console.log('res',res.videos);
+                        if(res.success) {
+                          let videos=res.videos;
+                          let videoAll=videos.map((item)=>{
+                            return(<div style={styles.out}>
+                              <h2>{item.videoTitle}</h2>
+                              {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
+                              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
+                                     autoPlay="autoplay" preload="none"
+                                     controls="controls">
+                                <source src={item.videoContent}
+                                />
+                                <source src={item.videoContent}
+                                />
+                              </video>
+                            </div>)
+                          });
+                          this.setState({videos:videoAll})
+                        }
                       });
                     }}>
                       <Icon className={styles.popup} type="video-camera" />
                     </Col>
                     <Col span={4} onClick={() => {
+                      // this.setState({ startVideo: true })
+                      // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
                       this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
+                        console.log('res',res.videos);
+                        if(res.success) {
+                          let videos=res.videos;
+                          let videoAll=videos.map((item,index, arr)=>{
+                            return(<div style={styles.out}>
+                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black'}}>{item.videoTitle}</h1>
+                              {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
+                              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
+                                     autoPlay="autoplay" preload="none"
+                                     controls="controls">
+                                <source src={item.videoContent}
+                                />
+                                <source src={item.videoContent}
+                                />
+                              </video>
+                              <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
+                            </div>)
+                          });
+                          this.setState({videos:videoAll})
+                        }
+                      });
                     }}>
                       视频
                     </Col>
