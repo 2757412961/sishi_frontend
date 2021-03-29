@@ -72,19 +72,19 @@ export default class QuestionTable extends Component {
           sorter: (a, b) => a.answer.length - b.answer.length,
           sortDirections: ['descend', 'ascend'],
         },
-        // {
-        //   title: '公开',
-        //   dataIndex: 'isPublic',
-        //   key: 'isPublic',
-        //   align: 'center',
-        //   render: (text, record) => (
-        //     <>
-        //       {record.isPublic ?
-        //         <Tag color="blue">公开</Tag> :
-        //         <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
-        //     </>
-        //   ),
-        // },
+        {
+          title: '公开',
+          dataIndex: 'isPublic',
+          key: 'isPublic',
+          align: 'center',
+          render: (text, record) => (
+            <>
+              {record.isPublic ?
+                <Tag color="blue">公开</Tag> :
+                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
+            </>
+          ),
+        },
         {
           title: '操作',
           key: 'action',
