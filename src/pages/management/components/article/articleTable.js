@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Table, message, Button, Tag,} from 'antd';
 import request from "@/utils/request";
+import {getLocalData} from '@/utils/common.js';
 
 export default class ArticleTable extends Component {
   constructor(props) {
@@ -80,7 +81,7 @@ export default class ArticleTable extends Component {
             <>
               {record.isPublic ?
                 <Tag color="blue">公开</Tag> :
-                <Button>点击公开</Button>}
+                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
             </>
           ),
         },
@@ -214,6 +215,27 @@ export default class ArticleTable extends Component {
         message.success('删除文章成功');
       } else {
         message.error('删除文章失败,' + res.message);
+      }
+    });
+  }
+
+  updatePublicState = (text, record) => {
+    request({
+      url: '/v1.0/api/article/public/' + record.articleId,
+      method: 'PUT',
+      headers: {
+        userId: getLocalData({dataName: 'userId'}),
+        token: getLocalData({dataName: 'token'})
+      },
+      autoAdd: false, //不添加v1.0
+    }).then((res) => {
+      console.log(res);
+
+      if (res.success) {
+        this.updateTable();
+        message.success('更新状态成功');
+      } else {
+        message.error('更新状态失败,' + res.message);
       }
     });
   }
