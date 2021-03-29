@@ -257,10 +257,10 @@ class ArticleModal extends Component {
   render() {
     const layout = {
       labelCol: {
-        span: 2,
+        span: 3,
       },
       wrapperCol: {
-        span: 22,
+        span: 21,
       },
     };
     const {getFieldDecorator} = this.props.form;

@@ -64,19 +64,19 @@ export default class MapinfoTable extends Component {
           sorter: (a, b) => a.mapCreateTime - b.mapCreateTime,
           sortDirections: ['descend', 'ascend'],
         },
-        {
-          title: '公开',
-          dataIndex: 'isPublic',
-          key: 'isPublic',
-          align: 'center',
-          render: (text, record) => (
-            <>
-              {record.isPublic ?
-                <Tag color="blue">公开</Tag> :
-                <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
-            </>
-          ),
-        },
+        // {
+        //   title: '公开',
+        //   dataIndex: 'isPublic',
+        //   key: 'isPublic',
+        //   align: 'center',
+        //   render: (text, record) => (
+        //     <>
+        //       {record.isPublic ?
+        //         <Tag color="blue">公开</Tag> :
+        //         <Button onClick={() => this.updatePublicState(text, record)}>点击公开</Button>}
+        //     </>
+        //   ),
+        // },
         {
           title: '操作',
           key: 'action',
@@ -154,7 +154,7 @@ export default class MapinfoTable extends Component {
       console.log(res);
 
       if (res.success) {
-        this.props.updateCascade();
+        // this.props.updateCascade();
         this.updateTable();
         message.success('删除地理信息成功');
       } else {

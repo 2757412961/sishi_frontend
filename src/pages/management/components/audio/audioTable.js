@@ -165,7 +165,7 @@ export default class AudioTable extends Component {
       console.log(res);
 
       if (res.success) {
-        this.props.updateCascade();
+        // this.props.updateCascade();
         this.updateTable();
         message.success('删除音频成功');
       } else {
