@@ -18,8 +18,12 @@ export default {
     video:'',
     audio:'',
     tagTree:[],
+    module:''
   },
   reducers: {
+    setModule(state, payload){
+      return {...state, module:payload.payload};
+    },
     showModal(state){
       return {...state, modalVisble: true,};
     },
@@ -90,8 +94,9 @@ export default {
 
     //获取问题及答案
     * getQuestion({payload}, {call, put}) {
-      //const response = yield call(getQuestionsByTag, "党史新学@中共一大");
-      const response = yield call(getAllQuestion);
+      debugger
+      const response = yield call(getQuestionsByTag, payload);
+      // const response = yield call(getAllQuestion);
       console.log('response',response);
       if (response.success) {
         yield put({
@@ -122,6 +127,7 @@ export default {
       const response = yield call(getVideoByTag, payload);
       // const response = yield call(getVideoList);
       console.log('response',response);
+      return response;
     },
 
     //获取音频通过tagName

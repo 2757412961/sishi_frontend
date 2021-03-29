@@ -6,7 +6,8 @@
 
 import React, { Component } from 'react';
 import styles from './index.less';
-import { Icon, Button, Menu,Avatar, Divider } from 'antd';
+import { Icon, Button, Menu,Avatar, Divider, Row, Col } from 'antd';
+import xueyuanlogo from '@/assets/images/xueyuan-white.png';
 // import foot_logo from '@images/index/logo100.gif';
 
 class Footer extends Component {
@@ -23,11 +24,18 @@ class Footer extends Component {
 
   render() {
     return <footer className={styles.home_footer}>
-      <div>
-        单位：浙江大学
-      </div>
-      <div> Copyright <Icon type="copyright"/>...........................................
-      </div>
+      <Row style={{width:"300px", textAlign:"center"}}>
+        <Col span={4}>
+          <img src={xueyuanlogo} className={styles.xueyuan_logo} alt="" />
+        </Col>
+        <Col span={20}>
+          <div style={{marginTop:"10px"}}>
+            单位：浙江大学
+          </div>
+          <div> Copyright <Icon type="copyright"/>...........................................
+          </div>
+        </Col>
+      </Row>
     </footer>;
   }
 }

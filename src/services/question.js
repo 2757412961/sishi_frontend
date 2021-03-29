@@ -1,4 +1,5 @@
 import requestHeard from '../utils/requestHeard';
+
 //标签接口
 //标签树排序
 //获取排序标签树
@@ -15,8 +16,9 @@ export function getUserAnswer(tagName,userName) {
 }
 
 // 根据tag信息，获取相关答题列表
-export function getQuestionsByTag(tagName) {
-  return requestHeard({ url: '/questionsTag', method: 'GET', data: { tagName} });
+export function getQuestionsByTag(tag_name) {
+  debugger
+  return requestHeard({ url: '/questionsTag', method: 'GET', data: { tag_name} });
 }
 
 // 添加用户积分，改写用户答题状态
