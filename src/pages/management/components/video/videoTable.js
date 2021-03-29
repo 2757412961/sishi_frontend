@@ -135,9 +135,9 @@ export default class VideoTable extends Component {
       url: requestUrl,
       method: 'GET',
       autoAdd: false, //不添加v1.0
-      data: {
+      data:{
         length: 1000
-      }
+      },
     }).then((res) => {
       console.log(res);
 

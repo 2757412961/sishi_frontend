@@ -141,9 +141,9 @@ export default class PictureTable extends Component {
         userId: getLocalData({dataName: 'userId'}),
         token: getLocalData({dataName: 'token'})
       },
-      data: {
+      data:{
         length: 1000
-      }
+      },
     }).then((res) => {
       console.log(res);
 
