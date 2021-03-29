@@ -97,8 +97,8 @@ export default class TagTable extends Component {
       console.log(res);
 
       if (res.success) {
-        // this.props.updateCascade();
-        this.updateTable();
+        this.props.updateCascade();
+        // this.updateTable();
         message.success('删除标签成功');
       } else {
         message.error('删除标签失败,' + res.message);
