@@ -160,7 +160,7 @@ h2 {
 .top{
   position: relative;
   top: 4px;
-  left: -28px;
+  left: -2px;
   height: 90px;
   width: 960px;
   background-Image:url("../../assets/headerQuestion.PNG");
@@ -168,7 +168,7 @@ h2 {
 .top1{
   position: relative;
   top: 4px;
-  left: -28px;
+  left: -2px;
   height: 90px;
   width: 960px;
   background-Image:url("../../assets/headerQuestion.PNG");
@@ -191,9 +191,10 @@ h2 {
 
 }
 .bottom{
-  position: fixed;
-  bottom: 48px;
-  left: 295px;
+  position: relative;
+  /* position: fixed; */
+  bottom: -19px;
+  left: -2px;
   height: 50px;
   width: 960px;
   background-Image:url("../../assets/bottomAnswer.PNG");
@@ -321,7 +322,7 @@ section:last-child {
   background: #fafafa;
   border: 1px solid #f0f0f0;
   border-radius: 4px;
-  height: 40em;
+  height: 720px;
   :global {
     //.ant-checkbox-checked {
     //  background-color: #1890ff;
@@ -390,6 +391,14 @@ section:last-child {
     }
   }
 }
+
+.q-body {
+  margin-top: 16px;
+  color: #262626;
+  line-height: 28px;
+  margin-bottom: 16px;
+  word-break: break-all;
+}
 .header-row {
   width: 640px;
   margin: 0 auto 20px;
@@ -401,46 +410,46 @@ section:last-child {
   align-items: center;
   text-align: right;
 }
-.correct {
-  position: relative;
-  top: 0;
-  left: 0;
-  display: block;
-  width: 70px;
-  height: 25px;
-  //background-color: #fff;
-  /* border: 1px solid #d9d9d9; */
-  border-radius: 2px;
-  border-collapse: separate;
-  transition: all 0.3s;
-  background-color: #3dc076;
-  animation: antCheckboxEffect 0.36s ease-in-out;
-  animation-fill-mode: backwards;
-}
-//li {
-//  width: 220px;
-//  height: 180px;
-//  float: left;
-//  margin-right: 32px;
-//  margin-top: 10px;
+//.correct {
+//  position: relative;
+//  top: 0;
+//  left: 0;
+//  display: block;
+//  width: 70px;
+//  height: 25px;
+//  //background-color: #fff;
+//  /* border: 1px solid #d9d9d9; */
+//  border-radius: 2px;
+//  border-collapse: separate;
+//  transition: all 0.3s;
+//  background-color: #3dc076;
+//  animation: antCheckboxEffect 0.36s ease-in-out;
+//  animation-fill-mode: backwards;
 //}
-.wrong{
-  position: relative;
-  top: 0;
-  left: 0;
-  display: block;
-  width: 70px;
-  height: 25px;
-  //background-color: #fff;
-  /* border: 1px solid #d9d9d9; */
-  border-radius: 2px;
-  border-collapse: separate;
-  transition: all 0.3s;
-  background-color: darkred;
-  z-index: 3;
-  animation: antCheckboxEffect 0.36s ease-in-out;
-  animation-fill-mode: backwards;
+li {
+  width: 220px;
+  height: 180px;
+  float: left;
+  margin-right: 32px;
+  margin-top: 10px;
 }
+//.wrong{
+//  position: relative;
+//  top: 0;
+//  left: 0;
+//  display: block;
+//  width: 70px;
+//  height: 25px;
+//  //background-color: #fff;
+//  /* border: 1px solid #d9d9d9; */
+//  border-radius: 2px;
+//  border-collapse: separate;
+//  transition: all 0.3s;
+//  background-color: darkred;
+//  z-index: 3;
+//  animation: antCheckboxEffect 0.36s ease-in-out;
+//  animation-fill-mode: backwards;
+//}
 .header {
   position: relative;
   width: 100%;
@@ -504,6 +513,7 @@ section:last-child {
   background: #fafafa;
   border: 1px solid #f0f0f0;
   border-radius: 4px;
+  height: 720px;
 }
 .question .qbody {
   margin-top: 16px;
@@ -515,34 +525,23 @@ section:last-child {
 .question .qfooter {
   height: 20px;
 }
-.question .qfooter .tips {
-  float: right;
-  font-size: 14px;
-  text-align: right;
-  cursor: pointer;
-}
-//.question .qanswer {
-//  display: -ms-flexbox;
-//  display: flex;
-//  -ms-flex-align: center;
-//  align-items: center;
-//  -ms-flex-pack: justify;
-//  justify-content: space-between;
-//  line-height: 40px;
-//  margin-top: 24px;
-//  margin-bottom: 16px;
-//  padding: 0 24px;
-//  background: #fff;
-//  border: 1px solid #f0f0f0;
-//  border-radius: 10px;
-//  cursor: pointer;
-//}
-.question .qanswer.chosen {
+.chosen {
   color: #ba9e83;
   border-color: #ba9e83;
 }
-.question .qanswer.false {
+.false {
   color: #cb1e1e;
+}
+.correct {
+  color: #3dc076;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  position: relative;
+  left: 12px;
 }
 .detailbody {
   width: 960px;
@@ -586,6 +585,16 @@ section:last-child {
   float: left;
   cursor: pointer;
   margin-top: 9px;
+}
+.centerBtn {
+  float: inside;
+  width: 160px;
+  height: 40px;
+  color: #fff;
+  background-color: #cb1e1e;
+  border-color: #cb1e1e;
+  text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
+  box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
 }
 .nextBtn {
   float: right;
