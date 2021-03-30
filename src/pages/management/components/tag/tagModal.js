@@ -33,13 +33,15 @@ class TagModal extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let formData = this.props.form.getFieldsValue();
-        console.log(formData.tagPath.join('@') + '@' + formData.tagName);
+        let tagArr = [...formData.tagPath]; // 标签路径
+        tagArr.push(formData.tagName); // 标签名称
+        console.log(tagArr.join('@'));
 
         request({
           url: '/v1.0/api/tag',
           method: 'POST',
           data: {
-            tagName: formData.tagPath.join('@') + '@' + formData.tagName,
+            tagName: tagArr.join('@'),
           },
           autoAdd: false, //不添加v1.0
         }).then((res) => {
@@ -91,7 +93,7 @@ class TagModal extends Component {
 
           <Form name="basic" {...layout}>
             <Form.Item label="标签路径" name="tagPath">
-              {getFieldDecorator('tagPath', {rules: [{required: true, message: '请输入标签路径!'},]})(
+              {getFieldDecorator('tagPath', {initialValue: []})(
                 <Cascader
                   placeholder="请选择标签"
                   onChange={this.onChangeCascade}

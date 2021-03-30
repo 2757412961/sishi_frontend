@@ -16,6 +16,7 @@ import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
 import line from '@/assets/pointData/line.geojson';
+import lineShToJx from '@/assets/pointData/lineShToJx.geojson';
 import point from '@/assets/pointData/point.json';
 import { Scene, LineLayer,Control,PolygonLayer,PointLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
@@ -54,6 +55,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from 'react-mapbox-gl/src/image';
 
+const RadioGroup = Radio.Group;
+var timer;
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
 const Authorized = RenderAuthorized(getAuthority());
@@ -330,24 +333,6 @@ let des = [
       "<p>中国共产党第十八次全国代表大会，简称中共十八大，于2012年11月8日至14日在北京人民大会堂召开。</p></div>"},
   { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
       "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},{ "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
-      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
-
 ]
 
 
@@ -431,7 +416,9 @@ function forList(treeList){
       temp.text=treeList[i].label.split('@')[0];
       temp.value=treeList[i].label.replace('@','');
       temp.time=treeList[i].time;
-      temp.showInfo=des[i].showInfo;
+      if(des[i]){
+        temp.showInfo=des[i].showInfo;
+      }
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       list.push(temp);
@@ -511,6 +498,8 @@ class MapPage extends Component {
       videos: [],
       questionChoose:[],
       answerAll:'',
+      checkValue1:false,//是否显示一大惠聚英才
+      checkValue2:false,//是否显示上海到嘉兴路线
     };
   }
   choose=(num)=>{
@@ -701,6 +690,10 @@ class MapPage extends Component {
   }}
   componentDidMount() {
     const { dispatch } = this.props;
+    //保存当前模块名
+    this.setState({
+      module:this.props.location.query.module
+    });
     dispatch({ type: 'mapPage/getTagTree' });
     dispatch({ type: 'mapPage/getQuestion' });
     // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
@@ -711,6 +704,7 @@ class MapPage extends Component {
     console.log('mapPage', mapPage);
     const { tagTree } = mapPage;
     console.log('tagTree', tagTree);
+
     //遍历tagTree;
     let tree;
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
@@ -1051,25 +1045,6 @@ class MapPage extends Component {
 //         map.getCanvas().style.cursor = '';
 //       });
 //     }
-    const myDeckLayer = new MapboxLayer({
-      id: 'arc',
-      type: ArcLayer,
-      data: flyline,
-      getSourcePosition: d => d.coord[0],
-      getTargetPosition: d => d.coord[1],
-      getSourceColor: d => [255, 0, 0],
-      getTargetColor: d => [255, 0, 0],
-      getWidth: 2.3,
-      // getText:d => d.text,
-      // animate:({
-      //   interval: 0.8,
-      //   trailLength: 2,
-      //   duration: 1
-      // })
-    });
-    map.on('load', () => {
-      map.addLayer(myDeckLayer)
-    })
     var el = document.createElement('div');
     el.className = "marker";
     el.style.backgroundSize = 'cover'
@@ -1077,86 +1052,137 @@ class MapPage extends Component {
     el.style.height='20px';
     el.style.borderRadius = '50%';
     el.style.backgroundImage = 'url('+dangqi+')'
-    map.on('load', function() {
-      d3.json(line,function(err,data) {
-        if (err) throw err;
-        var coordinates = data.features[0].geometry.coordinates;
-        data.features[0].geometry.coordinates = [coordinates[0]];
-        map.addSource('trace', {type:'geojson', data: data})
-        map.addLayer({
-          "id": "trace",
-          "type": "line",
-          "source": "trace",
-          "layout": {
-            "line-join": "round",
-            "line-cap": "round"
-          },
-          "paint": {
-            "line-color": "red",
-            "line-opacity": 0.8,
-            "line-width": 5
-          }
-        });
-        map.jumpTo({'center': coordinates[0], 'zoom': 7});
-        map.setPitch(10);
-        //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
-        var marker = new mapboxgl.Marker(el)
-        var i = 0;
-        var timer = window.setInterval(function() {
-          if(i<coordinates.length) {
-            data.features[0].geometry.coordinates.push(coordinates[i]);
-            map.getSource('trace').setData(data);
-            map.panTo(coordinates[i]);
-            i++;
-            // function animateMarker() {
-            //   marker.setLngLat(coordinates[i])
-            //   marker.addTo(map);
-            //   requestAnimationFrame(animateMarker);
-            // }
-            // requestAnimationFrame(animateMarker);
-          } else {
-            window.clearInterval(timer);
-          }
-        }, 100);
-      });
-      /*map.addLayer({
-        'id': 'lines',
-        'type': 'line',
-        'source': {
-          'type': 'geojson',
-          'data': {
-            'type': 'FeatureCollection',
-            'features': [{
-              'type': 'Feature',
-              'properties': {
-                'color':  '#33C9EB' // blue
+    // map.on('load', function() {
+    //   d3.json(line,function(err,data) {
+    //     if (err) throw err;
+    //     var coordinates = data.features[0].geometry.coordinates;
+    //     data.features[0].geometry.coordinates = [coordinates[0]];
+    //     map.addSource('trace', {type:'geojson', data: data})
+    //     map.addLayer({
+    //       "id": "trace",
+    //       "type": "line",
+    //       "source": "trace",
+    //       "layout": {
+    //         "line-join": "round",
+    //         "line-cap": "round"
+    //       },
+    //       "paint": {
+    //         "line-color": "red",
+    //         "line-opacity": 0.8,
+    //         "line-width": 5
+    //       }
+    //     });
+    //     map.jumpTo({'center': coordinates[0], 'zoom': [7]});
+    //     map.setPitch(10);
+    //     //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
+    //     var marker = new mapboxgl.Marker(el)
+    //     var i = 0;
+    //     var timer = window.setInterval(function() {
+    //       if(i<coordinates.length) {
+    //         data.features[0].geometry.coordinates.push(coordinates[i]);
+    //         map.getSource('trace').setData(data);
+    //         map.panTo(coordinates[i],{zoom: 7});
+    //         i++;
+    //         // function animateMarker() {
+    //         //   marker.setLngLat(coordinates[i])
+    //         //   marker.addTo(map);
+    //         //   requestAnimationFrame(animateMarker);
+    //         // }
+    //         // requestAnimationFrame(animateMarker);
+    //       } else {
+    //         window.clearInterval(timer);
+    //       }
+    //     }, 100);
+    //   });
+    // });
+    this.map = map;
+  }
+  checkOnChange=(item)=>{
+    // let item = e.target.key;
+    // e.stopPropagation();
+    let map = this.map;
+    if(item==1){
+      let temp = this.state.checkValue1;
+      if(!temp){
+          d3.json(lineShToJx,function(err,data) {
+            if (err) throw err;
+            var coordinates = data.features[0].geometry.coordinates;
+            data.features[0].geometry.coordinates = [coordinates[0]];
+            map.addSource('lineShToJx', {type:'geojson', data: data})
+            map.addLayer({
+              "id": "lineShToJx",
+              "type": "line",
+              "source": "lineShToJx",
+              "layout": {
+                // 'symbol-placement': 'line',
+                // 'symbol-spacing': 50, // 图标间隔，默认为250
+                // 'icon-image': 'arrowIcon', //箭头图标
+                // 'icon-size': 0.5,
+                "line-join": "round",
+                "line-cap": "round"
               },
-              'geometry': {
-                'type': 'LineString',
-                'coordinates': [
-                  [121.47069346816863, 31.22206084685108],
-                  [120.75580305351667, 30.75747193181725],
-                  [121.46214132313253, 31.2260623329518],
-                  [113.29062697510238, 23.121680862715294],
-                  [121.48020351895462, 31.25728522799882],
-                  [114.29318634011975, 30.553569642526185],
-                  [37.153974181328664, 55.535728582753336],
-                  [109.46267096678156, 36.618757084621336],
-                  [116.35780179933835, 39.91833919135752],
-                  [116.38748691963224, 39.90337460887406]
-                ]
+              "paint": {
+                "line-color": "blue",
+                "line-opacity": 0.8,
+                "line-width": 10
               }
-            }]
-          }
-        },
-        'paint': {
-          'line-width': 3,
-// Use a get expression (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-get)
-// to set the line-color to a feature property value.
-          'line-color': ['get', 'color']
+            });
+            map.jumpTo({'center': coordinates[0], 'zoom': [7]});
+            map.setPitch(10);
+            var i = 0;
+            timer = window.setInterval(function() {
+              if(i<coordinates.length) {
+                data.features[0].geometry.coordinates.push(coordinates[i]);
+                map.getSource('lineShToJx').setData(data);
+                map.panTo(coordinates[i],{zoom: 7});
+                i++;
+              } else {
+                window.clearInterval(timer);
+              }
+            }, 10);
+          });
+      }
+      else{
+        if (map.getLayer('lineShToJx')) {
+          map.removeLayer('lineShToJx');
+          map.removeSource('lineShToJx');
+          clearInterval(timer);
         }
-      });*/
-    });
+      }
+      this.setState({
+        checkValue1: !temp,
+      });
+    }
+    else if(item==2){
+      let temp = this.state.checkValue2;
+      if(!temp){
+        const myDeckLayer = new MapboxLayer({
+          id: 'arc',
+          type: ArcLayer,
+          data: flyline,
+          getSourcePosition: d => d.coord[0],
+          getTargetPosition: d => d.coord[1],
+          getSourceColor: d => [255, 0, 0],
+          getTargetColor: d => [255, 0, 0],
+          getWidth: 2.3,
+          // getText:d => d.text,
+          // animate:({
+          //   interval: 0.8,
+          //   trailLength: 2,
+          //   duration: 1
+          // })
+        });
+        map.addLayer(myDeckLayer)
+      }
+      else{
+        if (map.getLayer('arc')) {
+          map.removeLayer('arc');
+        }
+      }
+      this.setState({
+        checkValue2: !temp,
+      });
+    }
     this.map = map;
   }
   showModal=(activeKey)=>{
@@ -1269,7 +1295,7 @@ class MapPage extends Component {
   return (
     <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
-      <Sider collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
+      <Sider className={styles.siderStyle}collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} width={400}>
         {/*答题*/}
         {/**/}
         <Modal
@@ -1321,7 +1347,6 @@ class MapPage extends Component {
                }}
                footer={null}
                closable={true}
-               style={{'height':'710px'}}
                wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
         >
           <div className="d-iframe">
@@ -1470,24 +1495,10 @@ class MapPage extends Component {
             >
               <div className={styles.modal}>
                 <div className={styles.topVideo}></div>
-                {/*<video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"*/}
-                {/*       autoPlay="autoplay" preload="none"*/}
-                {/*       controls="controls">*/}
-                {/*  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"*/}
-                {/*  />*/}
-                {/*  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"*/}
-                {/*  />*/}
-                {/*</video>*/}
                 <div style={{padding: 40, background: "#ececec"}} >
                 <div className="d-iframe">
                   <Slider {...this.carousel_settings} >
                     {this.state.videos}
-                    {/*<div style={styles.out}>*/}
-                    {/*  <img src={yay} style={{ height: '100%', width: '100%' }} />*/}
-                    {/*</div>*/}
-                    {/*<div>*/}
-                    {/*  <img src={yaa} style={{ height: '100%', width: '100%' }} />*/}
-                    {/*</div>*/}
                   </Slider>
                 </div>
                   <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>共<span style={{color:'red'}}>{this.state.videos.length}</span>个</p>
@@ -1516,9 +1527,6 @@ class MapPage extends Component {
                         <div style={{fontWeight:"bold"}}>
                           {item['value']}
                         </div>
-                        {
-                          item['text']=='中共一大'
-                        }
                       </VerticalTimelineElement>:
                       <VerticalTimelineElement
                         id={item['id']}
@@ -1534,30 +1542,25 @@ class MapPage extends Component {
                             this.moreOnClick():
                             this.oneClick(item)) }
                         icon={<Icon type="schedule" />}
-                      >
-                        <div style={{fontWeight:"bold"}}>
-                          {item['text']}
-                        </div>
-                        {/*{*/}
-                        {/*  item['text']=='中共一大'&&*/}
-                        {/*  <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(177,46,46)"}} />:<Icon type="arrow-up" style={{color:"rgba(177,46,46)"}} />}</div></div>*/}
-                        {/*}*/}
+                      >{
+                        item['text']=='中共一大'?
+                          <div style={{fontWeight:"bold"}}>
+                            {item['text']}
+                            <div className={styles.zhonggongyida}>
+                              <Checkbox  key="a" onChange={()=>this.checkOnChange(1)} onClick={e => e.stopPropagation()} >会议地点转移</Checkbox>
+                              <Checkbox  key="b" onChange={()=>this.checkOnChange(2)} onClick={e => e.stopPropagation()} >荟聚天下英才</Checkbox>
+                            </div>
+                          </div>:
+                          <div style={{fontWeight:"bold"}}>
+                            {item['text']}
+                          </div>
+                      }
                       </VerticalTimelineElement>
                   )
                 )
                 }
               </VerticalTimeline>
             </div>
-            {/*<Timeline className={styles.timeline}>{*/}
-            {/*  list.map((item)=> (*/}
-            {/*    <div onClick={ (e) => this.oneClick(e, item)}>*/}
-            {/*      /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
-            {/*      <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>*/}
-            {/*    </div>*/}
-            {/*    )*/}
-            {/*  )*/}
-            {/*}*/}
-            {/*</Timeline>*/}
           </Sider>
           <Content>
             <div className={styles.normal}>

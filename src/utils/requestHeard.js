@@ -13,8 +13,11 @@ const fetch = options => {
   }
   debugger
   const header = {
-    rzpj: getLocalData({
-      dataName: 'rzpj',
+    token: getLocalData({
+      dataName: 'token',
+    }),
+    userId: getLocalData({
+      dataName: 'userId',
     }),
     userId:getLocalData({
       dataName:'userId'

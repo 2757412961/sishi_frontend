@@ -18,8 +18,12 @@ export default {
     video:'',
     audio:'',
     tagTree:[],
+    module:''
   },
   reducers: {
+    setModule(state, payload){
+      return {...state, module:payload.payload};
+    },
     showModal(state){
       return {...state, modalVisble: true,};
     },
