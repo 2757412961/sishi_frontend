@@ -11,19 +11,28 @@ const fetch = options => {
   if (!notification) {
     needNotificate = false;
   }
+  debugger
   const header = {
     rzpj: getLocalData({
       dataName: 'rzpj',
     }),
+    userId:getLocalData({
+      dataName:'userId'
+    }),
+    token:getLocalData({
+      dataName:'token'
+    }),
     Accept: 'application/json;charset=UTF-8',
   };
-  console.log("headers", headers)
-  if(headers){
-    if(headers['ak']&&headers['sk']){
-      header['accessKey'] = headers['ak'];
-      header['secretKey'] = headers['sk'];
-    }
-  }
+  headers=header;
+  console.log('headers'.headers);
+  // console.log("headers", headers)
+  // if(headers){
+  //   if(headers['ak']&&headers['sk']){
+  //     header['accessKey'] = headers['ak'];
+  //     header['secretKey'] = headers['sk'];
+  //   }
+  // }
   if (autoAdd) {
     url = '/v1.0/api' + url;
   }
