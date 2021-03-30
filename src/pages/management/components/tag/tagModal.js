@@ -93,7 +93,7 @@ class TagModal extends Component {
 
           <Form name="basic" {...layout}>
             <Form.Item label="标签路径" name="tagPath">
-              {getFieldDecorator('tagPath', )(
+              {getFieldDecorator('tagPath', {initialValue: []})(
                 <Cascader
                   placeholder="请选择标签"
                   onChange={this.onChangeCascade}
