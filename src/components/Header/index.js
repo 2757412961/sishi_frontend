@@ -192,7 +192,7 @@ class Header extends Component {
                       }
                 >
                   {
-                    ((window.location.pathname=='/mapPage')&&(this.props.mapPage.module=='dangshixinxue'))?
+                    ((window.location.pathname=='/mapPage')&&((this.props.mapPage.module=='dangshixinxue')||this.props.mapPage.module==''))?
                       <div className={styles.font_style_selected}>党史新学</div>:
                       <div className={styles.font_style}>党史新学</div>
                   }
