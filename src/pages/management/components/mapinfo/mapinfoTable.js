@@ -124,9 +124,9 @@ export default class MapinfoTable extends Component {
       url: requestUrl,
       method: 'GET',
       autoAdd: false, //不添加v1.0
-      data: {
+      data:{
         length: 1000
-      }
+      },
     }).then((res) => {
       console.log(res);
 
@@ -154,7 +154,7 @@ export default class MapinfoTable extends Component {
       console.log(res);
 
       if (res.success) {
-        this.props.updateCascade();
+        // this.props.updateCascade();
         this.updateTable();
         message.success('删除地理信息成功');
       } else {

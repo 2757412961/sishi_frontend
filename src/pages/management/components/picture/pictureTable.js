@@ -141,9 +141,9 @@ export default class PictureTable extends Component {
         userId: getLocalData({dataName: 'userId'}),
         token: getLocalData({dataName: 'token'})
       },
-      data: {
+      data:{
         length: 1000
-      }
+      },
     }).then((res) => {
       console.log(res);
 
@@ -171,7 +171,7 @@ export default class PictureTable extends Component {
       console.log(res);
 
       if (res.success) {
-        this.props.updateCascade();
+        // this.props.updateCascade();
         this.updateTable();
         message.success('删除图片成功');
       } else {
