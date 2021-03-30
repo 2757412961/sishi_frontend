@@ -768,7 +768,7 @@ class MapPage extends Component {
       }
       console.log("listHere", listHere);
       //加载中共一大（上海，嘉兴地点）的火花图标
-      map.on('load', function() {
+      map.on('styledata', function() {
         for (let i=0;i<listHere.length;i++) {
           map.addImage(listHere[i].id, pulsingDot, { pixelRatio: 2 });
           map.addLayer({
@@ -1045,6 +1045,7 @@ class MapPage extends Component {
 //         map.getCanvas().style.cursor = '';
 //       });
 //     }
+    document.getElementById('vec').style.border = ('2px solid red');
     var el = document.createElement('div');
     el.className = "marker";
     el.style.backgroundSize = 'cover'
@@ -1052,49 +1053,69 @@ class MapPage extends Component {
     el.style.height='20px';
     el.style.borderRadius = '50%';
     el.style.backgroundImage = 'url('+dangqi+')'
-    // map.on('load', function() {
-    //   d3.json(line,function(err,data) {
-    //     if (err) throw err;
-    //     var coordinates = data.features[0].geometry.coordinates;
-    //     data.features[0].geometry.coordinates = [coordinates[0]];
-    //     map.addSource('trace', {type:'geojson', data: data})
-    //     map.addLayer({
-    //       "id": "trace",
-    //       "type": "line",
-    //       "source": "trace",
-    //       "layout": {
-    //         "line-join": "round",
-    //         "line-cap": "round"
-    //       },
-    //       "paint": {
-    //         "line-color": "red",
-    //         "line-opacity": 0.8,
-    //         "line-width": 5
-    //       }
-    //     });
-    //     map.jumpTo({'center': coordinates[0], 'zoom': [7]});
-    //     map.setPitch(10);
-    //     //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
-    //     var marker = new mapboxgl.Marker(el)
-    //     var i = 0;
-    //     var timer = window.setInterval(function() {
-    //       if(i<coordinates.length) {
-    //         data.features[0].geometry.coordinates.push(coordinates[i]);
-    //         map.getSource('trace').setData(data);
-    //         map.panTo(coordinates[i],{zoom: 7});
-    //         i++;
-    //         // function animateMarker() {
-    //         //   marker.setLngLat(coordinates[i])
-    //         //   marker.addTo(map);
-    //         //   requestAnimationFrame(animateMarker);
-    //         // }
-    //         // requestAnimationFrame(animateMarker);
-    //       } else {
-    //         window.clearInterval(timer);
-    //       }
-    //     }, 100);
-    //   });
-    // });
+    map.on('styledata', function() {
+      d3.json(line,function(err,data) {
+        if (err) throw err;
+        var coordinates = data.features[0].geometry.coordinates;
+        data.features[0].geometry.coordinates = [coordinates[0]];
+        map.addSource('trace', {type:'geojson', data: data})
+        map.addLayer({
+          "id": "trace",
+          "type": "line",
+          "source": "trace",
+          "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+          },
+          "paint": {
+            "line-color": "red",
+            "line-opacity": 0.8,
+            "line-width": 5
+          }
+        });
+        map.jumpTo({'center': coordinates[0], 'zoom': 8});
+        map.setPitch(10);
+        //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
+        var marker = new mapboxgl.Marker(el)
+        var i = 0;
+        var timer = window.setInterval(function() {
+          if(i<coordinates.length) {
+            data.features[0].geometry.coordinates.push(coordinates[i]);
+            map.getSource('trace').setData(data);
+            if(i<195){
+              map.panTo(coordinates[i],{'zoom':8})
+            } else if(i<495){
+              map.panTo(coordinates[i],{'zoom':5})
+            } else if (i<695){
+              map.panTo(coordinates[i],{'zoom':2})
+            } else if(i<780){
+              map.panTo(coordinates[i],{'zoom':5})
+            } else if(i<790){
+              map.panTo(coordinates[i],{'zoom':7})
+            } else if(i<800){
+              map.panTo(coordinates[i],{'zoom':9})
+            } else if(i<805){
+              map.panTo(coordinates[i],{'zoom':10})
+            } else if(i<810){
+              map.panTo(coordinates[i],{'zoom':11})
+            } else if(i<815){
+              map.panTo(coordinates[i],{'zoom':12})
+            } else {
+              map.panTo(coordinates[i],{'zoom':13})
+            }
+            i++;
+            function animateMarker() {
+              marker.setLngLat(coordinates[i])
+              marker.addTo(map);
+              requestAnimationFrame(animateMarker);
+            }
+            requestAnimationFrame(animateMarker);
+          } else {
+            window.clearInterval(timer);
+          }
+        }, 100);
+      });
+    });
     this.map = map;
   }
   checkOnChange=(item)=>{
@@ -1278,11 +1299,115 @@ class MapPage extends Component {
         document.getElementById(diTuList[i]).style.border = ('');
       }
     }
-    this.componentWillUnmount()
-    this.componentDidMount()
+    let localhost = window.location.origin;
+    let sources = {
+      "osm-tiles1": {
+        "type": "raster",
+        'tiles': [this.state.mapUrl],
+        'tileSize': 256
+      },
+      "osm-tiles2": {
+        "type": "raster",
+        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
+        'tileSize': 256
+      }
+    };
+    let layers = [{
+      "id": "simple-tiles1",
+      "type": "raster",
+      "source": "osm-tiles1",
+    },
+      {
+        "id": "simple-tiles2",
+        "type": "raster",
+        "source": "osm-tiles2",
+      }
+    ];
+    var style = {
+      "version": 8,
+      "sprite": localhost + "/MapBoxGL/css/sprite",
+      "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+      "sources": sources,
+      "layers": layers,
+    }
+    this.map.setStyle(style);
+    // this.componentWillUnmount()
+    // this.componentDidMount()
     // this.map.setStyle('')
   }
-
+  // eventReview = () => {
+  //   var el = document.createElement('div');
+  //   el.className = "marker";
+  //   el.style.backgroundSize = 'cover'
+  //   el.style.width='20px';
+  //   el.style.height='20px';
+  //   el.style.borderRadius = '50%';
+  //   el.style.backgroundImage = 'url('+dangqi+')'
+  //   let _this = this
+  //   this.map.on('load', function() {
+  //     d3.json(line,function(err,data) {
+  //       // if (err) throw err;
+  //       var coordinates = data.features[0].geometry.coordinates;
+  //       data.features[0].geometry.coordinates = [coordinates[0]];
+  //       _this.map.addSource('trace', {type:'geojson', data: data})
+  //       _this.map.addLayer({
+  //         "id": "trace",
+  //         "type": "line",
+  //         "source": "trace",
+  //         "layout": {
+  //           "line-join": "round",
+  //           "line-cap": "round"
+  //         },
+  //         "paint": {
+  //           "line-color": "red",
+  //           "line-opacity": 0.8,
+  //           "line-width": 5
+  //         }
+  //       });
+  //       _this.map.jumpTo({'center': coordinates[0], 'zoom': 8});
+  //       _this.map.setPitch(10);
+  //       //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
+  //       var marker = new mapboxgl.Marker(el)
+  //       var i = 0;
+  //       var timer = window.setInterval(function() {
+  //         if(i<coordinates.length) {
+  //           data.features[0].geometry.coordinates.push(coordinates[i]);
+  //           _this.map.getSource('trace').setData(data);
+  //           if(i<195){
+  //             _this.map.panTo(coordinates[i],{'zoom':8})
+  //           } else if(i<495){
+  //             _this.map.panTo(coordinates[i],{'zoom':5})
+  //           } else if (i<695){
+  //             _this.map.panTo(coordinates[i],{'zoom':2})
+  //           } else if(i<780){
+  //             _this.map.panTo(coordinates[i],{'zoom':5})
+  //           } else if(i<790){
+  //             _this.map.panTo(coordinates[i],{'zoom':7})
+  //           } else if(i<800){
+  //             _this.map.panTo(coordinates[i],{'zoom':9})
+  //           } else if(i<805){
+  //             _this.map.panTo(coordinates[i],{'zoom':10})
+  //           } else if(i<810){
+  //             _this.map.panTo(coordinates[i],{'zoom':11})
+  //           } else if(i<815){
+  //             _this.map.panTo(coordinates[i],{'zoom':12})
+  //           } else {
+  //             _this.map.panTo(coordinates[i],{'zoom':13})
+  //           }
+  //           i++;
+  //           // function animateMarker() {
+  //           //   marker.setLngLat(coordinates[i])
+  //           //   marker.addTo(map);
+  //           //   requestAnimationFrame(animateMarker);
+  //           // }
+  //           // requestAnimationFrame(animateMarker);
+  //         } else {
+  //           window.clearInterval(timer);
+  //         }
+  //       }, 100);
+  //     });
+  //   })
+  // }
   render(){
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
@@ -1820,6 +1945,9 @@ class MapPage extends Component {
                     <div style={{marginLeft:25,marginTop:13}}>地形图</div>
                   </Col>
                 </Row>
+              </div>
+              <div className={styles.review_icon} onClick={this.eventReview}>
+                <img src={reback} className={styles.layer_img}/>
               </div>
             </div>
           </Content>
