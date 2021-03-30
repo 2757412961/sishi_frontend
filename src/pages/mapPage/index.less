@@ -161,7 +161,7 @@ h2 {
 .top{
   position: relative;
   top: 4px;
-  left: -28px;
+  left: -2px;
   height: 90px;
   width: 960px;
   background-Image:url("../../assets/headerQuestion.PNG");
@@ -169,7 +169,7 @@ h2 {
 .top1{
   position: relative;
   top: 4px;
-  left: -28px;
+  left: -2px;
   height: 90px;
   width: 960px;
   background-Image:url("../../assets/headerQuestion.PNG");
@@ -195,7 +195,7 @@ h2 {
   position: relative;
   /* position: fixed; */
   bottom: -19px;
-  left: -28px;
+  left: -2px;
   height: 50px;
   width: 960px;
   background-Image:url("../../assets/bottomAnswer.PNG");
@@ -358,22 +358,22 @@ section:last-child {
   align-items: center;
   text-align: right;
 }
-.correct {
-  position: relative;
-  top: 0;
-  left: 0;
-  display: block;
-  width: 70px;
-  height: 25px;
-  //background-color: #fff;
-  /* border: 1px solid #d9d9d9; */
-  border-radius: 2px;
-  border-collapse: separate;
-  transition: all 0.3s;
-  background-color: #3dc076;
-  animation: antCheckboxEffect 0.36s ease-in-out;
-  animation-fill-mode: backwards;
-}
+//.correct {
+//  position: relative;
+//  top: 0;
+//  left: 0;
+//  display: block;
+//  width: 70px;
+//  height: 25px;
+//  //background-color: #fff;
+//  /* border: 1px solid #d9d9d9; */
+//  border-radius: 2px;
+//  border-collapse: separate;
+//  transition: all 0.3s;
+//  background-color: #3dc076;
+//  animation: antCheckboxEffect 0.36s ease-in-out;
+//  animation-fill-mode: backwards;
+//}
 li {
   width: 220px;
   height: 180px;
@@ -381,23 +381,23 @@ li {
   margin-right: 32px;
   margin-top: 10px;
 }
-.wrong{
-  position: relative;
-  top: 0;
-  left: 0;
-  display: block;
-  width: 70px;
-  height: 25px;
-  //background-color: #fff;
-  /* border: 1px solid #d9d9d9; */
-  border-radius: 2px;
-  border-collapse: separate;
-  transition: all 0.3s;
-  background-color: darkred;
-  z-index: 3;
-  animation: antCheckboxEffect 0.36s ease-in-out;
-  animation-fill-mode: backwards;
-}
+//.wrong{
+//  position: relative;
+//  top: 0;
+//  left: 0;
+//  display: block;
+//  width: 70px;
+//  height: 25px;
+//  //background-color: #fff;
+//  /* border: 1px solid #d9d9d9; */
+//  border-radius: 2px;
+//  border-collapse: separate;
+//  transition: all 0.3s;
+//  background-color: darkred;
+//  z-index: 3;
+//  animation: antCheckboxEffect 0.36s ease-in-out;
+//  animation-fill-mode: backwards;
+//}
 .header {
   position: relative;
   width: 100%;
@@ -461,6 +461,7 @@ li {
   background: #fafafa;
   border: 1px solid #f0f0f0;
   border-radius: 4px;
+  height: 720px;
 }
 .question .qbody {
   margin-top: 16px;
@@ -472,17 +473,11 @@ li {
 .question .qfooter {
   height: 20px;
 }
-.question .qfooter .tips {
-  float: right;
-  font-size: 14px;
-  text-align: right;
-  cursor: pointer;
-}
 .chosen {
   color: #ba9e83;
   border-color: #ba9e83;
 }
-.qanswer.false {
+.false {
   color: #cb1e1e;
 }
 .correct {
@@ -538,6 +533,16 @@ li {
   float: left;
   cursor: pointer;
   margin-top: 9px;
+}
+.centerBtn {
+  float: inside;
+  width: 160px;
+  height: 40px;
+  color: #fff;
+  background-color: #cb1e1e;
+  border-color: #cb1e1e;
+  text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
+  box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
 }
 .nextBtn {
   float: right;

@@ -41,6 +41,8 @@ import c6 from '@/assets/test/c6.jpg';
 import c7 from '@/assets/test/c7.jpg';
 import c8 from '@/assets/test/c8.jpg';
 import c9 from '@/assets/test/c9.jpg';
+import correct from '@/assets/correct.PNG'
+import wrong from '@/assets/false.PNG'
 import dangqi from '@/assets/test/党旗.png';
 import layer from '@/assets/test/layer.png';
 import reback from '@/assets/test/reback.png';
@@ -328,6 +330,24 @@ let des = [
       "<p>中国共产党第十八次全国代表大会，简称中共十八大，于2012年11月8日至14日在北京人民大会堂召开。</p></div>"},
   { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
       "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},{ "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+  { "showInfo":"<div><h3>中共十九大会址</h3><img width=220px' src="+c9+" />" +
+      "<p>中国共产党第十九次全国代表大会，简称中共十九大，于2017年10月18日至24日在北京人民大会堂召开。自中共九大起，中共党代会均在人民大会堂举行。</p></div>"},
+
 ]
 
 
@@ -494,33 +514,191 @@ class MapPage extends Component {
     };
   }
   choose=(num)=>{
-    let temp={};
-    let questionChoose=this.state.questionChoose;
     debugger
     let id=(num+1).toString();
-    if(questionChoose[num]){
-    if(questionChoose[num].hasOwnProperty('checked')){
-      if(questionChoose[num].checked) {
-        this.state.answerAll.replace(id,'');
-        if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
-          document.getElementById(id).classList.remove(styles.qanswerchoosable);
-        }
-      }else{
-        this.state.answerAll.concat(id);
-        if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
-          document.getElementById(id).classList.add(styles.qanswerchoosable);
-        }
+    let temp=document.getElementById(id)&&document.getElementById(id);
+    if(temp){
+      document.getElementById(id).classList.add(styles.qanswerchoosable);
+    }
+    console.log(temp);
+    // let temp={};
+    // let questionChoose=this.state.questionChoose;
+    // debugger
+
+    // if(questionChoose[num]){
+    // if(questionChoose[num].hasOwnProperty('checked')){
+    //   if(questionChoose[num].checked) {
+    //     this.state.answerAll.replace(id,'');
+    //     if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
+    //       document.getElementById(id).classList.remove(styles.qanswerchoosable);
+    //     }
+    //   }else{
+    //     this.state.answerAll.concat(id);
+    //     if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
+    //       document.getElementById(id).classList.add(styles.qanswerchoosable);
+    //     }
+    //   }
+    // }}
+    // else{
+    //   temp.checked=true;
+    //   questionChoose[num]=temp;
+    //   if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
+    //     document.getElementById(id).classList.add(styles.chosen);
+    //   }
+    //   }
+    // questionChoose[num].checked=!questionChoose[num].checked;
+  }
+  nextQuestion=()=>{
+    const {mapPage}=this.props;
+    console.log('mapPage',mapPage);
+    const {tagTree,question,knowledgeContent}=mapPage;
+    let allNumber=question.length;
+    let recent=this.state.questionNumber;
+    let temp=this.state.questionChoose[recent];
+    debugger
+    if(this.state.questionNumber==allNumber&&this.state.answer==true){
+      this.setState({startQuestion:false})
+      this.setState({questionNumber: 1})
+      return
+    }
+    if(temp&&temp[4]==true){
+      this.setState({answer:true})
+      let checked1=document.getElementsByClassName(styles.qanswer);
+      for (let i=0;i<checked1.length;i++){
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+        // document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.wrong);
       }
+      let state = document.getElementsByTagName("input");
+      state[0].getAttribute("checked");
+      for(let i=0;i<state.length;i++){
+        document.getElementsByTagName("input")[i].checked=false;
+        //document.getElementsByTagName("input")[i].setAttribute('checked','false');
+      }
+      let i=0;
+      while(i<4){
+        if(temp[i]==wrong){
+          if(document.getElementsByClassName(styles.qanswer)[i])
+            document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.false);
+        }else if(temp[i]==correct){
+          if(document.getElementsByClassName(styles.qanswer)[i])
+            document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.correct);
+        }
+        i++;
+      }
+      this.setState({questionNumber: this.state.questionNumber+1})
+      this.setState({answer:false})
+    } else{
+      let arg=question[recent]?question[recent].answer:'';
+      arg=arg.split("");
+      let translate1=translate(arg);
+      let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
+      let checked1=document.getElementsByClassName(styles.qanswer);
+      for (let i=0;i<checked1.length;i++){
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+        // document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.wrong);
+      }
+      let state = document.getElementsByTagName("input");
+      state[0].getAttribute("checked");
+      for(let i=0;i<state.length;i++){
+        document.getElementsByTagName("input")[i].checked=false;
+        //document.getElementsByTagName("input")[i].setAttribute('checked','false');
+      }
+      // $("input[type=checkbox]").removeAttr("checked");
+      this.setState({deadline:Date.now() +  1000 * 60})
+      this.setState({questionNumber: this.state.questionNumber+1})
+      this.setState({answer:false})
+    }
+  }
+  lastQuestion=()=>{
+    debugger
+    this.setState({questionNumber: this.state.questionNumber-1});
+    if(this.state.questionNumber>1){
+    let checked1=document.getElementsByClassName(styles.qanswer);
+    for (let i=0;i<checked1.length;i++){
+      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+      // document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.wrong);
+    }
+    let state = document.getElementsByTagName("input");
+    state[0].getAttribute("checked");
+    for(let i=0;i<state.length;i++){
+      document.getElementsByTagName("input")[i].checked=false;
+      //document.getElementsByTagName("input")[i].setAttribute('checked','false');
+    }
+    let recent=this.state.questionNumber-2;
+    let temp=this.state.questionChoose[recent];
+    let i=0;
+    while(i<4){
+      if(temp[i]==wrong){
+        if(document.getElementsByClassName(styles.qanswer)[i])
+        document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.false);
+      }else if(temp[i]==correct){
+        if(document.getElementsByClassName(styles.qanswer)[i])
+        document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.correct);
+      }
+      i++;
     }}
     else{
-      temp.checked=true;
-      questionChoose[num]=temp;
-      if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
-        document.getElementById(id).classList.add(styles.chosen);
-      }
-      }
-    questionChoose[num].checked=!questionChoose[num].checked;
+      alert('当前为第一道题');
+      return
+    }
   }
+  submitQuestion=()=>{
+    debugger
+    const {mapPage}=this.props;
+    console.log('mapPage',mapPage);
+    const {tagTree,question,knowledgeContent}=mapPage;
+    let allNumber=question.length;
+    let recent=this.state.questionNumber-1;
+    let string=this.state.value.toString();
+    string=string.replace(/,/g,'');
+    let arg=question[recent]?question[recent].answer:'';
+    arg=arg.split("");
+    let translate1=translate(arg);
+    let temp=[-1,-1,-1,-1,true];
+    let questionChoose=this.state.questionChoose;
+    if(string==(question[recent]?question[recent].answer:''))//答案正确
+    {
+      if(this.state.answer==false){
+        this.setState({grade:this.state.grade+1});
+      }
+      let id=0;
+      let i=0;
+      while(i<translate1.length){
+        id=translate1[i];
+        temp[id]=correct;
+        if(document.getElementsByClassName(styles.qanswer)[id]) {
+          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.qanswerchoosable);
+          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.false);
+          document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.correct);
+        }
+        i++;
+        // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
+      }
+    }else{//答案错误
+      let id=0;
+      let i=0;
+      for( i=0;i<translate1.length;i++){
+        id=translate1[i];
+        temp[id]=wrong;
+        // let temp=document.getElementsByClassName(styles.qanswer)[id];
+        if(document.getElementsByClassName(styles.qanswer)[id]) {
+          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.qanswerchoosable);
+          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.correct);
+          document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.false);
+        }}
+    }
+    debugger
+    questionChoose.push(temp);
+    this.setState({questionChoose:questionChoose});
+    this.setState({answer:true});
+    if(this.state.questionNumber==allNumber) {
+      let username=getLocalData({dataName:'userName'});
+      this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
+      alert("答题结束")
+  }}
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({ type: 'mapPage/getTagTree' });
@@ -1004,7 +1182,7 @@ class MapPage extends Component {
   onChange = e => {
     console.log('radio checked', e);
     this.setState({
-      value: e,
+      value: e.target.value,
     });
   };
   //子时间轴（中共一大）
@@ -1094,7 +1272,9 @@ class MapPage extends Component {
       <Sider collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} style={{backgroundColor:'rgba(155,100,20,0.5)', overflow:'auto'}} width={400}>
         {/*答题*/}
         {/**/}
-        <Modal visible={this.state.startQuestion}
+        <Modal
+          visible={this.state.startQuestion}
+          // visible={true}
                centered
               width={1000}
                mask={true}
@@ -1144,215 +1324,72 @@ class MapPage extends Component {
                style={{'height':'710px'}}
                wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
         >
-          {/*<div className="d-iframe">*/}
-          {/*  /!*<iframe id="previewIframe" src="" frameBorder="0"*!/*/}
-          {/*  /!*        className="iframe-style"></iframe>*!/*/}
-          {/*  <div className={styles.web} >*/}
+          <div className="d-iframe">
+            {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
+            {/*        className="iframe-style"></iframe>*/}
+            <div className={styles.web} >
           {/*<div className={styles.question}>*/}
-          {/*  <div className={styles.top}></div>*/}
-          {/*  <div className={styles.headerRow}>*/}
-          {/*    <span class={styles.big}>{this.state.questionNumber}</span>*/}
-          {/*    /{allNumber}*/}
-          {/*  </div>*/}
-          {/*  <div className={styles.question}>*/}
-          {/*    <div className={styles.qbody}><div>{question[recent]?question[recent].questionContent:''}</div></div>*/}
-          {/*    /!*<div className={styles.qanswer}>*!/*/}
-          {/*      <Row>*/}
-          {/*        <div id="1" className={styles.qanswer} onClick={this.choose(0)}>*/}
-                    {/*// ()=>{document.getElementsByClassName(styles.qanswer)[0].classList.add(styles.qanswerchoosable);}}*/}
-                    {/*//    onDoubleClick={()=>{document.getElementsByClassName(styles.qanswer)[0].classList.add(styles.false);}}>*/}
-          {/*          {'A  '+(question[recent]?question[recent].optionA:'')}*/}
-          {/*          <Image className={styles.icon} src='../../assets/false.png'></Image>*/}
-          {/*        </div>*/}
-          {/*      </Row>*/}
-          {/*      <Row>*/}
-          {/*        <div id="2" className={styles.qanswer}>*/}
-          {/*          {'B  '+(question[recent]?question[recent].optionB:'')}*/}
-          {/*        </div>*/}
-          {/*      </Row>*/}
-          {/*    {question[recent]&&question[recent].hasOwnProperty('optionC')?*/}
-          {/*      (<Row>*/}
-          {/*        <div id="3" className={styles.qanswer}>*/}
-          {/*          {'C  '+(question[recent]?question[recent].optionC:'')}*/}
-          {/*        </div>*/}
-          {/*      </Row>):''}*/}
-          {/*    {question[recent]&&question[recent].hasOwnProperty('optionD')?*/}
-          {/*      (<Row>*/}
-          {/*      <div id="4" className={styles.qanswer}>*/}
-          {/*        {'D  '+(question[recent]?question[recent].optionD:'')}*/}
-          {/*      </div>*/}
-          {/*      </Row>):''}*/}
-          {/*    /!*</div>*!/*/}
-          {/*    <div className={styles.actionRow}>*/}
-          {/*      <Button className={styles.preBtn} onClick={()=>{*/}
-
-          {/*      }}>上一题</Button>*/}
-          {/*      <Button className={styles.nextBtn} onClick={()=>{*/}
-
-          {/*      }}>确定</Button>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*  <div className={styles.bottom}></div>*/}
-          {/*</div></div></div>*/}
-            <div className="d-iframe">
-              {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
-              {/*        className="iframe-style"></iframe>*/}
-              <div className={styles.web} >
-                <p>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</p>
-                <div className={styles.radio}>
-                  <div className={styles.question}>
-                    <div className={styles.top}></div>
-                <Checkbox.Group id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                  <Row>
-                    <Col span={12}>
-                  <Checkbox    value={'A'}>
-                    {'A  '+(question[recent]?question[recent].optionA:'')}
-                  </Checkbox>
-                    </Col>
-                    <Col span={12}>
-                  <Checkbox    value={'B'}>
+            <div className={styles.top}></div>
+            <div className={styles.headerRow}>
+              <span class={styles.big}>{this.state.questionNumber}</span>
+              /{allNumber}
+            </div>
+            <div className={styles.question}>
+              <div className={styles.qbody}><div>{question[recent]?question[recent].questionContent:''}</div></div>
+              {/*<div className={styles.qanswer}>*/}
+              <form id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                <Row>
+                  <div id="1" className={styles.qanswer} >
+                    <p><input type="checkbox"   value={'A'}/>
+                      {'A  '+(question[recent]?question[recent].optionA:'')}
+                    </p>
+                    {this.state.answer&&this.state.questionChoose[recent][0]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][0]} />:''}
+                  </div>
+                </Row>
+                <div id="2" className={styles.qanswer}>
+                  <p><input type="checkbox"   value={'B'}
+                            // oonClick={this.choose(1)}
+                  />
                     {'B  '+(question[recent]?question[recent].optionB:'')}
-                  </Checkbox>
-                    </Col>
-                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                  <Checkbox    value={'C'}>
+                  </p>
+                  {this.state.answer&&this.state.questionChoose[recent][1]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][1]} />:''}
+                </div>
+                {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} >
+                  <p><input type="checkbox"   value={'C'}/>
                     {'C  '+(question[recent]?question[recent].optionC:'')}
-                  </Checkbox>
-                    </Col>:""}
-                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                    <Col span={12}>
-                  <Checkbox    value={'D'}>
-                    {'D  '+(question[recent]?question[recent].optionD:'')}
-                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                  </Checkbox>
-                    </Col>:''}
-                  </Row>
-                </Checkbox.Group>
-                  <img src=""/>
-                </div>
-                </div>
-              </div>
-              {this.state.answer==true?
-                (<h3>正确答案是</h3>):''}
-              {this.state.answer==true?
-                (<h2> {(question[recent]?question[recent].answer:'')} </h2>):''}
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Button  key="submit"
-                           centered
-                           type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
-                           onClick={()=>{
-                             let checked1=document.getElementById("choose");
-                             // let checked=document.getElementsByClassName("ant-checkbox-checked");
-                             let checked=document.getElementsByClassName("ant-checkbox-inner");
-                             // checked[0].style.backgroundColor='rgb(0,255,0)';
-                             debugger
-                             let string=this.state.value.toString();
-                             string=string.replace(/,/g,'');
-                             let arg=question[recent]?question[recent].answer:'';
-                             arg=arg.split("");
-                             let translate1=translate(arg);
-                             if(string==(question[recent]?question[recent].answer:''))
-                             {
-                               if(this.state.answer==false){
-                               this.setState({grade:this.state.grade+1});}
-                               // checked[i].classList[1]=(styles.correct);
-                               let id=0;
-                               let i=0;
-                               while(i<translate1.length){
-                                  id=translate1[i]-i;
-                                 document.getElementsByClassName("ant-checkbox-inner")[id].setAttribute('class',styles.correct);
-                                 i++;
-                                 // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
-                               }
-                             }else{
-                               let id=0;
-                               let i=0;
-                               for( i=0;i<translate1.length;i++){
-                                 id=translate1[i]-i;
-                                 let temp=document.getElementsByClassName("ant-checkbox-inner")[id];
-                                 if(document.getElementsByClassName("ant-checkbox-inner")[id]) {
-                                   document.getElementsByClassName("ant-checkbox-inner")[id].setAttribute('class', styles.wrong);
-                                 }}
-                             }
-                             this.setState({answer:true});
-                             if(this.state.questionNumber==allNumber) {
-                               let username=getLocalData({dataName:'userName'});
-                               this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
-                               alert("答题结束")
-                             }}
-                           }>提交</Button>
-                </Col>
-                <Col span={12} style={{alignContent:'center',alignItems:'center'}}>
-                  <Button
-                    centered
-                    key="submit" style={{backgroundColor:'rgb(255,0,0)'}}
-                    type="primary"
-                    onClick={()=> {
-
-                      if(this.state.questionNumber==allNumber&&this.state.answer==true){
-                        this.setState({startQuestion:false})
-                        this.setState({questionNumber: 1})
-                        return
-                      }
-                      if(this.state.answer==false){
-                        alert('你还未提交本题答案')
-                      } else{
-                        let arg=question[recent]?question[recent].answer:'';
-                        arg=arg.split("");
-                        let translate1=translate(arg);
-                        let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
-                        let checked1=document.getElementsByClassName('ant-checkbox');
-                        for (let i=0;i<checked1.length;i++){
-                          document.getElementsByClassName('ant-checkbox')[i].classList.remove('ant-checkbox-checked');
-                          document.getElementsByClassName('ant-checkbox-wrapper')[i].classList.remove('ant-checkbox-wrapper-checked');
-                        }
-                        for(let i=0;i<checked.length;i++){
-                          if(document.getElementsByClassName(styles.correct).length>0)
-                          {document.getElementsByClassName(styles.correct)[i].setAttribute('class','ant-checkbox-inner');
-                          }
-                          else{
-                            if(document.getElementsByClassName(styles.wrong)[i]){
-                            document.getElementsByClassName(styles.wrong)[i].setAttribute('class','ant-checkbox-inner');
-                            }
-                          }
-                          // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
-                        }
-                        //let checked=document.getElementById("choose");
-                        let state = document.getElementsByTagName("input");
-                        state[0].getAttribute("checked");
-                        for(let i=0;i<state.length;i++){
-                          document.getElementsByTagName("input")[i].checked=false;
-                          //document.getElementsByTagName("input")[i].setAttribute('checked','false');
-                        }
-                        debugger
-                        let i1=document.getElementById("choose").value;
-                        document.getElementById("choose").value="";
-                        console.log(i1);
-                        // $("input[type=checkbox]").removeAttr("checked");
-                        this.setState({deadline:Date.now() +  1000 * 60})
-                        this.setState({questionNumber: this.state.questionNumber+1})
-                        this.setState({answer:false})
-                      }
-                    }}>
-                    下一题
-                  </Button>
-                </Col>
-                {/*<Col span={8}>*/}
-                {/*  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>*/}
-                {/*  <h1><span>{this.state.questionNumber}</span>/*/}
-                {/*    <span>{allNumber}</span></h1>*/}
-                {/*  /!*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*!/*/}
-                {/*</Col>*/}
-              </Row>
+                  </p>
+                  {this.state.answer&&this.state.questionChoose[recent][2]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][2]} />:''}
+                </div>:""}
+                {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                  <div className={styles.qanswer} >
+                    <p><input type="checkbox"   value={'D'}/>
+                      {'D  '+(question[recent]?question[recent].optionD:'')}
+                    </p>
+                    {this.state.answer&&this.state.questionChoose[recent][3]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][3]} />:''}
+                  </div>:''}
+              </form>
+                  {this.state.answer==true?
+                    (<h3>正确答案是</h3>):''}
+                  {this.state.answer==true?
+                    (<h2> {(question[recent]?question[recent].answer:'')} </h2>):''}
               {this.state.questionNumber==allNumber&&this.state.answer?
                 (<div>
-                  <div className={styles.try}></div>
-                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
-
+                  {/*<div className={styles.try}></div>*/}
+                  <h3><span>您的得分为</span><h2>{this.state.grade}</h2></h3></div>):''}
+              <div className={styles.actionRow}>
+                <Button className={styles.preBtn} onClick={()=>{
+                  this.lastQuestion()
+                }}>上一题</Button>
+                <Button className={styles.centerBtn} onClick={()=>{
+                  this.submitQuestion()
+                }}>确定</Button>
+                <Button className={styles.nextBtn} onClick={()=>{
+                  this.nextQuestion()
+                }}>下一题</Button>
+              </div>
             </div>
             <div className={styles.bottom}></div>
-          {/*</div>*/}
+          </div></div>
         </Modal>
         {/*文章*/}
         <Modal visible={this.state.startArticle}
