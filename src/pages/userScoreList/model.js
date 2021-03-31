@@ -8,8 +8,7 @@ import {
 } from '@/services/question';
 import { getUserData } from '@/services/service';
 export default {
-  namespace: 'mapPage',
-
+  namespace: 'userScoreList',
   state: {
     status: '',
     modalVisble:false,
@@ -19,7 +18,8 @@ export default {
     video:'',
     audio:'',
     tagTree:[],
-    module:''
+    module:'',
+    users:'',
   },
   reducers: {
     setModule(state, payload){
@@ -44,7 +44,7 @@ export default {
     setKnowledge(state,{payload}){
       debugger
       return{...state,knowledgeContent:payload.articleContent,
-       }
+      }
     },
     //设置音频
     setAudio(state,{payload}){
@@ -62,6 +62,9 @@ export default {
         ...state,
         status: 'ok',
       };
+    },
+    setUsers(state,{payload}){
+      return{...state,users:payload}
     },
     clearStatus(state) {
       return {...state, status: '',};
@@ -156,13 +159,12 @@ export default {
     *getUserScoreList({payload}, {call, put}){
       const response=yield call(getUserScoreList);
       if(response&&response.success){
+        yield put({
+          type: 'setUsers',
+          payload: response,
+        });
         return response;
       }
-
-      // // console.log(response1);
-      // const {tag_name,user_name}=payload;
-      // debugger
-      // const response = yield call(updateQuestionStatus, tag_name,user_name);
     }
   },
 

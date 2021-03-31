@@ -13,12 +13,12 @@ const fetch = options => {
   }
   debugger
   const header = {
-    token: getLocalData({
-      dataName: 'token',
-    }),
-    userId: getLocalData({
-      dataName: 'userId',
-    }),
+    // token: getLocalData({
+    //   dataName: 'token',
+    // }),
+    // userId: getLocalData({
+    //   dataName: 'userId',
+    // }),
     userId:getLocalData({
       dataName:'userId'
     }),

@@ -501,6 +501,7 @@ class MapPage extends Component {
       answerAll:'',
       checkValue1:false,//是否显示一大惠聚英才
       checkValue2:false,//是否显示上海到嘉兴路线
+      pictureTag:'',
     };
   }
   choose=(num)=>{
@@ -649,6 +650,10 @@ class MapPage extends Component {
     let translate1=translate(arg);
     let temp=[-1,-1,-1,-1,true];
     let questionChoose=this.state.questionChoose;
+    let choose=this.state.questionChoose[recent];
+    if(choose&&choose[4]){
+      return
+    }else{
     if(string==(question[recent]?question[recent].answer:''))//答案正确
     {
       if(this.state.answer==false){
@@ -688,7 +693,7 @@ class MapPage extends Component {
       let username=getLocalData({dataName:'userName'});
       this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
       alert("答题结束")
-  }}
+  }}}
   componentDidMount() {
     const { dispatch } = this.props;
     //保存当前模块名
@@ -862,7 +867,16 @@ class MapPage extends Component {
           popup.setLngLat(coordinates)
           // popup.setHTML(showInfo)
           popup.addTo(map)
-          popup.setDOMContent(popupRef.current);
+          _this.props.dispatch({type: 'mapPage/getPictureByTag', payload: _this.state.tagName}).then(res=>{
+            debugger
+            if(res.success) {
+              let picture=res.pictures[0]&&res.pictures[0].pictureContent;
+              _this.setState({pictureTag:picture})
+            }
+            console.log('res');
+            popup.setDOMContent(popupRef.current);
+          });
+
         });
         map.on('mouseleave', listHere[i].id, function() {
           map.getCanvas().style.cursor = '';
@@ -1457,8 +1471,8 @@ class MapPage extends Component {
               <span class={styles.big}>{this.state.questionNumber}</span>
               /{allNumber}
             </div>
-            <div className={styles.question}>
-              <div className={styles.qbody}><div>{question[recent]?question[recent].questionContent:''}</div></div>
+            <div className={styles.question} style={{height:'500px',overflow:'scroll'}}>
+              <div className={styles.qbody}><div><h3>{question[recent]?question[recent].questionContent:''}</h3></div></div>
               {/*<div className={styles.qanswer}>*/}
               <form id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                 <Row>
@@ -1530,28 +1544,17 @@ class MapPage extends Component {
           <div className={styles.modal}>
             {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
             <div className={styles.topArticle}></div>
-            <div className="d-iframe" dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >
-              {/*<Card style={{ width: '100' }}*/}
-              {/*      title={"中共一大"}*/}
-              {/*      cover={*/}
-              {/*        <img*/}
-              {/*          alt="example"*/}
-              {/*          src={this.state.knowledgeUrl}*/}
-              {/*        />*/}
-              {/*      }*/}
-              {/*>*/}
-              {/*  {this.state.knowledgeContent}*/}
-              {/*</Card>*/}
+            <div className="d-iframe" style={{height:'570px',overflow:'scroll'}} dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >
             </div>
           </div>
         </Modal>
         {/*图片*/}
-        <Modal visible={this.state.startPicture}
+        <Modal
+               visible={this.state.startPicture}
                centered
                width={1000}
                mask={true}
                maskClosable={true}
-          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
                title={null}
                onCancel={()=>this.setState({startPicture:false})}
                footer={null}
@@ -1560,19 +1563,10 @@ class MapPage extends Component {
         >
           <div className={styles.modal}>
             <div className={styles.topPicture}></div>
-            <div className="d-iframe">
-              <div style={{padding: 40, background: "#ececec"}} >
-                {/*<div style={styles.out}>*/}
-
-                    {/*</div>*/}
+            <div className="d-iframe" style={{height:'560px'}}>
+              <div style={{ background: "#ececec",height:'560px', padding: '0px 20px 0px 20px'}} >
                     <Slider {...this.carousel_settings} >
                       {this.state.pictures}
-                      {/*<div style={styles.out}>*/}
-                      {/*  <img src={yay} style={{ height: '100%', width: '100%' }} />*/}
-                      {/*</div>*/}
-                      {/*<div>*/}
-                      {/*  <img src={yaa} style={{ height: '100%', width: '100%' }} />*/}
-                      {/*</div>*/}
                     </Slider>
                   </div>
                 </div>
@@ -1584,7 +1578,6 @@ class MapPage extends Component {
                    width={1000}
                    mask={true}
                    maskClosable={true}
-              // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
                    title={null}
                    onCancel={() => this.setState({ startVideo: false })}
                    footer={null}
@@ -1593,7 +1586,7 @@ class MapPage extends Component {
             >
               <div className={styles.modal}>
                 <div className={styles.topVideo}></div>
-                <div style={{padding: 40, background: "#ececec"}} >
+                <div style={{padding: 30, background: "#ececec"}} >
                 <div className="d-iframe">
                   <Slider {...this.carousel_settings} >
                     {this.state.videos}
@@ -1604,9 +1597,7 @@ class MapPage extends Component {
               </div>
             </Modal>
             <div id='verticalTimeLine' className={styles.verticalTimeLine}>
-              <VerticalTimeline
-                // layout='1-column-left'
-              >
+              <VerticalTimeline>
                 {this.state.listTime.map((item)=> (
                     item['sub']?
                       <VerticalTimelineElement
@@ -1668,128 +1659,129 @@ class MapPage extends Component {
                     <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
                     :null}
                   {this.state.itemNow?
-                    <img style={{ height: '100%', width: '100%' ,marginTop:11}} src={c1} />
+                    <img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag} />
                     :null}
-                  {this.state.itemNow?
-                    <Row style={{ width: "240px", top: "5px" }} justify="space-between">
-                      <Col span={2} onClick={() => {
-                        this.setState({ startArticle: true });
-                        this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
-                      }}>
-                        <Icon className={styles.popup} type="book" />
-                      </Col>
-                      <Col span={4} onClick={() => {
-                        this.setState({ startArticle: true })
-                        this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
-                      }}>
-                        文章
-                      </Col>
-                      <Col span={2} onClick={() => {
-                        this.setState({ startPicture: true })
-                        this.setState({ startPicture: true })
-                        this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
-                          console.log('res');
-                          if(res.success) {
-                            let pictures=res.pictures;
-                            let picturesAll=pictures.map((item)=>{
-                              return(<div style={styles.out}>
-                                <h2>{item.pictureTitle}</h2>
-                                <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
-                              </div>)
-                            });
-                            this.setState({pictures:picturesAll})
-                          }
-                        });
-                      }}>
-                        <Icon className={styles.popup} type="picture" />
-                      </Col>
-                      <Col span={4} onClick={() => {
-                        this.setState({ startPicture: true });
-                        this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
-                          debugger
-                          if(res.success) {
-                            let pictures=res.pictures;
-                            let picturesAll=pictures.map((item)=>{
-                              return(<div style={styles.out}>
-                                <h2>{item.pictureTitle}</h2>
-                                <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
-                              </div>)
-                            });
-                            this.setState({pictures:picturesAll})
-                          }
-                          console.log('res');
-                        });
-                      }}>
-                        图片
-                      </Col>
-                      <Col span={2} onClick={() => {
-                        this.setState({ startVideo: true })
-                        this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
-                          console.log('res',res.videos);
-                          if(res.success) {
-                            let videos=res.videos;
-                            let videoAll=videos.map((item)=>{
-                              return(<div style={styles.out}>
-                                <h2>{item.videoTitle}</h2>
-                                {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
-                                <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
-                                       autoPlay="autoplay" preload="none"
-                                       controls="controls">
-                                  <source src={item.videoContent}
-                                  />
-                                  <source src={item.videoContent}
-                                  />
-                                </video>
-                              </div>)
-                            });
-                            this.setState({videos:videoAll})
-                          }
-                        });
-                      }}>
-                        <Icon className={styles.popup} type="video-camera" />
-                      </Col>
-                      <Col span={4} onClick={() => {
-                        // this.setState({ startVideo: true })
-                        // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
-                        this.setState({ startVideo: true })
-                        this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
-                          console.log('res',res.videos);
-                          if(res.success) {
-                            let videos=res.videos;
-                            let videoAll=videos.map((item,index, arr)=>{
-                              return(<div style={styles.out}>
-                                <h1 style={{fontSize:'24px',textAlign:'center',color:'black'}}>{item.videoTitle}</h1>
-                                {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
-                                <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
-                                       autoPlay="autoplay" preload="none"
-                                       controls="controls">
-                                  <source src={item.videoContent}
-                                  />
-                                  <source src={item.videoContent}
-                                  />
-                                </video>
-                                <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
-                              </div>)
-                            });
-                            this.setState({videos:videoAll})
-                          }
-                        });
-                      }}>
-                        视频
-                      </Col>
-                      <Col span={2} onClick={() => {this.setState({ startQuestion: true });
-                        this.props.dispatch({type: 'mapPage/getQuestion', payload: this.state.tagName});}
-                      }>
-                        <Icon className={styles.popup} type="question" />
-                      </Col>
-                      <Col span={4} onClick={() => {
-                        this.setState({ startQuestion: true });
-                        this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
-                      }}>
-                        答题
-                      </Col>
-                    </Row>
-                    :null}
+                  {this.state.itemNow?<Row style={{ width: "240px", top: "10px" }} justify="space-between">
+                    <Col span={2} onClick={() => {
+                      this.setState({ startArticle: true });
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                    }}>
+                      <Icon className={styles.popup} type="book" />
+                    </Col>
+                    <Col span={4} onClick={() => {
+                      this.setState({ startArticle: true })
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                    }}>
+                      文章
+                    </Col>
+                    <Col span={2} onClick={() => {
+                      this.setState({ startPicture: true });
+                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                        debugger
+                        if(res.success) {
+                          let pictures=res.pictures;
+                          let picturesAll=pictures.map((item)=>{
+                            return(<div style={styles.out}>
+                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'5px'}}>{item.pictureTitle}</h1>
+                              <img src={item.pictureContent} style={{ height: '515px',display:'block',
+                                marginLeft: 'auto',marginRight: 'auto'}} />
+                            </div>)
+                          });
+                          this.setState({pictures:picturesAll})
+                        }
+                        console.log('res');
+                      });
+                    }}>
+                      <Icon className={styles.popup} type="picture" />
+                    </Col>
+                    <Col span={4} onClick={() => {
+                      this.setState({ startPicture: true });
+                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                        debugger
+                        if(res.success) {
+                          let pictures=res.pictures;
+                          let picturesAll=pictures.map((item)=>{
+                            return(<div style={styles.out}>
+                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'5px'}}>{item.pictureTitle}</h1>
+                              <img src={item.pictureContent} style={{ height: '515px',display:'block',
+                                marginLeft: 'auto',marginRight: 'auto'}} />
+                            </div>)
+                          });
+                          this.setState({pictures:picturesAll})
+                        }
+                        console.log('res');
+                      });
+                    }}>
+                      图片
+                    </Col>
+                    <Col span={2} onClick={() => {
+                      this.setState({ startVideo: true })
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
+                        console.log('res',res.videos);
+                        if(res.success) {
+                          let videos=res.videos;
+                          let videoAll=videos.map((item,index, arr)=>{
+                            return(<div style={styles.out}>
+                              <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
+                              {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
+                              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
+                                     autoPlay="autoplay" preload="none"
+                                     controls="controls">
+                                <source src={item.videoContent}
+                                />
+                                <source src={item.videoContent}
+                                />
+                              </video>
+                              <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
+                            </div>)
+                          });
+                          this.setState({videos:videoAll})
+                        }
+                      });
+                    }}>
+                      <Icon className={styles.popup} type="video-camera" />
+                    </Col>
+                    <Col span={4} onClick={() => {
+                      // this.setState({ startVideo: true })
+                      // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
+                      this.setState({ startVideo: true })
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
+                        console.log('res',res.videos);
+                        if(res.success) {
+                          let videos=res.videos;
+                          let videoAll=videos.map((item,index, arr)=>{
+                            return(<div style={styles.out}>
+                              <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
+                              {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
+                              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
+                                     autoPlay="autoplay" preload="none"
+                                     controls="controls">
+                                <source src={item.videoContent}
+                                />
+                                <source src={item.videoContent}
+                                />
+                              </video>
+                              <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
+                            </div>)
+                          });
+                          this.setState({videos:videoAll})
+                        }
+                      });
+                    }}>
+                      视频
+                    </Col>
+                    <Col span={2} onClick={() => {this.setState({ startQuestion: true });
+                      this.props.dispatch({type: 'mapPage/getQuestion', payload: this.state.tagName});}
+                    }>
+                      <Icon className={styles.popup} type="question" />
+                    </Col>
+                    <Col span={4} onClick={() => {
+                      this.setState({ startQuestion: true });
+                      this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
+                    }}>
+                      答题
+                    </Col>
+                  </Row>:null}
                 </div>
                 {/*{*/}
                 {/*  list.map((item, index)=>(*/}
@@ -1924,9 +1916,9 @@ class MapPage extends Component {
                   </Col>
                 </Row>
               </div>
-              {/*<div className={styles.review_icon} onClick={this.eventReview}>*/}
-              {/*  <img src={shuaxin} className={styles.layer_img}/>*/}
-              {/*</div>*/}
+              <div className={styles.review_icon} onClick={this.eventReview}>
+                <img src={reback} className={styles.layer_img}/>
+              </div>
             </div>
           </Content>
         </Layout>
