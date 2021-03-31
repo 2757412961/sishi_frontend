@@ -47,6 +47,7 @@ import wrong from '@/assets/false.PNG'
 import dangqi from '@/assets/test/党旗.png';
 import layer from '@/assets/test/layer.png';
 import reback from '@/assets/test/reback.png';
+import shuaxin from '@/assets/test/刷新.png';
 import jiedao from '@/assets/test/街道.PNG';
 import dixing from '@/assets/test/地形.PNG';
 import yingxiang from '@/assets/test/影像.PNG';
@@ -795,76 +796,116 @@ class MapPage extends Component {
               "icon-image": listHere[i].id,
               "icon-optional": false,
               "icon-ignore-placement": true,
-              // "text-ignore-placement": true,
               "icon-allow-overlap": true,
-              "text-allow-overlap": true,
+              // "text-ignore-placement": true,
+              // "text-allow-overlap": true,
+              // "text-field": listHere[i].value,
+              // "text-anchor": 'left',
+              // "text-offset": [1,0.1],
+              // // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+              // "text-size": [
+              //   "interpolate", ["linear"], ["zoom"],
+              //   3,10,
+              //   17,38
+              // ],
+            },
+            // paint: {
+            //   "text-color": 'rgb(255,0,0)',
+            // }
+          });
+          map.addLayer({
+            "id": listHere[i].id + i,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": listHere[i].lonlat,
+                  }
+                }]
+              }
+            },
+            "layout": {
+              // "icon-image": listHere[i].id,
+              // "icon-optional": false,
+              // "icon-ignore-placement": true,
+              // "text-ignore-placement": true,
+              // "icon-allow-overlap": true,
+              // "text-allow-overlap": true,
               "text-field": listHere[i].value,
               "text-anchor": 'left',
               "text-offset": [1,0.1],
               // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
               "text-size": [
                 "interpolate", ["linear"], ["zoom"],
-                3,20,
+                3,10,
                 17,38
               ],
             },
             paint: {
               "text-color": 'rgb(255,0,0)',
             }
-
           });
         }
       });
       let _this = this;
-      var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
+      var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
       for (let i = 0; i < listHere.length; i++) {
         map.on('mouseenter', listHere[i].id, function(e) {
           map.getCanvas().style.cursor = 'pointer';
-          var coordinates = e.features[0].geometry.coordinates;
-          let showInfo = listHere[i].showInfo;
-          popup.setLngLat(coordinates)
-          popup.setHTML(showInfo)
-          popup.addTo(map)
-        });
-        map.on('mouseleave', listHere[i].id, function() {
-          map.getCanvas().style.cursor = '';
-          popup.remove();
-        });
-      }
-
-      for(let i = 0;i<listHere.length;i++){
-        map.on('click', listHere[i].id, function(e) {
-          popup.remove();
           var coordinates = e.features[0].geometry.coordinates;
           _this.setState({
             itemNow: listHere[i],
             tagName:listHere[i].tagName,
           })
-
-          new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            // .setHTML(showInfo)
-            .addTo(map)
-            .setDOMContent(popupRef.current);
-        });
-        map.on('mouseenter', listHere[i].id, function() {
-          map.getCanvas().style.cursor = 'pointer';
+          // let showInfo = listHere[i].showInfo;
+          popup.setLngLat(coordinates)
+          // popup.setHTML(showInfo)
+          popup.addTo(map)
+          popup.setDOMContent(popupRef.current);
         });
         map.on('mouseleave', listHere[i].id, function() {
           map.getCanvas().style.cursor = '';
+          // popup.remove();
         });
       }
+      // for(let i = 0;i<listHere.length;i++){
+      //   map.on('click', listHere[i].id, function(e) {
+      //     popup.remove();
+      //     var coordinates = e.features[0].geometry.coordinates;
+      //     _this.setState({
+      //       itemNow: listHere[i],
+      //       tagName:listHere[i].tagName,
+      //     })
+      //
+      //     new mapboxgl.Popup()
+      //       .setLngLat(coordinates)
+      //       // .setHTML(showInfo)
+      //       .addTo(map)
+      //       .setDOMContent(popupRef.current);
+      //   });
+      //   map.on('mouseenter', listHere[i].id, function() {
+      //     map.getCanvas().style.cursor = 'pointer';
+      //   });
+      //   map.on('mouseleave', listHere[i].id, function() {
+      //     map.getCanvas().style.cursor = '';
+      //   });
+      // }
       this.map = map;
     });
 
-    // let nav = new mapboxgl.NavigationControl({
-    //   //是否显示指南针按钮，默认为true
-    //   "showCompass": true,
-    //   //是否显示缩放按钮，默认为true
-    //   "showZoom":true
-    // });
-    // //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
-    // map.addControl(nav, 'top-left');
+    let nav = new mapboxgl.NavigationControl({
+      //是否显示指南针按钮，默认为true
+      "showCompass": false,
+      //是否显示缩放按钮，默认为true
+      "showZoom":true
+    });
+    //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
+    map.addControl(nav, 'top-right');
 
     var size = 100;
     var pulsingDot = {
@@ -1080,7 +1121,7 @@ class MapPage extends Component {
     //     map.jumpTo({'center': coordinates[0], 'zoom': 8});
     //     map.setPitch(10);
     //     //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
-    //     var marker = new mapboxgl.Marker(el)
+    //     // var marker = new mapboxgl.Marker(el)
     //     var i = 0;
     //     var timer = window.setInterval(function() {
     //       if(i<coordinates.length) {
@@ -1108,12 +1149,12 @@ class MapPage extends Component {
     //           map.panTo(coordinates[i],{'zoom':13})
     //         }
     //         i++;
-    //         function animateMarker() {
-    //           marker.setLngLat(coordinates[i])
-    //           marker.addTo(map);
-    //           requestAnimationFrame(animateMarker);
-    //         }
-    //         requestAnimationFrame(animateMarker);
+    //         // function animateMarker() {
+    //         //   marker.setLngLat(coordinates[i])
+    //         //   marker.addTo(map);
+    //         //   requestAnimationFrame(animateMarker);
+    //         // }
+    //         // requestAnimationFrame(animateMarker);
     //       } else {
     //         window.clearInterval(timer);
     //       }
@@ -1217,6 +1258,7 @@ class MapPage extends Component {
     });
     console.log(this.state.modalVisble)
   }
+  //时间轴点击事件
   oneClick = (item) => {
     let _this = this;
     console.log("map", _this.map,item);
@@ -1339,79 +1381,10 @@ class MapPage extends Component {
     // this.componentDidMount()
     // this.map.setStyle('')
   }
-  // eventReview = () => {
-  //   var el = document.createElement('div');
-  //   el.className = "marker";
-  //   el.style.backgroundSize = 'cover'
-  //   el.style.width='20px';
-  //   el.style.height='20px';
-  //   el.style.borderRadius = '50%';
-  //   el.style.backgroundImage = 'url('+dangqi+')'
-  //   let _this = this
-  //   this.map.on('load', function() {
-  //     d3.json(line,function(err,data) {
-  //       // if (err) throw err;
-  //       var coordinates = data.features[0].geometry.coordinates;
-  //       data.features[0].geometry.coordinates = [coordinates[0]];
-  //       _this.map.addSource('trace', {type:'geojson', data: data})
-  //       _this.map.addLayer({
-  //         "id": "trace",
-  //         "type": "line",
-  //         "source": "trace",
-  //         "layout": {
-  //           "line-join": "round",
-  //           "line-cap": "round"
-  //         },
-  //         "paint": {
-  //           "line-color": "red",
-  //           "line-opacity": 0.8,
-  //           "line-width": 5
-  //         }
-  //       });
-  //       _this.map.jumpTo({'center': coordinates[0], 'zoom': 8});
-  //       _this.map.setPitch(10);
-  //       //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
-  //       var marker = new mapboxgl.Marker(el)
-  //       var i = 0;
-  //       var timer = window.setInterval(function() {
-  //         if(i<coordinates.length) {
-  //           data.features[0].geometry.coordinates.push(coordinates[i]);
-  //           _this.map.getSource('trace').setData(data);
-  //           if(i<195){
-  //             _this.map.panTo(coordinates[i],{'zoom':8})
-  //           } else if(i<495){
-  //             _this.map.panTo(coordinates[i],{'zoom':5})
-  //           } else if (i<695){
-  //             _this.map.panTo(coordinates[i],{'zoom':2})
-  //           } else if(i<780){
-  //             _this.map.panTo(coordinates[i],{'zoom':5})
-  //           } else if(i<790){
-  //             _this.map.panTo(coordinates[i],{'zoom':7})
-  //           } else if(i<800){
-  //             _this.map.panTo(coordinates[i],{'zoom':9})
-  //           } else if(i<805){
-  //             _this.map.panTo(coordinates[i],{'zoom':10})
-  //           } else if(i<810){
-  //             _this.map.panTo(coordinates[i],{'zoom':11})
-  //           } else if(i<815){
-  //             _this.map.panTo(coordinates[i],{'zoom':12})
-  //           } else {
-  //             _this.map.panTo(coordinates[i],{'zoom':13})
-  //           }
-  //           i++;
-  //           // function animateMarker() {
-  //           //   marker.setLngLat(coordinates[i])
-  //           //   marker.addTo(map);
-  //           //   requestAnimationFrame(animateMarker);
-  //           // }
-  //           // requestAnimationFrame(animateMarker);
-  //         } else {
-  //           window.clearInterval(timer);
-  //         }
-  //       }, 100);
-  //     });
-  //   })
-  // }
+  eventReview = () => {
+    this.componentWillUnmount()
+    this.componentDidMount()
+  }
   render(){
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
