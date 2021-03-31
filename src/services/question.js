@@ -70,5 +70,8 @@ export function getArticlesByTag(tagName) {
 export function getPicturesByTag(tagName) {
   return requestHeard({ url: '/pictures/tagName/'+tagName, method: 'GET'});
 }
-
+//获取排名前十的用户
+export function getUserScoreList() {
+  return requestHeard({ url: '/user/scoreList', method: 'GET'});
+}
 
