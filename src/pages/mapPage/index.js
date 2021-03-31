@@ -16,6 +16,7 @@ import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
 import line from '@/assets/pointData/line.geojson';
+import lineShToJx from '@/assets/pointData/lineShToJx.geojson';
 import point from '@/assets/pointData/point.json';
 import { Scene, LineLayer,Control,PolygonLayer,PointLayer } from '@antv/l7';
 import { Mapbox } from '@antv/l7-maps';
@@ -41,16 +42,22 @@ import c6 from '@/assets/test/c6.jpg';
 import c7 from '@/assets/test/c7.jpg';
 import c8 from '@/assets/test/c8.jpg';
 import c9 from '@/assets/test/c9.jpg';
+import correct from '@/assets/correct.PNG'
+import wrong from '@/assets/false.PNG'
 import dangqi from '@/assets/test/党旗.png';
 import layer from '@/assets/test/layer.png';
 import reback from '@/assets/test/reback.png';
+import shuaxin from '@/assets/test/刷新.png';
 import jiedao from '@/assets/test/街道.PNG';
 import dixing from '@/assets/test/地形.PNG';
 import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Image from 'react-mapbox-gl/src/image';
 
+const RadioGroup = Radio.Group;
+var timer;
 const { TabPane } = Tabs;
 const { Column, ColumnGroup } = Table;
 const Authorized = RenderAuthorized(getAuthority());
@@ -410,7 +417,9 @@ function forList(treeList){
       temp.text=treeList[i].label.split('@')[0];
       temp.value=treeList[i].label.replace('@','');
       temp.time=treeList[i].time;
-      temp.showInfo=des[i].showInfo;
+      if(des[i]){
+        temp.showInfo=des[i].showInfo;
+      }
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       list.push(temp);
@@ -488,10 +497,198 @@ class MapPage extends Component {
       tagName: '',
       pictures: [],
       videos: [],
+      questionChoose:[],
+      answerAll:'',
+      checkValue1:false,//是否显示一大惠聚英才
+      checkValue2:false,//是否显示上海到嘉兴路线
     };
-
   }
+  choose=(num)=>{
+    debugger
+    let id=(num+1).toString();
+    let temp=document.getElementById(id)&&document.getElementById(id);
+    if(temp){
+      document.getElementById(id).classList.add(styles.qanswerchoosable);
+    }
+    console.log(temp);
+    // let temp={};
+    // let questionChoose=this.state.questionChoose;
+    // debugger
 
+    // if(questionChoose[num]){
+    // if(questionChoose[num].hasOwnProperty('checked')){
+    //   if(questionChoose[num].checked) {
+    //     this.state.answerAll.replace(id,'');
+    //     if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
+    //       document.getElementById(id).classList.remove(styles.qanswerchoosable);
+    //     }
+    //   }else{
+    //     this.state.answerAll.concat(id);
+    //     if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
+    //       document.getElementById(id).classList.add(styles.qanswerchoosable);
+    //     }
+    //   }
+    // }}
+    // else{
+    //   temp.checked=true;
+    //   questionChoose[num]=temp;
+    //   if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
+    //     document.getElementById(id).classList.add(styles.chosen);
+    //   }
+    //   }
+    // questionChoose[num].checked=!questionChoose[num].checked;
+  }
+  nextQuestion=()=>{
+    const {mapPage}=this.props;
+    console.log('mapPage',mapPage);
+    const {tagTree,question,knowledgeContent}=mapPage;
+    let allNumber=question.length;
+    let recent=this.state.questionNumber;
+    let temp=this.state.questionChoose[recent];
+    debugger
+    if(this.state.questionNumber==allNumber&&this.state.answer==true){
+      this.setState({startQuestion:false})
+      this.setState({questionNumber: 1})
+      return
+    }
+    if(temp&&temp[4]==true){
+      this.setState({answer:true})
+      let checked1=document.getElementsByClassName(styles.qanswer);
+      for (let i=0;i<checked1.length;i++){
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+        // document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.wrong);
+      }
+      let state = document.getElementsByTagName("input");
+      state[0].getAttribute("checked");
+      for(let i=0;i<state.length;i++){
+        document.getElementsByTagName("input")[i].checked=false;
+        //document.getElementsByTagName("input")[i].setAttribute('checked','false');
+      }
+      let i=0;
+      while(i<4){
+        if(temp[i]==wrong){
+          if(document.getElementsByClassName(styles.qanswer)[i])
+            document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.false);
+        }else if(temp[i]==correct){
+          if(document.getElementsByClassName(styles.qanswer)[i])
+            document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.correct);
+        }
+        i++;
+      }
+      this.setState({questionNumber: this.state.questionNumber+1})
+      this.setState({answer:false})
+    } else{
+      let arg=question[recent]?question[recent].answer:'';
+      arg=arg.split("");
+      let translate1=translate(arg);
+      let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
+      let checked1=document.getElementsByClassName(styles.qanswer);
+      for (let i=0;i<checked1.length;i++){
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+        // document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.wrong);
+      }
+      let state = document.getElementsByTagName("input");
+      state[0].getAttribute("checked");
+      for(let i=0;i<state.length;i++){
+        document.getElementsByTagName("input")[i].checked=false;
+        //document.getElementsByTagName("input")[i].setAttribute('checked','false');
+      }
+      // $("input[type=checkbox]").removeAttr("checked");
+      this.setState({deadline:Date.now() +  1000 * 60})
+      this.setState({questionNumber: this.state.questionNumber+1})
+      this.setState({answer:false})
+    }
+  }
+  lastQuestion=()=>{
+    debugger
+    this.setState({questionNumber: this.state.questionNumber-1});
+    if(this.state.questionNumber>1){
+    let checked1=document.getElementsByClassName(styles.qanswer);
+    for (let i=0;i<checked1.length;i++){
+      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+      // document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.wrong);
+    }
+    let state = document.getElementsByTagName("input");
+    state[0].getAttribute("checked");
+    for(let i=0;i<state.length;i++){
+      document.getElementsByTagName("input")[i].checked=false;
+      //document.getElementsByTagName("input")[i].setAttribute('checked','false');
+    }
+    let recent=this.state.questionNumber-2;
+    let temp=this.state.questionChoose[recent];
+    let i=0;
+    while(i<4){
+      if(temp[i]==wrong){
+        if(document.getElementsByClassName(styles.qanswer)[i])
+        document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.false);
+      }else if(temp[i]==correct){
+        if(document.getElementsByClassName(styles.qanswer)[i])
+        document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.correct);
+      }
+      i++;
+    }}
+    else{
+      alert('当前为第一道题');
+      return
+    }
+  }
+  submitQuestion=()=>{
+    debugger
+    const {mapPage}=this.props;
+    console.log('mapPage',mapPage);
+    const {tagTree,question,knowledgeContent}=mapPage;
+    let allNumber=question.length;
+    let recent=this.state.questionNumber-1;
+    let string=this.state.value.toString();
+    string=string.replace(/,/g,'');
+    let arg=question[recent]?question[recent].answer:'';
+    arg=arg.split("");
+    let translate1=translate(arg);
+    let temp=[-1,-1,-1,-1,true];
+    let questionChoose=this.state.questionChoose;
+    if(string==(question[recent]?question[recent].answer:''))//答案正确
+    {
+      if(this.state.answer==false){
+        this.setState({grade:this.state.grade+1});
+      }
+      let id=0;
+      let i=0;
+      while(i<translate1.length){
+        id=translate1[i];
+        temp[id]=correct;
+        if(document.getElementsByClassName(styles.qanswer)[id]) {
+          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.qanswerchoosable);
+          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.false);
+          document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.correct);
+        }
+        i++;
+        // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
+      }
+    }else{//答案错误
+      let id=0;
+      let i=0;
+      for( i=0;i<translate1.length;i++){
+        id=translate1[i];
+        temp[id]=wrong;
+        // let temp=document.getElementsByClassName(styles.qanswer)[id];
+        if(document.getElementsByClassName(styles.qanswer)[id]) {
+          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.qanswerchoosable);
+          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.correct);
+          document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.false);
+        }}
+    }
+    debugger
+    questionChoose.push(temp);
+    this.setState({questionChoose:questionChoose});
+    this.setState({answer:true});
+    if(this.state.questionNumber==allNumber) {
+      let username=getLocalData({dataName:'userName'});
+      this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
+      alert("答题结束")
+  }}
   componentDidMount() {
     const { dispatch } = this.props;
     //保存当前模块名
@@ -562,7 +759,7 @@ class MapPage extends Component {
         // console.log('tree',tree);
         listHere=forList(tagTree);
         listHere2=forList(tagTree);
-        let listTime = listHere;
+        let listTime = forList(tagTree);
         listTime.splice(0,1);
         console.log("listTime", listTime);
         this.setState({
@@ -572,7 +769,7 @@ class MapPage extends Component {
       }
       console.log("listHere", listHere);
       //加载中共一大（上海，嘉兴地点）的火花图标
-      map.on('load', function() {
+      map.on('styledata', function() {
         for (let i=0;i<listHere.length;i++) {
           map.addImage(listHere[i].id, pulsingDot, { pixelRatio: 2 });
           map.addLayer({
@@ -595,76 +792,116 @@ class MapPage extends Component {
               "icon-image": listHere[i].id,
               "icon-optional": false,
               "icon-ignore-placement": true,
-              // "text-ignore-placement": true,
               "icon-allow-overlap": true,
-              "text-allow-overlap": true,
+              // "text-ignore-placement": true,
+              // "text-allow-overlap": true,
+              // "text-field": listHere[i].value,
+              // "text-anchor": 'left',
+              // "text-offset": [1,0.1],
+              // // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+              // "text-size": [
+              //   "interpolate", ["linear"], ["zoom"],
+              //   3,10,
+              //   17,38
+              // ],
+            },
+            // paint: {
+            //   "text-color": 'rgb(255,0,0)',
+            // }
+          });
+          map.addLayer({
+            "id": listHere[i].id + i,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [{
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": listHere[i].lonlat,
+                  }
+                }]
+              }
+            },
+            "layout": {
+              // "icon-image": listHere[i].id,
+              // "icon-optional": false,
+              // "icon-ignore-placement": true,
+              // "text-ignore-placement": true,
+              // "icon-allow-overlap": true,
+              // "text-allow-overlap": true,
               "text-field": listHere[i].value,
               "text-anchor": 'left',
               "text-offset": [1,0.1],
               // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
               "text-size": [
                 "interpolate", ["linear"], ["zoom"],
-                3,20,
+                3,10,
                 17,38
               ],
             },
             paint: {
               "text-color": 'rgb(255,0,0)',
             }
-
           });
         }
       });
       let _this = this;
-      var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
+      var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
       for (let i = 0; i < listHere.length; i++) {
         map.on('mouseenter', listHere[i].id, function(e) {
           map.getCanvas().style.cursor = 'pointer';
-          var coordinates = e.features[0].geometry.coordinates;
-          let showInfo = listHere[i].showInfo;
-          popup.setLngLat(coordinates)
-          popup.setHTML(showInfo)
-          popup.addTo(map)
-        });
-        map.on('mouseleave', listHere[i].id, function() {
-          map.getCanvas().style.cursor = '';
-          popup.remove();
-        });
-      }
-
-      for(let i = 0;i<listHere.length;i++){
-        map.on('click', listHere[i].id, function(e) {
-          popup.remove();
           var coordinates = e.features[0].geometry.coordinates;
           _this.setState({
             itemNow: listHere[i],
             tagName:listHere[i].tagName,
           })
-
-          new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            // .setHTML(showInfo)
-            .addTo(map)
-            .setDOMContent(popupRef.current);
-        });
-        map.on('mouseenter', listHere[i].id, function() {
-          map.getCanvas().style.cursor = 'pointer';
+          // let showInfo = listHere[i].showInfo;
+          popup.setLngLat(coordinates)
+          // popup.setHTML(showInfo)
+          popup.addTo(map)
+          popup.setDOMContent(popupRef.current);
         });
         map.on('mouseleave', listHere[i].id, function() {
           map.getCanvas().style.cursor = '';
+          // popup.remove();
         });
       }
+      // for(let i = 0;i<listHere.length;i++){
+      //   map.on('click', listHere[i].id, function(e) {
+      //     popup.remove();
+      //     var coordinates = e.features[0].geometry.coordinates;
+      //     _this.setState({
+      //       itemNow: listHere[i],
+      //       tagName:listHere[i].tagName,
+      //     })
+      //
+      //     new mapboxgl.Popup()
+      //       .setLngLat(coordinates)
+      //       // .setHTML(showInfo)
+      //       .addTo(map)
+      //       .setDOMContent(popupRef.current);
+      //   });
+      //   map.on('mouseenter', listHere[i].id, function() {
+      //     map.getCanvas().style.cursor = 'pointer';
+      //   });
+      //   map.on('mouseleave', listHere[i].id, function() {
+      //     map.getCanvas().style.cursor = '';
+      //   });
+      // }
       this.map = map;
     });
 
-    // let nav = new mapboxgl.NavigationControl({
-    //   //是否显示指南针按钮，默认为true
-    //   "showCompass": true,
-    //   //是否显示缩放按钮，默认为true
-    //   "showZoom":true
-    // });
-    // //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
-    // map.addControl(nav, 'top-left');
+    let nav = new mapboxgl.NavigationControl({
+      //是否显示指南针按钮，默认为true
+      "showCompass": false,
+      //是否显示缩放按钮，默认为true
+      "showZoom":true
+    });
+    //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
+    map.addControl(nav, 'top-right');
 
     var size = 100;
     var pulsingDot = {
@@ -849,25 +1086,7 @@ class MapPage extends Component {
 //         map.getCanvas().style.cursor = '';
 //       });
 //     }
-    const myDeckLayer = new MapboxLayer({
-      id: 'arc',
-      type: ArcLayer,
-      data: flyline,
-      getSourcePosition: d => d.coord[0],
-      getTargetPosition: d => d.coord[1],
-      getSourceColor: d => [255, 0, 0],
-      getTargetColor: d => [255, 0, 0],
-      getWidth: 2.3,
-      // getText:d => d.text,
-      // animate:({
-      //   interval: 0.8,
-      //   trailLength: 2,
-      //   duration: 1
-      // })
-    });
-    map.on('load', () => {
-      map.addLayer(myDeckLayer)
-    })
+    document.getElementById('vec').style.border = ('2px solid red');
     var el = document.createElement('div');
     el.className = "marker";
     el.style.backgroundSize = 'cover'
@@ -875,86 +1094,157 @@ class MapPage extends Component {
     el.style.height='20px';
     el.style.borderRadius = '50%';
     el.style.backgroundImage = 'url('+dangqi+')'
-    map.on('load', function() {
-      d3.json(line,function(err,data) {
-        if (err) throw err;
-        var coordinates = data.features[0].geometry.coordinates;
-        data.features[0].geometry.coordinates = [coordinates[0]];
-        map.addSource('trace', {type:'geojson', data: data})
-        map.addLayer({
-          "id": "trace",
-          "type": "line",
-          "source": "trace",
-          "layout": {
-            "line-join": "round",
-            "line-cap": "round"
-          },
-          "paint": {
-            "line-color": "red",
-            "line-opacity": 0.8,
-            "line-width": 5
-          }
-        });
-        map.jumpTo({'center': coordinates[0], 'zoom': 7});
-        map.setPitch(10);
-        //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
-        var marker = new mapboxgl.Marker(el)
-        var i = 0;
-        var timer = window.setInterval(function() {
-          if(i<coordinates.length) {
-            data.features[0].geometry.coordinates.push(coordinates[i]);
-            map.getSource('trace').setData(data);
-            map.panTo(coordinates[i]);
-            i++;
-            // function animateMarker() {
-            //   marker.setLngLat(coordinates[i])
-            //   marker.addTo(map);
-            //   requestAnimationFrame(animateMarker);
-            // }
-            // requestAnimationFrame(animateMarker);
-          } else {
-            window.clearInterval(timer);
-          }
-        }, 100);
-      });
-      /*map.addLayer({
-        'id': 'lines',
-        'type': 'line',
-        'source': {
-          'type': 'geojson',
-          'data': {
-            'type': 'FeatureCollection',
-            'features': [{
-              'type': 'Feature',
-              'properties': {
-                'color':  '#33C9EB' // blue
+    // map.on('styledata', function() {
+    //   d3.json(line,function(err,data) {
+    //     if (err) throw err;
+    //     var coordinates = data.features[0].geometry.coordinates;
+    //     data.features[0].geometry.coordinates = [coordinates[0]];
+    //     map.addSource('trace', {type:'geojson', data: data})
+    //     map.addLayer({
+    //       "id": "trace",
+    //       "type": "line",
+    //       "source": "trace",
+    //       "layout": {
+    //         "line-join": "round",
+    //         "line-cap": "round"
+    //       },
+    //       "paint": {
+    //         "line-color": "red",
+    //         "line-opacity": 0.8,
+    //         "line-width": 5
+    //       }
+    //     });
+    //     map.jumpTo({'center': coordinates[0], 'zoom': 8});
+    //     map.setPitch(10);
+    //     //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
+    //     // var marker = new mapboxgl.Marker(el)
+    //     var i = 0;
+    //     var timer = window.setInterval(function() {
+    //       if(i<coordinates.length) {
+    //         data.features[0].geometry.coordinates.push(coordinates[i]);
+    //         map.getSource('trace').setData(data);
+    //         if(i<195){
+    //           map.panTo(coordinates[i],{'zoom':8})
+    //         } else if(i<495){
+    //           map.panTo(coordinates[i],{'zoom':5})
+    //         } else if (i<695){
+    //           map.panTo(coordinates[i],{'zoom':2})
+    //         } else if(i<780){
+    //           map.panTo(coordinates[i],{'zoom':5})
+    //         } else if(i<790){
+    //           map.panTo(coordinates[i],{'zoom':7})
+    //         } else if(i<800){
+    //           map.panTo(coordinates[i],{'zoom':9})
+    //         } else if(i<805){
+    //           map.panTo(coordinates[i],{'zoom':10})
+    //         } else if(i<810){
+    //           map.panTo(coordinates[i],{'zoom':11})
+    //         } else if(i<815){
+    //           map.panTo(coordinates[i],{'zoom':12})
+    //         } else {
+    //           map.panTo(coordinates[i],{'zoom':13})
+    //         }
+    //         i++;
+    //         // function animateMarker() {
+    //         //   marker.setLngLat(coordinates[i])
+    //         //   marker.addTo(map);
+    //         //   requestAnimationFrame(animateMarker);
+    //         // }
+    //         // requestAnimationFrame(animateMarker);
+    //       } else {
+    //         window.clearInterval(timer);
+    //       }
+    //     }, 100);
+    //   });
+    // });
+    this.map = map;
+  }
+  checkOnChange=(item)=>{
+    // let item = e.target.key;
+    // e.stopPropagation();
+    let map = this.map;
+    if(item==1){
+      let temp = this.state.checkValue1;
+      if(!temp){
+          d3.json(lineShToJx,function(err,data) {
+            if (err) throw err;
+            var coordinates = data.features[0].geometry.coordinates;
+            data.features[0].geometry.coordinates = [coordinates[0]];
+            map.addSource('lineShToJx', {type:'geojson', data: data})
+            map.addLayer({
+              "id": "lineShToJx",
+              "type": "line",
+              "source": "lineShToJx",
+              "layout": {
+                // 'symbol-placement': 'line',
+                // 'symbol-spacing': 50, // 图标间隔，默认为250
+                // 'icon-image': 'arrowIcon', //箭头图标
+                // 'icon-size': 0.5,
+                "line-join": "round",
+                "line-cap": "round"
               },
-              'geometry': {
-                'type': 'LineString',
-                'coordinates': [
-                  [121.47069346816863, 31.22206084685108],
-                  [120.75580305351667, 30.75747193181725],
-                  [121.46214132313253, 31.2260623329518],
-                  [113.29062697510238, 23.121680862715294],
-                  [121.48020351895462, 31.25728522799882],
-                  [114.29318634011975, 30.553569642526185],
-                  [37.153974181328664, 55.535728582753336],
-                  [109.46267096678156, 36.618757084621336],
-                  [116.35780179933835, 39.91833919135752],
-                  [116.38748691963224, 39.90337460887406]
-                ]
+              "paint": {
+                "line-color": "blue",
+                "line-opacity": 0.8,
+                "line-width": 10
               }
-            }]
-          }
-        },
-        'paint': {
-          'line-width': 3,
-// Use a get expression (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-get)
-// to set the line-color to a feature property value.
-          'line-color': ['get', 'color']
+            });
+            map.jumpTo({'center': coordinates[0], 'zoom': [7]});
+            map.setPitch(10);
+            var i = 0;
+            timer = window.setInterval(function() {
+              if(i<coordinates.length) {
+                data.features[0].geometry.coordinates.push(coordinates[i]);
+                map.getSource('lineShToJx').setData(data);
+                map.panTo(coordinates[i],{zoom: 7});
+                i++;
+              } else {
+                window.clearInterval(timer);
+              }
+            }, 10);
+          });
+      }
+      else{
+        if (map.getLayer('lineShToJx')) {
+          map.removeLayer('lineShToJx');
+          map.removeSource('lineShToJx');
+          clearInterval(timer);
         }
-      });*/
-    });
+      }
+      this.setState({
+        checkValue1: !temp,
+      });
+    }
+    else if(item==2){
+      let temp = this.state.checkValue2;
+      if(!temp){
+        const myDeckLayer = new MapboxLayer({
+          id: 'arc',
+          type: ArcLayer,
+          data: flyline,
+          getSourcePosition: d => d.coord[0],
+          getTargetPosition: d => d.coord[1],
+          getSourceColor: d => [255, 0, 0],
+          getTargetColor: d => [255, 0, 0],
+          getWidth: 2.3,
+          // getText:d => d.text,
+          // animate:({
+          //   interval: 0.8,
+          //   trailLength: 2,
+          //   duration: 1
+          // })
+        });
+        map.addLayer(myDeckLayer)
+      }
+      else{
+        if (map.getLayer('arc')) {
+          map.removeLayer('arc');
+        }
+      }
+      this.setState({
+        checkValue2: !temp,
+      });
+    }
     this.map = map;
   }
   showModal=(activeKey)=>{
@@ -964,6 +1254,7 @@ class MapPage extends Component {
     });
     console.log(this.state.modalVisble)
   }
+  //时间轴点击事件
   oneClick = (item) => {
     let _this = this;
     console.log("map", _this.map,item);
@@ -980,7 +1271,7 @@ class MapPage extends Component {
   onChange = e => {
     console.log('radio checked', e);
     this.setState({
-      value: e,
+      value: e.target.value,
     });
   };
   //子时间轴（中共一大）
@@ -1050,11 +1341,46 @@ class MapPage extends Component {
         document.getElementById(diTuList[i]).style.border = ('');
       }
     }
-    this.componentWillUnmount()
-    this.componentDidMount()
+    let localhost = window.location.origin;
+    let sources = {
+      "osm-tiles1": {
+        "type": "raster",
+        'tiles': [this.state.mapUrl],
+        'tileSize': 256
+      },
+      "osm-tiles2": {
+        "type": "raster",
+        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
+        'tileSize': 256
+      }
+    };
+    let layers = [{
+      "id": "simple-tiles1",
+      "type": "raster",
+      "source": "osm-tiles1",
+    },
+      {
+        "id": "simple-tiles2",
+        "type": "raster",
+        "source": "osm-tiles2",
+      }
+    ];
+    var style = {
+      "version": 8,
+      "sprite": localhost + "/MapBoxGL/css/sprite",
+      "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+      "sources": sources,
+      "layers": layers,
+    }
+    this.map.setStyle(style);
+    // this.componentWillUnmount()
+    // this.componentDidMount()
     // this.map.setStyle('')
   }
-
+  eventReview = () => {
+    this.componentWillUnmount()
+    this.componentDidMount()
+  }
   render(){
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
@@ -1070,7 +1396,9 @@ class MapPage extends Component {
       <Sider className={styles.siderStyle}collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} width={400}>
         {/*答题*/}
         {/**/}
-        <Modal visible={this.state.startQuestion}
+        <Modal
+          visible={this.state.startQuestion}
+          // visible={true}
                centered
               width={1000}
                mask={true}
@@ -1119,168 +1447,72 @@ class MapPage extends Component {
                closable={true}
                wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
         >
-          <div className={styles.question}>
+          <div className="d-iframe">
+            {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
+            {/*        className="iframe-style"></iframe>*/}
+            <div className={styles.web} >
+          {/*<div className={styles.question}>*/}
             <div className={styles.top}></div>
             <div className={styles.headerRow}>
               <span class={styles.big}>{this.state.questionNumber}</span>
               /{allNumber}
             </div>
-            <div className="d-iframe">
-              {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
-              {/*        className="iframe-style"></iframe>*/}
-              <div className={styles.web} >
-                <p>{this.state.questionNumber+"."+(question[recent]?question[recent].questionContent:'')}</p>
-                <div className={styles.radio}>
-                <Checkbox.Group id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                  <Row>
-                    <Col span={12}>
-                  <Checkbox    value={'A'}>
-                    {'A  '+(question[recent]?question[recent].optionA:'')}
-                  </Checkbox>
-                    </Col>
-                    <Col span={12}>
-                  <Checkbox    value={'B'}>
+            <div className={styles.question}>
+              <div className={styles.qbody}><div>{question[recent]?question[recent].questionContent:''}</div></div>
+              {/*<div className={styles.qanswer}>*/}
+              <form id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+                <Row>
+                  <div id="1" className={styles.qanswer} >
+                    <p><input type="checkbox"   value={'A'}/>
+                      {'A  '+(question[recent]?question[recent].optionA:'')}
+                    </p>
+                    {this.state.answer&&this.state.questionChoose[recent][0]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][0]} />:''}
+                  </div>
+                </Row>
+                <div id="2" className={styles.qanswer}>
+                  <p><input type="checkbox"   value={'B'}
+                            // oonClick={this.choose(1)}
+                  />
                     {'B  '+(question[recent]?question[recent].optionB:'')}
-                  </Checkbox>
-                    </Col>
-                    {question[recent]&&question[recent].hasOwnProperty('optionC')?<Col span={12}>
-                  <Checkbox    value={'C'}>
-                    {'C  '+(question[recent]?question[recent].optionC:'')}
-                  </Checkbox>
-                    </Col>:""}
-                    {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                    <Col span={12}>
-                  <Checkbox    value={'D'}>
-                    {'D  '+(question[recent]?question[recent].optionD:'')}
-                    {/*{value === 4 ? <Input style={{ width: 100, marginLeft: 10 }} /> : null}*/}
-                  </Checkbox>
-                    </Col>:''}
-                  </Row>
-                </Checkbox.Group>
-                  <img src=""/>
+                  </p>
+                  {this.state.answer&&this.state.questionChoose[recent][1]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][1]} />:''}
                 </div>
-              </div>
-              {this.state.answer==true?
-                (<h3>正确答案是</h3>):''}
-              {this.state.answer==true?
-                (<h2> {(question[recent]?question[recent].answer:'')} </h2>):''}
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Button  key="submit"
-                           centered
-                           type="primary" style={{backgroundColor:'rgb(255,0,0)'}}
-                           onClick={()=>{
-                             let checked1=document.getElementById("choose");
-                             // let checked=document.getElementsByClassName("ant-checkbox-checked");
-                             let checked=document.getElementsByClassName("ant-checkbox-inner");
-                             // checked[0].style.backgroundColor='rgb(0,255,0)';
-                             debugger
-                             let string=this.state.value.toString();
-                             string=string.replace(/,/g,'');
-                             let arg=question[recent]?question[recent].answer:'';
-                             arg=arg.split("");
-                             let translate1=translate(arg);
-                             if(string==(question[recent]?question[recent].answer:''))
-                             {
-                               if(this.state.answer==false){
-                               this.setState({grade:this.state.grade+1});}
-                               // checked[i].classList[1]=(styles.correct);
-                               let id=0;
-                               let i=0;
-                               while(i<translate1.length){
-                                  id=translate1[i]-i;
-                                 document.getElementsByClassName("ant-checkbox-inner")[id].setAttribute('class',styles.correct);
-                                 i++;
-                                 // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
-                               }
-                             }else{
-                               let id=0;
-                               let i=0;
-                               for( i=0;i<translate1.length;i++){
-                                 id=translate1[i]-i;
-                                 let temp=document.getElementsByClassName("ant-checkbox-inner")[id];
-                                 if(document.getElementsByClassName("ant-checkbox-inner")[id]) {
-                                   document.getElementsByClassName("ant-checkbox-inner")[id].setAttribute('class', styles.wrong);
-                                 }}
-                             }
-                             this.setState({answer:true});
-                             if(this.state.questionNumber==allNumber) {
-                               let username=getLocalData({dataName:'userName'});
-                               this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
-                               alert("答题结束")
-                             }}
-                           }>提交</Button>
-                </Col>
-                <Col span={12} style={{alignContent:'center',alignItems:'center'}}>
-                  <Button
-                    centered
-                    key="submit" style={{backgroundColor:'rgb(255,0,0)'}}
-                    type="primary"
-                    onClick={()=> {
-
-                      if(this.state.questionNumber==allNumber&&this.state.answer==true){
-                        this.setState({startQuestion:false})
-                        this.setState({questionNumber: 1})
-                        return
-                      }
-                      if(this.state.answer==false){
-                        alert('你还未提交本题答案')
-                      } else{
-                        let arg=question[recent]?question[recent].answer:'';
-                        arg=arg.split("");
-                        let translate1=translate(arg);
-                        let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
-                        let checked1=document.getElementsByClassName('ant-checkbox');
-                        for (let i=0;i<checked1.length;i++){
-                          document.getElementsByClassName('ant-checkbox')[i].classList.remove('ant-checkbox-checked');
-                          document.getElementsByClassName('ant-checkbox-wrapper')[i].classList.remove('ant-checkbox-wrapper-checked');
-                        }
-                        for(let i=0;i<checked.length;i++){
-                          if(document.getElementsByClassName(styles.correct).length>0)
-                          {document.getElementsByClassName(styles.correct)[i].setAttribute('class','ant-checkbox-inner');
-                          }
-                          else{
-                            if(document.getElementsByClassName(styles.wrong)[i]){
-                            document.getElementsByClassName(styles.wrong)[i].setAttribute('class','ant-checkbox-inner');
-                            }
-                          }
-                          // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
-                        }
-                        //let checked=document.getElementById("choose");
-                        let state = document.getElementsByTagName("input");
-                        state[0].getAttribute("checked");
-                        for(let i=0;i<state.length;i++){
-                          document.getElementsByTagName("input")[i].checked=false;
-                          //document.getElementsByTagName("input")[i].setAttribute('checked','false');
-                        }
-                        debugger
-                        let i1=document.getElementById("choose").value;
-                        document.getElementById("choose").value="";
-                        console.log(i1);
-                        // $("input[type=checkbox]").removeAttr("checked");
-                        this.setState({deadline:Date.now() +  1000 * 60})
-                        this.setState({questionNumber: this.state.questionNumber+1})
-                        this.setState({answer:false})
-                      }
-                    }}>
-                    下一题
-                  </Button>
-                </Col>
-                {/*<Col span={8}>*/}
-                {/*  <Button onClick={()=>this.setState({startQuestion:false})}> 关闭</Button>*/}
-                {/*  <h1><span>{this.state.questionNumber}</span>/*/}
-                {/*    <span>{allNumber}</span></h1>*/}
-                {/*  /!*<Countdown title="计时器" value={this.state.deadline} onFinish={()=>{}} />*!/*/}
-                {/*</Col>*/}
-              </Row>
+                {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} >
+                  <p><input type="checkbox"   value={'C'}/>
+                    {'C  '+(question[recent]?question[recent].optionC:'')}
+                  </p>
+                  {this.state.answer&&this.state.questionChoose[recent][2]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][2]} />:''}
+                </div>:""}
+                {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                  <div className={styles.qanswer} >
+                    <p><input type="checkbox"   value={'D'}/>
+                      {'D  '+(question[recent]?question[recent].optionD:'')}
+                    </p>
+                    {this.state.answer&&this.state.questionChoose[recent][3]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][3]} />:''}
+                  </div>:''}
+              </form>
+                  {this.state.answer==true?
+                    (<h3>正确答案是</h3>):''}
+                  {this.state.answer==true?
+                    (<h2> {(question[recent]?question[recent].answer:'')} </h2>):''}
               {this.state.questionNumber==allNumber&&this.state.answer?
                 (<div>
-                  <div className={styles.try}></div>
-                  <h1><span>您的得分为</span><h2>{this.state.grade}</h2></h1></div>):''}
-
+                  {/*<div className={styles.try}></div>*/}
+                  <h3><span>您的得分为</span><h2>{this.state.grade}</h2></h3></div>):''}
+              <div className={styles.actionRow}>
+                <Button className={styles.preBtn} onClick={()=>{
+                  this.lastQuestion()
+                }}>上一题</Button>
+                <Button className={styles.centerBtn} onClick={()=>{
+                  this.submitQuestion()
+                }}>确定</Button>
+                <Button className={styles.nextBtn} onClick={()=>{
+                  this.nextQuestion()
+                }}>下一题</Button>
+              </div>
             </div>
             <div className={styles.bottom}></div>
-          </div>
+          </div></div>
         </Modal>
         {/*文章*/}
         <Modal visible={this.state.startArticle}
@@ -1361,24 +1593,10 @@ class MapPage extends Component {
             >
               <div className={styles.modal}>
                 <div className={styles.topVideo}></div>
-                {/*<video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"*/}
-                {/*       autoPlay="autoplay" preload="none"*/}
-                {/*       controls="controls">*/}
-                {/*  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"*/}
-                {/*  />*/}
-                {/*  <source src="http://192.168.2.2:89/media/videos/dangshi/05.mp4"*/}
-                {/*  />*/}
-                {/*</video>*/}
                 <div style={{padding: 40, background: "#ececec"}} >
                 <div className="d-iframe">
                   <Slider {...this.carousel_settings} >
                     {this.state.videos}
-                    {/*<div style={styles.out}>*/}
-                    {/*  <img src={yay} style={{ height: '100%', width: '100%' }} />*/}
-                    {/*</div>*/}
-                    {/*<div>*/}
-                    {/*  <img src={yaa} style={{ height: '100%', width: '100%' }} />*/}
-                    {/*</div>*/}
                   </Slider>
                 </div>
                   <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>共<span style={{color:'red'}}>{this.state.videos.length}</span>个</p>
@@ -1407,9 +1625,6 @@ class MapPage extends Component {
                         <div style={{fontWeight:"bold"}}>
                           {item['value']}
                         </div>
-                        {
-                          item['text']=='中共一大'
-                        }
                       </VerticalTimelineElement>:
                       <VerticalTimelineElement
                         id={item['id']}
@@ -1425,30 +1640,25 @@ class MapPage extends Component {
                             this.moreOnClick():
                             this.oneClick(item)) }
                         icon={<Icon type="schedule" />}
-                      >
-                        <div style={{fontWeight:"bold"}}>
-                          {item['text']}
-                        </div>
-                        {/*{*/}
-                        {/*  item['text']=='中共一大'&&*/}
-                        {/*  <div><div onClick={this.moreOnClick}>{this.state.more?<Icon type="arrow-down" style={{color:"rgba(177,46,46)"}} />:<Icon type="arrow-up" style={{color:"rgba(177,46,46)"}} />}</div></div>*/}
-                        {/*}*/}
+                      >{
+                        item['text']=='中共一大'?
+                          <div style={{fontWeight:"bold"}}>
+                            {item['text']}
+                            <div className={styles.zhonggongyida}>
+                              <Checkbox  key="a" onChange={()=>this.checkOnChange(1)} onClick={e => e.stopPropagation()} >会议地点转移</Checkbox>
+                              <Checkbox  key="b" onChange={()=>this.checkOnChange(2)} onClick={e => e.stopPropagation()} >荟聚天下英才</Checkbox>
+                            </div>
+                          </div>:
+                          <div style={{fontWeight:"bold"}}>
+                            {item['text']}
+                          </div>
+                      }
                       </VerticalTimelineElement>
                   )
                 )
                 }
               </VerticalTimeline>
             </div>
-            {/*<Timeline className={styles.timeline}>{*/}
-            {/*  list.map((item)=> (*/}
-            {/*    <div onClick={ (e) => this.oneClick(e, item)}>*/}
-            {/*      /!*<Timeline.Item color='red' dot={<Icon type="login" style={{fontSize: '20px'}} />}>1921年7月-中共一大</Timeline.Item>*!/*/}
-            {/*      <Timeline.Item color='red' style={unCheckStyle} id={item['id']}>{item['text']}</Timeline.Item>*/}
-            {/*    </div>*/}
-            {/*    )*/}
-            {/*  )*/}
-            {/*}*/}
-            {/*</Timeline>*/}
           </Sider>
           <Content>
             <div className={styles.normal}>
@@ -1457,124 +1667,129 @@ class MapPage extends Component {
                   {this.state.itemNow?
                     <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
                     :null}
-                  <Row style={{ width: "240px", top: "10px" }} justify="space-between">
-                    <Col span={2} onClick={() => {
-                      this.setState({ startArticle: true });
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
-                    }}>
-                      <Icon className={styles.popup} type="book" />
-                    </Col>
-                    <Col span={4} onClick={() => {
-                      this.setState({ startArticle: true })
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
-                    }}>
-                      文章
-                    </Col>
-                    <Col span={2} onClick={() => {
-                      this.setState({ startPicture: true })
-                      this.setState({ startPicture: true })
-                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
-                        console.log('res');
-                        if(res.success) {
-                          let pictures=res.pictures;
-                          let picturesAll=pictures.map((item)=>{
-                            return(<div style={styles.out}>
-                              <h2>{item.pictureTitle}</h2>
-                              <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
-                            </div>)
-                          });
-                          this.setState({pictures:picturesAll})
-                        }
-                      });
-                    }}>
-                      <Icon className={styles.popup} type="picture" />
-                    </Col>
-                    <Col span={4} onClick={() => {
-                      this.setState({ startPicture: true });
-                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
-                        debugger
-                        if(res.success) {
-                          let pictures=res.pictures;
-                          let picturesAll=pictures.map((item)=>{
-                            return(<div style={styles.out}>
-                              <h2>{item.pictureTitle}</h2>
-                              <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
-                            </div>)
-                          });
-                          this.setState({pictures:picturesAll})
-                        }
-                        console.log('res');
-                      });
-                    }}>
-                      图片
-                    </Col>
-                    <Col span={2} onClick={() => {
-                      this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
-                        console.log('res',res.videos);
-                        if(res.success) {
-                          let videos=res.videos;
-                          let videoAll=videos.map((item)=>{
-                            return(<div style={styles.out}>
-                              <h2>{item.videoTitle}</h2>
-                              {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
-                              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
-                                     autoPlay="autoplay" preload="none"
-                                     controls="controls">
-                                <source src={item.videoContent}
-                                />
-                                <source src={item.videoContent}
-                                />
-                              </video>
-                            </div>)
-                          });
-                          this.setState({videos:videoAll})
-                        }
-                      });
-                    }}>
-                      <Icon className={styles.popup} type="video-camera" />
-                    </Col>
-                    <Col span={4} onClick={() => {
-                      // this.setState({ startVideo: true })
-                      // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
-                      this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
-                        console.log('res',res.videos);
-                        if(res.success) {
-                          let videos=res.videos;
-                          let videoAll=videos.map((item,index, arr)=>{
-                            return(<div style={styles.out}>
-                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black'}}>{item.videoTitle}</h1>
-                              {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
-                              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
-                                     autoPlay="autoplay" preload="none"
-                                     controls="controls">
-                                <source src={item.videoContent}
-                                />
-                                <source src={item.videoContent}
-                                />
-                              </video>
-                              <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
-                            </div>)
-                          });
-                          this.setState({videos:videoAll})
-                        }
-                      });
-                    }}>
-                      视频
-                    </Col>
-                    <Col span={2} onClick={() => {this.setState({ startQuestion: true });
-                      this.props.dispatch({type: 'mapPage/getQuestion', payload: this.state.tagName});}
-                    }>
-                      <Icon className={styles.popup} type="question" />
-                    </Col>
-                    <Col span={4} onClick={() => {
-                      this.setState({ startQuestion: true });
-                      this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
-                    }}>
-                      答题
-                    </Col>
-                  </Row>
+                  {this.state.itemNow?
+                    <img style={{ height: '100%', width: '100%' ,marginTop:11}} src={c1} />
+                    :null}
+                  {this.state.itemNow?
+                    <Row style={{ width: "240px", top: "5px" }} justify="space-between">
+                      <Col span={2} onClick={() => {
+                        this.setState({ startArticle: true });
+                        this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                      }}>
+                        <Icon className={styles.popup} type="book" />
+                      </Col>
+                      <Col span={4} onClick={() => {
+                        this.setState({ startArticle: true })
+                        this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                      }}>
+                        文章
+                      </Col>
+                      <Col span={2} onClick={() => {
+                        this.setState({ startPicture: true })
+                        this.setState({ startPicture: true })
+                        this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                          console.log('res');
+                          if(res.success) {
+                            let pictures=res.pictures;
+                            let picturesAll=pictures.map((item)=>{
+                              return(<div style={styles.out}>
+                                <h2>{item.pictureTitle}</h2>
+                                <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
+                              </div>)
+                            });
+                            this.setState({pictures:picturesAll})
+                          }
+                        });
+                      }}>
+                        <Icon className={styles.popup} type="picture" />
+                      </Col>
+                      <Col span={4} onClick={() => {
+                        this.setState({ startPicture: true });
+                        this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                          debugger
+                          if(res.success) {
+                            let pictures=res.pictures;
+                            let picturesAll=pictures.map((item)=>{
+                              return(<div style={styles.out}>
+                                <h2>{item.pictureTitle}</h2>
+                                <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
+                              </div>)
+                            });
+                            this.setState({pictures:picturesAll})
+                          }
+                          console.log('res');
+                        });
+                      }}>
+                        图片
+                      </Col>
+                      <Col span={2} onClick={() => {
+                        this.setState({ startVideo: true })
+                        this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
+                          console.log('res',res.videos);
+                          if(res.success) {
+                            let videos=res.videos;
+                            let videoAll=videos.map((item)=>{
+                              return(<div style={styles.out}>
+                                <h2>{item.videoTitle}</h2>
+                                {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
+                                <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
+                                       autoPlay="autoplay" preload="none"
+                                       controls="controls">
+                                  <source src={item.videoContent}
+                                  />
+                                  <source src={item.videoContent}
+                                  />
+                                </video>
+                              </div>)
+                            });
+                            this.setState({videos:videoAll})
+                          }
+                        });
+                      }}>
+                        <Icon className={styles.popup} type="video-camera" />
+                      </Col>
+                      <Col span={4} onClick={() => {
+                        // this.setState({ startVideo: true })
+                        // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
+                        this.setState({ startVideo: true })
+                        this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
+                          console.log('res',res.videos);
+                          if(res.success) {
+                            let videos=res.videos;
+                            let videoAll=videos.map((item,index, arr)=>{
+                              return(<div style={styles.out}>
+                                <h1 style={{fontSize:'24px',textAlign:'center',color:'black'}}>{item.videoTitle}</h1>
+                                {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
+                                <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
+                                       autoPlay="autoplay" preload="none"
+                                       controls="controls">
+                                  <source src={item.videoContent}
+                                  />
+                                  <source src={item.videoContent}
+                                  />
+                                </video>
+                                <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
+                              </div>)
+                            });
+                            this.setState({videos:videoAll})
+                          }
+                        });
+                      }}>
+                        视频
+                      </Col>
+                      <Col span={2} onClick={() => {this.setState({ startQuestion: true });
+                        this.props.dispatch({type: 'mapPage/getQuestion', payload: this.state.tagName});}
+                      }>
+                        <Icon className={styles.popup} type="question" />
+                      </Col>
+                      <Col span={4} onClick={() => {
+                        this.setState({ startQuestion: true });
+                        this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
+                      }}>
+                        答题
+                      </Col>
+                    </Row>
+                    :null}
                 </div>
                 {/*{*/}
                 {/*  list.map((item, index)=>(*/}
@@ -1709,6 +1924,9 @@ class MapPage extends Component {
                   </Col>
                 </Row>
               </div>
+              {/*<div className={styles.review_icon} onClick={this.eventReview}>*/}
+              {/*  <img src={shuaxin} className={styles.layer_img}/>*/}
+              {/*</div>*/}
             </div>
           </Content>
         </Layout>
