@@ -501,6 +501,7 @@ class MapPage extends Component {
       answerAll:'',
       checkValue1:false,//是否显示一大惠聚英才
       checkValue2:false,//是否显示上海到嘉兴路线
+      pictureTag:'',
     };
   }
   choose=(num)=>{
@@ -866,7 +867,16 @@ class MapPage extends Component {
           popup.setLngLat(coordinates)
           // popup.setHTML(showInfo)
           popup.addTo(map)
-          popup.setDOMContent(popupRef.current);
+          _this.props.dispatch({type: 'mapPage/getPictureByTag', payload: _this.state.tagName}).then(res=>{
+            debugger
+            if(res.success) {
+              let picture=res.pictures[0]&&res.pictures[0].pictureContent;
+              _this.setState({pictureTag:picture})
+            }
+            console.log('res');
+            popup.setDOMContent(popupRef.current);
+          });
+
         });
         map.on('mouseleave', listHere[i].id, function() {
           map.getCanvas().style.cursor = '';
@@ -1576,7 +1586,7 @@ class MapPage extends Component {
             >
               <div className={styles.modal}>
                 <div className={styles.topVideo}></div>
-                <div style={{padding: 40, background: "#ececec"}} >
+                <div style={{padding: 30, background: "#ececec"}} >
                 <div className="d-iframe">
                   <Slider {...this.carousel_settings} >
                     {this.state.videos}
@@ -1648,7 +1658,10 @@ class MapPage extends Component {
                   {this.state.itemNow?
                     <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
                     :null}
-                  <Row style={{ width: "240px", top: "10px" }} justify="space-between">
+                  {this.state.itemNow?
+                    <img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag} />
+                    :null}
+                  {this.state.itemNow?<Row style={{ width: "240px", top: "10px" }} justify="space-between">
                     <Col span={2} onClick={() => {
                       this.setState({ startArticle: true });
                       this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
@@ -1669,8 +1682,8 @@ class MapPage extends Component {
                           let pictures=res.pictures;
                           let picturesAll=pictures.map((item)=>{
                             return(<div style={styles.out}>
-                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.pictureTitle}</h1>
-                              <img src={item.pictureContent} style={{ height: '520px',display:'block',
+                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'5px'}}>{item.pictureTitle}</h1>
+                              <img src={item.pictureContent} style={{ height: '515px',display:'block',
                                 marginLeft: 'auto',marginRight: 'auto'}} />
                             </div>)
                           });
@@ -1689,8 +1702,8 @@ class MapPage extends Component {
                           let pictures=res.pictures;
                           let picturesAll=pictures.map((item)=>{
                             return(<div style={styles.out}>
-                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.pictureTitle}</h1>
-                              <img src={item.pictureContent} style={{ height: '520px',display:'block',
+                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'5px'}}>{item.pictureTitle}</h1>
+                              <img src={item.pictureContent} style={{ height: '515px',display:'block',
                                 marginLeft: 'auto',marginRight: 'auto'}} />
                             </div>)
                           });
@@ -1768,7 +1781,7 @@ class MapPage extends Component {
                     }}>
                       答题
                     </Col>
-                  </Row>
+                  </Row>:null}
                 </div>
                 {/*{*/}
                 {/*  list.map((item, index)=>(*/}
