@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Modal, Form, Input, Button, Checkbox, Row, Col, message} from 'antd';
 import {Link} from "react-router-dom";
 import request from "@/utils/request";
+import {getLocalData, toDBC} from '@/utils/common.js';
 
 class QuestionModal extends Component {
   constructor(props) {
@@ -42,7 +43,8 @@ class QuestionModal extends Component {
           url: '/v1.0/api/question/tagName/' + formData.tagName,
           method: 'POST',
           data: {
-            questionContent: formData.questionContent,
+            questionContent: toDBC(formData.questionContent),
+            // questionContent: formData.questionContent,
             optionA: formData.optionA,
             optionB: formData.optionB,
             optionC: formData.optionC,

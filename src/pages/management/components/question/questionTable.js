@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, message, Table, Tag,} from 'antd';
 import request from "@/utils/request";
-import {getLocalData} from '@/utils/common.js';
+import {getLocalData, toDBC} from '@/utils/common.js';
 
 export default class QuestionTable extends Component {
   constructor(props) {

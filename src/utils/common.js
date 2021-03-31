@@ -1,10 +1,10 @@
-import { notification } from 'antd';
+import {notification} from 'antd';
 import querystring from 'querystring';
-import { parse, stringify } from 'qs';
+import {parse, stringify} from 'qs';
 import moment from 'moment';
 
 // 获取数组中对应key中的数据
-export function selectArrayByKey({ arr, key }) {
+export function selectArrayByKey({arr, key}) {
   return arr.find((item, index) => item.key === key);
 }
 
@@ -23,31 +23,31 @@ export function generateTabularData(item) {
   let columns = data.schema.map((item, index) => {
     let key = Object.keys(item)[0];
     if (Object.keys(item)[0] === 'Description' || '描述') {
-      return { title: key, dataIndex: key, key: key };
+      return {title: key, dataIndex: key, key: key};
     } else {
-      return { title: key, dataIndex: key, key: key, width: '100px' };
+      return {title: key, dataIndex: key, key: key, width: '100px'};
     }
   });
-  let dataSource = data.rows.map((item, index) => ({ ...item, key: index }));
-  return { ...item, columns: columns, dataSource: dataSource };
+  let dataSource = data.rows.map((item, index) => ({...item, key: index}));
+  return {...item, columns: columns, dataSource: dataSource};
 }
 
 // 获取本地存储
-export function getLocalData({ dataName }) {
+export function getLocalData({dataName}) {
   return localStorage.getItem(dataName);
 }
 
 export function getPageQuery() {
-    return parse(window.location.href.split('?').pop());
+  return parse(window.location.href.split('?').pop());
 }
 
 // 设置本地存储
-export function setLoalData({ dataName, dataList }) {
+export function setLoalData({dataName, dataList}) {
   localStorage.setItem(dataName, dataList);
 }
 
 // 本地存储是否存在
-export function isSetLoacl({ dataName }) {
+export function isSetLoacl({dataName}) {
   return localStorage.hasOwnProperty(dataName);
 }
 
@@ -70,7 +70,7 @@ export function judgeUrl(indexUrl, deteUrl) {
 
 // 修改工具集中的主要参数
 
-export function dealToolData({ properties, required }) {
+export function dealToolData({properties, required}) {
   return Object.keys(properties).map((item, index) => ({
     key: index,
     ...properties[item],
@@ -93,10 +93,10 @@ export function changeFormData(conValue, getValue) {
         value: getValue[item],
       });
     } else {
-      conf.push({ paramName: item, value: getValue[item] });
+      conf.push({paramName: item, value: getValue[item]});
     }
   });
-  return { args, conf };
+  return {args, conf};
 }
 
 // 设置错误
@@ -109,13 +109,11 @@ export function openNotificationWithIcon(code, message) {
   console.log("code message", code, message);
   if (successTest.test(code)) {
     tipTest = 'success';
-    notification.open({ message: tipTest, description: message });
-  }
-  else if(message=='该数据集暂无关联图层'){
+    notification.open({message: tipTest, description: message});
+  } else if (message == '该数据集暂无关联图层') {
     tipTest = 'info';
-    notification.open({ message: tipTest, description: message });
-  }
-  else if (warningText.test(code)) {
+    notification.open({message: tipTest, description: message});
+  } else if (warningText.test(code)) {
     // tipTest = 'warning';
   } else if (errorText.test(code)) {
     // tipTest = 'error';
@@ -181,10 +179,10 @@ export function setRenderLayer({
 }
 
 // 设置本地存储
-export function setLocal({ locType = 'dataset', ...payload }) {
+export function setLocal({locType = 'dataset', ...payload}) {
   let data = [];
-  if (isSetLoacl({ dataName: locType })) {
-    data = JSON.parse(getLocalData({ dataName: locType }));
+  if (isSetLoacl({dataName: locType})) {
+    data = JSON.parse(getLocalData({dataName: locType}));
     if (data.some((item, index) => item.id === payload.id)) {
       return;
     } else {
@@ -193,11 +191,11 @@ export function setLocal({ locType = 'dataset', ...payload }) {
   } else {
     data.push(payload);
   }
-  setLoalData({ dataName: locType, dataList: JSON.stringify(data) });
+  setLoalData({dataName: locType, dataList: JSON.stringify(data)});
 }
 
 // 删除本地存储
-export function delLocal({ type = 'dataset', id }) {
+export function delLocal({type = 'dataset', id}) {
   let arr = [];
   type === 'dataset'
     ? (arr = JSON.parse(
@@ -229,8 +227,7 @@ export function calcFileSize(num) {
   if (num) {
     if (num < 1024) {
       return num + 'B';
-    }
-    else if (num / 1024 < 1024) {
+    } else if (num / 1024 < 1024) {
       return Math.round(num / 1024) + 'KB';
     } else if (num / (1024 * 1024) < 1024) {
       return (num / (1024 * 1024)).toFixed(1) + 'MB';
@@ -280,7 +277,7 @@ export function dealSliderMarks(arr) {
   let arrData = [...arr];
   let maxData = arrData.shift();
   let minData = arrData.pop();
-  let returnData = { 0: maxData.layerName, 100: minData.layerName };
+  let returnData = {0: maxData.layerName, 100: minData.layerName};
   let maxTime = moment(maxData.layerTime).valueOf();
   let minTime = moment(minData.layerTime).valueOf();
   let interval = maxTime - minTime;
@@ -363,4 +360,29 @@ export function isGeoTIFF(type) {
 
 export function isShape(type) {
   return type.toLowerCase().includes('shape');
+}
+
+// 半角符号转全角
+export function toDBC(txtstring) {
+  let res = "";
+  console.log('【'.charCodeAt(0))
+  console.log('】'.charCodeAt(0))
+  console.log('（'.charCodeAt(0))
+  console.log('）'.charCodeAt(0))
+  for (let i = 0; i < txtstring.length; i++) {
+    let code = txtstring.charCodeAt(i);
+    if (false) {
+    } else if (code == 91) { // [ -> 【
+      code = 12304;
+    } else if (code == 93) { // ] -> 】
+      code = 12305;
+    } else if (code == 40) { // ( -> （
+      code = 65288;
+    } else if (code == 41) { // ) -> ）
+      code = 65289;
+    }
+
+    res += String.fromCharCode(code);
+  }
+  return res;
 }

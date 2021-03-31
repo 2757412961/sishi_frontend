@@ -35,6 +35,8 @@ export default {
     '/v1.0/api': {
       target: 'http://192.168.2.2:7666/v1.0/api/',
       // target: 'http://192.168.137.116:7666/v1.0/api/',
+      // target: 'http://192.168.137.116:8080/v1.0/api/',
+      // target: 'http://47.100.24.69:8080/v1.0/api/',
       // target: 'http://39.106.65.69:80/v1.0/api/',
       // target: '192.168.100.110:80/v1.0/api/',
       changeOrigin: true,
