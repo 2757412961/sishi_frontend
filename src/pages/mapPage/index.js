@@ -648,6 +648,10 @@ class MapPage extends Component {
     let translate1=translate(arg);
     let temp=[-1,-1,-1,-1,true];
     let questionChoose=this.state.questionChoose;
+    let choose=this.state.questionChoose[recent];
+    if(choose&&choose[4]){
+      return
+    }else{
     if(string==(question[recent]?question[recent].answer:''))//答案正确
     {
       if(this.state.answer==false){
@@ -687,7 +691,7 @@ class MapPage extends Component {
       let username=getLocalData({dataName:'userName'});
       this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
       alert("答题结束")
-  }}
+  }}}
   componentDidMount() {
     const { dispatch } = this.props;
     //保存当前模块名
@@ -758,7 +762,7 @@ class MapPage extends Component {
         // console.log('tree',tree);
         listHere=forList(tagTree);
         listHere2=forList(tagTree);
-        let listTime = listHere;
+        let listTime = forList(tagTree);
         listTime.splice(0,1);
         console.log("listTime", listTime);
         this.setState({
@@ -1053,69 +1057,69 @@ class MapPage extends Component {
     el.style.height='20px';
     el.style.borderRadius = '50%';
     el.style.backgroundImage = 'url('+dangqi+')'
-    map.on('styledata', function() {
-      d3.json(line,function(err,data) {
-        if (err) throw err;
-        var coordinates = data.features[0].geometry.coordinates;
-        data.features[0].geometry.coordinates = [coordinates[0]];
-        map.addSource('trace', {type:'geojson', data: data})
-        map.addLayer({
-          "id": "trace",
-          "type": "line",
-          "source": "trace",
-          "layout": {
-            "line-join": "round",
-            "line-cap": "round"
-          },
-          "paint": {
-            "line-color": "red",
-            "line-opacity": 0.8,
-            "line-width": 5
-          }
-        });
-        map.jumpTo({'center': coordinates[0], 'zoom': 8});
-        map.setPitch(10);
-        //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
-        var marker = new mapboxgl.Marker(el)
-        var i = 0;
-        var timer = window.setInterval(function() {
-          if(i<coordinates.length) {
-            data.features[0].geometry.coordinates.push(coordinates[i]);
-            map.getSource('trace').setData(data);
-            if(i<195){
-              map.panTo(coordinates[i],{'zoom':8})
-            } else if(i<495){
-              map.panTo(coordinates[i],{'zoom':5})
-            } else if (i<695){
-              map.panTo(coordinates[i],{'zoom':2})
-            } else if(i<780){
-              map.panTo(coordinates[i],{'zoom':5})
-            } else if(i<790){
-              map.panTo(coordinates[i],{'zoom':7})
-            } else if(i<800){
-              map.panTo(coordinates[i],{'zoom':9})
-            } else if(i<805){
-              map.panTo(coordinates[i],{'zoom':10})
-            } else if(i<810){
-              map.panTo(coordinates[i],{'zoom':11})
-            } else if(i<815){
-              map.panTo(coordinates[i],{'zoom':12})
-            } else {
-              map.panTo(coordinates[i],{'zoom':13})
-            }
-            i++;
-            function animateMarker() {
-              marker.setLngLat(coordinates[i])
-              marker.addTo(map);
-              requestAnimationFrame(animateMarker);
-            }
-            requestAnimationFrame(animateMarker);
-          } else {
-            window.clearInterval(timer);
-          }
-        }, 100);
-      });
-    });
+    // map.on('styledata', function() {
+    //   d3.json(line,function(err,data) {
+    //     if (err) throw err;
+    //     var coordinates = data.features[0].geometry.coordinates;
+    //     data.features[0].geometry.coordinates = [coordinates[0]];
+    //     map.addSource('trace', {type:'geojson', data: data})
+    //     map.addLayer({
+    //       "id": "trace",
+    //       "type": "line",
+    //       "source": "trace",
+    //       "layout": {
+    //         "line-join": "round",
+    //         "line-cap": "round"
+    //       },
+    //       "paint": {
+    //         "line-color": "red",
+    //         "line-opacity": 0.8,
+    //         "line-width": 5
+    //       }
+    //     });
+    //     map.jumpTo({'center': coordinates[0], 'zoom': 8});
+    //     map.setPitch(10);
+    //     //'url(https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png)'
+    //     var marker = new mapboxgl.Marker(el)
+    //     var i = 0;
+    //     var timer = window.setInterval(function() {
+    //       if(i<coordinates.length) {
+    //         data.features[0].geometry.coordinates.push(coordinates[i]);
+    //         map.getSource('trace').setData(data);
+    //         if(i<195){
+    //           map.panTo(coordinates[i],{'zoom':8})
+    //         } else if(i<495){
+    //           map.panTo(coordinates[i],{'zoom':5})
+    //         } else if (i<695){
+    //           map.panTo(coordinates[i],{'zoom':2})
+    //         } else if(i<780){
+    //           map.panTo(coordinates[i],{'zoom':5})
+    //         } else if(i<790){
+    //           map.panTo(coordinates[i],{'zoom':7})
+    //         } else if(i<800){
+    //           map.panTo(coordinates[i],{'zoom':9})
+    //         } else if(i<805){
+    //           map.panTo(coordinates[i],{'zoom':10})
+    //         } else if(i<810){
+    //           map.panTo(coordinates[i],{'zoom':11})
+    //         } else if(i<815){
+    //           map.panTo(coordinates[i],{'zoom':12})
+    //         } else {
+    //           map.panTo(coordinates[i],{'zoom':13})
+    //         }
+    //         i++;
+    //         function animateMarker() {
+    //           marker.setLngLat(coordinates[i])
+    //           marker.addTo(map);
+    //           requestAnimationFrame(animateMarker);
+    //         }
+    //         requestAnimationFrame(animateMarker);
+    //       } else {
+    //         window.clearInterval(timer);
+    //       }
+    //     }, 100);
+    //   });
+    // });
     this.map = map;
   }
   checkOnChange=(item)=>{
@@ -1484,8 +1488,8 @@ class MapPage extends Component {
               <span class={styles.big}>{this.state.questionNumber}</span>
               /{allNumber}
             </div>
-            <div className={styles.question}>
-              <div className={styles.qbody}><div>{question[recent]?question[recent].questionContent:''}</div></div>
+            <div className={styles.question} style={{height:'500px',overflow:'scroll'}}>
+              <div className={styles.qbody}><div><h3>{question[recent]?question[recent].questionContent:''}</h3></div></div>
               {/*<div className={styles.qanswer}>*/}
               <form id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                 <Row>
@@ -1557,28 +1561,17 @@ class MapPage extends Component {
           <div className={styles.modal}>
             {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
             <div className={styles.topArticle}></div>
-            <div className="d-iframe" dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >
-              {/*<Card style={{ width: '100' }}*/}
-              {/*      title={"中共一大"}*/}
-              {/*      cover={*/}
-              {/*        <img*/}
-              {/*          alt="example"*/}
-              {/*          src={this.state.knowledgeUrl}*/}
-              {/*        />*/}
-              {/*      }*/}
-              {/*>*/}
-              {/*  {this.state.knowledgeContent}*/}
-              {/*</Card>*/}
+            <div className="d-iframe" style={{height:'570px',overflow:'scroll'}} dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >
             </div>
           </div>
         </Modal>
         {/*图片*/}
-        <Modal visible={this.state.startPicture}
+        <Modal
+               visible={this.state.startPicture}
                centered
                width={1000}
                mask={true}
                maskClosable={true}
-          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
                title={null}
                onCancel={()=>this.setState({startPicture:false})}
                footer={null}
@@ -1587,19 +1580,10 @@ class MapPage extends Component {
         >
           <div className={styles.modal}>
             <div className={styles.topPicture}></div>
-            <div className="d-iframe">
-              <div style={{padding: 40, background: "#ececec"}} >
-                {/*<div style={styles.out}>*/}
-
-                    {/*</div>*/}
+            <div className="d-iframe" style={{height:'560px'}}>
+              <div style={{ background: "#ececec",height:'560px', padding: '0px 20px 0px 20px'}} >
                     <Slider {...this.carousel_settings} >
                       {this.state.pictures}
-                      {/*<div style={styles.out}>*/}
-                      {/*  <img src={yay} style={{ height: '100%', width: '100%' }} />*/}
-                      {/*</div>*/}
-                      {/*<div>*/}
-                      {/*  <img src={yaa} style={{ height: '100%', width: '100%' }} />*/}
-                      {/*</div>*/}
                     </Slider>
                   </div>
                 </div>
@@ -1611,7 +1595,6 @@ class MapPage extends Component {
                    width={1000}
                    mask={true}
                    maskClosable={true}
-              // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
                    title={null}
                    onCancel={() => this.setState({ startVideo: false })}
                    footer={null}
@@ -1631,9 +1614,7 @@ class MapPage extends Component {
               </div>
             </Modal>
             <div id='verticalTimeLine' className={styles.verticalTimeLine}>
-              <VerticalTimeline
-                // layout='1-column-left'
-              >
+              <VerticalTimeline>
                 {this.state.listTime.map((item)=> (
                     item['sub']?
                       <VerticalTimelineElement
@@ -1708,20 +1689,21 @@ class MapPage extends Component {
                       文章
                     </Col>
                     <Col span={2} onClick={() => {
-                      this.setState({ startPicture: true })
-                      this.setState({ startPicture: true })
+                      this.setState({ startPicture: true });
                       this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
-                        console.log('res');
+                        debugger
                         if(res.success) {
                           let pictures=res.pictures;
                           let picturesAll=pictures.map((item)=>{
                             return(<div style={styles.out}>
-                              <h2>{item.pictureTitle}</h2>
-                              <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
+                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.pictureTitle}</h1>
+                              <img src={item.pictureContent} style={{ height: '520px',display:'block',
+                                marginLeft: 'auto',marginRight: 'auto'}} />
                             </div>)
                           });
                           this.setState({pictures:picturesAll})
                         }
+                        console.log('res');
                       });
                     }}>
                       <Icon className={styles.popup} type="picture" />
@@ -1734,8 +1716,9 @@ class MapPage extends Component {
                           let pictures=res.pictures;
                           let picturesAll=pictures.map((item)=>{
                             return(<div style={styles.out}>
-                              <h2>{item.pictureTitle}</h2>
-                              <img src={item.pictureContent} style={{ height: '100%', width: '100%' }} />
+                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.pictureTitle}</h1>
+                              <img src={item.pictureContent} style={{ height: '520px',display:'block',
+                                marginLeft: 'auto',marginRight: 'auto'}} />
                             </div>)
                           });
                           this.setState({pictures:picturesAll})
@@ -1751,9 +1734,9 @@ class MapPage extends Component {
                         console.log('res',res.videos);
                         if(res.success) {
                           let videos=res.videos;
-                          let videoAll=videos.map((item)=>{
+                          let videoAll=videos.map((item,index, arr)=>{
                             return(<div style={styles.out}>
-                              <h2>{item.videoTitle}</h2>
+                              <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
                               {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                               <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
                                      autoPlay="autoplay" preload="none"
@@ -1763,6 +1746,7 @@ class MapPage extends Component {
                                 <source src={item.videoContent}
                                 />
                               </video>
+                              <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
                             </div>)
                           });
                           this.setState({videos:videoAll})
@@ -1781,7 +1765,7 @@ class MapPage extends Component {
                           let videos=res.videos;
                           let videoAll=videos.map((item,index, arr)=>{
                             return(<div style={styles.out}>
-                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black'}}>{item.videoTitle}</h1>
+                              <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
                               {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                               <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
                                      autoPlay="autoplay" preload="none"
