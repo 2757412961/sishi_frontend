@@ -17,20 +17,9 @@ import {getAuthority} from '@/utils/authority';
 import flyline from '@/assets/pointData/flyline.json';
 import line from '@/assets/pointData/line.geojson';
 import lineShToJx from '@/assets/pointData/lineShToJx.geojson';
-import point from '@/assets/pointData/point.json';
-import { Scene, LineLayer,Control,PolygonLayer,PointLayer } from '@antv/l7';
-import { Mapbox } from '@antv/l7-maps';
 import {MapboxLayer} from '@deck.gl/mapbox';
 import {ArcLayer} from '@deck.gl/layers';
-// import {motion} from 'framer-motion';
-// // @import '~video-react/styles/scss/video-react';
-// import {Player} from 'video-react'
-import redflag from '@/assets/redflag.png';
-import eventcard from '@/assets/eventcard.png';
 import p1 from '@/assets/test/1.jpg';
-import yay from '@/assets/unnamed.jpg'
-import yaa from '@/assets/KkpJ-hukwxnu5742888.jpg'
-import dangshi_background from '@/assets/dangshi_background.PNG'
 import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import c1 from '@/assets/test/c1.jpg';
@@ -46,6 +35,9 @@ import correct from '@/assets/correct.PNG'
 import wrong from '@/assets/false.PNG'
 import dangqi from '@/assets/test/党旗.png';
 import layer from '@/assets/test/layer.png';
+import zanting from '@/assets/test/暂停.png';
+import kaishi from '@/assets/test/开始.png';
+import qingchu from '@/assets/test/清除.png';
 import reback from '@/assets/test/reback.png';
 import shuaxin from '@/assets/test/刷新.png';
 import jiedao from '@/assets/test/街道.PNG';
@@ -68,205 +60,6 @@ const variants={open: { opacity: 1, x: 0 },
   closed: { opacity: 0, x: "-100%" },}
 
 
-// const list = [
-//   {
-//     id:'一大-上海',
-//     lonlat:[121.47069346816863, 31.22206084685108],
-//     text:'1921年7月-中共一大上海',
-//     value: '中共一大上海',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共一大</h2>' +
-//       '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-//       '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-//       '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p1,
-//     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-//     label:"党史新学@中共一大@上海",
-//   },
-//   {
-//     id:'一大-嘉兴',
-//     lonlat:[120.75580305351667, 30.75747193181725],
-//     text:'1921年7月-中共一大',
-//     value: '中共一大嘉兴',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共一大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p1,
-//     cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-//     label:"党史新学@中共一大@嘉兴",
-//   },
-//   {
-//     id:'二大-上海',
-//     lonlat:[121.46214132313253, 31.2260623329518],
-//     text: '1922年7月-中共二大',
-//     value: '中共二大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共二大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第二次全国代表大会，简称中共二大',
-//     label:"党史新学@中共二大@上海",
-//   },
-//   {
-//     id:'三大-广州',
-//     lonlat:[113.29062697510238, 23.121680862715294],
-//     text: '1923年6月-中共三大',
-//     value: '中共三大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共三大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p3,
-//     cardContent:'中国共产党第三次全国代表大会，简称中共三大',
-//     label:"党史新学@中共三大@广州",
-//   },
-//   {
-//     id:'四大-上海',
-//     lonlat:[121.48020351895462,31.25728522799882],
-//     text: '1925年1月-中共四大',
-//     value: '中共四大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共四大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第四次全国代表大会，简称中共四大',
-//     label:"党史新学@中共四大@上海",
-//   },
-//   {
-//     id:'五大-武汉',
-//     lonlat:[114.29318634011975,30.553569642526185],
-//     text: '1927年4月-中共五大',
-//     value: '中共五大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共五大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第五次全国代表大会，简称中共五大',
-//     label:"党史新学@中共五大@武汉",
-//   },
-//   {
-//     id:'六大-俄罗斯',
-//     lonlat:[37.153974181328664,55.535728582753336],
-//     text: '1928年6月-中共六大',
-//     value: '中共六大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共六大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第六次全国代表大会，简称中共六大',
-//     label:"党史新学@中共六大@俄罗斯",
-//   },
-//   {
-//     id:'七大-延安',
-//     lonlat:[109.46267096678156,36.618757084621336],
-//     text: '1945年4月-中共七大',
-//     value: '中共七大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共七大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第七次全国代表大会，简称中共七大',
-//     label:"党史新学@中共七大@延安",
-//   },
-//   {
-//     id:'八大-政协礼堂',
-//     lonlat:[116.35780179933835,39.91833919135752],
-//     text: '1956年9月-中共八大',
-//     value: '中共八大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共八大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第八次全国代表大会，简称中共八大',
-//     label:"党史新学@中共八大@北京",
-//   },{
-//     id:'九大-人民大会堂',
-//     lonlat:[116.38748691963224,39.90337460887406],
-//     text: '1969年4月-中共九大',
-//     value: '中共九大',
-//     showInfo: '<div className={styles.markerTop}>' +
-//       '<h2>中共九大</h2>' +
-//       '<p><a id="btn">点击进入学习卡片</a></p>' +
-//       '</div>',
-//     cardImg:p2,
-//     cardContent:'中国共产党第九次全国代表大会，简称中共九大',
-//     label:"党史新学@中共九大@北京",
-//   },
-// ];
-
-var chapters = {
-  '一大-上海': {
-    bearing: 0,
-    center: [121.47069346816863, 31.22206084685108],
-    zoom: 15.5,
-    pitch: 20
-  },
-  '一大-嘉兴': {
-    duration: 6000,
-    center: [120.75580305351667, 30.75747193181725],
-    bearing: 0,
-    zoom: 15,
-    pitch: 30
-  },
-  '二大-上海': {
-    bearing: 0,
-    center: [121.46214132313253, 31.2260623329518],
-    zoom: 16,
-    speed: 0.6,
-    pitch: 30
-  },
-  '三大-广州': {
-    bearing: 0,
-    center: [113.29062697510238, 23.121680862715294],
-    zoom: 17.3,
-    pitch: 20,
-  },
-  '四大-上海': {
-    bearing: 0,
-    center: [121.48020351895462,31.25728522799882],
-    zoom: 16.3,
-    pitch: 20,
-    speed: 1,
-  },
-  '五大-武汉': {
-    bearing: 0,
-    center: [114.29318634011975,30.553569642526185],
-    zoom: 16.3,
-    pitch: 40,
-  },
-  '六大-俄罗斯': {
-    bearing: 0,
-    center: [37.153974181328664,55.535728582753336],
-    zoom: 16.3,
-    pitch: 20
-  },
-  '七大-延安': {
-    bearing: 0,
-    center: [109.46267096678156,36.618757084621336],
-    zoom: 16.3,
-    pitch: 20
-  },
-  '八大-政协礼堂': {
-    bearing: 0,
-    center: [116.35780179933835,39.91833919135752],
-    zoom: 17,
-    pitch: 20
-  },
-  '九大-人民大会堂': {
-    bearing: 0,
-    center: [116.38748691963224,39.90337460887406],
-    zoom: 16,
-    pitch: 10
-  }
-};
 let des = [
   { "showInfo":"<div ><h3>中共一大上海会址</h3><div style={styles.popup1}></div><p>中国共产党第一次全国代表大会，简称中共一大，于1921年7月23日在上海法租界秘密召开，" +
       "7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省嘉兴南湖闭幕结束。大会的召开宣告了中国共产党的正式成立。</p></div>"},
@@ -350,49 +143,6 @@ function SampleNextArrow(props) {
   );
 }
 
-const subList = [
-  {
-    id:'一大-嘉兴',
-    lonlat:[120.75580305351667, 30.75747193181725],
-    text:'1921年7月-中共一大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共一大</h2>' +
-      '<p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p1,
-    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-    label:"党史新学@中共一大@嘉兴",
-    sub:true,
-  },
-  {
-    id:'jiaxing7',
-    lonlat:[120.79, 30.75],
-    text:'1921年7月-中共大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共一大</h2>' +
-      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p1,
-    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-    sub:true,
-  },
-  {
-    id:'jiaxing8',
-    lonlat:[120.79, 30.75],
-    text:'1921年7月-中共大',
-    showInfo: '<div className={styles.markerTop}>' +
-      '<h2>中共一大</h2>' +
-      '</div> <div className={styles.markerBody}><p>中国共产党第一次全国代表大会，简称中共一大，' +
-      '于1921年7月23日在<span>上海</span>法租界秘密召开，7月30日会场被租界巡捕房搜查后休会，8月3日在浙江省<span>嘉兴</span>闭幕结束。' +
-      '大会的召开宣告了中国共产党的正式成立。</p> <p><a id="btn">点击进入学习卡片</a></p>' +
-      '</div>',
-    cardImg:p1,
-    cardContent:'中国共产党第一次全国代表大会，简称中共一大',
-    sub:true,
-  },
-];
 //遍历树生成的数组treeList
 let tree=[];
 function forTree(treeList){
@@ -501,6 +251,10 @@ class MapPage extends Component {
       answerAll:'',
       checkValue1:false,//是否显示一大惠聚英才
       checkValue2:false,//是否显示上海到嘉兴路线
+      play: true,
+      delete: false,
+      playCount:0,
+      playNumber:0,
       pictureTag:'',
     };
   }
