@@ -35,6 +35,9 @@ import correct from '@/assets/correct.PNG'
 import wrong from '@/assets/false.PNG'
 import dangqi from '@/assets/test/党旗.png';
 import layer from '@/assets/test/layer.png';
+import zanting from '@/assets/test/暂停.png';
+import kaishi from '@/assets/test/开始.png';
+import qingchu from '@/assets/test/清除.png';
 import reback from '@/assets/test/reback.png';
 import shuaxin from '@/assets/test/刷新.png';
 import jiedao from '@/assets/test/街道.PNG';
@@ -248,6 +251,10 @@ class MapPage extends Component {
       answerAll:'',
       checkValue1:false,//是否显示一大惠聚英才
       checkValue2:false,//是否显示上海到嘉兴路线
+      play: true,
+      delete: false,
+      playCount:0,
+      playNumber:0,
     };
   }
   choose=(num)=>{
@@ -564,7 +571,7 @@ class MapPage extends Component {
               "text-size": [
                 "interpolate", ["linear"], ["zoom"],
                 3,10,
-                17,38
+                10,38
               ],
             },
             paint: {
@@ -595,8 +602,14 @@ class MapPage extends Component {
       }
       this.map = map;
     });
-
-
+    let nav = new mapboxgl.NavigationControl({
+      //是否显示指南针按钮，默认为true
+      "showCompass": false,
+      //是否显示缩放按钮，默认为true
+      "showZoom":true
+    });
+    //添加导航控件，控件的位置包括'top-left', 'top-right','bottom-left' ,'bottom-right'四种，默认为'top-right'
+    map.addControl(nav, 'top-right');
     var size = 100;
     var pulsingDot = {
       width: size,
@@ -644,13 +657,7 @@ class MapPage extends Component {
         return true;
       }
     };
-    var el = document.createElement('div');
-    el.className = "marker";
-    el.style.backgroundSize = 'cover'
-    el.style.width='20px';
-    el.style.height='20px';
-    el.style.borderRadius = '50%';
-    el.style.backgroundImage = 'url('+dangqi+')'
+    document.getElementById('vec').style.border = ('2px solid red');
     this.map = map;
   }
   checkOnChange=(item)=>{
@@ -871,9 +878,113 @@ class MapPage extends Component {
     // this.componentDidMount()
     // this.map.setStyle('')
   }
-  eventReview = () => {
-    this.componentWillUnmount()
-    this.componentDidMount()
+  eventReview = (e) => {
+    // this.componentWillUnmount()
+    // this.componentDidMount()
+    var map = this.map;
+    let _this = this;
+    this.setState({
+      delete: true,
+      play: !this.state.play,
+      playCount: this.state.playCount + 1
+    })
+    var el = document.createElement('div');
+    el.className = "marker";
+    el.style.backgroundSize = 'cover'
+    el.style.width='20px';
+    el.style.height='20px';
+    el.style.borderRadius = '50%';
+    el.style.backgroundImage = 'url('+dangqi+')'
+    d3.json(line,function(err,data) {
+      if (err) throw err;
+      var i = _this.state.playNumber;
+      var coordinates = data.features[0].geometry.coordinates;
+      if(i===0){
+        data.features[0].geometry.coordinates = [coordinates[0]];
+        map.jumpTo({'center': coordinates[0], 'zoom': 8});
+        map.setPitch(10);
+      } else {
+        data.features[0].geometry.coordinates = [coordinates[i-1]];
+      }
+      map.addSource('trace'+ _this.state.playCount, {type:'geojson', data: data})
+      map.addLayer({
+        "id": "trace"+ _this.state.playCount,
+        "type": "line",
+        "source": "trace"+ _this.state.playCount,
+        // "lineMetrics": true,
+        "layout": {
+          "line-join": "round",
+          "line-cap": "round",
+        },
+        "paint": {
+          // "line-color": "royalblue",
+          "line-color": "royalblue",
+          "line-opacity": 1,
+          "line-width": 10,
+          // "line-blur": 3,
+          // "line-gap-width": 10,
+          // "line-offset": 5,
+          // "line-dasharray": [2,4],
+        }
+      });
+      var marker = new mapboxgl.Marker(el)
+      var timer = window.setInterval(function() {
+        if(i<coordinates.length) {
+          if(!_this.state.play){
+            data.features[0].geometry.coordinates.push(coordinates[i]);
+            map.getSource('trace'+ _this.state.playCount).setData(data);
+            if(i<195){
+              map.panTo(coordinates[i],{'zoom':8})
+            } else if(i<495){
+              map.panTo(coordinates[i],{'zoom':5})
+            } else if (i<695){
+              map.panTo(coordinates[i],{'zoom':2})
+            } else if(i<780){
+              map.panTo(coordinates[i],{'zoom':5})
+            } else if(i<790){
+              map.panTo(coordinates[i],{'zoom':7})
+            } else if(i<800){
+              map.panTo(coordinates[i],{'zoom':9})
+            } else if(i<805){
+              map.panTo(coordinates[i],{'zoom':10})
+            } else if(i<810){
+              map.panTo(coordinates[i],{'zoom':11})
+            } else if(i<815){
+              map.panTo(coordinates[i],{'zoom':12})
+            } else {
+              map.panTo(coordinates[i],{'zoom':13})
+            }
+            i++;
+            _this.setState({ playNumber: i })
+            // function animateMarker() {
+            //   marker.setLngLat(coordinates[i])
+            //   marker.addTo(map);
+            //   requestAnimationFrame(animateMarker);
+            // }
+            // requestAnimationFrame(animateMarker);
+          } else {
+            window.clearInterval(timer);
+          }
+        } else {
+          _this.setState({ play: true });
+          window.clearInterval(timer);
+        }
+      }, 100);
+    });
+  }
+  eventDelete = ()  => {
+    this.setState({
+      play: true,
+      delete:false,
+      playNumber: 0,
+    })
+    for(var i=0;i<this.state.playCount+1;i++){
+      if(this.map.getLayer("trace"+i)){
+        this.map.removeSource("trace"+i);
+        this.map.removeLayer("trace"+i);
+      }
+    }
+    this.map.jumpTo({'center': [121.52, 31.04], 'zoom': 3});
   }
 
   render(){
@@ -1301,7 +1412,7 @@ class MapPage extends Component {
                 type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
                 onClick={this.onCollapse}
               />
-              <div className={styles.layer_icon} onClick={this.layerClick}>
+              <div className={styles.layer_icon} onClick={this.layerClick} title="更换地图底图">
                 <img src={layer} className={styles.layer_img}/>
               </div>
               <div className={styles.layer_div} style={{display: this.state.layerValue ? 'block': 'none'}}>
@@ -1334,6 +1445,13 @@ class MapPage extends Component {
                     <div style={{marginLeft:25,marginTop:13}}>地形图</div>
                   </Col>
                 </Row>
+              </div>
+              <div id="pause" className={styles.review_icon} onClick={() => this.eventReview(1)} title="一大至十九大地图位置串联">
+                {this.state.play ? <img src={kaishi} className={styles.layer_img}/> :
+                  <img src={zanting} className={styles.layer_img}/>}
+              </div>
+              <div id="pause" style={{display: this.state.delete ? 'block':'none'}} className={styles.review_deleteIcon} onClick={this.eventDelete} title="删除一大至十九大串联的图层">
+                <img src={qingchu} className={styles.layer_img}/>
               </div>
             </div>
           </Content>
