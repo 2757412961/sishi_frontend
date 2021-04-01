@@ -512,32 +512,6 @@ class MapPage extends Component {
       document.getElementById(id).classList.add(styles.qanswerchoosable);
     }
     console.log(temp);
-    // let temp={};
-    // let questionChoose=this.state.questionChoose;
-    // debugger
-
-    // if(questionChoose[num]){
-    // if(questionChoose[num].hasOwnProperty('checked')){
-    //   if(questionChoose[num].checked) {
-    //     this.state.answerAll.replace(id,'');
-    //     if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
-    //       document.getElementById(id).classList.remove(styles.qanswerchoosable);
-    //     }
-    //   }else{
-    //     this.state.answerAll.concat(id);
-    //     if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
-    //       document.getElementById(id).classList.add(styles.qanswerchoosable);
-    //     }
-    //   }
-    // }}
-    // else{
-    //   temp.checked=true;
-    //   questionChoose[num]=temp;
-    //   if(document.getElementById(id)&&document.getElementById(id).hasOwnProperty('classList')) {
-    //     document.getElementById(id).classList.add(styles.chosen);
-    //   }
-    //   }
-    // questionChoose[num].checked=!questionChoose[num].checked;
   }
   nextQuestion=()=>{
     const {mapPage}=this.props;
@@ -548,23 +522,20 @@ class MapPage extends Component {
     let temp=this.state.questionChoose[recent];
     debugger
     if(this.state.questionNumber==allNumber&&this.state.answer==true){
-      this.setState({startQuestion:false})
-      this.setState({questionNumber: 1})
-      return
-    }
+      alert("答题结束，请点击右上角关闭答题页面")
+    }else{
     if(temp&&temp[4]==true){
+      debugger
       this.setState({answer:true})
       let checked1=document.getElementsByClassName(styles.qanswer);
       for (let i=0;i<checked1.length;i++){
         document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
         document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
-        // document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.wrong);
       }
       let state = document.getElementsByTagName("input");
       state[0].getAttribute("checked");
       for(let i=0;i<state.length;i++){
         document.getElementsByTagName("input")[i].checked=false;
-        //document.getElementsByTagName("input")[i].setAttribute('checked','false');
       }
       let i=0;
       while(i<4){
@@ -577,8 +548,17 @@ class MapPage extends Component {
         }
         i++;
       }
+      if(temp&&temp[5]){
+        let checked=temp[5];
+        let j=0;
+        while(j<checked.length){
+          console.log('checked',checked);
+          let id=checked[j];
+          document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.qanswerchoosable);
+          j++;
+        }
+      }
       this.setState({questionNumber: this.state.questionNumber+1})
-      this.setState({answer:false})
     } else{
       let arg=question[recent]?question[recent].answer:'';
       arg=arg.split("");
@@ -588,29 +568,27 @@ class MapPage extends Component {
       for (let i=0;i<checked1.length;i++){
         document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
         document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
-        // document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.wrong);
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
       }
       let state = document.getElementsByTagName("input");
       state[0].getAttribute("checked");
       for(let i=0;i<state.length;i++){
         document.getElementsByTagName("input")[i].checked=false;
-        //document.getElementsByTagName("input")[i].setAttribute('checked','false');
       }
-      // $("input[type=checkbox]").removeAttr("checked");
       this.setState({deadline:Date.now() +  1000 * 60})
       this.setState({questionNumber: this.state.questionNumber+1})
       this.setState({answer:false})
-    }
+    }}
   }
   lastQuestion=()=>{
-    debugger
     this.setState({questionNumber: this.state.questionNumber-1});
+    this.setState({answer: true});
     if(this.state.questionNumber>1){
     let checked1=document.getElementsByClassName(styles.qanswer);
     for (let i=0;i<checked1.length;i++){
       document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
       document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
-      // document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.wrong);
+      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
     }
     let state = document.getElementsByTagName("input");
     state[0].getAttribute("checked");
@@ -630,14 +608,25 @@ class MapPage extends Component {
         document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.correct);
       }
       i++;
-    }}
+    }
+    debugger
+    if(temp&&temp[5]){
+      let checked=temp[5];
+      let j=0;
+      while(j<checked.length){
+        console.log('checked',checked);
+        let id=checked[j];
+        document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.qanswerchoosable);
+        j++;
+      }
+    }
+    }
     else{
+      this.setState({questionNumber: this.state.questionNumber});
       alert('当前为第一道题');
-      return
     }
   }
   submitQuestion=()=>{
-    debugger
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
     const {tagTree,question,knowledgeContent}=mapPage;
@@ -645,16 +634,31 @@ class MapPage extends Component {
     let recent=this.state.questionNumber-1;
     let string=this.state.value.toString();
     string=string.replace(/,/g,'');
+    string=string.split("");
+    let chooseAnswer=translate(string);
     let arg=question[recent]?question[recent].answer:'';
     arg=arg.split("");
     let translate1=translate(arg);
-    let temp=[-1,-1,-1,-1,true];
+    let temp=[-1,-1,-1,-1,true,[]];
     let questionChoose=this.state.questionChoose;
     let choose=this.state.questionChoose[recent];
+    let flag=true;
     if(choose&&choose[4]){
       return
     }else{
-    if(string==(question[recent]?question[recent].answer:''))//答案正确
+      if(arg.length!=string.length){
+        flag=false;
+      }
+      let i=0;
+      let answer=question[recent]?question[recent].answer:'';
+      while(i<string.length){
+        if(answer.indexOf(string[i])==-1){
+          flag=false;
+          break;
+        }
+        i++;
+      }
+    if(flag==true)//答案正确
     {
       if(this.state.answer==false){
         this.setState({grade:this.state.grade+1});
@@ -686,6 +690,7 @@ class MapPage extends Component {
         }}
     }
     debugger
+      temp[5]=chooseAnswer;
     questionChoose.push(temp);
     this.setState({questionChoose:questionChoose});
     this.setState({answer:true});
@@ -1283,9 +1288,21 @@ class MapPage extends Component {
     }
   }
   onChange = e => {
+    debugger
+    let state = document.getElementsByClassName("answer");
+    state[0].getAttribute("checked");
+    let value=[];
+    for(let i=0;i<state.length;i++){
+      let checked=state[i].checked;
+      console.log(i,checked);
+      if(checked==true){
+          let temp=state[i].value;
+          value.push(temp)
+      }
+    }
     console.log('radio checked', e);
     this.setState({
-      value: e.target.value,
+      value: value,
     });
   };
   //子时间轴（中共一大）
@@ -1422,35 +1439,16 @@ class MapPage extends Component {
                onCancel={()=>{
                  this.setState({startQuestion:false})
                  if(this.state.questionNumber==allNumber&&this.state.answer==true){
-                   let arg=question[recent]?question[recent].answer:'';
-                   arg=arg.split("");
-                   debugger
-                   let translate1=translate(arg);
-                   let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
-                   let checked1=document.getElementsByClassName('ant-checkbox');
+                   let checked1=document.getElementsByClassName(styles.qanswer);
                    for (let i=0;i<checked1.length;i++){
-                     document.getElementsByClassName('ant-checkbox')[i].classList.remove('ant-checkbox-checked');
-                     document.getElementsByClassName('ant-checkbox-wrapper')[i].classList.remove('ant-checkbox-wrapper-checked');
+                     document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+                     document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
                    }
-                   for(let i=0;i<checked.length;i++){
-                     if(document.getElementsByClassName(styles.correct).length>0)
-                     {document.getElementsByClassName(styles.correct)[i].setAttribute('class','ant-checkbox-inner');
-                     }
-                     else{
-                       if(document.getElementsByClassName(styles.wrong)[i]){
-                         document.getElementsByClassName(styles.wrong)[i].setAttribute('class','ant-checkbox-inner');
-                       }
-                     }
-                     // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
-                   }
-                   //let checked=document.getElementById("choose");
                    let state = document.getElementsByTagName("input");
                    state[0].getAttribute("checked");
                    for(let i=0;i<state.length;i++){
                      document.getElementsByTagName("input")[i].checked=false;
-                     //document.getElementsByTagName("input")[i].setAttribute('checked','false');
                    }
-                   // $("input[type=checkbox]").removeAttr("checked");
                    this.setState({deadline:Date.now() +  1000 * 60})
                    this.setState({questionNumber: 1})
                    this.setState({answer:false})
@@ -1471,13 +1469,13 @@ class MapPage extends Component {
               <span class={styles.big}>{this.state.questionNumber}</span>
               /{allNumber}
             </div>
-            <div className={styles.question} style={{height:'500px',overflow:'scroll'}}>
+            <div className={styles.question} style={{height:'490px',overflow:'scroll'}}>
               <div className={styles.qbody}><div><h3>{question[recent]?question[recent].questionContent:''}</h3></div></div>
               {/*<div className={styles.qanswer}>*/}
               <form id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                 <Row>
                   <div id="1" className={styles.qanswer} >
-                    <p><input type="checkbox"   value={'A'}/>
+                    <p><input type="checkbox"   value={'A'} className="answer"/>
                       {'A  '+(question[recent]?question[recent].optionA:'')}
                     </p>
                     {this.state.answer&&this.state.questionChoose[recent][0]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][0]} />:''}
@@ -1485,21 +1483,21 @@ class MapPage extends Component {
                 </Row>
                 <div id="2" className={styles.qanswer}>
                   <p><input type="checkbox"   value={'B'}
-                            // oonClick={this.choose(1)}
+                            className="answer"
                   />
                     {'B  '+(question[recent]?question[recent].optionB:'')}
                   </p>
                   {this.state.answer&&this.state.questionChoose[recent][1]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][1]} />:''}
                 </div>
                 {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} >
-                  <p><input type="checkbox"   value={'C'}/>
+                  <p><input type="checkbox"   value={'C'} className="answer"/>
                     {'C  '+(question[recent]?question[recent].optionC:'')}
                   </p>
                   {this.state.answer&&this.state.questionChoose[recent][2]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][2]} />:''}
                 </div>:""}
                 {question[recent]&&question[recent].hasOwnProperty('optionD')?
                   <div className={styles.qanswer} >
-                    <p><input type="checkbox"   value={'D'}/>
+                    <p><input type="checkbox"   value={'D'} className="answer"/>
                       {'D  '+(question[recent]?question[recent].optionD:'')}
                     </p>
                     {this.state.answer&&this.state.questionChoose[recent][3]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][3]} />:''}
@@ -1513,19 +1511,20 @@ class MapPage extends Component {
                 (<div>
                   {/*<div className={styles.try}></div>*/}
                   <h3><span>您的得分为</span><h2>{this.state.grade}</h2></h3></div>):''}
+            </div>
               <div className={styles.actionRow}>
-                <Button className={styles.preBtn} onClick={()=>{
+                <Button className={styles.preBtn} disabled={this.state.questionNumber<=1?true:false} onClick={()=>{
                   this.lastQuestion()
                 }}>上一题</Button>
-                <Button className={styles.centerBtn} onClick={()=>{
-                  this.submitQuestion()
-                }}>确定</Button>
-                <Button className={styles.nextBtn} onClick={()=>{
-                  this.nextQuestion()
-                }}>下一题</Button>
+                {/*<Button className={styles.centerBtn} onClick={()=>{*/}
+                {/*  this.submitQuestion()*/}
+                {/*}}>提 交</Button>*/}
+                {/*this.state.value.length==0?true:false||*/}
+                <Button className={styles.nextBtn} disabled={this.state.questionNumber>allNumber?true:false||this.state.value.length==0?true:false} onClick={()=>{
+                  this.state.answer?this.nextQuestion():this.submitQuestion()
+                }}>{this.state.answer?"下一题":"提 交"}</Button>
               </div>
-            </div>
-            <div className={styles.bottom}></div>
+            {/*<div className={styles.bottom}></div>*/}
           </div></div>
         </Modal>
         {/*文章*/}
