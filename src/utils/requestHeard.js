@@ -11,7 +11,6 @@ const fetch = options => {
   if (!notification) {
     needNotificate = false;
   }
-  debugger
   const header = {
     // token: getLocalData({
     //   dataName: 'token',

@@ -252,9 +252,9 @@ class Header extends Component {
                 </Dropdown>
               </Col>
             </Row>
-            <div style={{float:"right", color:"rgba(255,255,255,0.7)", fontSize:"20px",position:'relative',right:'-9em',top:'-29px'}}
-            onClick={() => router.replace('/userScoreList')}
-            > 排行榜</div>
+            {/*<div style={{float:"right", color:"rgba(255,255,255,0.7)", fontSize:"20px",position:'relative',right:'-9em',top:'-29px'}}*/}
+            {/*onClick={() => router.replace('/userScoreList')}*/}
+            {/*> 排行榜</div>*/}
           </div>
           {getLocalData({ dataName: 'userName' }) ? (
             <Dropdown overlay={menu} trigger={['click']}>

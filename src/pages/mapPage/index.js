@@ -251,7 +251,6 @@ class MapPage extends Component {
     };
   }
   choose=(num)=>{
-    debugger
     let id=(num+1).toString();
     let temp=document.getElementById(id)&&document.getElementById(id);
     if(temp){
@@ -270,7 +269,6 @@ class MapPage extends Component {
     let allNumber=question.length;
     let recent=this.state.questionNumber;
     let temp=this.state.questionChoose[recent];
-    debugger
     if(this.state.questionNumber==allNumber&&this.state.answer==true){
       this.setState({startQuestion:false})
       this.setState({questionNumber: 1})
@@ -327,7 +325,6 @@ class MapPage extends Component {
     }
   }
   lastQuestion=()=>{
-    debugger
     this.setState({questionNumber: this.state.questionNumber-1});
     if(this.state.questionNumber>1){
       let checked1=document.getElementsByClassName(styles.qanswer);
@@ -361,7 +358,6 @@ class MapPage extends Component {
     }
   }
   submitQuestion=()=>{
-    debugger
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
     const {tagTree,question,knowledgeContent}=mapPage;
@@ -405,7 +401,6 @@ class MapPage extends Component {
           document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.false);
         }}
     }
-    debugger
     questionChoose.push(temp);
     this.setState({questionChoose:questionChoose});
     this.setState({answer:true});
@@ -905,7 +900,6 @@ class MapPage extends Component {
                 if(this.state.questionNumber==allNumber&&this.state.answer==true){
                   let arg=question[recent]?question[recent].answer:'';
                   arg=arg.split("");
-                  debugger
                   let translate1=translate(arg);
                   let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
                   let checked1=document.getElementsByClassName('ant-checkbox');
@@ -1201,7 +1195,6 @@ class MapPage extends Component {
                       <Col span={4} onClick={() => {
                         this.setState({ startPicture: true });
                         this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
-                          debugger
                           if(res.success) {
                             let pictures=res.pictures;
                             let picturesAll=pictures.map((item)=>{
