@@ -12,7 +12,7 @@ import { judgeUrl, getLocalData } from '@/utils/common.js';
 import router from 'umi/router';
 import { connect } from 'dva';
 import classnames from 'classnames';
-import paihangbang from '@/assets/images/paihangbang.png';
+import paihangbang from '@/assets/images/paihangbang2.png';
 
 
 class Header extends Component {
@@ -86,7 +86,10 @@ class Header extends Component {
         <Menu.Item key="0">
           <Link to="/userCenter">个人中心</Link>
         </Menu.Item>
-        <Menu.Item key="1" onClick={this.resetUserData.bind(this)}>
+        <Menu.Item key="1">
+          <Link to="/management">管理员界面</Link>
+        </Menu.Item>
+        <Menu.Item key="2" onClick={this.resetUserData.bind(this)}>
           <span>退出</span>
         </Menu.Item>
       </Menu>;
@@ -177,9 +180,12 @@ class Header extends Component {
       <div>
         <div className={classnames(styles.header_first)}
         >
+          <Link to={{pathname: '/'}}>
+            <div className={styles.shouye_div}/>
+          </Link>
           <div className={styles.font_div}>
             <Row justify="space-between" style={{marginBottom:"10px"}}>
-              <Col span={4}>
+              <Col span={5}>
                 <Link to={{pathname: '/mapPage', query: {module: 'dangshixinxue'}}}
                       onClick={()=>
                         this.props.dispatch(
@@ -194,7 +200,7 @@ class Header extends Component {
                   }
                 </Link>
               </Col>
-              <Col span={4}>
+              <Col span={5}>
                 <Link to={{pathname: '/mapPage', query: {module: 'jianshezhongguo'}}}
                       onClick={()=>
                         this.props.dispatch(
@@ -209,7 +215,7 @@ class Header extends Component {
                   }
                 </Link>
               </Col>
-              <Col span={4}>
+              <Col span={5}>
                 <Link to={{pathname: '/mapPage', query: {module: 'zhongtezhilu'}}}
                       onClick={()=>
                         this.props.dispatch(
@@ -224,7 +230,7 @@ class Header extends Component {
                   }
                 </Link>
               </Col>
-              <Col span={4} style={{}}>
+              <Col span={5} style={{}}>
                 <Link to={{pathname: '/mapPage', query: {module: 'gaigefuxing'}}}
                       onClick={()=>
                         this.props.dispatch(
@@ -239,11 +245,11 @@ class Header extends Component {
                   }
                 </Link>
               </Col>
-              <Col span={6} style={{}}>
+              <Col span={4} style={{}}>
                 <Dropdown overlay={menu_more}>
                   <div className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                     <Icon style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}} type='right' />
-                    <div style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}}>更多模块</div>
+                    <div style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}}>更多</div>
                   </div>
                 </Dropdown>
               </Col>

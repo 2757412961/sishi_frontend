@@ -13,7 +13,11 @@ function BasicLayout(props) {
       }
       {/*<h1 className={styles.title}>Yay! Welcome to umi!</h1>*/}
       {props.children}
-      <Footer indexUrl={window.location.pathname}/>
+      {
+        window.location.pathname!='/mapPage'?
+          <Footer indexUrl={window.location.pathname}/>:
+          null
+      }
     </div>
   );
 }

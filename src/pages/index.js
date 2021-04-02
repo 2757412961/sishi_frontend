@@ -8,6 +8,7 @@ import { connect } from 'dva';
 import { Menu, Button, Dropdown, Icon, Avatar, Row, Col, Divider } from 'antd';
 import Link from 'umi/link';
 import router from 'umi/router';
+import paihangbang from '@/assets/images/paihangbang2.png';
 
 // 登出
 function resetUserData(props){
@@ -30,15 +31,12 @@ function Shouye(props) {
     <div className={styles.normal}>
       <div className={styles.welcome}>
         <div className={styles.self}>
+          <img className={styles.paihangbang} src={paihangbang} onClick={() => router.replace('/userScoreList')}></img>
         {getLocalData({ dataName: 'userName' }) ? (
           <Dropdown overlay={menu} trigger={['click']}>
             <div className={styles.head_user}>
-              {/*<div className={styles.head_user_avatar}>*/}
-              {/*  <Avatar size="small" icon="user" src={avatar} />*/}
-              {/*</div>*/}
               <div className={styles.head_user_name}>
                 <img src={getLocalData({ dataName: 'avatar' })} className={styles.img_style}/>
-                {/*<span>{getLocalData({ dataName: 'userName' })}</span>*/}
               </div>
             </div>
           </Dropdown>
