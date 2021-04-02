@@ -1,6 +1,6 @@
 /* global window */
 import axios from 'axios';
-import { message } from 'antd';
+import {message} from 'antd';
 import qs from 'qs';
 import router from 'umi/router';
 import {getLocalData} from '@/utils/common.js';
@@ -19,7 +19,7 @@ const fetch = (options) => {
   // ------------------ zjh auth ------------------
   let headersAdd = {
     userId: getLocalData({dataName: 'userId'}),
-      token: getLocalData({dataName: 'token'})
+    token: getLocalData({dataName: 'token'})
   }
   headers = headersAdd;
   // ------------------ zjh auth ------------------
@@ -30,27 +30,27 @@ const fetch = (options) => {
   switch (method.toLowerCase()) {
     case 'get':
       if (headers) {
-        return axios.get(url, { params: data, headers: headers, timeout: 1000 * 20 });
+        return axios.get(url, {params: data, headers: headers, timeout: 1000 * 20});
       } else {
-        return axios.get(url, { params: data, timeout: 1000 * 20 });
+        return axios.get(url, {params: data, timeout: 1000 * 20});
       }
     case 'delete':
       if (headers) {
-        return axios.delete(url, { params: data, headers: headers, timeout: 1000 * 20 });
+        return axios.delete(url, {params: data, headers: headers, timeout: 1000 * 20});
       } else {
-        return axios.delete(url, { params: data, timeout: 1000 * 20 });
+        return axios.delete(url, {params: data, timeout: 1000 * 20});
       }
     case 'post':
       if (headers) {
-        return axios.post(url, data, { headers: headers, timeout: 1000 * 60 });
+        return axios.post(url, data, {headers: headers, timeout: 1000 * 60});
       } else {
-        return axios.post(url, data, { timeout: 1000 * 60 });
+        return axios.post(url, data, {timeout: 1000 * 60});
       }
     case 'put':
       if (headers) {
-        return axios.put(url, data, { headers: headers, timeout: 1000 * 20 });
+        return axios.put(url, data, {headers: headers, timeout: 1000 * 20});
       } else {
-        return axios.put(url, data, { timeout: 1000 * 20 });
+        return axios.put(url, data, {timeout: 1000 * 20});
       }
     default:
       return axios(options);
@@ -59,7 +59,7 @@ const fetch = (options) => {
 
 export default function request(options) {
   return fetch(options).then((response) => {
-    const { statusText, status } = response;
+    const {statusText, status} = response;
     let data = response.data;
     if (data instanceof Array) {
       data = {
@@ -67,7 +67,7 @@ export default function request(options) {
       };
     }
     if (typeof data === 'string') {
-      data = { str: data };
+      data = {str: data};
     }
     return Promise.resolve({
       success: true,
@@ -77,12 +77,12 @@ export default function request(options) {
       ...data,
     });
   }).catch((error) => {
-    const { response } = error;
+    const {response} = error;
     let msg;
     let statusCode;
     if (response && response instanceof Object) {
 
-      const { data, statusText } = response;
+      const {data, statusText} = response;
       statusCode = response.status;
       msg = data.message || statusText;
     } else {
@@ -91,6 +91,6 @@ export default function request(options) {
     }
 
     /* eslint-disable */
-    return Promise.resolve({ success: false, statusCode, message: msg });
+    return Promise.resolve({success: false, statusCode, message: msg});
   });
 }
