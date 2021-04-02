@@ -3730,7 +3730,6 @@ class ArticleModal extends Component {
           <header>
             <div class="title">
               <h2><a href="#">${this.props.form.getFieldsValue().articleTitle}</a></h2>
-              <!-- <p>文章·作者：${this.props.form.getFieldsValue().articleAuthor}</p> -->
             </div>
             <div class="meta">
               <time class="published" >事件发生时间：${this.props.form.getFieldsValue().eventTime.format('YYYY-MM-DD')}</time>
