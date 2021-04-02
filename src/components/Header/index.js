@@ -12,12 +12,8 @@ import { judgeUrl, getLocalData } from '@/utils/common.js';
 import router from 'umi/router';
 import { connect } from 'dva';
 import classnames from 'classnames';
-import header from '@/assets/images/header.png';
-import zhedalogo from '@/assets/zhedalogo.png';
-import logobiaoti from '@/assets/images/logobiaoti.png';
-import xuexi2 from '@/assets/images/xuexi2.png';
-import xuexi3 from '@/assets/images/xuexi3.png';
-import xueyuanlogo from '@/assets/images/xueyuan-white.png';
+import paihangbang from '@/assets/images/paihangbang2.png';
+
 
 class Header extends Component {
   constructor(props) {
@@ -184,9 +180,12 @@ class Header extends Component {
       <div>
         <div className={classnames(styles.header_first)}
         >
+          <Link to={{pathname: '/'}}>
+            <div className={styles.shouye_div}/>
+          </Link>
           <div className={styles.font_div}>
             <Row justify="space-between" style={{marginBottom:"10px"}}>
-              <Col span={4} style={{borderRight:"1px solid #e5c387"}}>
+              <Col span={5}>
                 <Link to={{pathname: '/mapPage', query: {module: 'dangshixinxue'}}}
                       onClick={()=>
                         this.props.dispatch(
@@ -201,7 +200,7 @@ class Header extends Component {
                   }
                 </Link>
               </Col>
-              <Col span={4} style={{borderRight:"1px solid #e5c387"}}>
+              <Col span={5}>
                 <Link to={{pathname: '/mapPage', query: {module: 'jianshezhongguo'}}}
                       onClick={()=>
                         this.props.dispatch(
@@ -216,7 +215,7 @@ class Header extends Component {
                   }
                 </Link>
               </Col>
-              <Col span={4} style={{borderRight:"1px solid #e5c387"}}>
+              <Col span={5}>
                 <Link to={{pathname: '/mapPage', query: {module: 'zhongtezhilu'}}}
                       onClick={()=>
                         this.props.dispatch(
@@ -231,7 +230,7 @@ class Header extends Component {
                   }
                 </Link>
               </Col>
-              <Col span={4} style={{}}>
+              <Col span={5} style={{}}>
                 <Link to={{pathname: '/mapPage', query: {module: 'gaigefuxing'}}}
                       onClick={()=>
                         this.props.dispatch(
@@ -246,19 +245,18 @@ class Header extends Component {
                   }
                 </Link>
               </Col>
-              <Col span={6} style={{}}>
+              <Col span={4} style={{}}>
                 <Dropdown overlay={menu_more}>
                   <div className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                     <Icon style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}} type='right' />
-                    <div style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}}>更多模块</div>
+                    <div style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}}>更多</div>
                   </div>
                 </Dropdown>
               </Col>
             </Row>
-            <div style={{float:"right", color:"rgba(255,255,255,0.7)", fontSize:"20px",position:'relative',right:'-9em',top:'-29px'}}
-            onClick={() => router.replace('/userScoreList')}
-            > 排行榜</div>
           </div>
+          <img className={styles.paihangbang} src={paihangbang} onClick={() => router.replace('/userScoreList')}></img>
+          <div className={styles.head_nav}>
           {getLocalData({ dataName: 'userName' }) ? (
             <Dropdown overlay={menu} trigger={['click']}>
               <div className={styles.head_user}>
@@ -285,6 +283,7 @@ class Header extends Component {
               </Button>
             </div>
           )}
+          </div>
         </div>
             <div>
                 <div className={styles.divider}>
