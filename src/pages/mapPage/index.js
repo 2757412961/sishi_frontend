@@ -206,7 +206,7 @@ class MapPage extends Component {
       collapsed: false,
       modalVisble: false,
       deadline: Date.now() + 1000 * 60,
-      value: 1,
+      value: [],
       grade: 0,
       answer: false,
       first: false,
@@ -267,22 +267,26 @@ class MapPage extends Component {
     }
     console.log(temp);
   }
-  nextQuestion=()=>{
-    const {mapPage}=this.props;
-    console.log('mapPage',mapPage);
-    const {tagTree,question,knowledgeContent}=mapPage;
+  answerOrNext(){
+    const {tagTree,question,knowledgeContent}=this.props.mapPage;
     let allNumber=question.length;
-    let recent=this.state.questionNumber;
-    let temp=this.state.questionChoose[recent];
-    debugger
-    if(this.state.questionNumber==allNumber&&this.state.answer==true){
-      alert("答题结束，请点击右上角关闭答题页面")
-    }else{
-    if(temp&&temp[4]==true){
-      debugger
-      this.setState({answer:true})
+    if(this.state.value.length==0){
+      if(this.state.answer)
+      {
+        return false;
+      }
+      return true;
+    }else {
+      if(this.state.answer&&this.state.questionNumber==allNumber){
+      return true;
+      }else{
+      return false;
+    }}
+  }
+  clearSelected(temp){
       let checked1=document.getElementsByClassName(styles.qanswer);
       for (let i=0;i<checked1.length;i++){
+        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
         document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
         document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
       }
@@ -312,6 +316,21 @@ class MapPage extends Component {
           j++;
         }
       }
+  }
+  nextQuestion=()=>{
+    const {mapPage}=this.props;
+    console.log('mapPage',mapPage);
+    const {tagTree,question,knowledgeContent}=mapPage;
+    let allNumber=question.length;
+    let recent=this.state.questionNumber;
+    let temp=this.state.questionChoose[recent];
+    debugger
+    if(this.state.questionNumber==allNumber&&this.state.answer==true){
+      alert("答题结束，请点击右上角关闭答题页面")
+    }else{
+    if(temp&&temp[4]==true){
+      this.clearSelected(temp);
+      this.setState({answer: true});
       this.setState({questionNumber: this.state.questionNumber+1})
     } else{
       let arg=question[recent]?question[recent].answer:'';
@@ -329,57 +348,25 @@ class MapPage extends Component {
       for(let i=0;i<state.length;i++){
         document.getElementsByTagName("input")[i].checked=false;
       }
+      this.setState({value:[]});
       this.setState({deadline:Date.now() +  1000 * 60})
       this.setState({questionNumber: this.state.questionNumber+1})
       this.setState({answer:false})
     }}
   }
   lastQuestion=()=>{
-    this.setState({questionNumber: this.state.questionNumber-1});
-    this.setState({answer: true});
-    if(this.state.questionNumber>1){
-    let checked1=document.getElementsByClassName(styles.qanswer);
-    for (let i=0;i<checked1.length;i++){
-      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
-      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
-      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
-    }
-    let state = document.getElementsByTagName("input");
-    state[0].getAttribute("checked");
-    for(let i=0;i<state.length;i++){
-      document.getElementsByTagName("input")[i].checked=false;
-      //document.getElementsByTagName("input")[i].setAttribute('checked','false');
-    }
     let recent=this.state.questionNumber-2;
     let temp=this.state.questionChoose[recent];
-    let i=0;
-    while(i<4){
-      if(temp[i]==wrong){
-        if(document.getElementsByClassName(styles.qanswer)[i])
-        document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.false);
-      }else if(temp[i]==correct){
-        if(document.getElementsByClassName(styles.qanswer)[i])
-        document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.correct);
-      }
-      i++;
-    }
-    debugger
-    if(temp&&temp[5]){
-      let checked=temp[5];
-      let j=0;
-      while(j<checked.length){
-        console.log('checked',checked);
-        let id=checked[j];
-        document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.qanswerchoosable);
-        j++;
-      }
-    }
-    }
-    else{
+    if(this.state.questionNumber>1){
+      this.clearSelected(temp);
+      this.setState({questionNumber: this.state.questionNumber-1});
+      this.setState({answer: true});
+    } else{
       this.setState({questionNumber: this.state.questionNumber});
       alert('当前为第一道题');
     }
   }
+  //答题提交
   submitQuestion=()=>{
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
@@ -412,46 +399,36 @@ class MapPage extends Component {
         }
         i++;
       }
-    if(flag==true)//答案正确
-    {
-      if(this.state.answer==false){
-        this.setState({grade:this.state.grade+1});
-      }
       let id=0;
-      let i=0;
+      i=0;
       while(i<translate1.length){
         id=translate1[i];
-        temp[id]=correct;
         if(document.getElementsByClassName(styles.qanswer)[id]) {
+          if(flag==true)
+          {
+            temp[id]=correct;
+            if(this.state.answer==false){
+              this.setState({grade:this.state.grade+1});
+            }
+            document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.false);
+            document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.correct);
+          }else{
+            temp[id]=wrong;
+            document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.false);
+            document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.false);
+          }
           document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.qanswerchoosable);
-          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.false);
-          document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.correct);
         }
         i++;
-        // document.getElementsByClassName("ant-checkbox-inner")[id].classList.add(styles.correct);
       }
-    }else{//答案错误
-      let id=0;
-      let i=0;
-      for( i=0;i<translate1.length;i++){
-        id=translate1[i];
-        temp[id]=wrong;
-        // let temp=document.getElementsByClassName(styles.qanswer)[id];
-        if(document.getElementsByClassName(styles.qanswer)[id]) {
-          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.qanswerchoosable);
-          document.getElementsByClassName(styles.qanswer)[id].classList.remove(styles.correct);
-          document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.false);
-        }}
-    }
-    debugger
       temp[5]=chooseAnswer;
-    questionChoose.push(temp);
+      questionChoose.push(temp);
     this.setState({questionChoose:questionChoose});
     this.setState({answer:true});
     if(this.state.questionNumber==allNumber) {
       let username=getLocalData({dataName:'userName'});
       this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
-      alert("答题结束")
+      alert('答题结束');
   }}}
   componentDidMount() {
     const { dispatch } = this.props;
@@ -460,15 +437,9 @@ class MapPage extends Component {
       module:this.props.location.query.module
     });
     dispatch({ type: 'mapPage/getTagTree' });
-    dispatch({ type: 'mapPage/getQuestion' });
-    // dispatch({ type: 'mapPage/updateUserGrades',payload:this.state.grade});
-    dispatch({ type: 'mapPage/getVideoByTag' });
-    dispatch({ type: 'mapPage/getAudioByTag' });
-    console.log('dispatch', dispatch);
     const { mapPage } = this.props;
     console.log('mapPage', mapPage);
     const { tagTree } = mapPage;
-    console.log('tagTree', tagTree);
 
     //遍历tagTree;
     let tree;
@@ -723,142 +694,6 @@ class MapPage extends Component {
         return true;
       }
     };
-    //加载中共一大（上海，嘉兴地点）的火花图标
-//     map.on('load', function() {
-//       /*map.loadImage('https://upload.wikimedia.org/wikipedia/commons/4/45/Eventcard.png',function(error,image) {
-//         if(error) throw  error;
-//         for(let i = 0;i<list.length;i++){
-//           map.addImage(list[i].id, image);
-//           map.addLayer({
-//             "id": list[i].id,
-//             "type": "symbol",
-//             "source": {
-//               "type": "geojson",
-//               "data": {
-//                 "type": "FeatureCollection",
-//                 "features": [{
-//                   "type": "Feature",
-//                   "geometry": {
-//                     "type": "Point",
-//                     "coordinates": list[i].lonlat,
-//                   }
-//                 }]
-//               }
-//             },
-//             "layout": {
-//               "icon-image": list[i].id,
-//               "icon-size": [
-//                 "interpolate", ["linear"], ["zoom"],
-//                 3,0.1,
-//                 17,0.8
-//               ],
-//               "icon-ignore-placement": true,
-//             }
-//           });
-//         }
-//       });*/
-//       for (let i = 0; i < list.length; i++) {
-//         map.addImage(list[i].id, pulsingDot, { pixelRatio: 2 });
-//         map.addLayer({
-//           "id": list[i].id,
-//           "type": "symbol",
-//           "source": {
-//             "type": "geojson",
-//             "data": {
-//               "type": "FeatureCollection",
-//               "features": [{
-//                 "type": "Feature",
-//                 "geometry": {
-//                   "type": "Point",
-//                   "coordinates": list[i].lonlat,
-//                 }
-//               }]
-//             }
-//           },
-//           "layout": {
-//             "icon-image": list[i].id,
-//             "icon-optional": false,
-//             "icon-ignore-placement": true,
-//             // "text-ignore-placement": true,
-//             "text-allow-overlap": true,
-//             "text-field": list[i].value,
-//             "text-anchor": 'left',
-//             "text-offset": [1, 0.1],
-//             // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-//             "text-size": [
-//               "interpolate", ["linear"], ["zoom"],
-//               3, 20,
-//               17, 38
-//             ],
-//           },
-//           paint: {
-//             "text-color": 'rgb(255,0,0)',
-//           }
-//
-//         });
-//       }
-//       // playback(0);
-//     });
-//     let _this = this;
-//     var popup = new mapboxgl.Popup({ closeOnClick: false, closeButton: false })
-//     for (let i = 0; i < list.length; i++) {
-//       map.on('mouseenter', list[i].id, function(e) {
-//         map.getCanvas().style.cursor = 'pointer';
-//         var coordinates = e.features[0].geometry.coordinates;
-//         let showInfo = list[i].showInfo;
-// //closeOnClick:false,closeButton:true
-//         popup.setLngLat(coordinates)
-//         popup.setHTML(showInfo)
-//         popup.addTo(map)
-//         // .setDOMContent(popupRef.current);
-//         // document.getElementById('btn')
-//         //   .addEventListener('click', function(){
-//         //     let cardImg = list[i].cardImg;
-//         //     let cardContent = list[i].cardContent;
-//         //     _this.setState({
-//         //       knowledgeUrl: cardImg,
-//         //       knowledgeContent: cardContent,
-//         //     });
-//         //     _this.showModal()
-//         //   });
-//       });
-//       map.on('mouseleave', list[i].id, function() {
-//         map.getCanvas().style.cursor = '';
-//         popup.remove();
-//       });
-//     }
-//     for (let i = 0; i < list.length; i++) {
-//       map.on('click', list[i].id, function(e) {
-//         popup.remove();
-//         var coordinates = e.features[0].geometry.coordinates;
-//         let showInfo = list[i].showInfo;
-//         _this.setState({
-//           itemNow: list[i],
-//         })
-//
-//         new mapboxgl.Popup()
-//           .setLngLat(coordinates)
-//           // .setHTML(showInfo)
-//           .addTo(map)
-//           .setDOMContent(popupRef.current);
-//         // document.getElementById('btn')
-//         //   .addEventListener('click', function(){
-//         //     let cardImg = list[i].cardImg;
-//         //     let cardContent = list[i].cardContent;
-//         //     _this.setState({
-//         //       knowledgeUrl: cardImg,
-//         //       knowledgeContent: cardContent,
-//         //     });
-//         //     _this.showModal()
-//         //   });
-//       });
-//       map.on('mouseenter', list[i].id, function() {
-//         map.getCanvas().style.cursor = 'pointer';
-//       });
-//       map.on('mouseleave', list[i].id, function() {
-//         map.getCanvas().style.cursor = '';
-//       });
-//     }
     document.getElementById('vec').style.border = ('2px solid red');
     var el = document.createElement('div');
     el.className = "marker";
@@ -866,7 +701,7 @@ class MapPage extends Component {
     el.style.width='20px';
     el.style.height='20px';
     el.style.borderRadius = '50%';
-    el.style.backgroundImage = 'url('+dangqi+')'
+    el.style.backgroundImage = 'url('+dangqi+')';
     // map.on('styledata', function() {
     //   d3.json(line,function(err,data) {
     //     if (err) throw err;
@@ -1299,6 +1134,7 @@ class MapPage extends Component {
                  if(this.state.questionNumber==allNumber&&this.state.answer==true){
                    let checked1=document.getElementsByClassName(styles.qanswer);
                    for (let i=0;i<checked1.length;i++){
+                     document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
                      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
                      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
                    }
@@ -1309,7 +1145,8 @@ class MapPage extends Component {
                    }
                    this.setState({deadline:Date.now() +  1000 * 60})
                    this.setState({questionNumber: 1})
-                   this.setState({answer:false})
+                   this.setState({answer:false});
+                   this.setState({value:[]});
                    return
                  }
                }}
@@ -1374,15 +1211,10 @@ class MapPage extends Component {
                 <Button className={styles.preBtn} disabled={this.state.questionNumber<=1?true:false} onClick={()=>{
                   this.lastQuestion()
                 }}>上一题</Button>
-                {/*<Button className={styles.centerBtn} onClick={()=>{*/}
-                {/*  this.submitQuestion()*/}
-                {/*}}>提 交</Button>*/}
-                {/*this.state.value.length==0?true:false||*/}
-                <Button className={styles.nextBtn} disabled={this.state.answer&&this.state.questionNumber==allNumber} onClick={()=>{
+                <Button className={styles.nextBtn} disabled={this.answerOrNext()} onClick={()=>{
                   this.state.answer?this.nextQuestion():this.submitQuestion()
                 }}>{this.state.answer?"下一题":"提 交"}</Button>
               </div>
-            {/*<div className={styles.bottom}></div>*/}
           </div></div>
         </Modal>
         {/*文章*/}
@@ -1521,13 +1353,13 @@ class MapPage extends Component {
                   {this.state.itemNow?<Row style={{ width: "240px", top: "10px" }} justify="space-between">
                     <Col span={2} onClick={() => {
                       this.setState({ startArticle: true });
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: "天下大事@保证这个标签下没有关联资源"});
                     }}>
                       <Icon className={styles.popup} type="book" />
                     </Col>
                     <Col span={4} onClick={() => {
                       this.setState({ startArticle: true })
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: "天下大事@保证这个标签下没有关联资源"});
                     }}>
                       文章
                     </Col>

@@ -610,16 +610,15 @@ section:last-child {
   height: 40px;
   position: relative;
   top: 10px;
+  :global{.ant-btn:hover, .ant-btn:focus {
+    color: #cb1e1e;
+    background-color: #fff;
+    border-color: #cb1e1e;
+  }}
 }
 .preBtn{
   float: left;
   cursor: pointer;
-  //margin-top: 9px;
-}
-.centerBtn {
-  float: inside;
-  //width: 160px;
-  //height: 40px;
   color: #fff;
   background-color: #cb1e1e;
   border-color: #cb1e1e;
