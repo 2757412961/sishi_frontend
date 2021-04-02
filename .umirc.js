@@ -54,7 +54,8 @@ export default {
   ],
   proxy: {
     '/v1.0/api': {
-      target: 'http://192.168.2.2:7666/v1.0/api/',
+      // target: 'http://192.168.2.2:7666/v1.0/api/',
+      target: 'http://47.100.24.69:8080/v1.0/api/',
       changeOrigin: true,
       secure: false,
       pathRewrite: { '^/v1.0/api': '' },
