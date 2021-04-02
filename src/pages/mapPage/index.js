@@ -563,11 +563,11 @@ class MapPage extends Component {
               // "text-anchor": 'left',
               // "text-offset": [1,0.1],
               // // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-              // "text-size": [
-              //   "interpolate", ["linear"], ["zoom"],
-              //   3,10,
-              //   17,38
-              // ],
+              "text-size": [
+                "interpolate", ["linear"], ["zoom"],
+                3,10,
+                10,38
+              ],
             },
             // paint: {
             //   "text-color": 'rgb(255,0,0)',
@@ -623,7 +623,7 @@ class MapPage extends Component {
             tagName:listHere[i].tagName,
           })
           // let showInfo = listHere[i].showInfo;
-          popup.setLngLat(coordinates)
+          popup.setLngLat(coordinates);
           // popup.setHTML(showInfo)
           popup.addTo(map)
           _this.props.dispatch({type: 'mapPage/getPictureByTag', payload: _this.state.tagName}).then(res=>{
@@ -939,43 +939,43 @@ class MapPage extends Component {
     if(item==1){
       let temp = this.state.checkValue1;
       if(!temp){
-          d3.json(lineShToJx,function(err,data) {
-            if (err) throw err;
-            var coordinates = data.features[0].geometry.coordinates;
-            data.features[0].geometry.coordinates = [coordinates[0]];
-            map.addSource('lineShToJx', {type:'geojson', data: data})
-            map.addLayer({
-              "id": "lineShToJx",
-              "type": "line",
-              "source": "lineShToJx",
-              "layout": {
-                // 'symbol-placement': 'line',
-                // 'symbol-spacing': 50, // 图标间隔，默认为250
-                // 'icon-image': 'arrowIcon', //箭头图标
-                // 'icon-size': 0.5,
-                "line-join": "round",
-                "line-cap": "round"
-              },
-              "paint": {
-                "line-color": "blue",
-                "line-opacity": 0.8,
-                "line-width": 10
-              }
+        d3.json(lineShToJx,function(err,data) {
+          if (err) throw err;
+          var coordinates = data.features[0].geometry.coordinates;
+          data.features[0].geometry.coordinates = [coordinates[0]];
+          map.addSource('lineShToJx', {type:'geojson', data: data})
+          map.addLayer({
+            "id": "lineShToJx",
+            "type": "line",
+            "source": "lineShToJx",
+            "layout": {
+              // 'symbol-placement': 'line',
+              // 'symbol-spacing': 50, // 图标间隔，默认为250
+              // 'icon-image': 'arrowIcon', //箭头图标
+              // 'icon-size': 0.5,
+              "line-join": "round",
+              "line-cap": "round"
+            },
+            "paint": {
+              "line-color": "blue",
+              "line-opacity": 0.8,
+              "line-width": 10
+            }
             });
-            map.jumpTo({'center': coordinates[0], 'zoom': [7]});
-            map.setPitch(10);
-            var i = 0;
-            timer = window.setInterval(function() {
-              if(i<coordinates.length) {
-                data.features[0].geometry.coordinates.push(coordinates[i]);
-                map.getSource('lineShToJx').setData(data);
-                map.panTo(coordinates[i],{zoom: 7});
-                i++;
-              } else {
-                window.clearInterval(timer);
-              }
-            }, 10);
-          });
+          map.jumpTo({'center': coordinates[0], 'zoom': [7]});
+          map.setPitch(10);
+          var i = 0;
+          timer = window.setInterval(function() {
+            if(i<coordinates.length) {
+              data.features[0].geometry.coordinates.push(coordinates[i]);
+              map.getSource('lineShToJx').setData(data);
+              map.panTo(coordinates[i],{zoom: 7});
+              i++;
+            } else {
+              window.clearInterval(timer);
+            }
+          }, 10);
+        });
       }
       else{
         if (map.getLayer('lineShToJx')) {
@@ -1019,6 +1019,114 @@ class MapPage extends Component {
       });
     }
     this.map = map;
+  }
+  eventReview = (e) => {
+    // this.componentWillUnmount()
+    // this.componentDidMount()
+    var map = this.map;
+    let _this = this;
+    this.setState({
+      delete: true,
+      play: !this.state.play,
+      playCount: this.state.playCount + 1
+    })
+    var el = document.createElement('div');
+    el.className = "marker";
+    el.style.backgroundSize = 'cover'
+    el.style.width='20px';
+    el.style.height='20px';
+    el.style.borderRadius = '50%';
+    el.style.backgroundImage = 'url('+dangqi+')'
+    d3.json(line,function(err,data) {
+      if (err) throw err;
+      var i = _this.state.playNumber;
+      var coordinates = data.features[0].geometry.coordinates;
+      if(i===0){
+        data.features[0].geometry.coordinates = [coordinates[0]];
+        map.jumpTo({'center': coordinates[0], 'zoom': 8});
+        map.setPitch(10);
+      } else {
+        data.features[0].geometry.coordinates = [coordinates[i-1]];
+      }
+      map.addSource('trace'+ _this.state.playCount, {type:'geojson', data: data})
+      map.addLayer({
+        "id": "trace"+ _this.state.playCount,
+        "type": "line",
+        "source": "trace"+ _this.state.playCount,
+        // "lineMetrics": true,
+        "layout": {
+          "line-join": "round",
+          "line-cap": "round",
+        },
+        "paint": {
+          // "line-color": "royalblue",
+          "line-color": "royalblue",
+          "line-opacity": 1,
+          "line-width": 10,
+          // "line-blur": 3,
+          // "line-gap-width": 10,
+          // "line-offset": 5,
+          // "line-dasharray": [2,4],
+        }
+      });
+      var marker = new mapboxgl.Marker(el)
+      var timer = window.setInterval(function() {
+        if(i<coordinates.length) {
+          if(!_this.state.play){
+            data.features[0].geometry.coordinates.push(coordinates[i]);
+            map.getSource('trace'+ _this.state.playCount).setData(data);
+            if(i<195){
+              map.panTo(coordinates[i],{'zoom':8})
+            } else if(i<495){
+              map.panTo(coordinates[i],{'zoom':5})
+            } else if (i<695){
+              map.panTo(coordinates[i],{'zoom':2})
+            } else if(i<780){
+              map.panTo(coordinates[i],{'zoom':5})
+            } else if(i<790){
+              map.panTo(coordinates[i],{'zoom':7})
+            } else if(i<800){
+              map.panTo(coordinates[i],{'zoom':9})
+            } else if(i<805){
+              map.panTo(coordinates[i],{'zoom':10})
+            } else if(i<810){
+              map.panTo(coordinates[i],{'zoom':11})
+            } else if(i<815){
+              map.panTo(coordinates[i],{'zoom':12})
+            } else {
+              map.panTo(coordinates[i],{'zoom':13})
+            }
+            i++;
+            _this.setState({ playNumber: i })
+            // function animateMarker() {
+            //   marker.setLngLat(coordinates[i])
+            //   marker.addTo(map);
+            //   requestAnimationFrame(animateMarker);
+            // }
+            // requestAnimationFrame(animateMarker);
+          } else {
+            window.clearInterval(timer);
+          }
+        } else {
+          _this.setState({ play: true });
+          window.clearInterval(timer);
+        }
+      }, 100);
+    });
+  }
+  eventDelete = ()  => {
+    this.setState({
+      play: true,
+      delete:false,
+      playNumber: 0,
+    })
+    for(var i=0;i<this.state.playCount+1;i++){
+      if(this.map.getLayer("trace"+i)){
+        this.map.removeSource("trace"+i);
+        this.map.removeLayer("trace"+i);
+      }
+    }
+    this.map.jumpTo({'center': [121.52, 31.04], 'zoom': 3});
   }
   showModal=(activeKey)=>{
     this.setState({
@@ -1162,10 +1270,6 @@ class MapPage extends Component {
     // this.componentDidMount()
     // this.map.setStyle('')
   }
-  eventReview = () => {
-    this.componentWillUnmount()
-    this.componentDidMount()
-  }
   render(){
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
@@ -1274,7 +1378,7 @@ class MapPage extends Component {
                 {/*  this.submitQuestion()*/}
                 {/*}}>提 交</Button>*/}
                 {/*this.state.value.length==0?true:false||*/}
-                <Button className={styles.nextBtn} disabled={this.state.questionNumber>allNumber?true:false||this.state.value.length==0?true:false} onClick={()=>{
+                <Button className={styles.nextBtn} disabled={this.state.answer&&this.state.questionNumber==allNumber} onClick={()=>{
                   this.state.answer?this.nextQuestion():this.submitQuestion()
                 }}>{this.state.answer?"下一题":"提 交"}</Button>
               </div>
@@ -1635,7 +1739,7 @@ class MapPage extends Component {
                     and Watson catch both criminals.</p>
                 </section>
               </div>*/}
-              <div className={styles.layer_icon} onClick={this.layerClick}>
+              <div className={styles.layer_icon} onClick={this.layerClick} title="更换地图底图">
                 <img src={layer} className={styles.layer_img}/>
               </div>
               <div className={styles.layer_div} style={{display: this.state.layerValue ? 'block': 'none'}}>
@@ -1671,6 +1775,13 @@ class MapPage extends Component {
               </div>
               <div className={styles.review_icon} onClick={this.eventReview}>
                 <img src={reback} className={styles.layer_img}/>
+              </div>
+              <div id="pause" className={styles.review_icon} onClick={() => this.eventReview(1)} title="一大至十九大地图位置串联">
+                {this.state.play ? <img src={kaishi} className={styles.layer_img}/> :
+                  <img src={zanting} className={styles.layer_img}/>}
+              </div>
+              <div id="pause" style={{display: this.state.delete ? 'block':'none'}} className={styles.review_deleteIcon} onClick={this.eventDelete} title="删除一大至十九大串联的图层">
+                <img src={qingchu} className={styles.layer_img}/>
               </div>
             </div>
           </Content>
