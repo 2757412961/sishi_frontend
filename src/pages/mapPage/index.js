@@ -10,7 +10,7 @@ import axios from 'axios';
 import * as d3 from "d3";
 import { getLocalData } from '@/utils/common.js';
 import { MapContext, RotationControl, ScaleControl, ZoomControl } from 'react-mapbox-gl';
-import MapPageMap from './MapPageMap';
+// import MapPageMap from './MapPageMap';
 import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
@@ -454,199 +454,201 @@ class MapPage extends Component {
       }
     ];
 
-    const map = new mapboxgl.Map({
-      container: 'onlineMapping',
-      style: {
-        "version": 8,
-        "sprite": localhost + "/MapBoxGL/css/sprite",
-        "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-        "sources": sources,
-        "layers": layers,
-      },
-      center: [121.52, 31.04],  //上海经纬度坐标
-      zoom: 3,
-      pitch: 30,
-      // bearing: 10,
-    });
-    // let treeList=forTree(tagTree);
-    // console.log('treeList',treeList);
-    dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
-      console.log('res',res);
-      let listHere = [], listHere2 = [];
-      if(res&&res.success){
-        let tagTree=res.list;
-        // let tree=forTree(tagTree);
-        // console.log('tree',tree);
-        listHere=forList(tagTree);
-        listHere2=forList(tagTree);
-        let listTime = forList(tagTree);
-        listTime.splice(0,1);
-        console.log("listTime", listTime);
-        this.setState({
-          list:listHere2,
-          listTime:listTime,
-        })
-      }
-      console.log("listHere", listHere);
-      //加载中共一大（上海，嘉兴地点）的火花图标
-      map.on('styledata', function() {
-        for (let i=0;i<listHere.length;i++) {
-          map.addImage(listHere[i].id, pulsingDot, { pixelRatio: 2 });
-          map.addLayer({
-            "id": listHere[i].id,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": listHere[i].lonlat,
-                  }
-                }]
+    if(document.getElementById('historyMap')){
+      const map = new mapboxgl.Map({
+        container: 'historyMap',
+        style: {
+          "version": 8,
+          "sprite": localhost + "/MapBoxGL/css/sprite",
+          "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+          "sources": sources,
+          "layers": layers,
+        },
+        center: [121.52, 31.04],  //上海经纬度坐标
+        zoom: 3,
+        pitch: 30,
+        // bearing: 10,
+      });
+      // let treeList=forTree(tagTree);
+      // console.log('treeList',treeList);
+      dispatch({ type: 'mapPage/getTagTreeSortByTime', payload: {tagName:'党史新学'}}).then((res)=>{
+        console.log('res',res);
+        let listHere = [], listHere2 = [];
+        if(res&&res.success){
+          let tagTree=res.list;
+          // let tree=forTree(tagTree);
+          // console.log('tree',tree);
+          listHere=forList(tagTree);
+          listHere2=forList(tagTree);
+          let listTime = forList(tagTree);
+          listTime.splice(0,1);
+          console.log("listTime", listTime);
+          this.setState({
+            list:listHere2,
+            listTime:listTime,
+          })
+        }
+        console.log("listHere", listHere);
+        //加载中共一大（上海，嘉兴地点）的火花图标
+        map.on('styledata', function() {
+          for (let i=0;i<listHere.length;i++) {
+            map.addImage(listHere[i].id, pulsingDot, { pixelRatio: 2 });
+            map.addLayer({
+              "id": listHere[i].id,
+              "type": "symbol",
+              "source": {
+                "type": "geojson",
+                "data": {
+                  "type": "FeatureCollection",
+                  "features": [{
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": listHere[i].lonlat,
+                    }
+                  }]
+                }
+              },
+              "layout": {
+                "icon-image": listHere[i].id,
+                "icon-optional": false,
+                "icon-ignore-placement": true,
+                "icon-allow-overlap": true,
+                // "text-ignore-placement": true,
+                // "text-allow-overlap": true,
+                // "text-field": listHere[i].value,
+                // "text-anchor": 'left',
+                // "text-offset": [1,0.1],
+                // // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+                // "text-size": [
+                //   "interpolate", ["linear"], ["zoom"],
+                //   3,10,
+                //   17,38
+                // ],
+              },
+              // paint: {
+              //   "text-color": 'rgb(255,0,0)',
+              // }
+            });
+            map.addLayer({
+              "id": listHere[i].id + i,
+              "type": "symbol",
+              "source": {
+                "type": "geojson",
+                "data": {
+                  "type": "FeatureCollection",
+                  "features": [{
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": listHere[i].lonlat,
+                    }
+                  }]
+                }
+              },
+              "layout": {
+                // "icon-image": listHere[i].id,
+                // "icon-optional": false,
+                // "icon-ignore-placement": true,
+                // "text-ignore-placement": true,
+                // "icon-allow-overlap": true,
+                // "text-allow-overlap": true,
+                "text-field": listHere[i].value,
+                "text-anchor": 'left',
+                "text-offset": [1,0.1],
+                // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
+                "text-size": [
+                  "interpolate", ["linear"], ["zoom"],
+                  3,10,
+                  17,38
+                ],
+              },
+              paint: {
+                "text-color": 'rgb(255,0,0)',
               }
-            },
-            "layout": {
-              "icon-image": listHere[i].id,
-              "icon-optional": false,
-              "icon-ignore-placement": true,
-              "icon-allow-overlap": true,
-              // "text-ignore-placement": true,
-              // "text-allow-overlap": true,
-              // "text-field": listHere[i].value,
-              // "text-anchor": 'left',
-              // "text-offset": [1,0.1],
-              // // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-              // "text-size": [
-              //   "interpolate", ["linear"], ["zoom"],
-              //   3,10,
-              //   17,38
-              // ],
-            },
-            // paint: {
-            //   "text-color": 'rgb(255,0,0)',
-            // }
+            });
+          }
+        });
+        let _this = this;
+        var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
+        for (let i = 0; i < listHere.length; i++) {
+          map.on('mouseenter', listHere[i].id, function(e) {
+            map.getCanvas().style.cursor = 'pointer';
+            var coordinates = e.features[0].geometry.coordinates;
+            _this.setState({
+              itemNow: listHere[i],
+              tagName:listHere[i].tagName,
+            })
+            // let showInfo = listHere[i].showInfo;
+            popup.setLngLat(coordinates)
+            // popup.setHTML(showInfo)
+            popup.addTo(map)
+            popup.setDOMContent(popupRef.current);
           });
-          map.addLayer({
-            "id": listHere[i].id + i,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [{
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": listHere[i].lonlat,
-                  }
-                }]
-              }
-            },
-            "layout": {
-              // "icon-image": listHere[i].id,
-              // "icon-optional": false,
-              // "icon-ignore-placement": true,
-              // "text-ignore-placement": true,
-              // "icon-allow-overlap": true,
-              // "text-allow-overlap": true,
-              "text-field": listHere[i].value,
-              "text-anchor": 'left',
-              "text-offset": [1,0.1],
-              // "text-font": ["DIN Offc Pro Medium\", \"Arial Unicode MS Bold"],
-              "text-size": [
-                "interpolate", ["linear"], ["zoom"],
-                3,10,
-                17,38
-              ],
-            },
-            paint: {
-              "text-color": 'rgb(255,0,0)',
-            }
+          map.on('mouseleave', listHere[i].id, function() {
+            map.getCanvas().style.cursor = '';
           });
         }
+        this.map = map;
       });
-      let _this = this;
-      var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
-      for (let i = 0; i < listHere.length; i++) {
-        map.on('mouseenter', listHere[i].id, function(e) {
-          map.getCanvas().style.cursor = 'pointer';
-          var coordinates = e.features[0].geometry.coordinates;
-          _this.setState({
-            itemNow: listHere[i],
-            tagName:listHere[i].tagName,
-          })
-          // let showInfo = listHere[i].showInfo;
-          popup.setLngLat(coordinates)
-          // popup.setHTML(showInfo)
-          popup.addTo(map)
-          popup.setDOMContent(popupRef.current);
-        });
-        map.on('mouseleave', listHere[i].id, function() {
-          map.getCanvas().style.cursor = '';
-        });
-      }
-      this.map = map;
-    });
 
 
-    var size = 100;
-    var pulsingDot = {
-      width: size,
-      height: size,
-      data: new Uint8Array(size * size * 4),
+      var size = 100;
+      var pulsingDot = {
+        width: size,
+        height: size,
+        data: new Uint8Array(size * size * 4),
 
-      onAdd: function() {
-        var canvas = document.createElement('canvas');
-        canvas.width = this.width;
-        canvas.height = this.height;
-        this.context = canvas.getContext('2d');
-      },
+        onAdd: function() {
+          var canvas = document.createElement('canvas');
+          canvas.width = this.width;
+          canvas.height = this.height;
+          this.context = canvas.getContext('2d');
+        },
 
-      render: function() {
-        var duration = 1000;
-        var t = (performance.now() % duration) / duration;
+        render: function() {
+          var duration = 1000;
+          var t = (performance.now() % duration) / duration;
 
-        var radius = size / 2 * 0.3;
-        var outerRadius = size / 2 * 0.7 * t + radius;
-        var context = this.context;
+          var radius = size / 2 * 0.3;
+          var outerRadius = size / 2 * 0.7 * t + radius;
+          var context = this.context;
 
 // draw outer circle
-        context.clearRect(0, 0, this.width, this.height);
-        context.beginPath();
-        context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
-        context.fillStyle = 'rgba(255, 100, 100,' + (1 - t) + ')';
-        context.fill();
+          context.clearRect(0, 0, this.width, this.height);
+          context.beginPath();
+          context.arc(this.width / 2, this.height / 2, outerRadius, 0, Math.PI * 2);
+          context.fillStyle = 'rgba(255, 100, 100,' + (1 - t) + ')';
+          context.fill();
 
 // draw inner circle
-        context.beginPath();
-        context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
-        context.fillStyle = 'rgba(255, 0, 0, 1)';
-        context.strokeStyle = 'white';
-        context.lineWidth = 2 + 4 * (1 - t);
-        context.fill();
-        context.stroke();
+          context.beginPath();
+          context.arc(this.width / 2, this.height / 2, radius, 0, Math.PI * 2);
+          context.fillStyle = 'rgba(255, 0, 0, 1)';
+          context.strokeStyle = 'white';
+          context.lineWidth = 2 + 4 * (1 - t);
+          context.fill();
+          context.stroke();
 
 // update this image's data with data from the canvas
-        this.data = context.getImageData(0, 0, this.width, this.height).data;
+          this.data = context.getImageData(0, 0, this.width, this.height).data;
 
 // keep the map repainting
-        map.triggerRepaint();
+          map.triggerRepaint();
 
 // return `true` to let the map know that the image was updated
-        return true;
-      }
-    };
-    var el = document.createElement('div');
-    el.className = "marker";
-    el.style.backgroundSize = 'cover'
-    el.style.width='20px';
-    el.style.height='20px';
-    el.style.borderRadius = '50%';
-    el.style.backgroundImage = 'url('+dangqi+')'
-    this.map = map;
+          return true;
+        }
+      };
+      var el = document.createElement('div');
+      el.className = "marker";
+      el.style.backgroundSize = 'cover'
+      el.style.width='20px';
+      el.style.height='20px';
+      el.style.borderRadius = '50%';
+      el.style.backgroundImage = 'url('+dangqi+')'
+      this.map = map;
+    }
   }
   checkOnChange=(item)=>{
     // let item = e.target.key;
@@ -796,7 +798,9 @@ class MapPage extends Component {
     this.setState({ collapsed:!temp });
   };
   componentWillUnmount() {
-    this.map.remove()
+    if(this.map){
+      this.map.remove()
+    }
   }
   layerClick = () => {
     this.setState({
@@ -881,9 +885,9 @@ class MapPage extends Component {
     console.log('tagName',this.state.tagName);
     //遍历tagTree;
     return (
-      <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
+      <Authorized authority={['NORMAL','ADMIN']} noMatch={noMatch}>
         <Layout className={styles.normal}>
-          <Sider className={styles.siderStyle}collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} width={400}>
+          <Sider className={styles.siderStyle} collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} width={400}>
             {/*答题*/}
             {/**/}
             <Modal
@@ -1151,7 +1155,7 @@ class MapPage extends Component {
           </Sider>
           <Content>
             <div className={styles.normal}>
-              <div className={styles.mapContainer} id="onlineMapping">
+              <div className={styles.mapContainer} id="historyMap">
                 <div ref={popupRef} className={styles.popupDiv}>
                   {this.state.itemNow?
                     <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>

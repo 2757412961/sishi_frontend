@@ -1,18 +1,158 @@
 
+.head_opration {
+  width: 125px;
+  display: flex;
+}
+.head_user {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  float: right;
+  .head_user_avatar {
+    width: 24px;
+    height: 24px;
+    margin-left: 5px;
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
+  .head_user_name {
+    margin-left: 5px;
+    margin-right: 10px;
+    .img_style{
+      width:50px;
+      height:50px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+    span {
+      color: #fff;
+      display: inline-block;
+      vertical-align: middle;
+      min-width: 20px;
+      max-width: 85px;
+      font-size: 14px;
+      line-height: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
 .normal {
   font-family: Georgia, sans-serif;
   //margin-top: 4em;
   text-align: center;
 }
+.self{
+  align-self:flex-end;
+  height:50px;
+  :global {
+    .ant-btn {
+      height: 50px;
+      border-radius: 0;
+      font-size: 14px;
+      font-family: 'MicrosoftYaHei-Bold';
+      background: transparent;
+      border: 0;
+      color: white;
+    }
+    .ant-menu-item {
+      margin: 0 20px;
+    }
+    .ant-row{
+      height: 10px;
+    }
+    .ant-btn-primary {
+      background: rgb(211, 75, 88);
+      color: #fff;
+    }
+  }
+}
 .arrows_div{
   position:absolute;
   right: 50px;
-  bottom:50px;
+  bottom:100px;
 }
-.arrows{
+.arrows1{
   font-size: 40px;
   font-weight: bold;
-  color:yellow;
+  animation-name: light1;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes light1{
+  0%{
+    color:rgba(255,255,0,1);
+  }
+  100%{
+    color:rgba(255,255,0,0);
+  }
+}
+.arrows2{
+  font-size: 40px;
+  font-weight: bold;
+  animation-name: light2;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes light2{
+  0%{
+    color:rgba(255,255,0,0.8);
+  }
+  20%{
+    color:rgba(255,255,0,1);
+  }
+  100%{
+    color:rgba(255,255,0,0.2);
+  }
+}
+.arrows3{
+  font-size: 40px;
+  font-weight: bold;
+  animation-name: light3;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes light3{
+  0%{
+    color:rgba(255,255,0,0.5);
+  }
+  50%{
+    color:rgba(255,255,0,1);
+  }
+  100%{
+    color:rgba(255,255,0,0.5);
+  }
+}
+.arrows4{
+  font-size: 40px;
+  font-weight: bold;
+  animation-name: light4;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes light4{
+  0%{
+    color:rgba(255,255,0,0.2);
+  }
+  80%{
+    color:rgba(255,255,0,1);
+  }
+  100%{
+    color:rgba(255,255,0,0.8);
+  }
 }
 .welcome {
   //height: 512px;
@@ -20,8 +160,11 @@
   //background-repeat: no-repeat;
   padding-top: 5vh;
   width:100vw;
-  height:calc(100vh - 150px);
+  height:calc(100vh - 70px);
   background-color: rgba(211,0,0,1);
+  display:flex;
+  align-items: center;
+  flex-direction: column
 }
 .map_div{
   position: relative;
