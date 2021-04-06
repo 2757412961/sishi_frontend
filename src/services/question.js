@@ -17,7 +17,6 @@ export function getUserAnswer(tagName,userName) {
 
 // 根据tag信息，获取相关答题列表
 export function getQuestionsByTag(tag_name) {
-  debugger
   return requestHeard({ url: '/questionsTag', method: 'GET', data: { tag_name} });
 }
 
@@ -74,4 +73,7 @@ export function getPicturesByTag(tagName) {
 export function getUserScoreList() {
   return requestHeard({ url: '/user/scoreList', method: 'GET'});
 }
-
+//获取用户答题状态
+export function getUserStatus(tag_name,user_name) {
+  return requestHeard({ url: '/getuseranswer?tag_name='+tag_name+'&user_name='+user_name, method: 'GET',});
+}

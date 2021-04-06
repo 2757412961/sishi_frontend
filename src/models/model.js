@@ -3,8 +3,8 @@ import {reloadAuthorized} from '@/utils/Authorized';
 import {
   getQuestionsByTag, getAudioByTag, getVideoByTag,
   getArticlesByTag, getTagTree, getAllQuestion, updateQuestionStatus,
-  getAudioList, getVideoList,getTagTreeSortByTime,getPicturesByTag,
-  getUserScoreList,
+  getAudioList, getVideoList, getTagTreeSortByTime, getPicturesByTag,
+  getUserScoreList, getUserStatus,
 } from '@/services/question';
 import { getUserData } from '@/services/service';
 export default {
@@ -42,7 +42,6 @@ export default {
     },
     //设置知识卡片
     setKnowledge(state,{payload}){
-      debugger
       return{...state,knowledgeContent:payload.articleContent,
        }
     },
@@ -95,7 +94,6 @@ export default {
 
     //获取问题及答案
     * getQuestion({payload}, {call, put}) {
-      debugger
       const response = yield call(getQuestionsByTag, payload);
       // const response = yield call(getAllQuestion);
       console.log('response',response);
@@ -110,7 +108,6 @@ export default {
     * getKnowLedge({payload}, {call, put}) {
       const response = yield call(getArticlesByTag, payload);
       console.log('response',response);
-      debugger
       if (response.success) {
         yield put({
           type: 'setKnowledge',
@@ -137,7 +134,6 @@ export default {
     },
     //获取图片通过tagName
     * getPictureByTag({payload}, {call, put}) {
-      debugger
       const response = yield call(getPicturesByTag, payload);
       // const response = yield call(getAudioList);
       console.log('response',response);
@@ -149,7 +145,6 @@ export default {
       // const response1=yield call(getUserData,payload);
       // console.log(response1);
       const {tag_name,user_name}=payload;
-      debugger
       const response = yield call(updateQuestionStatus, tag_name,user_name);
     },
     //获取排名前十的用户
@@ -163,6 +158,12 @@ export default {
       // const {tag_name,user_name}=payload;
       // debugger
       // const response = yield call(updateQuestionStatus, tag_name,user_name);
+    },
+    //获取用户答题状态
+    *getUsrStatus({payload}, {call, put}){
+      const {tag_name,user_name}=payload;
+      const response = yield call(getUserStatus, tag_name,user_name);
+      return response;
     }
   },
 
