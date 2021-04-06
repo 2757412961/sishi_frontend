@@ -1342,7 +1342,17 @@ class MapPage extends Component {
                    mask={true}
                    maskClosable={true}
                    title={null}
-                   onCancel={() => this.setState({ startVideo: false })}
+                   onCancel={() => {
+                     this.setState({ startVideo: false });
+                     debugger
+                     let video=document.getElementsByTagName('video');
+                     let i=0;
+                     while(i<video.length){
+                       // document.getElementsByTagName('video')[i].style.display = "none";
+                       document.getElementsByTagName('video')[i].pause();
+                       i++;
+                     }
+                   }}
                    footer={null}
                    closable={true}
                    wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
@@ -1505,7 +1515,7 @@ class MapPage extends Component {
                     </Col>
                     <Col span={2} onClick={() => {
                       this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName}).then(res=>{
                         console.log('res',res.videos);
                         if(res.success) {
                           let videos=res.videos;
@@ -1514,8 +1524,9 @@ class MapPage extends Component {
                               <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
                               {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                               <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
-                                     autoPlay="autoplay" preload="none"
+                                      preload="none"
                                      controls="controls">
+                                {/*autoPlay="autoplay"*/}
                                 <source src={item.videoContent}
                                 />
                                 <source src={item.videoContent}
@@ -1534,7 +1545,7 @@ class MapPage extends Component {
                       // this.setState({ startVideo: true })
                       // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
                       this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName}).then(res=>{
                         console.log('res',res.videos);
                         if(res.success) {
                           let videos=res.videos;
