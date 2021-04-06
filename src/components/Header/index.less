@@ -13,7 +13,7 @@
   display: none !important;
 }
 .head_nav {
-  width: 100%;
+  //width: 100%;
   //display: flex;
   //justify-content: space-between;
   //box-sizing: border-box;
@@ -25,26 +25,28 @@
   //z-index: 99;
   //height: 100px;
   :global {
-    .ant-btn {
-      height: 50px;
-      border-radius: 0;
-      font-size: 14px;
-      font-family: 'MicrosoftYaHei-Bold';
-      background: transparent;
-      border: 0;
-      color: white;
-    }
-    .ant-menu-item {
-      margin: 0 20px;
-    }
-    .ant-row{
-      height: 10px;
-    }
-    .ant-btn-primary {
-      background: rgb(211, 75, 88);
-      color: #fff;
-    }
-  }
+     .ant-btn {
+       height: 30px;
+       border-radius: 0;
+       font-size: 14px;
+       font-family: 'MicrosoftYaHei-Bold';
+       background: transparent;
+       border: 0;
+       color: white;
+       padding: 0 2px;
+       width: 40px;
+     }
+     .ant-menu-item {
+       margin: 0 20px;
+     }
+     .ant-row{
+       height: 10px;
+     }
+     .ant-btn-primary {
+       background: rgb(211, 75, 88);
+       color: #fff;
+     }
+   }
 }
 .header_divider{
   width:100%;
@@ -105,8 +107,13 @@
   background: -webkit-linear-gradient(left,rgba(255, 255, 255, 0),rgba(255, 255, 0, 1),rgba(255,255,255,0));
   background: linear-gradient(to right, rgba(255, 255, 255, 0),rgba(255, 255, 0, 1),rgba(255,255,255,0));
 }
+.paihangbang{
+  width: 120px;
+  position: absolute;
+  right: 80px;
+}
 .font_style{
-  width:90px;
+  width:120px;
   cursor:default;
   color:rgba(255,255,255,0.8);
   font-weight:bold;
@@ -115,7 +122,7 @@
   margin: 0 auto;
 }
 .font_style_selected{
-  width:90px;
+  width:120px;
   cursor:default;
   color:rgba(255,255,255,1);
   font-weight:bold;
@@ -123,15 +130,22 @@
   padding-left:10px;
   margin: 0 auto;
 }
+.shouye_div{
+  background-color: rgba(0,0,0,0);
+  height:100px;
+  width:530px;
+  position:absolute;
+  left:40px;
+  top:0;
+}
 .font_div{
   //margin: 0 auto;
   background-color: rgba(0,0,0,0);
   padding: 10px;
-  //position:absolute;
-  left:0;
+  position:absolute;
+  left:570px;
   //right:0;
-  width:700px;
-  margin-left: 610px;
+  //width:700px;
 }
 .font_module{
   color:rgba(155, 20, 20, 1);
@@ -172,8 +186,8 @@
   }
 }
 .head_opration {
-  width: 125px;
-  display: flex;
+  //width: 100px;
+  //display: flex;
 }
 .head_user {
   display: flex;

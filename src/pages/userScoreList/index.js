@@ -5,8 +5,14 @@ import { connect } from 'dva';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import styles from './index.less';
 import correct from '@/assets/correct.PNG';
+import Redirect from 'umi/redirect';
+import RenderAuthorized from '@/components/Authorized';
+import {getAuthority} from '@/utils/authority';
+
 const { Header, Content, Footer, Sider } = Layout;
 const { Meta } = Card;
+const Authorized = RenderAuthorized(getAuthority());
+const noMatch=<Redirect to={`/login?redirect=${window.location.href}`} />;
 const columns = [
   {
     title: '排名',
@@ -56,6 +62,7 @@ class UserScoreList extends React.Component {
     const {users}=this.props.userScoreList;
     console.log('users',users);
     return (
+      <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
       <Layout>
         <Content style={{ padding: '0 50px' }}>
           <Layout style={{ padding: '24px 0', background: '#fff' }}>
@@ -83,6 +90,7 @@ class UserScoreList extends React.Component {
           </Layout>
         </Content>
       </Layout>
+      </Authorized>
     );
   }
 }

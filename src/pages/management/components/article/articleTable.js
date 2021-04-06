@@ -49,6 +49,14 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
+          title: '事件发生地点',
+          dataIndex: 'address',
+          key: 'address',
+          align: 'center',
+          sorter: (a, b) => a.address.length - b.address.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
           title: '文章发布时间',
           dataIndex: 'articlePublishTime',
           key: 'articlePublishTime',

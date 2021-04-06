@@ -17,7 +17,6 @@ export function getUserAnswer(tagName,userName) {
 
 // 根据tag信息，获取相关答题列表
 export function getQuestionsByTag(tag_name) {
-  debugger
   return requestHeard({ url: '/questionsTag', method: 'GET', data: { tag_name} });
 }
 
