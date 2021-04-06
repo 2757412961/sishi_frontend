@@ -1,6 +1,25 @@
 import React, { useState, useEffect, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Spin,Timeline,Tabs,Icon,Table, Carousel,Divider } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Layout,
+  Modal,
+  Typography,
+  Statistic,
+  Col,
+  Row,
+  Card,
+  Radio,
+  Spin,
+  Timeline,
+  Tabs,
+  Icon,
+  Table,
+  Carousel,
+  Divider,
+  Popconfirm,
+} from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -427,10 +446,15 @@ class MapPage extends Component {
     this.setState({questionChoose:questionChoose});
     this.setState({answer:true});
     if(this.state.questionNumber==allNumber) {
-      let username=getLocalData({dataName:'userName'});
+      if(this.grade==allNumber) {
+        let username=getLocalData({dataName:'userName'});
       this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
-      alert('答题结束');
-  }}}
+      alert('回答全部正确，答题结果已经上传');
+      }else{
+        alert('回答未全部正确，请继续努力');
+      }
+    }
+    }}
   componentDidMount() {
     const { dispatch } = this.props;
     //保存当前模块名
@@ -641,6 +665,7 @@ class MapPage extends Component {
             _this.setState({
               itemNow: listHere[ i ],
               tagName: listHere[ i ].tagName,
+              pictureTag:'',
             })
             // let showInfo = listHere[i].showInfo;
             popup.setLngLat(coordinates);
@@ -1202,7 +1227,6 @@ class MapPage extends Component {
                title={null}
                onCancel={()=>{
                  this.setState({startQuestion:false})
-                 if(this.state.questionNumber==allNumber&&this.state.answer==true){
                    let checked1=document.getElementsByClassName(styles.qanswer);
                    for (let i=0;i<checked1.length;i++){
                      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
@@ -1219,9 +1243,6 @@ class MapPage extends Component {
                    this.setState({answer:false});
                    this.setState({value:[]});
                    return
-                 }else{
-                   alert("本套题还没有答完，确认退出答题吗？");
-                 }
                }}
                footer={null}
                closable={true}
@@ -1326,8 +1347,8 @@ class MapPage extends Component {
         >
           <div className={styles.modal}>
             <div className={styles.topPicture}></div>
-            <div className="d-iframe" style={{height:'560px'}}>
-              <div style={{ background: "#ececec",height:'560px', padding: '0px 20px 0px 20px'}} >
+            <div className="d-iframe" style={{height:'560px',margin:'0 auto'}}>
+              <div style={{ height:'560px', padding: '0px 20px 0px 20px',margin:'0 auto'}} >
                     <Slider {...this.carousel_settings} >
                       {this.state.pictures}
                     </Slider>
@@ -1359,7 +1380,7 @@ class MapPage extends Component {
             >
               <div className={styles.modal}>
                 <div className={styles.topVideo}></div>
-                <div style={{padding: 30, background: "#ececec"}} >
+                <div style={{padding: 30}} >
                 <div className="d-iframe">
                   <Slider {...this.carousel_settings} >
                     {this.state.videos}
@@ -1486,8 +1507,8 @@ class MapPage extends Component {
                           let pictures=res.pictures;
                           let picturesAll=pictures.map((item)=>{
                             return(<div style={styles.out}>
-                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'5px'}}>{item.pictureTitle}</h1>
-                              <img src={item.pictureContent} style={{ height: '515px',display:'block',
+                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'15px',marginTop:'15px'}}>{item.pictureTitle}</h1>
+                              <img src={item.pictureContent} style={{ height: '490px',display:'block',
                                 marginLeft: 'auto',marginRight: 'auto'}} />
                             </div>)
                           });
@@ -1506,8 +1527,8 @@ class MapPage extends Component {
                           let pictures=res.pictures;
                           let picturesAll=pictures.map((item)=>{
                             return(<div style={styles.out}>
-                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'5px'}}>{item.pictureTitle}</h1>
-                              <img src={item.pictureContent} style={{ height: '515px',display:'block',
+                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'15px',marginTop:'15px'}}>{item.pictureTitle}</h1>
+                              <img src={item.pictureContent} style={{ height: '490px',display:'block',
                                 marginLeft: 'auto',marginRight: 'auto'}} />
                             </div>)
                           });
@@ -1550,7 +1571,7 @@ class MapPage extends Component {
                       // this.setState({ startVideo: true })
                       // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
                       this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName}).then(res=>{
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
                         console.log('res',res.videos);
                         if(res.success) {
                           let videos=res.videos;
@@ -1559,7 +1580,8 @@ class MapPage extends Component {
                               <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
                               {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                               <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
-                                     autoPlay="autoplay" preload="none"
+                                     // autoPlay="autoplay"
+                                     preload="none"
                                      controls="controls">
                                 <source src={item.videoContent}
                                 />
@@ -1580,14 +1602,15 @@ class MapPage extends Component {
                       debugger
                       this.props.dispatch({type: 'mapPage/getUsrStatus', payload: {tag_name:this.state.tagName,user_name:username}}).then(res=>
                       {
-                        debugger
-                        console.log('res',res);
-                        if(res.user_answer_status==1) {
-                          alert("该套题您已回答过");
-                        }else{
-                          this.setState({ startQuestion: true });
-                          this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
-                        }
+                        this.setState({ startQuestion: true });
+                        this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
+                        // debugger
+                        // console.log('res',res);
+                        // if(res.user_answer_status==1) {
+                        //   alert("该套题您已回答过");
+                        // }else{
+                        //
+                        // }
                       })
                     }}>
                       <Icon className={styles.popup} type="question" />
@@ -1597,14 +1620,8 @@ class MapPage extends Component {
                       debugger
                       this.props.dispatch({type: 'mapPage/getUsrStatus', payload: {tag_name:this.state.tagName,user_name:username}}).then(res=>
                       {
-                        debugger
-                        console.log('res',res);
-                        if(res.user_answer_status==1) {
-                          alert("该套题您已回答过");
-                        }else{
-                          this.setState({ startQuestion: true });
-                          this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
-                        }
+                        this.setState({ startQuestion: true });
+                        this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
                       })
                     }}>
                       答题
