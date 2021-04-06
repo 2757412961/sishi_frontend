@@ -1148,6 +1148,8 @@ class MapPage extends Component {
                    this.setState({answer:false});
                    this.setState({value:[]});
                    return
+                 }else{
+                   alert("本套题还没有答完，确认退出答题吗？");
                  }
                }}
                footer={null}
@@ -1233,8 +1235,9 @@ class MapPage extends Component {
           <div className={styles.modal}>
             {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
             <div className={styles.topArticle}></div>
-            <div className="d-iframe" style={{height:'570px',overflow:'scroll'}} dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >
-            </div>
+            <iframe width={"960px"}  style={{height:'560px',overflow:'scroll'}} srcDoc={knowledgeContent}  />
+            {/*<div className="d-iframe" style={{height:'570px',overflow:'scroll'}} dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >*/}
+            {/*</div>*/}
           </div>
         </Modal>
         {/*图片*/}
@@ -1350,7 +1353,9 @@ class MapPage extends Component {
                   {this.state.itemNow?
                     <img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag} />
                     :null}
-                  {this.state.itemNow?<Row style={{ width: "240px", top: "10px" }} justify="space-between">
+                  {this.state.itemNow?
+                    <div className={styles.hand}>
+                    <Row style={{ width: "240px", top: "10px" }} justify="space-between">
                     <Col span={2} onClick={() => {
                       this.setState({ startArticle: true });
                       this.props.dispatch({type: 'mapPage/getKnowLedge', payload: "天下大事@保证这个标签下没有关联资源"});
@@ -1459,18 +1464,41 @@ class MapPage extends Component {
                     }}>
                       视频
                     </Col>
-                    <Col span={2} onClick={() => {this.setState({ startQuestion: true });
-                      this.props.dispatch({type: 'mapPage/getQuestion', payload: this.state.tagName});}
-                    }>
+                    <Col span={2} onClick={() => {
+                      let username=getLocalData({dataName:'userName'});
+                      debugger
+                      this.props.dispatch({type: 'mapPage/getUsrStatus', payload: {tag_name:this.state.tagName,user_name:username}}).then(res=>
+                      {
+                        debugger
+                        console.log('res',res);
+                        if(res.user_answer_status==1) {
+                          this.setState({ startQuestion: true });
+                          this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
+                        }else{
+                          alert("该套题您已回答过");
+                        }
+                      })
+                    }}>
                       <Icon className={styles.popup} type="question" />
                     </Col>
                     <Col span={4} onClick={() => {
-                      this.setState({ startQuestion: true });
-                      this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
+                      let username=getLocalData({dataName:'userName'});
+                      debugger
+                      this.props.dispatch({type: 'mapPage/getUsrStatus', payload: {tag_name:this.state.tagName,user_name:username}}).then(res=>
+                      {
+                        debugger
+                        console.log('res',res);
+                        if(res.user_answer_status==1) {
+                          this.setState({ startQuestion: true });
+                          this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
+                        }else{
+                          alert("该套题您已回答过");
+                        }
+                      })
                     }}>
                       答题
                     </Col>
-                  </Row>:null}
+                    </Row></div>:null}
                 </div>
                 {/*{*/}
                 {/*  list.map((item, index)=>(*/}
