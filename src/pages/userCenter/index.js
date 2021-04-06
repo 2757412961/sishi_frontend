@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Menu, Layout, Card, Descriptions, Avatar, Image, Table, Empty  } from 'antd';
+import { Menu, Layout, Card, Descriptions, Avatar, Image, Table, Empty, message, Col, Cascader, Row } from 'antd';
 import { connect } from 'dva';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import {BrowserRouter, Route, Link} from 'react-router-dom';
@@ -8,6 +8,21 @@ import GitHubCalendar from 'react-github-calendar';
 import ReactTooltip from 'react-tooltip';
 
 import { Responsive as ResponsiveGridLayout } from 'react-grid-layout';
+
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import c1 from '@/assets/test/c1.jpg';
+import c2 from '@/assets/test/c2.jpg';
+import c3 from '@/assets/test/c3.jpg';
+import c4 from '@/assets/test/c4.jpg';
+import c5 from '@/assets/test/c5.jpg';
+import c6 from '@/assets/test/c6.jpg';
+import request from '@/utils/request';
+import { getLocalData } from '@/utils/common';
+import PictureModal from '@/pages/management/components/picture/pictureModal';
+import VideoModal from '@/pages/management/components/video/videoModal';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Meta } = Card;
@@ -80,6 +95,28 @@ const data_rank = [
 
 ];
 
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "red" }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  // console.log(className)
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "green" }}
+      onClick={onClick}
+    />
+  );
+}
 
 class UserCenter extends React.Component {
   constructor(props) {
@@ -88,21 +125,177 @@ class UserCenter extends React.Component {
       menuItemChosenKey: '1',
       layouts_honor: {
         lg: [
-          {x:2, y:0, w:2, h:2, i:"1", static: false},
-          {x:8, y:0, w:2, h:5, i:"2", static: false},
+          { x: 2, y: 0, w: 2, h: 2, i: "1", static: false },
+          { x: 8, y: 0, w: 2, h: 5, i: "2", static: false },
         ],
       },
+      user_info: {
+        userName: getLocalData({ dataName: 'userName' }),
+        userId: getLocalData({ dataName: 'userId' }),
+        avatar: getLocalData({ dataName: 'avatar' }),
+        email: getLocalData({ dataName: 'email' }),
+        score: getLocalData({ dataName: 'score' }),
+        mobile: getLocalData({ dataName: 'mobile' }),
+        partyBranch: getLocalData({ dataName: 'partyBranch' }),
+        rank: getLocalData({ dataName: 'rank' }),
+      },
+      columns: [
+        {
+          title: '标签',
+          dataIndex: 'tagName',
+          key: 'tagName',
+          align: 'center',
+          render: text => <a>{text}</a>,
+        },
+        {
+          title: '是否作答',
+          dataIndex: 'ifAns',
+          key: 'ifAns',
+          align: 'center',
+        },
+      ],
+      dataSource: [
 
+      ],
 
     };
+
+
+  }
+
+  componentDidMount() {
+    request({
+      url: '/v1.0/api/user',
+      method: 'GET',
+      autoAdd: false, //不添加v1.0
+      data:{
+        length: 1000
+      },
+    }).then((res) => {
+      console.log(res);
+
+      request({
+        url: '/v1.0/api/user/'+getLocalData({dataName: 'userId'})+'/score',
+        method: 'GET',
+        autoAdd: false, //不添加v1.0
+        data:{
+          length: 1000
+        },
+      }).then((res2) => {
+        console.log(res2);
+
+
+        request({
+          url: '/v1.0/api/tags',
+          method: 'GET',
+          autoAdd: false, //不添加v1.0
+        }).then((tags_list) => {
+          console.log(tags_list);
+
+          var ds_tmp = [];
+          for(let i = 0; i < tags_list.list.length; i++) {
+            // console.log(tags_listlist.[i]);
+            ds_tmp.push({tagName: tags_list.list[i].tagName, ifAns: '否'});
+          }
+
+          console.log(ds_tmp);
+
+          this.setState({
+            dataSource: ds_tmp,
+
+            user_info: {
+              userName: res.userName,
+              avatar: res.avatar,
+              email: res.email,
+              score: res.score,
+              mobile: res.mobile,
+              partyBranch: res.partyBranch,
+              rank: res2.rank,
+            },
+
+          });
+
+          // request({
+          //   url: '/v1.0/api/tags',
+          //   method: 'GET',
+          //   autoAdd: false, //不添加v1.0
+          // }).then((if_) => {
+          //   console.log(tags_list);
+          //
+          // });
+
+        });
+
+      });
+
+    });
+
+
+
+
   }
 
   handleClick = (e) => {
     this.setState({menuItemChosenKey: e.key});
     console.log(e.key)
+    if(e.key === '1') {
+      request({
+        url: '/v1.0/api/user',
+        method: 'GET',
+        autoAdd: false, //不添加v1.0
+        data:{
+          length: 1000
+        },
+      }).then((res) => {
+        console.log(res);
+
+        request({
+          url: '/v1.0/api/user/'+getLocalData({dataName: 'userId'})+'/score',
+          method: 'GET',
+          autoAdd: false, //不添加v1.0
+          data:{
+            length: 1000
+          },
+        }).then((res2) => {
+          console.log(res2);
+          this.setState({
+            user_info: {
+              userName: res.userName,
+              avatar: res.avatar,
+              email: res.email,
+              score: res.score,
+              mobile: res.mobile,
+              partyBranch: res.partyBranch,
+              rank: res2.rank,
+            }
+          });
+        });
+
+      });
+
+
+
+    }
+
   }
 
   render() {
+    const carousel_settings = {
+      dots: true,
+      className: "center",
+      centerMode: true,
+      infinite: true,
+      centerPadding: "60px",
+      slidesToShow: 1,
+      speed: 500,
+
+      autoplay: true,
+      autoplaySpeed: 2000,
+      cssEase: "linear",
+      // nextArrow: <SampleNextArrow />,
+      // prevArrow: <SamplePrevArrow />,
+    }
+
     return (
       <BrowserRouter>
         <Layout>
@@ -127,33 +320,39 @@ class UserCenter extends React.Component {
                   </Menu.Item>
                 </Menu>
               </Sider>
-              <Content style={{ padding: '0 24px', minHeight: 280, marginTop: 44 }}>
+              <Content style={{ padding: '0 24px', minHeight: 280, marginTop: 10 }}>
                 {
                   (this.state.menuItemChosenKey === '1') ?
                     <div>
-                      <Descriptions title="个人信息" bordered>
-                          <Descriptions.Item label="用户名">周强</Descriptions.Item>
+                      <span style={{fontSize:20}}>个人信息</span>
+                      <Descriptions  bordered style={{ margin: 30 }}>
+                          <Descriptions.Item label="用户名">{this.state.user_info.userName}</Descriptions.Item>
                           <Descriptions.Item label="头像">
-                            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                            <Avatar src={this.state.user_info.avatar} />
                           </Descriptions.Item>
-                          <Descriptions.Item label="排名">12</Descriptions.Item>
-                          <Descriptions.Item label="分数">180</Descriptions.Item>
-                          <Descriptions.Item label="EMail">pathtoemail@gmail.com</Descriptions.Item>
-                          <Descriptions.Item label="手机">1888888888</Descriptions.Item>
-                          <Descriptions.Item label="组织">第二党支部</Descriptions.Item>
+                          <Descriptions.Item label="排名">{this.state.user_info.rank}</Descriptions.Item>
+                          <Descriptions.Item label="分数">{this.state.user_info.score}</Descriptions.Item>
+                          <Descriptions.Item label="EMail">{this.state.user_info.email}</Descriptions.Item>
+                          <Descriptions.Item label="手机">{this.state.user_info.mobile}</Descriptions.Item>
+                          <Descriptions.Item label="组织">{this.state.user_info.partyBranch}</Descriptions.Item>
                       </Descriptions>
+
                       <br></br>
                       <span style={{fontSize:20}}>答题统计</span>
                       <br></br>
-                      <GitHubCalendar username="grubersjoe" theme={exampleTheme} fullYear={false} showTotalCount={false}>
+
+                      <GitHubCalendar username="grubersjoe" theme={exampleTheme} fullYear={false} showTotalCount={false}
+                                      style={{ margin: 30}}>
                         <ReactTooltip delayShow={50} html />
                       </GitHubCalendar>
 
-                      <br></br>
-                      <span style={{fontSize:20}}>排行榜</span>
-                      <br></br>
-                      <Table columns={column_rank} dataSource={data_rank} />
 
+
+                      <br></br>
+                      <span style={{fontSize:20}}>答题情况</span>
+                      <br></br>
+                      <Table style={{ margin: 30}} columns={this.state.columns} dataSource={this.state.dataSource}/>
+                      {/*dataSource={dataSource}*/}
 
                     </div>
 
@@ -162,7 +361,40 @@ class UserCenter extends React.Component {
                       //   width={200}
                       //   src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
                       // />
-                      <Empty />
+                      // <Empty />
+                      <div style={{margin: 50, padding: '0 24px',}}>
+                        {/*<Col span={8} style={{textAlign: 'left'}}>*/}
+                        {/*  <Cascader*/}
+                        {/*    placeholder="请选择标签"*/}
+                        {/*    changeOnSelect={true}*/}
+                        {/*    value={this.state.cascadeValue}*/}
+                        {/*    onChange={this.onChangeCascade}*/}
+                        {/*    options={this.state.cascadeOptions}*/}
+                        {/*    style={{width: '360px'}}/>*/}
+                        {/*</Col>*/}
+
+                        <Slider {...carousel_settings} style={{margin: 80, padding: '0 24px',}}>
+                          <div>
+                            <img src={c1} style={{height: 300, }}/>
+                          </div>
+                          <div>
+                            <img src={c2} style={{height: 300, }}/>
+                          </div>
+                          <div>
+                            <img src={c3} style={{height: 300, }}/>
+                          </div>
+                          <div>
+                            <img src={c4} style={{height: 300, }}/>
+                          </div>
+                          <div>
+                            <img src={c5} style={{height: 300, }}/>
+                          </div>
+                          <div>
+                            <img src={c6} style={{height: 300, }}/>
+                          </div>
+
+                        </Slider>
+                      </div>
                     :
                       <div>
                         <ResponsiveGridLayout className="layout" layouts={this.state.layouts_honor}
@@ -172,7 +404,7 @@ class UserCenter extends React.Component {
                             <Card
                               hoverable
                               style={{ width: 240 }}
-                              cover={<img alt="五星徽章" src="https://cdn1.bbcode0.com/uploads/2021/3/23/aa271f850d3093437d5e9408241fb309-full.png" />}
+                              cover={<img alt="五星徽章" src="https://i.ibb.co/09PpwNZ/stars.png" />}
                             >
                               <Meta title="五星徽章" />
                             </Card>
@@ -181,7 +413,7 @@ class UserCenter extends React.Component {
                             <Card
                               hoverable
                               style={{ width: 240 }}
-                              cover={<img alt="人民英雄纪念碑" src="https://cdn1.bbcode0.com/uploads/2021/3/30/f5c0217a7bf9fa381e074b04e63029ed-full.png" />}
+                              cover={<img alt="人民英雄纪念碑" src="https://i.ibb.co/3FWvKrr/image.png" />}
                             >
                               <Meta title="人民英雄纪念碑" />
                             </Card>
