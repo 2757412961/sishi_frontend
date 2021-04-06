@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from 'react';
-import { Menu, Layout, Card,Table,Avatar,PageHeader } from 'antd';
+import { Menu, Layout, Card, Table, Avatar, PageHeader, Row, Col } from 'antd';
 import router from 'umi/router';
 import { connect } from 'dva';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
@@ -85,7 +85,20 @@ class UserScoreList extends React.Component {
             </Sider>
             <Content style={{ padding: '0 24px', minHeight: 280 }}>
               <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>排行榜</h1>
-              <Table dataSource={this.state.users} columns={columns}></Table>
+              <div className={styles.background} style={{width:'72em',height:'60em',margin:'center',position:'relative'}}>
+                <div  style={{backgroundColor:'rgb(255,255,255,0)',width:'66em',height:'54em',margin:'center',position:'relative',top:'3em',left:'3em'}}>
+              <Table dataSource={this.state.users} columns={columns} pagination={false} ></Table>
+              </div>
+              </div>
+              {/*<div style={{backgroundColor:'red',height:'4em'}}>*/}
+              {/*<Row>*/}
+              {/*  <Col span={5}>1</Col>*/}
+              {/*  <Col span={5}>2</Col>*/}
+              {/*  <Col span={4}>3</Col>*/}
+              {/*  <Col span={5}>4</Col>*/}
+              {/*  <Col span={5}>6</Col>*/}
+              {/*</Row>*/}
+              {/*</div>*/}
             </Content>
           </Layout>
         </Content>
