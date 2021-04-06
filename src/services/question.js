@@ -73,4 +73,7 @@ export function getPicturesByTag(tagName) {
 export function getUserScoreList() {
   return requestHeard({ url: '/user/scoreList', method: 'GET'});
 }
-
+//获取用户答题状态
+export function getUserStatus(tag_name,user_name) {
+  return requestHeard({ url: '/getuseranswer?tag_name='+tag_name+'&user_name='+user_name, method: 'GET',});
+}

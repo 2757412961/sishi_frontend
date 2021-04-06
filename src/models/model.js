@@ -3,8 +3,8 @@ import {reloadAuthorized} from '@/utils/Authorized';
 import {
   getQuestionsByTag, getAudioByTag, getVideoByTag,
   getArticlesByTag, getTagTree, getAllQuestion, updateQuestionStatus,
-  getAudioList, getVideoList,getTagTreeSortByTime,getPicturesByTag,
-  getUserScoreList,
+  getAudioList, getVideoList, getTagTreeSortByTime, getPicturesByTag,
+  getUserScoreList, getUserStatus,
 } from '@/services/question';
 import { getUserData } from '@/services/service';
 export default {
@@ -158,6 +158,12 @@ export default {
       // const {tag_name,user_name}=payload;
       // debugger
       // const response = yield call(updateQuestionStatus, tag_name,user_name);
+    },
+    //获取用户答题状态
+    *getUsrStatus({payload}, {call, put}){
+      const {tag_name,user_name}=payload;
+      const response = yield call(getUserStatus, tag_name,user_name);
+      return response;
     }
   },
 

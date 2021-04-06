@@ -4,7 +4,7 @@ import {
   getQuestionsByTag, getAudioByTag, getVideoByTag,
   getArticlesByTag, getTagTree, getAllQuestion, updateQuestionStatus,
   getAudioList, getVideoList,getTagTreeSortByTime,getPicturesByTag,
-  getUserScoreList,
+  getUserScoreList,getUserStatus,
 } from '@/services/question';
 import { getUserData } from '@/services/service';
 export default {
@@ -160,6 +160,12 @@ export default {
         });
         return response;
       }
+    },
+    //获取用户答题状态
+    *getUsrStatus({payload}, {call, put}){
+      const {tag_name,user_name}=payload;
+      const response = yield call(getUserStatus, tag_name,user_name);
+      return response;
     }
   },
 
