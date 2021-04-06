@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Timeline,Tabs,Icon,Table, Carousel,Divider } from 'antd';
+import { Button, Checkbox, Layout, Modal, Typography, Statistic, Col, Row,Card,Radio,Spin,Timeline,Tabs,Icon,Table, Carousel,Divider } from 'antd';
 import styles from './index.less';
 import { fromJS } from 'immutable';
 import mapboxgl from 'mapbox-gl';
@@ -1446,7 +1446,7 @@ class MapPage extends Component {
                     <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
                     :null}
                   {this.state.itemNow?
-                    <img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag} />
+                    (this.state.pictureTag?<img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag}/>:<Spin/>)
                     :null}
                   {this.state.itemNow?
                     <div className={styles.hand}>
@@ -1567,10 +1567,10 @@ class MapPage extends Component {
                         debugger
                         console.log('res',res);
                         if(res.user_answer_status==1) {
+                          alert("该套题您已回答过");
+                        }else{
                           this.setState({ startQuestion: true });
                           this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
-                        }else{
-                          alert("该套题您已回答过");
                         }
                       })
                     }}>
@@ -1584,10 +1584,10 @@ class MapPage extends Component {
                         debugger
                         console.log('res',res);
                         if(res.user_answer_status==1) {
+                          alert("该套题您已回答过");
+                        }else{
                           this.setState({ startQuestion: true });
                           this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
-                        }else{
-                          alert("该套题您已回答过");
                         }
                       })
                     }}>
