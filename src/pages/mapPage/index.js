@@ -1388,13 +1388,18 @@ class MapPage extends Component {
                         dateClassName={ styles.date }
                         onTimelineElementClick={()=>(
                           item['text']=='中共一大'?
-                            this.moreOnClick():
+                            null:
                             this.oneClick(item)) }
                         icon={<Icon type="schedule" />}
                       >{
                         item['text']=='中共一大'?
                           <div style={{fontWeight:"bold",cursor: 'pointer'}}>
                             {item['text']}
+                            {
+                              this.state.more?
+                                <Icon className={styles.icons} type="vertical-align-bottom" onClick={()=>this.moreOnClick()}/>:
+                              <Icon className={styles.icons} type="vertical-align-top" onClick={()=>this.moreOnClick()}/>
+                            }
                             <div className={styles.zhonggongyida}>
                               <Row>
                                 <Col span={4}>
