@@ -3741,7 +3741,7 @@ class ArticleModal extends Component {
           </div>
           <footer>
             <ul class="stats">
-              <li><a href="#">返回标题</a></li>
+<!--              <li><a href="#">返回标题</a></li>-->
               <li>${this.props.form.getFieldsValue().tagName}</li>
             </ul>
           </footer>
