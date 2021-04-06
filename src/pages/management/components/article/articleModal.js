@@ -3448,7 +3448,7 @@ class ArticleModal extends Component {
         @media screen and (max-width: 1680px) {
 
           #wrapper {
-            padding: 3em;
+            padding: 0em 3em 0em 3em;
           }
 
         }
@@ -3729,7 +3729,7 @@ class ArticleModal extends Component {
         <article class="post">
           <header>
             <div class="title">
-              <h2><a href="#">${this.props.form.getFieldsValue().articleTitle}</a></h2>
+              <h2>${this.props.form.getFieldsValue().articleTitle}</h2>
             </div>
             <div class="meta">
               <time class="published" >事件发生时间：${this.props.form.getFieldsValue().eventTime.format('YYYY-MM-DD')}</time>
@@ -3741,7 +3741,7 @@ class ArticleModal extends Component {
           </div>
           <footer>
             <ul class="stats">
-              <li><a href="#">返回标题</a></li>
+<!--              <li><a href="#">返回标题</a></li>-->
               <li>${this.props.form.getFieldsValue().tagName}</li>
             </ul>
           </footer>
