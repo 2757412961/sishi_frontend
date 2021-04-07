@@ -87,7 +87,7 @@ class Header extends Component {
           <Link to="/userCenter">个人中心</Link>
         </Menu.Item>
         <Menu.Item key="1">
-          <Link to="/management">管理员界面</Link>
+          <Link to="/management">后台管理员</Link>
         </Menu.Item>
         <Menu.Item key="2" onClick={this.resetUserData.bind(this)}>
           <span>退出</span>
