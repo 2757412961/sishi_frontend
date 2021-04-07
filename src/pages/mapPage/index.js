@@ -175,7 +175,7 @@ function forTree(treeList){
   }
   return tree
 }
-function forList(treeList){
+function forList(treeList,dispatch){
   let list=[];
   for (let i in treeList){
     if(treeList[i].hasOwnProperty('geoCoordinates')){
@@ -191,6 +191,19 @@ function forList(treeList){
       }
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
+      temp.picture=treeList[i].picUrl;
+      // debugger
+      // dispatch({ type: 'mapPage/getPictureByTag', payload:treeList[i].tagName}).then(res => {
+      //   console.log('res',res);
+      //   if (res.success) {
+      //     let pictures = res.pictures;
+      //     temp.pictures=pictures;
+      //   }else{
+      //     temp.pictures=[];
+      //   }
+      //   console.log('temp',temp);
+      //
+      // });
       list.push(temp);
     }
   }
@@ -518,10 +531,11 @@ class MapPage extends Component {
           let tagTree = res.list;
           // let tree=forTree(tagTree);
           // console.log('tree',tree);
-          listHere = forList(tagTree);
-          listHere2 = forList(tagTree);
-          let listTime = forList(tagTree);
+          listHere = forList(tagTree,dispatch);
+          listHere2 = forList(tagTree,dispatch);
+          let listTime = forList(tagTree,dispatch);
           listTime.splice(0, 1);
+          debugger
           console.log("listTime", listTime);
           this.setState({
             list: listHere2,
@@ -665,22 +679,13 @@ class MapPage extends Component {
             _this.setState({
               itemNow: listHere[ i ],
               tagName: listHere[ i ].tagName,
-              pictureTag:'',
+              pictureTag:listHere[ i ].picture,
             })
             // let showInfo = listHere[i].showInfo;
             popup.setLngLat(coordinates);
             // popup.setHTML(showInfo)
             popup.addTo(map)
-            _this.props.dispatch({ type: 'mapPage/getPictureByTag', payload: _this.state.tagName }).then(res => {
-              debugger
-              if (res.success) {
-                let picture = res.pictures[ 0 ] && res.pictures[ 0 ].pictureContent;
-                _this.setState({ pictureTag: picture })
-              }
-              console.log('res');
-              popup.setDOMContent(popupRef.current);
-            });
-
+            popup.setDOMContent(popupRef.current);
           });
           map.on('mouseleave', listHere[ i ].id, function() {
             map.getCanvas().style.cursor = '';
@@ -1378,10 +1383,10 @@ class MapPage extends Component {
                    closable={true}
                    wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
             >
-              <div className={styles.modal}>
+              <div className={styles.modalVideo}>
                 <div className={styles.topVideo}></div>
-                <div style={{padding: 30}} >
-                <div className="d-iframe">
+                <div style={{padding: 30,margin:'auto'}} >
+                <div className="d-iframe" style={{margin:'auto'}}>
                   <Slider {...this.carousel_settings} >
                     {this.state.videos}
                   </Slider>
@@ -1485,8 +1490,8 @@ class MapPage extends Component {
                     (this.state.pictureTag?<img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag}/>:<Spin/>)
                     :null}
                   {this.state.itemNow?
-                    <div className={styles.hand}>
-                    <Row style={{ width: "240px", top: "10px" }} justify="space-between">
+                    <div className={styles.hand} style={{cursor:'pointer'}}>
+                    <Row style={{ width: "240px", top: "10px",cursor:'pointer'}} justify="space-between">
                     <Col span={2} onClick={() => {
                       this.setState({ startArticle: true });
                       this.props.dispatch({type: 'mapPage/getKnowLedge', payload: "天下大事@保证这个标签下没有关联资源"});
@@ -1546,11 +1551,12 @@ class MapPage extends Component {
                         if(res.success) {
                           let videos=res.videos;
                           let videoAll=videos.map((item,index, arr)=>{
-                            return(<div style={styles.out}>
+                            return(<div style={styles.out1}>
                               <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
                               {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                               <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
                                       preload="none"
+                                     margin='auto'
                                      controls="controls">
                                 {/*autoPlay="autoplay"*/}
                                 <source src={item.videoContent}
@@ -1576,11 +1582,12 @@ class MapPage extends Component {
                         if(res.success) {
                           let videos=res.videos;
                           let videoAll=videos.map((item,index, arr)=>{
-                            return(<div style={styles.out}>
+                            return(<div style={styles.out1}>
                               <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
                               {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                               <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
                                      // autoPlay="autoplay"
+                                width='888px'
                                      preload="none"
                                      controls="controls">
                                 <source src={item.videoContent}
