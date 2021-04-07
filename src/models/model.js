@@ -19,7 +19,8 @@ export default {
     video:'',
     audio:'',
     tagTree:[],
-    module:''
+    module:'',
+    list:[],
   },
   reducers: {
     setModule(state, payload){
