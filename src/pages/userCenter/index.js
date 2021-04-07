@@ -289,7 +289,7 @@ class UserCenter extends React.Component {
       slidesToShow: 1,
       speed: 500,
 
-      autoplay: true,
+      autoplay: false,
       autoplaySpeed: 2000,
       cssEase: "linear",
       // nextArrow: <SampleNextArrow />,
@@ -374,23 +374,20 @@ class UserCenter extends React.Component {
                         {/*</Col>*/}
 
                         <Slider {...carousel_settings} style={{margin: 80, padding: '0 24px',}}>
-                          <div>
-                            <img src={c1} style={{height: 300, }}/>
+                          <div style={{justifyContent: 'center'}}>
+                            <img src={c1} style={{height: 250, margin: 'auto',}}/>
                           </div>
-                          <div>
-                            <img src={c2} style={{height: 300, }}/>
+                          <div style={{justifyContent: 'center'}}>
+                            <img src={c2} style={{height: 250, margin: 'auto',}}/>
                           </div>
-                          <div>
-                            <img src={c3} style={{height: 300, }}/>
+                          <div style={{justifyContent: 'center'}}>
+                            <img src={c3} style={{height: 250, margin: 'auto',}}/>
                           </div>
-                          <div>
-                            <img src={c4} style={{height: 300, }}/>
+                          <div style={{justifyContent: 'center'}}>
+                            <img src={c4} style={{height: 250, margin: 'auto',}}/>
                           </div>
-                          <div>
-                            <img src={c5} style={{height: 300, }}/>
-                          </div>
-                          <div>
-                            <img src={c6} style={{height: 300, }}/>
+                          <div style={{justifyContent: 'center'}}>
+                            <img src={c5} style={{height: 250, margin: 'auto',}}/>
                           </div>
 
                         </Slider>
