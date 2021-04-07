@@ -316,13 +316,15 @@ export default {
         setLoalData({dataName: 'userId', dataList: response.userId});
         setLoalData({dataName: 'userName', dataList: response.userName});
         setLoalData({dataName: 'avatar', dataList: response.avatar});
-        if(response.userName!='admin'){
-          setAuthority('NORMAL');
-        }
-        else{
-          setAuthority('admin');
-        }
-        // //现在用户权限为NORMAL
+          setAuthority(response.roleType);
+
+        // if(response.userName!='admin'){
+        //   setAuthority('NORMAL');
+        // }
+        // else{
+        //   setAuthority('admin');
+        // }
+        //现在用户权限为NORMAL
         // setAuthority(response.userInfo.status);
         //重新鉴权
         reloadAuthorized();
