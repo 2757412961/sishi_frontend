@@ -191,6 +191,7 @@ function forList(treeList,dispatch){
       }
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
+      temp.picture=treeList[i].picUrl;
       // debugger
       // dispatch({ type: 'mapPage/getPictureByTag', payload:treeList[i].tagName}).then(res => {
       //   console.log('res',res);
@@ -673,32 +674,21 @@ class MapPage extends Component {
         var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
         for (let i = 0; i < listHere.length; i++) {
           map.on('mouseenter', listHere[ i ].id, function(e) {
-            setTimeout(function(){
             map.getCanvas().style.cursor = 'pointer';
             var coordinates = e.features[ 0 ].geometry.coordinates;
             _this.setState({
               itemNow: listHere[ i ],
               tagName: listHere[ i ].tagName,
-              // pictureTag:listHere[ i ].pictures[0].pictureContent,
+              pictureTag:listHere[ i ].picture,
             })
             // let showInfo = listHere[i].showInfo;
             popup.setLngLat(coordinates);
             // popup.setHTML(showInfo)
             popup.addTo(map)
-            _this.props.dispatch({ type: 'mapPage/getPictureByTag', payload: _this.state.tagName }).then(res => {
-              debugger
-              if (res.success) {
-                let picture = res.pictures[ 0 ] && res.pictures[ 0 ].pictureContent;
-                _this.setState({ pictureTag: picture })
-              }
-              console.log('res');
-              popup.setDOMContent(popupRef.current);
-            })
-            },100);
+            popup.setDOMContent(popupRef.current);
           });
           map.on('mouseleave', listHere[ i ].id, function() {
             map.getCanvas().style.cursor = '';
-            clearTimeout();
             // popup.remove();
           });
         }
@@ -1393,7 +1383,7 @@ class MapPage extends Component {
                    closable={true}
                    wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
             >
-              <div className={styles.modal}>
+              <div className={styles.modalVideo}>
                 <div className={styles.topVideo}></div>
                 <div style={{padding: 30,margin:'auto'}} >
                 <div className="d-iframe" style={{margin:'auto'}}>
@@ -1500,8 +1490,8 @@ class MapPage extends Component {
                     (this.state.pictureTag?<img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag}/>:<Spin/>)
                     :null}
                   {this.state.itemNow?
-                    <div className={styles.hand}>
-                    <Row style={{ width: "240px", top: "10px" }} justify="space-between">
+                    <div className={styles.hand} style={{cursor:'pointer'}}>
+                    <Row style={{ width: "240px", top: "10px",cursor:'pointer'}} justify="space-between">
                     <Col span={2} onClick={() => {
                       this.setState({ startArticle: true });
                       this.props.dispatch({type: 'mapPage/getKnowLedge', payload: "天下大事@保证这个标签下没有关联资源"});
@@ -1597,6 +1587,7 @@ class MapPage extends Component {
                               {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                               <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
                                      // autoPlay="autoplay"
+                                width='888px'
                                      preload="none"
                                      controls="controls">
                                 <source src={item.videoContent}
