@@ -175,7 +175,7 @@ function forTree(treeList){
   }
   return tree
 }
-function forList(treeList){
+function forList(treeList,dispatch){
   let list=[];
   for (let i in treeList){
     if(treeList[i].hasOwnProperty('geoCoordinates')){
@@ -191,6 +191,18 @@ function forList(treeList){
       }
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
+      // debugger
+      // dispatch({ type: 'mapPage/getPictureByTag', payload:treeList[i].tagName}).then(res => {
+      //   console.log('res',res);
+      //   if (res.success) {
+      //     let pictures = res.pictures;
+      //     temp.pictures=pictures;
+      //   }else{
+      //     temp.pictures=[];
+      //   }
+      //   console.log('temp',temp);
+      //
+      // });
       list.push(temp);
     }
   }
@@ -518,10 +530,11 @@ class MapPage extends Component {
           let tagTree = res.list;
           // let tree=forTree(tagTree);
           // console.log('tree',tree);
-          listHere = forList(tagTree);
-          listHere2 = forList(tagTree);
-          let listTime = forList(tagTree);
+          listHere = forList(tagTree,dispatch);
+          listHere2 = forList(tagTree,dispatch);
+          let listTime = forList(tagTree,dispatch);
           listTime.splice(0, 1);
+          debugger
           console.log("listTime", listTime);
           this.setState({
             list: listHere2,
@@ -660,12 +673,13 @@ class MapPage extends Component {
         var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
         for (let i = 0; i < listHere.length; i++) {
           map.on('mouseenter', listHere[ i ].id, function(e) {
+            setTimeout(function(){
             map.getCanvas().style.cursor = 'pointer';
             var coordinates = e.features[ 0 ].geometry.coordinates;
             _this.setState({
               itemNow: listHere[ i ],
               tagName: listHere[ i ].tagName,
-              pictureTag:'',
+              // pictureTag:listHere[ i ].pictures[0].pictureContent,
             })
             // let showInfo = listHere[i].showInfo;
             popup.setLngLat(coordinates);
@@ -679,11 +693,12 @@ class MapPage extends Component {
               }
               console.log('res');
               popup.setDOMContent(popupRef.current);
-            });
-
+            })
+            },100);
           });
           map.on('mouseleave', listHere[ i ].id, function() {
             map.getCanvas().style.cursor = '';
+            clearTimeout();
             // popup.remove();
           });
         }
@@ -1380,8 +1395,8 @@ class MapPage extends Component {
             >
               <div className={styles.modal}>
                 <div className={styles.topVideo}></div>
-                <div style={{padding: 30}} >
-                <div className="d-iframe">
+                <div style={{padding: 30,margin:'auto'}} >
+                <div className="d-iframe" style={{margin:'auto'}}>
                   <Slider {...this.carousel_settings} >
                     {this.state.videos}
                   </Slider>
@@ -1546,11 +1561,12 @@ class MapPage extends Component {
                         if(res.success) {
                           let videos=res.videos;
                           let videoAll=videos.map((item,index, arr)=>{
-                            return(<div style={styles.out}>
+                            return(<div style={styles.out1}>
                               <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
                               {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                               <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
                                       preload="none"
+                                     margin='auto'
                                      controls="controls">
                                 {/*autoPlay="autoplay"*/}
                                 <source src={item.videoContent}
@@ -1576,7 +1592,7 @@ class MapPage extends Component {
                         if(res.success) {
                           let videos=res.videos;
                           let videoAll=videos.map((item,index, arr)=>{
-                            return(<div style={styles.out}>
+                            return(<div style={styles.out1}>
                               <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
                               {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                               <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
