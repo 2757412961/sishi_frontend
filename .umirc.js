@@ -27,7 +27,7 @@ export default {
     // ref: https://umijs.org/plugin/umi-plugin-react.html
     ['umi-plugin-react', {
       antd: true,
-      title: 'history',
+      title: '浙江大学党史教育学习平台',
       dll: false,
       dva: {
         hmr: true,

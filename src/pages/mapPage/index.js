@@ -636,25 +636,29 @@ class MapPage extends Component {
         var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
         for (let i = 0; i < listHere.length; i++) {
           map.on('mouseenter', listHere[ i ].id, function(e) {
-            map.getCanvas().style.cursor = 'pointer';
-            var coordinates = e.features[ 0 ].geometry.coordinates;
-            _this.setState({
-              itemNow: listHere[ i ],
-              tagName: listHere[ i ].tagName,
-            })
-            // let showInfo = listHere[i].showInfo;
-            popup.setLngLat(coordinates);
-            // popup.setHTML(showInfo)
-            popup.addTo(map)
-            _this.props.dispatch({ type: 'mapPage/getPictureByTag', payload: _this.state.tagName }).then(res => {
-              debugger
-              if (res.success) {
-                let picture = res.pictures[ 0 ] && res.pictures[ 0 ].pictureContent;
-                _this.setState({ pictureTag: picture })
+            e.preventDefault();
+            if(!e.defaultPrevented)
+              {
+                map.getCanvas().style.cursor = 'pointer';
+                var coordinates = e.features[ 0 ].geometry.coordinates;
+                _this.setState({
+                  itemNow: listHere[ i ],
+                  tagName: listHere[ i ].tagName,
+                })
+                // let showInfo = listHere[i].showInfo;
+                popup.setLngLat(coordinates);
+                // popup.setHTML(showInfo)
+                popup.addTo(map)
+                _this.props.dispatch({ type: 'mapPage/getPictureByTag', payload: _this.state.tagName }).then(res => {
+                  debugger
+                  if (res.success) {
+                    let picture = res.pictures[ 0 ] && res.pictures[ 0 ].pictureContent;
+                    _this.setState({ pictureTag: picture })
+                  }
+                  console.log('res');
+                  popup.setDOMContent(popupRef.current);
+                });
               }
-              console.log('res');
-              popup.setDOMContent(popupRef.current);
-            });
 
           });
           map.on('mouseleave', listHere[ i ].id, function() {
@@ -1375,14 +1379,14 @@ class MapPage extends Component {
                     item['sub']?
                       <VerticalTimelineElement
                         id={item['id']}
-                        style={{fontSize:"15px", size:"10px", textAlign: "center"}}
+                        style={{fontSize:"12px", size:"10px", textAlign: "center"}}
                         className="vertical-timeline-element--education"
-                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
-                        contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46)' }}
+                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto", fontSize:"8px"}}>{item.time}</div>}
+                        contentStyle={{ borderTop: '2px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46,0.8)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
                         iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
                         dateClassName={ styles.date }
-                        onTimelineElementClick={()=> this.oneClick(item) }
+                        iconOnClick={()=> this.oneClick(item) }
                         // icon={<Icon type="schedule" />}
                         // icon={<Icon type="book" />}
                       >
@@ -1399,7 +1403,7 @@ class MapPage extends Component {
                         contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
                         iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
                         dateClassName={ styles.date }
-                        onTimelineElementClick={()=>(
+                        iconOnClick={()=>(
                           item['text']=='中共一大'?
                             null:
                             this.oneClick(item)) }
@@ -1417,18 +1421,6 @@ class MapPage extends Component {
                               <Row>
                                 <Col span={4}>
                                   {
-                                    this.state.icon1?
-                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(1,e)}/>:
-                                      <Icon type="play-square" style={{opacity:"0.5"}} onClick={(e)=>this.checkOnChange(1,e)}/>
-                                  }
-                                </Col>
-                                <Col span={20}>
-                                  会议地点转移
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col span={4}>
-                                  {
                                     this.state.icon2?
                                       <Icon type="play-square" onClick={(e)=>this.checkOnChange(2,e)}/>:
                                       <Icon type="play-square" style={{opacity:"0.5"}} onClick={(e)=>this.checkOnChange(2,e)}/>
@@ -1436,6 +1428,18 @@ class MapPage extends Component {
                                 </Col>
                                 <Col span={20}>
                                   荟聚天下英才
+                                </Col>
+                              </Row>
+                              <Row style={{marginTop:"5px"}}>
+                                <Col span={4}>
+                                  {
+                                    this.state.icon1?
+                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(1,e)}/>:
+                                      <Icon type="play-square" style={{opacity:"0.5"}} onClick={(e)=>this.checkOnChange(1,e)}/>
+                                  }
+                                </Col>
+                                <Col span={20}>
+                                  会议地点转移
                                 </Col>
                               </Row>
                               {/*<Checkbox  key="a" onChange={()=>this.checkOnChange(1)} onClick={e => e.stopPropagation()} >会议地点转移</Checkbox>*/}
