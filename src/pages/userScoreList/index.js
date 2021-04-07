@@ -62,7 +62,7 @@ class UserScoreList extends React.Component {
     const {users}=this.props.userScoreList;
     console.log('users',users);
     return (
-      <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
+      <Authorized authority={['general','NORMAL','admin']} noMatch={noMatch}>
       <Layout>
         <Content style={{ padding: '0 24px' }}>
           <Layout style={{ padding: '24px 0', background: '#fff' }}>

@@ -1226,7 +1226,7 @@ class MapPage extends Component {
     console.log('tagName',this.state.tagName);
     //遍历tagTree;
   return (
-    <Authorized authority={['NORMAL','admin']} noMatch={noMatch}>
+    <Authorized authority={['general','NORMAL','admin']} noMatch={noMatch}>
     <Layout className={styles.normal}>
       <Sider className={styles.siderStyle}collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} width={400}>
         {/*答题*/}
