@@ -1577,7 +1577,7 @@ class MapPage extends Component {
                       // this.setState({ startVideo: true })
                       // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
                       this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: '党史新学@中共一大'}).then(res=>{
+                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName}).then(res=>{
                         console.log('res',res.videos);
                         if(res.success) {
                           let videos=res.videos;
