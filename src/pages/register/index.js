@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import router from 'umi/router';
-import { Form, Input, Button, Popover, Progress, Cascader } from 'antd';
+import { Form, Input, Button, Popover, Progress, Cascader ,Row,Col} from 'antd';
 import styles from './index.less';
 import { countryData, userType, industry, affiliation } from '@/assets/images/register/selectData';
 
@@ -46,6 +46,8 @@ class Register extends Component {
       visible: false,
       help: '',
       prefix: '86',
+      email: '',
+      captcha: '',
     };
   }
 
@@ -89,12 +91,13 @@ class Register extends Component {
     const { form, dispatch } = this.props;
     form.validateFields({ force: true }, (err, values) => {
       if (!err) {
-        const { prefix } = this.state;
+        const { captcha }= this.state;
         dispatch({
           type: 'register/submit',
           payload: {
-            ...values,
-          },
+            captcha:captcha,
+            values:values,
+          } ,
         });
       }
     });
@@ -149,7 +152,7 @@ class Register extends Component {
     if (regexpCode.test(value)) {
       callback();
     } else {
-      callback('用户名只能包含字母,数字,和特殊字符"-",且必去以字母开头');
+      callback('用户名只能包含字母,数字,和特殊字符"-",且必须以字母开头');
     }
   };
 
@@ -176,17 +179,51 @@ class Register extends Component {
       </div>
     ) : null;
   };
-
+  emailChange = (e) => {
+    this.setState({
+      email: e.target.value
+    })
+  }
+  getCaptchaValue =(e) => {
+    // let _this = this;
+    // _this.state.captcha = e.target.value
+    this.setState({
+      captcha: e.target.value
+    })
+  }
+  getCaptchaClick =(e) => {
+    e.preventDefault();
+    const { form, dispatch } = this.props;
+    form.validateFields({ force: true }, (err, email) => {
+      if (!err) {
+        const { email } = this.state;
+        dispatch({
+          type: 'register/getCaptcha',
+          payload: email,
+        });
+      }
+    });
+  }
   render() {
     const { form, submitting } = this.props;
     const { getFieldDecorator } = form;
     const { count, prefix, help, visible } = this.state;
+    // const formItemLayout = {
+    //   labelCol: {
+    //     xs: { span: 24 },
+    //     sm: { span: 8 },
+    //   },
+    //   wrapperCol: {
+    //     xs: { span: 24 },
+    //     sm: { span: 16 },
+    //   },
+    // };
     return (
       <div className={styles.main}>
         <h3>
           欢迎注册党史学习教育平台账号
         </h3>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} >
           <FormItem label="用户名">
             {getFieldDecorator('userName', {
               rules: [
@@ -264,20 +301,84 @@ class Register extends Component {
           {/*    />,*/}
           {/*  )}*/}
           {/*</FormItem>*/}
-          <FormItem label={'邮件'}>
-            {getFieldDecorator('email', {
+          <FormItem label={'学号'}>
+            {getFieldDecorator('studentNumber', {
               rules: [
                 {
                   required: true,
-                  message: '请输入邮箱地址！',
+                  message: '请输入学号！',
                 },
-                {
-                  type: 'email',
-                  message: '邮箱地址格式错误！',
-                },
+                // {
+                //   type: 'studentNumber',
+                //   message: '学号格式错误！',
+                // },
               ],
             })(
-              <Input size="large" placeholder="邮箱"/>,
+              <Input size="large" placeholder="学号"/>,
+            )}
+          </FormItem>
+          <FormItem label={'身份证号'}>
+            {getFieldDecorator('idNumber', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入身份证号！',
+                },
+                // {
+                //   type: 'idNumber',
+                //   message: '身份证号格式错误！',
+                // },
+              ],
+            })(
+              <Input size="large" placeholder="身份证号"/>,
+            )}
+          </FormItem>
+          <FormItem label={'支部'}>
+            {getFieldDecorator('partyBranch', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入所在支部！',
+                },
+                // {
+                //   type: 'partyBranch',
+                //   message: '所在支部格式错误！',
+                // },
+              ],
+            })(
+              <Input size="large" placeholder="所在支部"/>,
+            )}
+          </FormItem>
+          <FormItem label={'班级'}>
+            {getFieldDecorator('grade', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入所在班级！',
+                },
+                // {
+                //   type: 'grade',
+                //   message: '所在班级格式错误！',
+                // },
+              ],
+            })(
+              <Input size="large" placeholder="所在班级"/>,
+            )}
+          </FormItem>
+          <FormItem label={'姓名'}>
+            {getFieldDecorator('studentName', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入姓名！',
+                },
+                // {
+                //   type: 'name',
+                //   message: '姓名格式错误！',
+                // },
+              ],
+            })(
+              <Input size="large" placeholder="姓名"/>,
             )}
           </FormItem>
           <FormItem label={'电话'}>
@@ -295,6 +396,41 @@ class Register extends Component {
             })(
               <Input size="large" placeholder="电话"/>,
             )}
+          </FormItem>
+          <FormItem label={'邮件'}>
+            {getFieldDecorator('email', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入邮箱地址！',
+                },
+                {
+                  type: 'email',
+                  message: '邮箱地址格式错误！',
+                },
+              ],
+            })(
+              <Input size="large" placeholder="邮箱" onChange={this.emailChange}/>,
+            )}
+          </FormItem>
+          <FormItem label={'邮箱验证码'} extra="请确保邮箱的真实性，以便能够获得验证码并快速注册成功；及后续找回或修改密码时使用">
+            <Row gutter={8}>
+              <Col span={18}>
+                {getFieldDecorator('captcha', {
+                  // rules: [
+                  //   {
+                  //     required: true,
+                  //     message: '请输入邮箱验证码！',
+                  //   },
+                  // ],
+                })(
+                  <Input size="large" placeholder="请输入收到的验证码" onChange={this.getCaptchaValue}/>,
+                )}
+              </Col>
+              <Col span={6}>
+                <Button onClick={this.getCaptchaClick} className={styles.captcha_btn}>获取验证码</Button>
+              </Col>
+            </Row>
           </FormItem>
           <FormItem>
             <Button
