@@ -1444,8 +1444,8 @@ class MapPage extends Component {
                                 <Col span={4}>
                                   {
                                     this.state.icon2?
-                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(2,e)}/>:
-                                      <Icon type="play-square" style={{opacity:"0.5"}} onClick={(e)=>this.checkOnChange(2,e)}/>
+                                      <Icon type="play-square" style={{color:"white", background:"rgba(177,46,46)"}} onClick={(e)=>this.checkOnChange(2,e)}/>:
+                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(2,e)}/>
                                   }
                                 </Col>
                                 <Col span={20}>
@@ -1456,8 +1456,8 @@ class MapPage extends Component {
                                 <Col span={4}>
                                   {
                                     this.state.icon1?
-                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(1,e)}/>:
-                                      <Icon type="play-square" style={{opacity:"0.5"}} onClick={(e)=>this.checkOnChange(1,e)}/>
+                                      <Icon type="play-square" style={{color:"white", background:"rgba(177,46,46)"}} onClick={(e)=>this.checkOnChange(1,e)}/>:
+                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(1,e)}/>
                                   }
                                 </Col>
                                 <Col span={20}>
