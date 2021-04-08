@@ -1494,13 +1494,13 @@ class MapPage extends Component {
                     <Row style={{ width: "240px", top: "10px",cursor:'pointer'}} justify="space-between">
                     <Col span={2} onClick={() => {
                       this.setState({ startArticle: true });
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: "天下大事@保证这个标签下没有关联资源"});
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
                     }}>
                       <Icon className={styles.popup} type="book" />
                     </Col>
                     <Col span={4} onClick={() => {
                       this.setState({ startArticle: true })
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: "天下大事@保证这个标签下没有关联资源"});
+                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
                     }}>
                       文章
                     </Col>
