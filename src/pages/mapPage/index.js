@@ -1086,6 +1086,19 @@ class MapPage extends Component {
       })
     }
   }
+  oneClickYida = (item) => {
+    let _this = this;
+    console.log("map", _this.map,item);
+    if(_this.map){
+      _this.map.flyTo({
+        center: item.lonlat,
+        zoom: 7,
+        speed: 1,
+        pitch: 20,
+        // curve: 3,
+      })
+    }
+  }
   onChange = e => {
     let state = document.getElementsByClassName("answer");
     state[0].getAttribute("checked");
@@ -1436,8 +1449,9 @@ class MapPage extends Component {
                         dateClassName={ styles.date }
                         iconOnClick={()=>(
                           item['text']=='中共一大'?
-                            null:
-                            this.oneClick(item)) }
+                            this.oneClickYida(item):
+                            this.oneClick(item))
+                        }
                         icon={<Icon type="schedule" />}
                       >{
                         item['text']=='中共一大'?
@@ -1696,7 +1710,7 @@ class MapPage extends Component {
                 <img src={qingchu} className={styles.layer_img}/>
               </div>
               <div className={styles.copyright}>
-                @浙江大学地球科学学院
+                版权所有Copyright © 浙江大学地球科学学院
               </div>
             </div>
           </Content>
