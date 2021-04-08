@@ -519,7 +519,7 @@ class MapPage extends Component {
         },
         center: [ 121.52, 31.04 ],  //上海经纬度坐标
         zoom: 3,
-        pitch: 30,
+        // pitch: 30,
         // bearing: 10,
       });
       // let treeList=forTree(tagTree);
@@ -544,69 +544,67 @@ class MapPage extends Component {
         }
         console.log("listHere", listHere);
         //加载中共一大（上海，嘉兴地点）的火花图标
-        map.on('load', function() {
-          for (let i = 0; i < listHere.length; i++) {
-            map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
-            map.addLayer({
-              "id": listHere[ i ].id,
-              "type": "symbol",
-              "source": {
-                "type": "geojson",
-                "data": {
-                  "type": "FeatureCollection",
-                  "features": [ {
-                    "type": "Feature",
-                    "geometry": {
-                      "type": "Point",
-                      "coordinates": listHere[ i ].lonlat,
-                    }
-                  } ]
-                }
-              },
-              "layout": {
-                "icon-image": listHere[ i ].id,
-                "icon-optional": false,
-                "icon-ignore-placement": true,
-                "icon-allow-overlap": true,
-                "text-size": [
-                  "interpolate", [ "linear" ], [ "zoom" ],
-                  3, 10,
-                  10, 38
-                ],
-              },
-            });
-            map.addLayer({
-              "id": listHere[ i ].id + i,
-              "type": "symbol",
-              "source": {
-                "type": "geojson",
-                "data": {
-                  "type": "FeatureCollection",
-                  "features": [ {
-                    "type": "Feature",
-                    "geometry": {
-                      "type": "Point",
-                      "coordinates": listHere[ i ].lonlat,
-                    }
-                  } ]
-                }
-              },
-              "layout": {
-                "text-field": listHere[ i ].value,
-                "text-anchor": 'left',
-                "text-offset": [ 1, 0.1 ],
-                "text-size": [
-                  "interpolate", [ "linear" ], [ "zoom" ],
-                  3, 10,
-                  17, 38
-                ],
-              },
-              paint: {
-                "text-color": 'rgb(255,0,0)',
+        for (let i = 0; i < listHere.length; i++) {
+          map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
+          map.addLayer({
+            "id": listHere[ i ].id,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [ {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": listHere[ i ].lonlat,
+                  }
+                } ]
               }
-            });
-          }
-        });
+            },
+            "layout": {
+              "icon-image": listHere[ i ].id,
+              "icon-optional": false,
+              "icon-ignore-placement": true,
+              "icon-allow-overlap": true,
+              "text-size": [
+                "interpolate", [ "linear" ], [ "zoom" ],
+                3, 10,
+                10, 38
+              ],
+            },
+          });
+          map.addLayer({
+            "id": listHere[ i ].id + i,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [ {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": listHere[ i ].lonlat,
+                  }
+                } ]
+              }
+            },
+            "layout": {
+              "text-field": listHere[ i ].value,
+              "text-anchor": 'left',
+              "text-offset": [ 1, 0.1 ],
+              "text-size": [
+                "interpolate", [ "linear" ], [ "zoom" ],
+                3, 10,
+                17, 38
+              ],
+            },
+            paint: {
+              "text-color": 'rgb(255,0,0)',
+            }
+          });
+        }
         map.on('styledata', function() {
           for (let i = 0; i < listHere.length; i++) {
             map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
@@ -774,13 +772,13 @@ class MapPage extends Component {
         }
       };
       document.getElementById('vec').style.border = ('2px solid red');
-      var el = document.createElement('div');
-      el.className = "marker";
-      el.style.backgroundSize = 'cover'
-      el.style.width = '20px';
-      el.style.height = '20px';
-      el.style.borderRadius = '50%';
-      el.style.backgroundImage = 'url(' + dangqi + ')';
+      // var el = document.createElement('div');
+      // el.className = "marker";
+      // el.style.backgroundSize = 'cover'
+      // el.style.width = '20px';
+      // el.style.height = '20px';
+      // el.style.borderRadius = '50%';
+      // el.style.backgroundImage = 'url(' + dangqi + ')';
       // map.on('styledata', function() {
       //   d3.json(line,function(err,data) {
       //     if (err) throw err;
@@ -875,21 +873,22 @@ class MapPage extends Component {
               "line-cap": "round"
             },
             "paint": {
-              "line-color": "blue",
+              "line-color": "red",
               "line-opacity": 0.8,
-              "line-width": 10
+              "line-width": 7
             }
-            });
-          map.jumpTo({'center': coordinates[0], 'zoom': [7]});
-          map.setPitch(10);
+          });
+          map.jumpTo({'center': coordinates[0], 'zoom': [8]});
+          // map.setPitch(10);
           var i = 0;
           timer = window.setInterval(function() {
             if(i<coordinates.length) {
               data.features[0].geometry.coordinates.push(coordinates[i]);
               map.getSource('lineShToJx').setData(data);
-              map.panTo(coordinates[i],{zoom: 7});
+              map.panTo(coordinates[i],{zoom: 8});
               i++;
             } else {
+              map.panTo(coordinates[65],{zoom: 8});
               window.clearInterval(timer);
             }
           }, 10);
@@ -910,6 +909,9 @@ class MapPage extends Component {
       });
     }
     else if(item==2){
+      map.jumpTo({'center': [130.75580305351667, 30.75747193181725], 'zoom': [4]});
+      map.setPitch(25);
+      map.setBearing(-3);
       let temp = this.state.checkValue2;
       if(!temp){
         this.setState({
@@ -934,6 +936,9 @@ class MapPage extends Component {
         map.addLayer(myDeckLayer)
       }
       else{
+        // map.jumpTo({'center': [ 121.52, 31.04], 'zoom': [3]});
+        map.setPitch(0);
+        map.setBearing(0);
         this.setState({
           icon2:false,
         })
@@ -958,14 +963,18 @@ class MapPage extends Component {
       play: !this.state.play,
       playCount: this.state.playCount + 1
     })
-    var el = document.createElement('div');
-    el.className = "marker";
-    el.style.backgroundSize = 'cover'
-    el.style.width='20px';
-    el.style.height='20px';
-    el.style.borderRadius = '50%';
-    el.style.backgroundImage = 'url('+dangqi+')'
+    // var el = document.createElement('div');
+    // el.className = "marker";
+    // el.style.backgroundSize = 'cover'
+    // el.style.width='20px';
+    // el.style.height='20px';
+    // el.style.borderRadius = '50%';
+    // el.style.backgroundImage = 'url('+dangqi+')'
     d3.json(line,function(err,data) {
+      if (map.getLayer('lineShToJx')) {
+        map.removeLayer('lineShToJx');
+        map.removeSource('lineShToJx');
+      }
       if (err) throw err;
       var i = _this.state.playNumber;
       var coordinates = data.features[0].geometry.coordinates;
@@ -988,16 +997,16 @@ class MapPage extends Component {
         },
         "paint": {
           // "line-color": "royalblue",
-          "line-color": "royalblue",
-          "line-opacity": 1,
-          "line-width": 10,
+          "line-color": "#3db3d0",
+          "line-opacity": 0.7,
+          "line-width": 8,
           // "line-blur": 3,
           // "line-gap-width": 10,
           // "line-offset": 5,
           // "line-dasharray": [2,4],
         }
       });
-      var marker = new mapboxgl.Marker(el)
+      // var marker = new mapboxgl.Marker(el)
       var timer = window.setInterval(function() {
         if(i<coordinates.length) {
           if(!_this.state.play){
@@ -1071,6 +1080,19 @@ class MapPage extends Component {
       _this.map.flyTo({
         center: item.lonlat,
         zoom: 16,
+        speed: 1,
+        pitch: 20,
+        // curve: 3,
+      })
+    }
+  }
+  oneClickYida = (item) => {
+    let _this = this;
+    console.log("map", _this.map,item);
+    if(_this.map){
+      _this.map.flyTo({
+        center: item.lonlat,
+        zoom: 7,
         speed: 1,
         pitch: 20,
         // curve: 3,
@@ -1205,6 +1227,9 @@ class MapPage extends Component {
     }
     map.setStyle(style);
     this.map = map;
+  }
+  stopOnClick=(e)=>{
+    e.stopPropagation();
   }
   render(){
     const {mapPage}=this.props;
@@ -1403,12 +1428,12 @@ class MapPage extends Component {
                         id={item['id']}
                         style={{fontSize:"12px", size:"10px", textAlign: "center"}}
                         className="vertical-timeline-element--education"
-                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto", fontSize:"8px"}}>{item.time}</div>}
+                        date={<div onClick={(e)=>this.stopOnClick(e)} style={{textAlign:"center", width:"80%", margin:"0 auto", fontSize:"8px"}}>{item.time}</div>}
                         contentStyle={{ borderTop: '2px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46,0.8)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
                         iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
                         dateClassName={ styles.date }
-                        iconOnClick={()=> this.oneClick(item) }
+                        onTimelineElementClick={()=> this.oneClick(item) }
                         // icon={<Icon type="schedule" />}
                         // icon={<Icon type="book" />}
                       >
@@ -1420,15 +1445,16 @@ class MapPage extends Component {
                         id={item['id']}
                         style={{fontSize:"15px", size:"10px", textAlign:"center"}}
                         className="vertical-timeline-element--education"
-                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                        date={<div onClick={(e)=>this.stopOnClick(e)} style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
                         contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
                         iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
                         dateClassName={ styles.date }
-                        iconOnClick={()=>(
+                        onTimelineElementClick={()=>(
                           item['text']=='中共一大'?
-                            null:
-                            this.oneClick(item)) }
+                            this.oneClickYida(item):
+                            this.oneClick(item))
+                        }
                         icon={<Icon type="schedule" />}
                       >{
                         item['text']=='中共一大'?
@@ -1444,8 +1470,8 @@ class MapPage extends Component {
                                 <Col span={4}>
                                   {
                                     this.state.icon2?
-                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(2,e)}/>:
-                                      <Icon type="play-square" style={{opacity:"0.5"}} onClick={(e)=>this.checkOnChange(2,e)}/>
+                                      <Icon type="play-square" style={{color:"white", background:"rgba(177,46,46)"}} onClick={(e)=>this.checkOnChange(2,e)}/>:
+                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(2,e)}/>
                                   }
                                 </Col>
                                 <Col span={20}>
@@ -1456,8 +1482,8 @@ class MapPage extends Component {
                                 <Col span={4}>
                                   {
                                     this.state.icon1?
-                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(1,e)}/>:
-                                      <Icon type="play-square" style={{opacity:"0.5"}} onClick={(e)=>this.checkOnChange(1,e)}/>
+                                      <Icon type="play-square" style={{color:"white", background:"rgba(177,46,46)"}} onClick={(e)=>this.checkOnChange(1,e)}/>:
+                                      <Icon type="play-square" onClick={(e)=>this.checkOnChange(1,e)}/>
                                   }
                                 </Col>
                                 <Col span={20}>
@@ -1687,7 +1713,7 @@ class MapPage extends Component {
                 <img src={qingchu} className={styles.layer_img}/>
               </div>
               <div className={styles.copyright}>
-                @浙江大学地球科学学院
+                版权所有Copyright © 浙江大学地球科学学院
               </div>
             </div>
           </Content>
