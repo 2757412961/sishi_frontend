@@ -42,14 +42,23 @@ export function getSTData({ tgt }) {
 }
 
 // 注册用户名和密码
-export function registerUser(data) {
+export function registerUser(payload) {
+  // console.log('captcha',captcha);
   return request({
-    url: '/v1.0/api/register',
+    url: '/v1.0/api/register?captcha='+ payload.captcha,
     method: 'POST',
-    data: { ...data },
+    data: { ...payload.values },
     autoAdd: false, //不添加v1.0
   });
 }
+//获取邮箱验证码
+export function getCaptcha(email) {
+  return request({
+    url: '/email/sendCaptcha?emailAddress='+ email,
+    method: 'GET',
+  });
+}
+
 
 // 用户登录
 export function loginUser({ userName, password}) {
