@@ -6,9 +6,10 @@ import dangshipingtai from '@/assets/images/dangshipingtai.png';
 import "../../node_modules/video-react/dist/video-react.css";
 import { connect } from 'dva';
 import { Menu, Button, Dropdown, Icon, Avatar, Row, Col, Divider } from 'antd';
-import Link from 'umi/link';
+// import Link from 'umi/link';
 import router from 'umi/router';
 import paihangbang from '@/assets/images/paihangbang2.png';
+import {BrowserRouter, Route, Link,HashRouter} from 'react-router-dom';
 
 // 登出
 function resetUserData(props){
@@ -31,7 +32,8 @@ function Shouye(props) {
   </Menu>;
 
   return (
-    <div className={styles.normal}>
+    <HashRouter>
+    <div className={styles.normal} scoped>
       <div className={styles.welcome}>
         <div className={styles.self}>
           <img className={styles.paihangbang} src={paihangbang} onClick={() => router.replace('/userScoreList')}></img>
@@ -86,6 +88,7 @@ function Shouye(props) {
         </div>
       </div>
     </div>
+    </HashRouter>
   );
 }
 
