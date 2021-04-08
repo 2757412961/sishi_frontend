@@ -1228,6 +1228,9 @@ class MapPage extends Component {
     map.setStyle(style);
     this.map = map;
   }
+  stopOnClick=(e)=>{
+    e.stopPropagation();
+  }
   render(){
     const {mapPage}=this.props;
     console.log('mapPage',mapPage);
@@ -1425,12 +1428,12 @@ class MapPage extends Component {
                         id={item['id']}
                         style={{fontSize:"12px", size:"10px", textAlign: "center"}}
                         className="vertical-timeline-element--education"
-                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto", fontSize:"8px"}}>{item.time}</div>}
+                        date={<div onClick={(e)=>this.stopOnClick(e)} style={{textAlign:"center", width:"80%", margin:"0 auto", fontSize:"8px"}}>{item.time}</div>}
                         contentStyle={{ borderTop: '2px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46,0.8)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
                         iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
                         dateClassName={ styles.date }
-                        iconOnClick={()=> this.oneClick(item) }
+                        onTimelineElementClick={()=> this.oneClick(item) }
                         // icon={<Icon type="schedule" />}
                         // icon={<Icon type="book" />}
                       >
@@ -1442,12 +1445,12 @@ class MapPage extends Component {
                         id={item['id']}
                         style={{fontSize:"15px", size:"10px", textAlign:"center"}}
                         className="vertical-timeline-element--education"
-                        date={<div style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
+                        date={<div onClick={(e)=>this.stopOnClick(e)} style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
                         contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
                         iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
                         dateClassName={ styles.date }
-                        iconOnClick={()=>(
+                        onTimelineElementClick={()=>(
                           item['text']=='中共一大'?
                             this.oneClickYida(item):
                             this.oneClick(item))

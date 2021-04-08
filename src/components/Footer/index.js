@@ -24,15 +24,18 @@ class Footer extends Component {
   }
 
   render() {
-    return <footer className={styles.home_footer}>
-      <Row style={{width:"600px", textAlign:"center"}}>
-        <Col span={3}>
-          <img src={xueyuanlogo} className={styles.xueyuan_logo} alt="" />
-        </Col>
-        <Col span={9}>
+    return(
+    <div>
+      <div className={styles.home_footer}>
+        <div>
+      {/*<Row style={{width:"600px", textAlign:"center"}}>*/}
+      {/*  <Col span={3}>*/}
+          <img src={xueyuanlogo} className={styles.xueyuan_logo} style={{float:"left"}}alt="" />
+        {/*</Col>*/}
+        {/*<Col span={9}>*/}
           <img src={logobiaoti} className={styles.logo_biaoti} alt="" />
-        </Col>
-        <Col span={12}>
+        {/*</Col>*/}
+        {/*<Col span={12}>*/}
           {/*<div style={{marginTop:"5px", fontWeight:"bold",fontSize:"15px"}}>*/}
           {/*  联&nbsp;系&nbsp;我&nbsp;们*/}
           {/*</div>*/}
@@ -45,8 +48,10 @@ class Footer extends Component {
           <div style={{marginTop:"5px"}}>
             电话 : +86-571-87952453
           </div>
-        </Col>
-      </Row>
+      {/*  </Col>*/}
+      {/*</Row>*/}
+        </div>
+        <div>
       <Row>
         <div style={{background:"rgba(255,255,255,0.5)",height:"1px", width:"100vw", marginTop:"10px", marginBottom:"10px"}}>
         </div>
@@ -56,7 +61,9 @@ class Footer extends Component {
           版权所有Copyright © 浙江大学地球科学学院
         </div>
       </Row>
-    </footer>;
+        </div>
+    </div>
+    </div>);
   }
 }
 
