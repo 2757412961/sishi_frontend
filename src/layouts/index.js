@@ -7,7 +7,7 @@ function BasicLayout(props) {
   return (
     <div className={styles.normal}>
       {
-        window.location.pathname!='/'?
+        ((window.location.pathname!='/') && (window.location.pathname!='/modelListPage')) ?
           <Header indexUrl={window.location.pathname}/>:
           null
       }

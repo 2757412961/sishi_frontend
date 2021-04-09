@@ -545,154 +545,88 @@ class MapPage extends Component {
           })
         }
         console.log("listHere", listHere);
-        //加载中共一大（上海，嘉兴地点）的火花图标
+        let feature = []
         for (let i = 0; i < listHere.length; i++) {
-          map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
-          map.addLayer({
-            "id": listHere[ i ].id,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [ {
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": listHere[ i ].lonlat,
-                  }
-                } ]
+          feature.push(
+            {
+              'type': 'Feature',
+              'properties': {
+                'value': listHere[i].value,
+                'picture': listHere[i].picture,
+                'tagName':listHere[i].tagName,
+                'itemNow': listHere[i],
+              },
+              'geometry': {
+                'type': 'Point',
+                'coordinates': listHere[ i ].lonlat
               }
             },
-            "layout": {
-              "icon-image": listHere[ i ].id,
-              "icon-optional": false,
-              "icon-ignore-placement": true,
-              "icon-allow-overlap": true,
-              "text-size": [
-                "interpolate", [ "linear" ], [ "zoom" ],
-                3, 10,
-                10, 38
-              ],
-            },
-          });
-          map.addLayer({
-            "id": listHere[ i ].id + i,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [ {
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": listHere[ i ].lonlat,
-                  }
-                } ]
-              }
-            },
-            "layout": {
-              "text-field": listHere[ i ].value,
-              "text-anchor": 'left',
-              "text-offset": [ 1, 0.1 ],
-              "text-size": [
-                "interpolate", [ "linear" ], [ "zoom" ],
-                3, 10,
-                17, 38
-              ],
-            },
-            paint: {
-              "text-color": 'rgb(255,0,0)',
+          )
+          var pointSource = {
+            'type': 'geojson',
+            'data': {
+              'type': 'FeatureCollection',
+              'features': feature
             }
-          });
+          }
+          // console.log('pointSource.data.features[0].properties.id', pointSource)
         }
-        map.on('styledata', function() {
-          for (let i = 0; i < listHere.length; i++) {
-            map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
-            map.addLayer({
-              "id": listHere[ i ].id,
-              "type": "symbol",
-              "source": {
-                "type": "geojson",
-                "data": {
-                  "type": "FeatureCollection",
-                  "features": [ {
-                    "type": "Feature",
-                    "geometry": {
-                      "type": "Point",
-                      "coordinates": listHere[ i ].lonlat,
-                    }
-                  } ]
-                }
-              },
-              "layout": {
-                "icon-image": listHere[ i ].id,
-                "icon-optional": false,
-                "icon-ignore-placement": true,
-                "icon-allow-overlap": true,
-                "text-size": [
-                  "interpolate", [ "linear" ], [ "zoom" ],
-                  3, 10,
-                  10, 38
-                ],
-              },
-            });
-            map.addLayer({
-              "id": listHere[ i ].id + i,
-              "type": "symbol",
-              "source": {
-                "type": "geojson",
-                "data": {
-                  "type": "FeatureCollection",
-                  "features": [ {
-                    "type": "Feature",
-                    "geometry": {
-                      "type": "Point",
-                      "coordinates": listHere[ i ].lonlat,
-                    }
-                  } ]
-                }
-              },
-              "layout": {
-                "text-field": listHere[ i ].value,
-                "text-anchor": 'left',
-                "text-offset": [ 1, 0.1 ],
-                "text-size": [
-                  "interpolate", [ "linear" ], [ "zoom" ],
-                  3, 10,
-                  17, 38
-                ],
-              },
-              paint: {
-                "text-color": 'rgb(255,0,0)',
-              }
-            });
+        // console.log('pointSource.data.features[0].properties.id', pointSource)
+        map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+        map.addSource('places', pointSource);
+        map.addLayer({
+          'id': 'places',
+          'type': 'symbol',
+          'source': 'places',
+          'layout': {
+            "icon-image": 'pulsing-dot',
+            "icon-optional": false,
+            "icon-ignore-placement": true,
+            "icon-allow-overlap": true,
           }
         });
-        let _this = this;
+        // map.addLayer({
+        //   'id': 'placesTitle',
+        //   'type': 'symbol',
+        //   'source': 'places',
+        //   'layout': {
+        //     "text-field": ['get','title'],
+        //     // "text-field": "{title}",
+        //     "text-anchor": 'left',
+        //     "text-offset": [ 1, 0.1 ],
+        //     "text-size": [
+        //       "interpolate", [ "linear" ], [ "zoom" ],
+        //       3, 10,
+        //       17, 38
+        //     ],
+        //   },
+        //   paint: {
+        //     "text-color": 'rgb(255,0,0)',
+        //   }
+        // });
+        //加载中共一大（上海，嘉兴地点）的火花图标
         var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
-        for (let i = 0; i < listHere.length; i++) {
-          map.on('mouseenter', listHere[ i ].id, function(e) {
-            map.getCanvas().style.cursor = 'pointer';
-            var coordinates = e.features[ 0 ].geometry.coordinates;
-            _this.setState({
-              itemNow: listHere[ i ],
-              tagName: listHere[ i ].tagName,
-              pictureTag:listHere[ i ].picture,
-            })
-            // let showInfo = listHere[i].showInfo;
-            popup.setLngLat(coordinates);
-            // popup.setHTML(showInfo)
+        map.on('mouseenter', 'places', function(e) {
+          map.getCanvas().style.cursor = 'pointer';
+          var coordinates = e.features[0].geometry.coordinates;
+          console.log('eeeeeeeeeee',e)
+          _this.setState({
+            itemNow: e.features[ 0 ].properties.value,
+            tagName: e.features[0].properties.tagName,
+            pictureTag: e.features[0].properties.picture
+          })
+          // let showInfo = listHere[i].showInfo;
+          popup.setLngLat(coordinates);
+          // popup.setHTML(showInfo)
+          popup.addTo(map)
+          popup.setDOMContent(popupRef.current);
+        });
+        map.on('mouseleave', 'places', function() {
+          map.getCanvas().style.cursor = '';
+          // popup.remove();
+        });
 
-            popup.addTo(map);
-            popup.setDOMContent(popupRef.current);
-          });
-          map.on('mouseleave', listHere[ i ].id, function() {
-            map.getCanvas().style.cursor = '';
-            // popup.remove();
-          });
-        }
+        let _this = this;
         // for(let i = 0;i<listHere.length;i++){
         //   map.on('click', listHere[i].id, function(e) {
         //     popup.remove();
@@ -720,7 +654,7 @@ class MapPage extends Component {
 
       let nav = new mapboxgl.NavigationControl({
         //是否显示指南针按钮，默认为true
-        "showCompass": false,
+        "showCompass": true,
         //是否显示缩放按钮，默认为true
         "showZoom": true
       });
@@ -1114,7 +1048,7 @@ class MapPage extends Component {
           value.push(temp)
       }
     }
-    // console.log('radio checked', e);
+    console.log('radio checked', e);
     this.setState({
       value: value,
     });
@@ -1294,50 +1228,36 @@ class MapPage extends Component {
             <div className={styles.question} style={{height:'490px',overflow:'scroll'}}>
               <div className={styles.qbody}><div><h3>{question[recent]?question[recent].questionContent:''}</h3></div></div>
               {/*<div className={styles.qanswer}>*/}
-              <form id={'choose'}
-                //     onChange={(e)=>{
-                // e.stopPropagation();
-                // this.onChange()}}
-                    style={{top:'3em',left:'3em'}} >
+              <form id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
                 <Row>
-                  <div>
-                  <div id="1" className={styles.qanswer}
-                       onClick={(event)=>{
-                    event.stopPropagation();
-                    document.getElementsByTagName("input")[0].checked=!document.getElementsByTagName("input")[0].checked;
-                    this.onChange()}}>
-                    <div style={{pointerEvents:'none'}}>
-                      <p><input type="checkbox"   value={'A'} className="answer"/>
-                        {'A  '+(question[recent]?question[recent].optionA:'')}
-                      </p></div>
-
+                  <div id="1" className={styles.qanswer} >
+                    <p><input type="checkbox"   value={'A'} className="answer"/>
+                      {'A  '+(question[recent]?question[recent].optionA:'')}
+                    </p>
                     {this.state.answer&&this.state.questionChoose[recent][0]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][0]} />:''}
-                  </div></div>
+                  </div>
                 </Row>
-                <div id="2" className={styles.qanswer}onClick={()=>{document.getElementsByTagName("input")[1].checked=!document.getElementsByTagName("input")[1].checked;this.onChange()}}>
-                  <div style={{pointerEvents:'none'}}>
+                <div id="2" className={styles.qanswer}>
                   <p><input type="checkbox"   value={'B'}
                             className="answer"
                   />
                     {'B  '+(question[recent]?question[recent].optionB:'')}
-                  </p></div>
+                  </p>
                   {this.state.answer&&this.state.questionChoose[recent][1]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][1]} />:''}
                 </div>
-                {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} onClick={()=>{document.getElementsByTagName("input")[2].checked=!document.getElementsByTagName("input")[2].checked;this.onChange()}} >
-                    <div style={{pointerEvents:'none'}}>
+                {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} >
                   <p><input type="checkbox"   value={'C'} className="answer"/>
                     {'C  '+(question[recent]?question[recent].optionC:'')}
-                  </p></div>
+                  </p>
                   {this.state.answer&&this.state.questionChoose[recent][2]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][2]} />:''}
-                    </div>:""}
+                </div>:""}
                 {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                  <div className={styles.qanswer} onClick={()=>{document.getElementsByTagName("input")[3].checked=!document.getElementsByTagName("input")[3].checked;this.onChange()}}>
-                    <div style={{pointerEvents:'none'}}>
+                  <div className={styles.qanswer} >
                     <p><input type="checkbox"   value={'D'} className="answer"/>
                       {'D  '+(question[recent]?question[recent].optionD:'')}
-                    </p></div>
+                    </p>
                     {this.state.answer&&this.state.questionChoose[recent][3]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][3]} />:''}
-                    </div>:''}
+                  </div>:''}
               </form>
                   {this.state.answer==true?
                     (<h3>正确答案是</h3>):''}
@@ -1455,7 +1375,6 @@ class MapPage extends Component {
                         // icon={<Icon type="book" />}
                       >
                         <div style={{fontWeight:"bold",cursor: 'pointer'}}>
-                          <img width='20px' height='20px' src={item['property']=='movement'?movement:meeting}/>
                           {item['value']}
                         </div>
                       </VerticalTimelineElement>:
@@ -1466,7 +1385,7 @@ class MapPage extends Component {
                         date={<div onClick={(e)=>this.stopOnClick(e)} style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
                         contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
-                        iconStyle={{background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
+                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
                         dateClassName={ styles.date }
                         onTimelineElementClick={()=>(
                           item['text']=='中共一大'?
@@ -1477,7 +1396,6 @@ class MapPage extends Component {
                       >{
                         item['text']=='中共一大'?
                           <div style={{fontWeight:"bold",cursor: 'pointer'}}>
-                            <img width='24px' height='24px' src={item['property']=='movement'?movement:meeting}/>
                             {item['text']}
                             {
                               this.state.more?
@@ -1514,7 +1432,6 @@ class MapPage extends Component {
                             </div>
                           </div>:
                           <div style={{fontWeight:"bold",cursor: 'pointer'}}>
-                            <img width='24px' height='24px' src={item['property']=='movement'?movement:meeting}/>
                             {item['text']}
                           </div>
                       }
@@ -1530,7 +1447,7 @@ class MapPage extends Component {
               <div className={styles.mapContainer} id="onlineMapping">
                 <div ref={popupRef} className={styles.popupDiv}>
                   {this.state.itemNow?
-                    <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
+                    <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow}</div>
                     :null}
                   {this.state.itemNow?
                     (this.state.pictureTag?<img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag}/>:<Spin/>)
