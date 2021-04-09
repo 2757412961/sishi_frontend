@@ -63,10 +63,11 @@ import jiedao from '@/assets/test/街道.PNG';
 import dixing from '@/assets/test/地形.PNG';
 import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
+import meeting from '@/assets/meeting.png';
+import movement from '@/assets/movements.png';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from 'react-mapbox-gl/src/image';
-
 const RadioGroup = Radio.Group;
 var timer;
 const { TabPane } = Tabs;
@@ -192,6 +193,7 @@ function forList(treeList,dispatch){
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       temp.picture=treeList[i].picUrl;
+      temp.property=treeList[i].property;
       // debugger
       // dispatch({ type: 'mapPage/getPictureByTag', payload:treeList[i].tagName}).then(res => {
       //   console.log('res',res);
@@ -682,7 +684,8 @@ class MapPage extends Component {
             // let showInfo = listHere[i].showInfo;
             popup.setLngLat(coordinates);
             // popup.setHTML(showInfo)
-            popup.addTo(map)
+
+            popup.addTo(map);
             popup.setDOMContent(popupRef.current);
           });
           map.on('mouseleave', listHere[ i ].id, function() {
@@ -1111,7 +1114,7 @@ class MapPage extends Component {
           value.push(temp)
       }
     }
-    console.log('radio checked', e);
+    // console.log('radio checked', e);
     this.setState({
       value: value,
     });
@@ -1291,36 +1294,50 @@ class MapPage extends Component {
             <div className={styles.question} style={{height:'490px',overflow:'scroll'}}>
               <div className={styles.qbody}><div><h3>{question[recent]?question[recent].questionContent:''}</h3></div></div>
               {/*<div className={styles.qanswer}>*/}
-              <form id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
+              <form id={'choose'}
+                //     onChange={(e)=>{
+                // e.stopPropagation();
+                // this.onChange()}}
+                    style={{top:'3em',left:'3em'}} >
                 <Row>
-                  <div id="1" className={styles.qanswer} >
-                    <p><input type="checkbox"   value={'A'} className="answer"/>
-                      {'A  '+(question[recent]?question[recent].optionA:'')}
-                    </p>
+                  <div>
+                  <div id="1" className={styles.qanswer}
+                       onClick={(event)=>{
+                    event.stopPropagation();
+                    document.getElementsByTagName("input")[0].checked=!document.getElementsByTagName("input")[0].checked;
+                    this.onChange()}}>
+                    <div style={{pointerEvents:'none'}}>
+                      <p><input type="checkbox"   value={'A'} className="answer"/>
+                        {'A  '+(question[recent]?question[recent].optionA:'')}
+                      </p></div>
+
                     {this.state.answer&&this.state.questionChoose[recent][0]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][0]} />:''}
-                  </div>
+                  </div></div>
                 </Row>
-                <div id="2" className={styles.qanswer}>
+                <div id="2" className={styles.qanswer}onClick={()=>{document.getElementsByTagName("input")[1].checked=!document.getElementsByTagName("input")[1].checked;this.onChange()}}>
+                  <div style={{pointerEvents:'none'}}>
                   <p><input type="checkbox"   value={'B'}
                             className="answer"
                   />
                     {'B  '+(question[recent]?question[recent].optionB:'')}
-                  </p>
+                  </p></div>
                   {this.state.answer&&this.state.questionChoose[recent][1]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][1]} />:''}
                 </div>
-                {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} >
+                {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} onClick={()=>{document.getElementsByTagName("input")[2].checked=!document.getElementsByTagName("input")[2].checked;this.onChange()}} >
+                    <div style={{pointerEvents:'none'}}>
                   <p><input type="checkbox"   value={'C'} className="answer"/>
                     {'C  '+(question[recent]?question[recent].optionC:'')}
-                  </p>
+                  </p></div>
                   {this.state.answer&&this.state.questionChoose[recent][2]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][2]} />:''}
-                </div>:""}
+                    </div>:""}
                 {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                  <div className={styles.qanswer} >
+                  <div className={styles.qanswer} onClick={()=>{document.getElementsByTagName("input")[3].checked=!document.getElementsByTagName("input")[3].checked;this.onChange()}}>
+                    <div style={{pointerEvents:'none'}}>
                     <p><input type="checkbox"   value={'D'} className="answer"/>
                       {'D  '+(question[recent]?question[recent].optionD:'')}
-                    </p>
+                    </p></div>
                     {this.state.answer&&this.state.questionChoose[recent][3]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][3]} />:''}
-                  </div>:''}
+                    </div>:''}
               </form>
                   {this.state.answer==true?
                     (<h3>正确答案是</h3>):''}
@@ -1438,6 +1455,7 @@ class MapPage extends Component {
                         // icon={<Icon type="book" />}
                       >
                         <div style={{fontWeight:"bold",cursor: 'pointer'}}>
+                          <img width='20px' height='20px' src={item['property']=='movement'?movement:meeting}/>
                           {item['value']}
                         </div>
                       </VerticalTimelineElement>:
@@ -1448,7 +1466,7 @@ class MapPage extends Component {
                         date={<div onClick={(e)=>this.stopOnClick(e)} style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
                         contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
-                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
+                        iconStyle={{background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
                         dateClassName={ styles.date }
                         onTimelineElementClick={()=>(
                           item['text']=='中共一大'?
@@ -1459,6 +1477,7 @@ class MapPage extends Component {
                       >{
                         item['text']=='中共一大'?
                           <div style={{fontWeight:"bold",cursor: 'pointer'}}>
+                            <img width='24px' height='24px' src={item['property']=='movement'?movement:meeting}/>
                             {item['text']}
                             {
                               this.state.more?
@@ -1495,6 +1514,7 @@ class MapPage extends Component {
                             </div>
                           </div>:
                           <div style={{fontWeight:"bold",cursor: 'pointer'}}>
+                            <img width='24px' height='24px' src={item['property']=='movement'?movement:meeting}/>
                             {item['text']}
                           </div>
                       }
