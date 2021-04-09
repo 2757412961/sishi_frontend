@@ -69,7 +69,7 @@ function Shouye(props) {
                )
              }
         >
-          <a href="/mapPage">
+          <a href="/modelListPage">
           <Row>
             <Col span={6}>
               <Icon className={styles.arrows1} type="right" />
