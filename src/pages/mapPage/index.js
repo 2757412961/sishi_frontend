@@ -543,153 +543,88 @@ class MapPage extends Component {
           })
         }
         console.log("listHere", listHere);
-        //加载中共一大（上海，嘉兴地点）的火花图标
+        let feature = []
         for (let i = 0; i < listHere.length; i++) {
-          map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
-          map.addLayer({
-            "id": listHere[ i ].id,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [ {
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": listHere[ i ].lonlat,
-                  }
-                } ]
+          feature.push(
+            {
+              'type': 'Feature',
+              'properties': {
+                'value': listHere[i].value,
+                'picture': listHere[i].picture,
+                'tagName':listHere[i].tagName,
+                'itemNow': listHere[i],
+              },
+              'geometry': {
+                'type': 'Point',
+                'coordinates': listHere[ i ].lonlat
               }
             },
-            "layout": {
-              "icon-image": listHere[ i ].id,
-              "icon-optional": false,
-              "icon-ignore-placement": true,
-              "icon-allow-overlap": true,
-              "text-size": [
-                "interpolate", [ "linear" ], [ "zoom" ],
-                3, 10,
-                10, 38
-              ],
-            },
-          });
-          map.addLayer({
-            "id": listHere[ i ].id + i,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [ {
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": listHere[ i ].lonlat,
-                  }
-                } ]
-              }
-            },
-            "layout": {
-              "text-field": listHere[ i ].value,
-              "text-anchor": 'left',
-              "text-offset": [ 1, 0.1 ],
-              "text-size": [
-                "interpolate", [ "linear" ], [ "zoom" ],
-                3, 10,
-                17, 38
-              ],
-            },
-            paint: {
-              "text-color": 'rgb(255,0,0)',
+          )
+          var pointSource = {
+            'type': 'geojson',
+            'data': {
+              'type': 'FeatureCollection',
+              'features': feature
             }
-          });
+          }
+          // console.log('pointSource.data.features[0].properties.id', pointSource)
         }
-        map.on('styledata', function() {
-          for (let i = 0; i < listHere.length; i++) {
-            map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
-            map.addLayer({
-              "id": listHere[ i ].id,
-              "type": "symbol",
-              "source": {
-                "type": "geojson",
-                "data": {
-                  "type": "FeatureCollection",
-                  "features": [ {
-                    "type": "Feature",
-                    "geometry": {
-                      "type": "Point",
-                      "coordinates": listHere[ i ].lonlat,
-                    }
-                  } ]
-                }
-              },
-              "layout": {
-                "icon-image": listHere[ i ].id,
-                "icon-optional": false,
-                "icon-ignore-placement": true,
-                "icon-allow-overlap": true,
-                "text-size": [
-                  "interpolate", [ "linear" ], [ "zoom" ],
-                  3, 10,
-                  10, 38
-                ],
-              },
-            });
-            map.addLayer({
-              "id": listHere[ i ].id + i,
-              "type": "symbol",
-              "source": {
-                "type": "geojson",
-                "data": {
-                  "type": "FeatureCollection",
-                  "features": [ {
-                    "type": "Feature",
-                    "geometry": {
-                      "type": "Point",
-                      "coordinates": listHere[ i ].lonlat,
-                    }
-                  } ]
-                }
-              },
-              "layout": {
-                "text-field": listHere[ i ].value,
-                "text-anchor": 'left',
-                "text-offset": [ 1, 0.1 ],
-                "text-size": [
-                  "interpolate", [ "linear" ], [ "zoom" ],
-                  3, 10,
-                  17, 38
-                ],
-              },
-              paint: {
-                "text-color": 'rgb(255,0,0)',
-              }
-            });
+        // console.log('pointSource.data.features[0].properties.id', pointSource)
+        map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+        map.addSource('places', pointSource);
+        map.addLayer({
+          'id': 'places',
+          'type': 'symbol',
+          'source': 'places',
+          'layout': {
+            "icon-image": 'pulsing-dot',
+            "icon-optional": false,
+            "icon-ignore-placement": true,
+            "icon-allow-overlap": true,
           }
         });
-        let _this = this;
+        // map.addLayer({
+        //   'id': 'placesTitle',
+        //   'type': 'symbol',
+        //   'source': 'places',
+        //   'layout': {
+        //     "text-field": ['get','title'],
+        //     // "text-field": "{title}",
+        //     "text-anchor": 'left',
+        //     "text-offset": [ 1, 0.1 ],
+        //     "text-size": [
+        //       "interpolate", [ "linear" ], [ "zoom" ],
+        //       3, 10,
+        //       17, 38
+        //     ],
+        //   },
+        //   paint: {
+        //     "text-color": 'rgb(255,0,0)',
+        //   }
+        // });
+        //加载中共一大（上海，嘉兴地点）的火花图标
         var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
-        for (let i = 0; i < listHere.length; i++) {
-          map.on('mouseenter', listHere[ i ].id, function(e) {
-            map.getCanvas().style.cursor = 'pointer';
-            var coordinates = e.features[ 0 ].geometry.coordinates;
-            _this.setState({
-              itemNow: listHere[ i ],
-              tagName: listHere[ i ].tagName,
-              pictureTag:listHere[ i ].picture,
-            })
-            // let showInfo = listHere[i].showInfo;
-            popup.setLngLat(coordinates);
-            // popup.setHTML(showInfo)
-            popup.addTo(map)
-            popup.setDOMContent(popupRef.current);
-          });
-          map.on('mouseleave', listHere[ i ].id, function() {
-            map.getCanvas().style.cursor = '';
-            // popup.remove();
-          });
-        }
+        map.on('mouseenter', 'places', function(e) {
+          map.getCanvas().style.cursor = 'pointer';
+          var coordinates = e.features[0].geometry.coordinates;
+          console.log('eeeeeeeeeee',e)
+          _this.setState({
+            itemNow: e.features[ 0 ].properties.value,
+            tagName: e.features[0].properties.tagName,
+            pictureTag: e.features[0].properties.picture
+          })
+          // let showInfo = listHere[i].showInfo;
+          popup.setLngLat(coordinates);
+          // popup.setHTML(showInfo)
+          popup.addTo(map)
+          popup.setDOMContent(popupRef.current);
+        });
+        map.on('mouseleave', 'places', function() {
+          map.getCanvas().style.cursor = '';
+          // popup.remove();
+        });
+
+        let _this = this;
         // for(let i = 0;i<listHere.length;i++){
         //   map.on('click', listHere[i].id, function(e) {
         //     popup.remove();
@@ -717,7 +652,7 @@ class MapPage extends Component {
 
       let nav = new mapboxgl.NavigationControl({
         //是否显示指南针按钮，默认为true
-        "showCompass": false,
+        "showCompass": true,
         //是否显示缩放按钮，默认为true
         "showZoom": true
       });
@@ -1510,7 +1445,7 @@ class MapPage extends Component {
               <div className={styles.mapContainer} id="onlineMapping">
                 <div ref={popupRef} className={styles.popupDiv}>
                   {this.state.itemNow?
-                    <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
+                    <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow}</div>
                     :null}
                   {this.state.itemNow?
                     (this.state.pictureTag?<img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag}/>:<Spin/>)
