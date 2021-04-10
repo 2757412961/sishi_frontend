@@ -14,7 +14,7 @@ function BasicLayout(props) {
       {/*<h1 className={styles.title}>Yay! Welcome to umi!</h1>*/}
       {props.children}
       {
-        window.location.pathname!='/mapPage'?
+        ((window.location.pathname!='/mapPage')&&(window.location.pathname!='/'))?
           <Footer indexUrl={window.location.pathname}/>:
           null
       }
