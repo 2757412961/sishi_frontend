@@ -93,83 +93,170 @@ class Header extends Component {
           <span>退出</span>
         </Menu.Item>
       </Menu>;
-    const menu_more = (
+    const menu1 = (
       <Menu>
         <Menu.Item onClick={()=>
           this.props.dispatch(
-            {type:'mapPage/setModule', payload:'wenjunchangzheng'}
+            {type:'mapPage/setModule', payload:'中共党史'}
           )
         }>
-          <Link to={{pathname: '/mapPage', query: {module: 'wenjunchangzheng'}}}>
+          <Link to={{pathname: '/mapPage', query: {module: '中共党史'}}}>
             {
-              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == 'wenjunchangzheng')) ?
-                <div className={styles.font_module_selected}>文军长征</div> :
-                <div className={styles.font_module}>文军长征</div>
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '中共党史')) ?
+                <div className={styles.font_module_selected}>中共党史</div> :
+                <div className={styles.font_module}>中共党史</div>
             }
           </Link>
         </Menu.Item>
         <Menu.Item onClick={()=>
           this.props.dispatch(
-            {type:'mapPage/setModule', payload:'jueshengxiaokang'}
+            {type:'mapPage/setModule', payload:'新中国史'}
           )
         }>
-          <Link to={{pathname: '/mapPage', query: {module: 'jueshengxiaokang'}}}>
+          <Link to={{pathname: '/mapPage', query: {module: '新中国史'}}}>
             {
-              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == 'jueshengxiaokang')) ?
-                <div className={styles.font_module_selected}>决胜小康</div> :
-                <div className={styles.font_module}>决胜小康</div>
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '新中国史')) ?
+                <div className={styles.font_module_selected}>新中国史</div> :
+                <div className={styles.font_module}>新中国史</div>
             }
           </Link>
         </Menu.Item>
         <Menu.Item onClick={()=>
           this.props.dispatch(
-            {type:'mapPage/setModule', payload:'baihuaqifang'}
+            {type:'mapPage/setModule', payload:'改革开放史'}
           )
         }>
-          <Link to={{pathname: '/mapPage', query: {module: 'baihuaqifang'}}}>
+          <Link to={{pathname: '/mapPage', query: {module: '改革开放史'}}}>
             {
-              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == 'baihuaqifang')) ?
-                <div className={styles.font_module_selected}>百花齐放</div> :
-                <div className={styles.font_module}>百花齐放</div>
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '改革开放史')) ?
+                <div className={styles.font_module_selected}>改革开放史</div> :
+                <div className={styles.font_module}>改革开放史</div>
             }
           </Link>
         </Menu.Item>
         <Menu.Item onClick={()=>
           this.props.dispatch(
-            {type:'mapPage/setModule', payload:'lilunxuexi'}
+            {type:'mapPage/setModule', payload:'社会主义发展史'}
           )
         }>
-          <Link to={{pathname: '/mapPage', query: {module: 'lilunxuexi'}}}>
+          <Link to={{pathname: '/mapPage', query: {module: '社会主义发展史'}}}>
             {
-              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == 'lilunxuexi')) ?
-                <div className={styles.font_module_selected}>理论学习</div> :
-                <div className={styles.font_module}>理论学习</div>
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '社会主义发展史')) ?
+                <div className={styles.font_module_selected}>社会主义发展史</div> :
+                <div className={styles.font_module}>社会主义发展史</div>
+            }
+          </Link>
+        </Menu.Item>
+      </Menu>
+    );
+    const menu2 = (
+      <Menu>
+        <Menu.Item onClick={()=>
+          this.props.dispatch(
+            {type:'mapPage/setModule', payload:'伟大精神'}
+          )
+        }>
+          <Link to={{pathname: '/mapPage', query: {module: '伟大精神'}}}>
+            {
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '伟大精神')) ?
+                <div className={styles.font_module_selected}>伟大精神</div> :
+                <div className={styles.font_module}>伟大精神</div>
             }
           </Link>
         </Menu.Item>
         <Menu.Item onClick={()=>
           this.props.dispatch(
-            {type:'mapPage/setModule', payload:'weishipinxuexi'}
+            {type:'mapPage/setModule', payload:'脱贫攻坚'}
           )
         }>
-          <Link to={{pathname: '/mapPage', query: {module: 'weishipinxuexi'}}}>
+          <Link to={{pathname: '/mapPage', query: {module: '脱贫攻坚'}}}>
             {
-              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == 'weishipinxuexi')) ?
-                <div className={styles.font_module_selected}>微视频学习</div> :
-                <div className={styles.font_module}>微视频学习</div>
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '脱贫攻坚')) ?
+                <div className={styles.font_module_selected}>脱贫攻坚</div> :
+                <div className={styles.font_module}>脱贫攻坚</div>
             }
           </Link>
         </Menu.Item>
         <Menu.Item onClick={()=>
           this.props.dispatch(
-            {type:'mapPage/setModule', payload:'woxiangduidangshuo'}
+            {type:'mapPage/setModule', payload:'一带一路'}
           )
         }>
-          <Link to={{pathname: '/mapPage', query: {module: 'woxiangduidangshuo'}}}>
+          <Link to={{pathname: '/mapPage', query: {module: '一带一路'}}}>
             {
-              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == 'woxiangduidangshuo')) ?
-                <div className={styles.font_module_selected}>我想对党说</div> :
-                <div className={styles.font_module}>我想对党说</div>
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '一带一路')) ?
+                <div className={styles.font_module_selected}>一带一路</div> :
+                <div className={styles.font_module}>一带一路</div>
+            }
+          </Link>
+        </Menu.Item>
+        <Menu.Item onClick={()=>
+          this.props.dispatch(
+            {type:'mapPage/setModule', payload:'西迁精神'}
+          )
+        }>
+          <Link to={{pathname: '/mapPage', query: {module: '西迁精神'}}}>
+            {
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '西迁精神')) ?
+                <div className={styles.font_module_selected}>西迁精神</div> :
+                <div className={styles.font_module}>西迁精神</div>
+            }
+          </Link>
+        </Menu.Item>
+      </Menu>
+    );
+
+    const menu3 = (
+      <Menu>
+        <Menu.Item onClick={()=>
+          this.props.dispatch(
+            {type:'mapPage/setModule', payload:'青春力量'}
+          )
+        }>
+          <Link to={{pathname: '/mapPage', query: {module: '青春力量'}}}>
+            {
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '青春力量')) ?
+                <div className={styles.font_module_selected}>青春力量</div> :
+                <div className={styles.font_module}>青春力量</div>
+            }
+          </Link>
+        </Menu.Item>
+        <Menu.Item onClick={()=>
+          this.props.dispatch(
+            {type:'mapPage/setModule', payload:'党言党语'}
+          )
+        }>
+          <Link to={{pathname: '/mapPage', query: {module: '党言党语'}}}>
+            {
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '党言党语')) ?
+                <div className={styles.font_module_selected}>党言党语</div> :
+                <div className={styles.font_module}>党言党语</div>
+            }
+          </Link>
+        </Menu.Item>
+        <Menu.Item onClick={()=>
+          this.props.dispatch(
+            {type:'mapPage/setModule', payload:'互动答题'}
+          )
+        }>
+          <Link to={{pathname: '/mapPage', query: {module: '互动答题'}}}>
+            {
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '互动答题')) ?
+                <div className={styles.font_module_selected}>互动答题</div> :
+                <div className={styles.font_module}>互动答题</div>
+            }
+          </Link>
+        </Menu.Item>
+        <Menu.Item onClick={()=>
+          this.props.dispatch(
+            {type:'mapPage/setModule', payload:'学习资料'}
+          )
+        }>
+          <Link to={{pathname: '/mapPage', query: {module: '学习资料'}}}>
+            {
+              ((window.location.pathname == '/mapPage') && (this.props.mapPage.module == '学习资料')) ?
+                <div className={styles.font_module_selected}>学习资料</div> :
+                <div className={styles.font_module}>学习资料</div>
             }
           </Link>
         </Menu.Item>
@@ -185,71 +272,84 @@ class Header extends Component {
           </Link>
           <div className={styles.font_div}>
             <Row justify="space-between" style={{marginBottom:"10px"}}>
-              <Col span={5}>
-                <Link to={{pathname: '/mapPage', query: {module: 'dangshixinxue'}}}
-                      onClick={()=>
-                        this.props.dispatch(
-                          {type:'mapPage/setModule', payload:'dangshixinxue'}
-                        )
-                      }
-                >
-                  {
-                    ((window.location.pathname=='/mapPage')&&((this.props.mapPage.module=='dangshixinxue')||this.props.mapPage.module==''))?
-                      <div className={styles.font_style_selected}>党史新学</div>:
-                      <div className={styles.font_style}>党史新学</div>
-                  }
-                </Link>
+              {/*<Col span={5}>*/}
+              {/*  <Link to={{pathname: '/mapPage', query: {module: 'dangshixinxue'}}}*/}
+              {/*        onClick={()=>*/}
+              {/*          this.props.dispatch(*/}
+              {/*            {type:'mapPage/setModule', payload:'dangshixinxue'}*/}
+              {/*          )*/}
+              {/*        }*/}
+              {/*  >*/}
+              {/*    {*/}
+              {/*      ((window.location.pathname=='/mapPage')&&((this.props.mapPage.module=='dangshixinxue')||this.props.mapPage.module==''))?*/}
+              {/*        <div className={styles.font_style_selected}>党史新学</div>:*/}
+              {/*        <div className={styles.font_style}>党史新学</div>*/}
+              {/*    }*/}
+              {/*  </Link>*/}
+              {/*</Col>*/}
+              {/*<Col span={5}>*/}
+              {/*  <Link to={{pathname: '/mapPage', query: {module: 'jianshezhongguo'}}}*/}
+              {/*        onClick={()=>*/}
+              {/*          this.props.dispatch(*/}
+              {/*            {type:'mapPage/setModule', payload:'jianshezhongguo'}*/}
+              {/*          )*/}
+              {/*        }*/}
+              {/*  >*/}
+              {/*    {*/}
+              {/*      ((window.location.pathname=='/mapPage')&&(this.props.mapPage.module=='jianshezhongguo'))?*/}
+              {/*        <div className={styles.font_style_selected}>建设中国</div>:*/}
+              {/*        <div className={styles.font_style}>建设中国</div>*/}
+              {/*    }*/}
+              {/*  </Link>*/}
+              {/*</Col>*/}
+              {/*<Col span={5}>*/}
+              {/*  <Link to={{pathname: '/mapPage', query: {module: 'zhongtezhilu'}}}*/}
+              {/*        onClick={()=>*/}
+              {/*          this.props.dispatch(*/}
+              {/*            {type:'mapPage/setModule', payload:'zhongtezhilu'}*/}
+              {/*          )*/}
+              {/*        }*/}
+              {/*  >*/}
+              {/*    {*/}
+              {/*      ((window.location.pathname=='/mapPage')&&(this.props.mapPage.module=='zhongtezhilu'))?*/}
+              {/*        <div className={styles.font_style_selected}>中特之路</div>:*/}
+              {/*        <div className={styles.font_style}>中特之路</div>*/}
+              {/*    }*/}
+              {/*  </Link>*/}
+              {/*</Col>*/}
+              {/*<Col span={5} style={{}}>*/}
+              {/*  <Link to={{pathname: '/mapPage', query: {module: 'gaigefuxing'}}}*/}
+              {/*        onClick={()=>*/}
+              {/*          this.props.dispatch(*/}
+              {/*            {type:'mapPage/setModule', payload:'gaigefuxing'}*/}
+              {/*          )*/}
+              {/*        }*/}
+              {/*  >*/}
+              {/*    {*/}
+              {/*      ((window.location.pathname=='/mapPage')&&(this.props.mapPage.module=='gaigefuxing'))?*/}
+              {/*        <div className={styles.font_style_selected}>改革复兴</div>:*/}
+              {/*        <div className={styles.font_style}>改革复兴</div>*/}
+              {/*    }*/}
+              {/*  </Link>*/}
+              {/*</Col>*/}
+              <Col span={8} style={{borderRight: '2px solid #fff'}}>
+                <Dropdown overlay={menu1} placement="bottomCenter">
+                  <div className={styles.font_style} onClick={e => e.preventDefault()}>
+                    <div style={{float:"left", color:"rgba(255,255,255,0.9)", fontSize:"20px"}}>党史学习</div>
+                  </div>
+                </Dropdown>
               </Col>
-              <Col span={5}>
-                <Link to={{pathname: '/mapPage', query: {module: 'jianshezhongguo'}}}
-                      onClick={()=>
-                        this.props.dispatch(
-                          {type:'mapPage/setModule', payload:'jianshezhongguo'}
-                        )
-                      }
-                >
-                  {
-                    ((window.location.pathname=='/mapPage')&&(this.props.mapPage.module=='jianshezhongguo'))?
-                      <div className={styles.font_style_selected}>建设中国</div>:
-                      <div className={styles.font_style}>建设中国</div>
-                  }
-                </Link>
+              <Col span={8} style={{borderRight: '2px solid #fff'}}>
+                <Dropdown overlay={menu2} placement="bottomCenter">
+                  <div className={styles.font_style} onClick={e => e.preventDefault()}>
+                    <div style={{float:"left", color:"rgba(255,255,255,0.9)", fontSize:"20px"}}>专题学习</div>
+                  </div>
+                </Dropdown>
               </Col>
-              <Col span={5}>
-                <Link to={{pathname: '/mapPage', query: {module: 'zhongtezhilu'}}}
-                      onClick={()=>
-                        this.props.dispatch(
-                          {type:'mapPage/setModule', payload:'zhongtezhilu'}
-                        )
-                      }
-                >
-                  {
-                    ((window.location.pathname=='/mapPage')&&(this.props.mapPage.module=='zhongtezhilu'))?
-                      <div className={styles.font_style_selected}>中特之路</div>:
-                      <div className={styles.font_style}>中特之路</div>
-                  }
-                </Link>
-              </Col>
-              <Col span={5} style={{}}>
-                <Link to={{pathname: '/mapPage', query: {module: 'gaigefuxing'}}}
-                      onClick={()=>
-                        this.props.dispatch(
-                          {type:'mapPage/setModule', payload:'gaigefuxing'}
-                        )
-                      }
-                >
-                  {
-                    ((window.location.pathname=='/mapPage')&&(this.props.mapPage.module=='gaigefuxing'))?
-                      <div className={styles.font_style_selected}>改革复兴</div>:
-                      <div className={styles.font_style}>改革复兴</div>
-                  }
-                </Link>
-              </Col>
-              <Col span={4} style={{}}>
-                <Dropdown overlay={menu_more}>
-                  <div className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                    <Icon style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}} type='right' />
-                    <div style={{float:"left", color:"rgba(255,255,255,0.7)", fontSize:"20px"}}>更多</div>
+              <Col span={8} style={{}}>
+                <Dropdown overlay={menu3} placement="bottomCenter">
+                  <div className={styles.font_style} onClick={e => e.preventDefault()}>
+                    <div style={{float:"left", color:"rgba(255,255,255,0.9)", fontSize:"20px"}}>互动学习</div>
                   </div>
                 </Dropdown>
               </Col>

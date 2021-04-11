@@ -1355,6 +1355,7 @@ class MapPage extends Component {
                 </div>
               </div>
             </Modal>
+            <div style={{textAlign:"center", fontSize:"20px", color:"rgba(155,20,20,1)",padding:"10px", fontWeight:"bold"}}>{mapPage.module?mapPage.module:this.state.module}</div>
             <div id='verticalTimeLine' className={styles.verticalTimeLine}>
               <VerticalTimeline>
                 {this.state.listTime.map((item)=> (

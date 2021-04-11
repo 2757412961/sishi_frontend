@@ -8,6 +8,8 @@ import correct from '@/assets/correct.PNG';
 import Redirect from 'umi/redirect';
 import RenderAuthorized from '@/components/Authorized';
 import {getAuthority} from '@/utils/authority';
+import paihangbang from '@/assets/images/paihangbang.png';
+import font from '@/assets/images/font.png';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Meta } = Card;
@@ -101,12 +103,19 @@ class UserScoreList extends React.Component {
               <Content style={{ padding: '0 18px', minHeight: 280 }}>
                 {/*<h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>排行榜</h1>*/}
                 <div className={styles.background} style={{width:'80em',height:'60em',margin:'center',position:'relative'}}>
-                  <div  style={{backgroundColor:'rgb(255,255,255,0.8)',width:'40em',height:'50em',margin:'center',position:'relative',top:'5em',left:'35em'}}>
-                    <Table dataSource={this.state.users} columns={columns} pagination={false} bordered={false}></Table>
-                  </div>
-                  <div className={styles.background1} style={{width:'30em',height:'40em',margin:'center',position:'relative',top:'-35em',left:'5em'}}>
-                    {/*<Table dataSource={this.state.users} columns={columns} pagination={false} bordered={false}></Table>*/}
-                  </div>
+                  <Row>
+                    <Col span={8}>
+                      <img src={font} style={{width:"200px",marginTop:"5em", marginLeft:"20px"}}></img>
+                    </Col>
+                    <Col span={16}>
+                      <div  style={{backgroundColor:'rgb(255,255,255,0.8)',width:'50em',height:'50em',margin:'center',position:'relative',top:'5em'}}>
+                        <Table dataSource={this.state.users} columns={columns} pagination={false} bordered={false}></Table>
+                      </div>
+                    </Col>
+                  </Row>
+                  {/*<div className={styles.background1} style={{width:'30em',height:'40em',margin:'center',position:'relative',top:'-35em',left:'5em'}}>*/}
+                  {/*  /!*<Table dataSource={this.state.users} columns={columns} pagination={false} bordered={false}></Table>*!/*/}
+                  {/*</div>*/}
                 </div>
                 {/*<div style={{backgroundColor:'red'}}>*/}
                 {/*<Row>*/}
