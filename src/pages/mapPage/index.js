@@ -63,8 +63,8 @@ import jiedao from '@/assets/test/街道.PNG';
 import dixing from '@/assets/test/地形.PNG';
 import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
-import meeting from '@/assets/meeting.png';
-import movement from '@/assets/movements.png';
+import meeting from '@/assets/meeting1.png';
+import movement from '@/assets/movement2.png';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from 'react-mapbox-gl/src/image';
@@ -1448,14 +1448,13 @@ class MapPage extends Component {
                         date={<div onClick={(e)=>this.stopOnClick(e)} style={{textAlign:"center", width:"80%", margin:"0 auto", fontSize:"8px"}}>{item.time}</div>}
                         contentStyle={{ borderTop: '2px solid  rgba(177,46,46)',textAlign:"center",color:'rgba(177,46,46,0.8)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgb(155, 20, 20)' }}
-                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'20px', height:"20px",top:"20px",marginLeft:"-10px" }}
+                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'30px', height:"30px",top:"20px",marginLeft:"-15px", paddingTop:"7px" }}
                         dateClassName={ styles.date }
                         onTimelineElementClick={()=> this.oneClick(item) }
                         // icon={<Icon type="schedule" />}
-                        // icon={<Icon type="book" />}
+                        icon={<img width='15px' height='15px' src={item['property']=='movement'?movement:meeting}/>}
                       >
                         <div style={{fontWeight:"bold",cursor: 'pointer'}}>
-                          <img width='20px' height='20px' src={item['property']=='movement'?movement:meeting}/>
                           {item['value']}
                         </div>
                       </VerticalTimelineElement>:
@@ -1466,24 +1465,26 @@ class MapPage extends Component {
                         date={<div onClick={(e)=>this.stopOnClick(e)} style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
                         contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
-                        iconStyle={{background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
+                        iconStyle={{background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"8px"  }}
                         dateClassName={ styles.date }
                         onTimelineElementClick={()=>(
                           item['text']=='中共一大'?
                             this.oneClickYida(item):
                             this.oneClick(item))
                         }
-                        icon={<Icon type="schedule" />}
-                      >{
-                        item['text']=='中共一大'?
-                          <div style={{fontWeight:"bold",cursor: 'pointer'}}>
-                            <img width='24px' height='24px' src={item['property']=='movement'?movement:meeting}/>
-                            {item['text']}
-                            {
+                        icon={
+                          item['text']=='中共一大'?
+                            (
                               this.state.more?
                                 <Icon className={styles.icons} type="vertical-align-bottom" onClick={()=>this.moreOnClick()}/>:
                                 <Icon className={styles.icons} type="vertical-align-top" onClick={()=>this.moreOnClick()}/>
-                            }
+                            ):
+                            <img width='24px' height='24px' src={item['property']=='movement'?movement:meeting}/>
+                        }
+                      >{
+                        item['text']=='中共一大'?
+                          <div style={{fontWeight:"bold",cursor: 'pointer'}}>
+                            {item['text']}
                             <div className={styles.zhonggongyida}>
                               <Row>
                                 <Col span={4}>
@@ -1514,7 +1515,6 @@ class MapPage extends Component {
                             </div>
                           </div>:
                           <div style={{fontWeight:"bold",cursor: 'pointer'}}>
-                            <img width='24px' height='24px' src={item['property']=='movement'?movement:meeting}/>
                             {item['text']}
                           </div>
                       }

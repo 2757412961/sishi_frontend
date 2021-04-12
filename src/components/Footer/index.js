@@ -28,23 +28,23 @@ class Footer extends Component {
     <div>
       <div className={styles.home_footer}>
         <div>
-      <Row style={{width:"600px"}}>
-        <Col span={12}>
+      <div className={styles.home_footer_first}>
+        <div>
           <img src={xueyuanlogo} className={styles.xueyuan_logo} style={{float:"left"}} alt="" />
-        </Col>
-        <Col span={12}>
+        </div>
+        <div>
           <div style={{marginTop:"10px"}}>
             地址 : 浙大路38号，浙江大学地球科学学院
           </div>
-          <div style={{marginTop:"5px"}}>
+          <div style={{marginTop:"10px"}}>
             邮编 : 310027
           </div>
-          <div style={{marginTop:"5px"}}>
+          <div style={{marginTop:"10px"}}>
             电话 : +86-571-87952453
           </div>
-        </Col>
+        </div>
       {/*  </Col>*/}
-        </Row>
+        </div>
         </div>
         <div>
       <Row>
