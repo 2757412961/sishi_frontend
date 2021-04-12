@@ -63,10 +63,11 @@ import jiedao from '@/assets/test/街道.PNG';
 import dixing from '@/assets/test/地形.PNG';
 import yingxiang from '@/assets/test/影像.PNG';
 import Slider from "react-slick";
+import meeting from '@/assets/meeting.png';
+import movement from '@/assets/movements.png';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from 'react-mapbox-gl/src/image';
-
 const RadioGroup = Radio.Group;
 var timer;
 const { TabPane } = Tabs;
@@ -192,6 +193,7 @@ function forList(treeList,dispatch){
       temp.cardContent=treeList[i].tagName;
       temp.cardImg=p1;
       temp.picture=treeList[i].picUrl;
+      temp.property=treeList[i].property;
       // debugger
       // dispatch({ type: 'mapPage/getPictureByTag', payload:treeList[i].tagName}).then(res => {
       //   console.log('res',res);
@@ -311,44 +313,44 @@ class MapPage extends Component {
       return true;
     }else {
       if(this.state.answer&&this.state.questionNumber==allNumber){
-      return true;
+        return true;
       }else{
-      return false;
-    }}
+        return false;
+      }}
   }
   clearSelected(temp){
-      let checked1=document.getElementsByClassName(styles.qanswer);
-      for (let i=0;i<checked1.length;i++){
-        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
-        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
-        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+    let checked1=document.getElementsByClassName(styles.qanswer);
+    for (let i=0;i<checked1.length;i++){
+      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
+      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+      document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+    }
+    let state = document.getElementsByTagName("input");
+    state[0].getAttribute("checked");
+    for(let i=0;i<state.length;i++){
+      document.getElementsByTagName("input")[i].checked=false;
+    }
+    let i=0;
+    while(i<4){
+      if(temp[i]==wrong){
+        if(document.getElementsByClassName(styles.qanswer)[i])
+          document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.false);
+      }else if(temp[i]==correct){
+        if(document.getElementsByClassName(styles.qanswer)[i])
+          document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.correct);
       }
-      let state = document.getElementsByTagName("input");
-      state[0].getAttribute("checked");
-      for(let i=0;i<state.length;i++){
-        document.getElementsByTagName("input")[i].checked=false;
+      i++;
+    }
+    if(temp&&temp[5]){
+      let checked=temp[5];
+      let j=0;
+      while(j<checked.length){
+        console.log('checked',checked);
+        let id=checked[j];
+        document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.qanswerchoosable);
+        j++;
       }
-      let i=0;
-      while(i<4){
-        if(temp[i]==wrong){
-          if(document.getElementsByClassName(styles.qanswer)[i])
-            document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.false);
-        }else if(temp[i]==correct){
-          if(document.getElementsByClassName(styles.qanswer)[i])
-            document.getElementsByClassName(styles.qanswer)[i].classList.add(styles.correct);
-        }
-        i++;
-      }
-      if(temp&&temp[5]){
-        let checked=temp[5];
-        let j=0;
-        while(j<checked.length){
-          console.log('checked',checked);
-          let id=checked[j];
-          document.getElementsByClassName(styles.qanswer)[id].classList.add(styles.qanswerchoosable);
-          j++;
-        }
-      }
+    }
   }
   nextQuestion=()=>{
     const {mapPage}=this.props;
@@ -361,31 +363,31 @@ class MapPage extends Component {
     if(this.state.questionNumber==allNumber&&this.state.answer==true){
       alert("答题结束，请点击右上角关闭答题页面")
     }else{
-    if(temp&&temp[4]==true){
-      this.clearSelected(temp);
-      this.setState({answer: true});
-      this.setState({questionNumber: this.state.questionNumber+1})
-    } else{
-      let arg=question[recent]?question[recent].answer:'';
-      arg=arg.split("");
-      let translate1=translate(arg);
-      let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
-      let checked1=document.getElementsByClassName(styles.qanswer);
-      for (let i=0;i<checked1.length;i++){
-        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
-        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
-        document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
-      }
-      let state = document.getElementsByTagName("input");
-      state[0].getAttribute("checked");
-      for(let i=0;i<state.length;i++){
-        document.getElementsByTagName("input")[i].checked=false;
-      }
-      this.setState({value:[]});
-      this.setState({deadline:Date.now() +  1000 * 60})
-      this.setState({questionNumber: this.state.questionNumber+1})
-      this.setState({answer:false})
-    }}
+      if(temp&&temp[4]==true){
+        this.clearSelected(temp);
+        this.setState({answer: true});
+        this.setState({questionNumber: this.state.questionNumber+1})
+      } else{
+        let arg=question[recent]?question[recent].answer:'';
+        arg=arg.split("");
+        let translate1=translate(arg);
+        let checked=(document.getElementsByClassName(styles.correct).length>0)?document.getElementsByClassName(styles.correct):document.getElementsByClassName(styles.wrong);
+        let checked1=document.getElementsByClassName(styles.qanswer);
+        for (let i=0;i<checked1.length;i++){
+          document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+          document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+          document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
+        }
+        let state = document.getElementsByTagName("input");
+        state[0].getAttribute("checked");
+        for(let i=0;i<state.length;i++){
+          document.getElementsByTagName("input")[i].checked=false;
+        }
+        this.setState({value:[]});
+        this.setState({deadline:Date.now() +  1000 * 60})
+        this.setState({questionNumber: this.state.questionNumber+1})
+        this.setState({answer:false})
+      }}
   }
   lastQuestion=()=>{
     let recent=this.state.questionNumber-2;
@@ -456,17 +458,17 @@ class MapPage extends Component {
       }
       temp[5]=chooseAnswer;
       questionChoose.push(temp);
-    this.setState({questionChoose:questionChoose});
-    this.setState({answer:true});
-    if(this.state.questionNumber==allNumber) {
-      if(this.grade==allNumber) {
-        let username=getLocalData({dataName:'userName'});
-      this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
-      alert('回答全部正确，答题结果已经上传');
-      }else{
-        alert('回答未全部正确，请继续努力');
+      this.setState({questionChoose:questionChoose});
+      this.setState({answer:true});
+      if(this.state.questionNumber==allNumber) {
+        if(this.grade==allNumber) {
+          let username=getLocalData({dataName:'userName'});
+          this.props.dispatch({type: 'mapPage/updateUserGrades', payload: {tag_name:this.state.tagName,user_name:username}});
+          alert('回答全部正确，答题结果已经上传');
+        }else{
+          alert('回答未全部正确，请继续努力');
+        }
       }
-    }
     }}
   componentDidMount() {
     const { dispatch } = this.props;
@@ -543,88 +545,154 @@ class MapPage extends Component {
           })
         }
         console.log("listHere", listHere);
-        let feature = []
+        //加载中共一大（上海，嘉兴地点）的火花图标
         for (let i = 0; i < listHere.length; i++) {
-          feature.push(
-            {
-              'type': 'Feature',
-              'properties': {
-                'value': listHere[i].value,
-                'picture': listHere[i].picture,
-                'tagName':listHere[i].tagName,
-                'itemNow': listHere[i],
-              },
-              'geometry': {
-                'type': 'Point',
-                'coordinates': listHere[ i ].lonlat
+          map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
+          map.addLayer({
+            "id": listHere[ i ].id,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [ {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": listHere[ i ].lonlat,
+                  }
+                } ]
               }
             },
-          )
-          var pointSource = {
-            'type': 'geojson',
-            'data': {
-              'type': 'FeatureCollection',
-              'features': feature
+            "layout": {
+              "icon-image": listHere[ i ].id,
+              "icon-optional": false,
+              "icon-ignore-placement": true,
+              "icon-allow-overlap": true,
+              "text-size": [
+                "interpolate", [ "linear" ], [ "zoom" ],
+                3, 10,
+                10, 38
+              ],
+            },
+          });
+          map.addLayer({
+            "id": listHere[ i ].id + i,
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": [ {
+                  "type": "Feature",
+                  "geometry": {
+                    "type": "Point",
+                    "coordinates": listHere[ i ].lonlat,
+                  }
+                } ]
+              }
+            },
+            "layout": {
+              "text-field": listHere[ i ].value,
+              "text-anchor": 'left',
+              "text-offset": [ 1, 0.1 ],
+              "text-size": [
+                "interpolate", [ "linear" ], [ "zoom" ],
+                3, 10,
+                17, 38
+              ],
+            },
+            paint: {
+              "text-color": 'rgb(255,0,0)',
             }
-          }
-          // console.log('pointSource.data.features[0].properties.id', pointSource)
+          });
         }
-        // console.log('pointSource.data.features[0].properties.id', pointSource)
-        map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
-        map.addSource('places', pointSource);
-        map.addLayer({
-          'id': 'places',
-          'type': 'symbol',
-          'source': 'places',
-          'layout': {
-            "icon-image": 'pulsing-dot',
-            "icon-optional": false,
-            "icon-ignore-placement": true,
-            "icon-allow-overlap": true,
+        map.on('styledata', function() {
+          for (let i = 0; i < listHere.length; i++) {
+            map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
+            map.addLayer({
+              "id": listHere[ i ].id,
+              "type": "symbol",
+              "source": {
+                "type": "geojson",
+                "data": {
+                  "type": "FeatureCollection",
+                  "features": [ {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": listHere[ i ].lonlat,
+                    }
+                  } ]
+                }
+              },
+              "layout": {
+                "icon-image": listHere[ i ].id,
+                "icon-optional": false,
+                "icon-ignore-placement": true,
+                "icon-allow-overlap": true,
+                "text-size": [
+                  "interpolate", [ "linear" ], [ "zoom" ],
+                  3, 10,
+                  10, 38
+                ],
+              },
+            });
+            map.addLayer({
+              "id": listHere[ i ].id + i,
+              "type": "symbol",
+              "source": {
+                "type": "geojson",
+                "data": {
+                  "type": "FeatureCollection",
+                  "features": [ {
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": listHere[ i ].lonlat,
+                    }
+                  } ]
+                }
+              },
+              "layout": {
+                "text-field": listHere[ i ].value,
+                "text-anchor": 'left',
+                "text-offset": [ 1, 0.1 ],
+                "text-size": [
+                  "interpolate", [ "linear" ], [ "zoom" ],
+                  3, 10,
+                  17, 38
+                ],
+              },
+              paint: {
+                "text-color": 'rgb(255,0,0)',
+              }
+            });
           }
         });
-        // map.addLayer({
-        //   'id': 'placesTitle',
-        //   'type': 'symbol',
-        //   'source': 'places',
-        //   'layout': {
-        //     "text-field": ['get','title'],
-        //     // "text-field": "{title}",
-        //     "text-anchor": 'left',
-        //     "text-offset": [ 1, 0.1 ],
-        //     "text-size": [
-        //       "interpolate", [ "linear" ], [ "zoom" ],
-        //       3, 10,
-        //       17, 38
-        //     ],
-        //   },
-        //   paint: {
-        //     "text-color": 'rgb(255,0,0)',
-        //   }
-        // });
-        //加载中共一大（上海，嘉兴地点）的火花图标
-        var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
-        map.on('mouseenter', 'places', function(e) {
-          map.getCanvas().style.cursor = 'pointer';
-          var coordinates = e.features[0].geometry.coordinates;
-          console.log('eeeeeeeeeee',e)
-          _this.setState({
-            itemNow: e.features[ 0 ].properties.value,
-            tagName: e.features[0].properties.tagName,
-            pictureTag: e.features[0].properties.picture
-          })
-          // let showInfo = listHere[i].showInfo;
-          popup.setLngLat(coordinates);
-          // popup.setHTML(showInfo)
-          popup.addTo(map)
-          popup.setDOMContent(popupRef.current);
-        });
-        map.on('mouseleave', 'places', function() {
-          map.getCanvas().style.cursor = '';
-          // popup.remove();
-        });
-
         let _this = this;
+        var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
+        for (let i = 0; i < listHere.length; i++) {
+          map.on('mouseenter', listHere[ i ].id, function(e) {
+            map.getCanvas().style.cursor = 'pointer';
+            var coordinates = e.features[ 0 ].geometry.coordinates;
+            _this.setState({
+              itemNow: listHere[ i ],
+              tagName: listHere[ i ].tagName,
+              pictureTag:listHere[ i ].picture,
+            })
+            // let showInfo = listHere[i].showInfo;
+            popup.setLngLat(coordinates);
+            // popup.setHTML(showInfo)
+
+            popup.addTo(map);
+            popup.setDOMContent(popupRef.current);
+          });
+          map.on('mouseleave', listHere[ i ].id, function() {
+            map.getCanvas().style.cursor = '';
+            // popup.remove();
+          });
+        }
         // for(let i = 0;i<listHere.length;i++){
         //   map.on('click', listHere[i].id, function(e) {
         //     popup.remove();
@@ -652,7 +720,7 @@ class MapPage extends Component {
 
       let nav = new mapboxgl.NavigationControl({
         //是否显示指南针按钮，默认为true
-        "showCompass": true,
+        "showCompass": false,
         //是否显示缩放按钮，默认为true
         "showZoom": true
       });
@@ -1042,11 +1110,11 @@ class MapPage extends Component {
       let checked=state[i].checked;
       console.log(i,checked);
       if(checked==true){
-          let temp=state[i].value;
-          value.push(temp)
+        let temp=state[i].value;
+        value.push(temp)
       }
     }
-    console.log('radio checked', e);
+    // console.log('radio checked', e);
     this.setState({
       value: value,
     });
@@ -1175,145 +1243,159 @@ class MapPage extends Component {
     console.log('tagTree',tagTree);
     console.log('tagName',this.state.tagName);
     //遍历tagTree;
-  return (
-    <Authorized authority={['general','NORMAL','admin']} noMatch={noMatch}>
-    <Layout className={styles.normal}>
-      <Sider className={styles.siderStyle}collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} width={400}>
-        {/*答题*/}
-        {/**/}
-        <Modal
-          visible={this.state.startQuestion}
-          // visible={true}
-               centered
+    return (
+      <Authorized authority={['general','NORMAL','admin']} noMatch={noMatch}>
+        <Layout className={styles.normal}>
+          <Sider className={styles.siderStyle}collapsible collapsed={this.state.collapsed} trigger={null}  collapsedWidth={0} width={400}>
+            {/*答题*/}
+            {/**/}
+            <Modal
+              visible={this.state.startQuestion}
+              // visible={true}
+              centered
               width={1000}
-               mask={true}
-               maskClosable={true}
+              mask={true}
+              maskClosable={true}
               // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-               title={null}
-               onCancel={()=>{
-                 this.setState({startQuestion:false})
-                   let checked1=document.getElementsByClassName(styles.qanswer);
-                   for (let i=0;i<checked1.length;i++){
-                     document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
-                     document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
-                     document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
-                   }
-                   let state = document.getElementsByTagName("input");
-                   state[0].getAttribute("checked");
-                   for(let i=0;i<state.length;i++){
-                     document.getElementsByTagName("input")[i].checked=false;
-                   }
-                   this.setState({deadline:Date.now() +  1000 * 60})
-                   this.setState({questionNumber: 1})
-                   this.setState({answer:false});
-                   this.setState({value:[]});
-                   return
-               }}
-               footer={null}
-               closable={true}
-               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-        >
-          <div className="d-iframe">
-            {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
-            {/*        className="iframe-style"></iframe>*/}
-            <div className={styles.web} >
-          {/*<div className={styles.question}>*/}
-            <div className={styles.top}></div>
-            <div className={styles.headerRow}>
-              <span class={styles.big}>{this.state.questionNumber}</span>
-              /{allNumber}
-            </div>
-            <div className={styles.question} style={{height:'490px',overflow:'scroll'}}>
-              <div className={styles.qbody}><div><h3>{question[recent]?question[recent].questionContent:''}</h3></div></div>
-              {/*<div className={styles.qanswer}>*/}
-              <form id={'choose'} onChange={this.onChange} style={{top:'3em',left:'3em'}} >
-                <Row>
-                  <div id="1" className={styles.qanswer} >
-                    <p><input type="checkbox"   value={'A'} className="answer"/>
-                      {'A  '+(question[recent]?question[recent].optionA:'')}
-                    </p>
-                    {this.state.answer&&this.state.questionChoose[recent][0]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][0]} />:''}
+              title={null}
+              onCancel={()=>{
+                this.setState({startQuestion:false})
+                let checked1=document.getElementsByClassName(styles.qanswer);
+                for (let i=0;i<checked1.length;i++){
+                  document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.qanswerchoosable);
+                  document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.correct);
+                  document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
+                }
+                let state = document.getElementsByTagName("input");
+                state[0].getAttribute("checked");
+                for(let i=0;i<state.length;i++){
+                  document.getElementsByTagName("input")[i].checked=false;
+                }
+                this.setState({deadline:Date.now() +  1000 * 60})
+                this.setState({questionNumber: 1})
+                this.setState({answer:false});
+                this.setState({value:[]});
+                return
+              }}
+              footer={null}
+              closable={true}
+              wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+            >
+              <div className="d-iframe">
+                {/*<iframe id="previewIframe" src="" frameBorder="0"*/}
+                {/*        className="iframe-style"></iframe>*/}
+                <div className={styles.web} >
+                  {/*<div className={styles.question}>*/}
+                  <div className={styles.top}></div>
+                  <div className={styles.headerRow}>
+                    <span class={styles.big}>{this.state.questionNumber}</span>
+                    /{allNumber}
                   </div>
-                </Row>
-                <div id="2" className={styles.qanswer}>
-                  <p><input type="checkbox"   value={'B'}
-                            className="answer"
-                  />
-                    {'B  '+(question[recent]?question[recent].optionB:'')}
-                  </p>
-                  {this.state.answer&&this.state.questionChoose[recent][1]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][1]} />:''}
-                </div>
-                {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} >
-                  <p><input type="checkbox"   value={'C'} className="answer"/>
-                    {'C  '+(question[recent]?question[recent].optionC:'')}
-                  </p>
-                  {this.state.answer&&this.state.questionChoose[recent][2]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][2]} />:''}
-                </div>:""}
-                {question[recent]&&question[recent].hasOwnProperty('optionD')?
-                  <div className={styles.qanswer} >
-                    <p><input type="checkbox"   value={'D'} className="answer"/>
-                      {'D  '+(question[recent]?question[recent].optionD:'')}
-                    </p>
-                    {this.state.answer&&this.state.questionChoose[recent][3]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][3]} />:''}
-                  </div>:''}
-              </form>
-                  {this.state.answer==true?
-                    (<h3>正确答案是</h3>):''}
-                  {this.state.answer==true?
-                    (<h2> {(question[recent]?question[recent].answer:'')} </h2>):''}
-              {this.state.questionNumber==allNumber&&this.state.answer?
-                (<div>
-                  {/*<div className={styles.try}></div>*/}
-                  <h3><span>您的得分为</span><h2>{this.state.grade}</h2></h3></div>):''}
-            </div>
-              <div className={styles.actionRow}>
-                <Button className={styles.preBtn} disabled={this.state.questionNumber<=1?true:false} onClick={()=>{
-                  this.lastQuestion()
-                }}>上一题</Button>
-                <Button className={styles.nextBtn} disabled={this.answerOrNext()} onClick={()=>{
-                  this.state.answer?this.nextQuestion():this.submitQuestion()
-                }}>{this.state.answer?"下一题":"提 交"}</Button>
+                  <div className={styles.question} style={{height:'490px',overflow:'scroll'}}>
+                    <div className={styles.qbody}><div><h3>{question[recent]?question[recent].questionContent:''}</h3></div></div>
+                    {/*<div className={styles.qanswer}>*/}
+                    <form id={'choose'}
+                      //     onChange={(e)=>{
+                      // e.stopPropagation();
+                      // this.onChange()}}
+                          style={{top:'3em',left:'3em'}} >
+                      <Row>
+                        <div>
+                          <div id="1" className={styles.qanswer}
+                               onClick={(event)=>{
+                                 event.stopPropagation();
+                                 document.getElementsByTagName("input")[0].checked=!document.getElementsByTagName("input")[0].checked;
+                                 this.onChange()}}>
+                            <div style={{pointerEvents:'none'}}>
+                              <p><input type="checkbox"   value={'A'} className="answer"/>
+                                {'A  '+(question[recent]?question[recent].optionA:'')}
+                              </p></div>
+
+                            {this.state.answer&&this.state.questionChoose[recent][0]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][0]} />:''}
+                          </div></div>
+                      </Row>
+                      <div id="2" className={styles.qanswer}onClick={()=>{document.getElementsByTagName("input")[1].checked=!document.getElementsByTagName("input")[1].checked;this.onChange()}}>
+                        <div style={{pointerEvents:'none'}}>
+                          <p><input type="checkbox"   value={'B'}
+                                    className="answer"
+                          />
+                            {'B  '+(question[recent]?question[recent].optionB:'')}
+                          </p></div>
+                        {this.state.answer&&this.state.questionChoose[recent][1]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][1]} />:''}
+                      </div>
+                      {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} onClick={()=>{document.getElementsByTagName("input")[2].checked=!document.getElementsByTagName("input")[2].checked;this.onChange()}} >
+                        <div style={{pointerEvents:'none'}}>
+                          <p><input type="checkbox"   value={'C'} className="answer"/>
+                            {'C  '+(question[recent]?question[recent].optionC:'')}
+                          </p></div>
+                        {this.state.answer&&this.state.questionChoose[recent][2]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][2]} />:''}
+                      </div>:""}
+                      {question[recent]&&question[recent].hasOwnProperty('optionD')?
+                        <div className={styles.qanswer} onClick={()=>{document.getElementsByTagName("input")[3].checked=!document.getElementsByTagName("input")[3].checked;this.onChange()}}>
+                          <div style={{pointerEvents:'none'}}>
+                            <p><input type="checkbox"   value={'D'} className="answer"/>
+                              {'D  '+(question[recent]?question[recent].optionD:'')}
+                            </p></div>
+                          {this.state.answer&&this.state.questionChoose[recent][3]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][3]} />:''}
+                        </div>:''}
+                    </form>
+                    {this.state.answer==true?
+                      (<h3>正确答案是</h3>):''}
+                    {this.state.answer==true?
+                      (<h2> {(question[recent]?question[recent].answer:'')} </h2>):''}
+                    {this.state.questionNumber==allNumber&&this.state.answer?
+                      (<div>
+                        {/*<div className={styles.try}></div>*/}
+                        <h3><span>您的得分为</span><h2>{this.state.grade}</h2></h3></div>):''}
+                  </div>
+                  <div className={styles.actionRow}>
+                    <Button className={styles.preBtn} disabled={this.state.questionNumber<=1?true:false} onClick={()=>{
+                      this.lastQuestion()
+                    }}>上一题</Button>
+                    <Button className={styles.nextBtn} disabled={this.answerOrNext()} onClick={()=>{
+                      this.state.answer?this.nextQuestion():this.submitQuestion()
+                    }}>{this.state.answer?"下一题":"提 交"}</Button>
+                  </div>
+                </div></div>
+            </Modal>
+            {/*文章*/}
+            <Modal visible={this.state.startArticle}
+                   centered
+                   width={1000}
+                   mask={true}
+                   maskClosable={true}
+              // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
+                   title={null}
+                   onCancel={()=>this.setState({startArticle:false})}
+                   footer={null}
+                   closable={true}
+                   wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+            >
+              <div className={styles.modal}>
+                {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
+                <div className={styles.topArticle}></div>
+                <iframe width={"960px"}  style={{height:'560px',overflow:'scroll'}} srcDoc={knowledgeContent}  />
+                {/*<div className="d-iframe" style={{height:'570px',overflow:'scroll'}} dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >*/}
+                {/*</div>*/}
               </div>
-          </div></div>
-        </Modal>
-        {/*文章*/}
-        <Modal visible={this.state.startArticle}
-               centered
-               width={1000}
-               mask={true}
-               maskClosable={true}
-          // maskStyle={{'opacity':'0.2','background':'#bd37ad','animation':'flow'}}
-               title={null}
-               onCancel={()=>this.setState({startArticle:false})}
-               footer={null}
-               closable={true}
-               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-        >
-          <div className={styles.modal}>
-            {/*<h2 style={{alignContent:'center',textAlign:'center'}}>文章</h2>*/}
-            <div className={styles.topArticle}></div>
-            <iframe width={"960px"}  style={{height:'560px',overflow:'scroll'}} srcDoc={knowledgeContent}  />
-            {/*<div className="d-iframe" style={{height:'570px',overflow:'scroll'}} dangerouslySetInnerHTML={{__html:'<strong>'+knowledgeContent+'</strong>'}} >*/}
-            {/*</div>*/}
-          </div>
-        </Modal>
-        {/*图片*/}
-        <Modal
-               visible={this.state.startPicture}
-               centered
-               width={1000}
-               mask={true}
-               maskClosable={true}
-               title={null}
-               onCancel={()=>this.setState({startPicture:false})}
-               footer={null}
-               closable={true}
-               wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
-        >
-          <div className={styles.modal}>
-            <div className={styles.topPicture}></div>
-            <div className="d-iframe" style={{height:'560px',margin:'0 auto'}}>
-              <div style={{ height:'560px', padding: '0px 20px 0px 20px',margin:'0 auto'}} >
+            </Modal>
+            {/*图片*/}
+            <Modal
+              visible={this.state.startPicture}
+              centered
+              width={1000}
+              mask={true}
+              maskClosable={true}
+              title={null}
+              onCancel={()=>this.setState({startPicture:false})}
+              footer={null}
+              closable={true}
+              wrapClassName={styles.web}//对话框外部的类名，主要是用来修改这个modal的样式的
+            >
+              <div className={styles.modal}>
+                <div className={styles.topPicture}></div>
+                <div className="d-iframe" style={{height:'560px',margin:'0 auto'}}>
+                  <div style={{ height:'560px', padding: '0px 20px 0px 20px',margin:'0 auto'}} >
                     <Slider {...this.carousel_settings} >
                       {this.state.pictures}
                     </Slider>
@@ -1346,11 +1428,11 @@ class MapPage extends Component {
               <div className={styles.modalVideo}>
                 <div className={styles.topVideo}></div>
                 <div style={{padding: 30,margin:'auto'}} >
-                <div className="d-iframe" style={{margin:'auto'}}>
-                  <Slider {...this.carousel_settings} >
-                    {this.state.videos}
-                  </Slider>
-                </div>
+                  <div className="d-iframe" style={{margin:'auto'}}>
+                    <Slider {...this.carousel_settings} >
+                      {this.state.videos}
+                    </Slider>
+                  </div>
                   <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>共<span style={{color:'red'}}>{this.state.videos.length}</span>个</p>
                 </div>
               </div>
@@ -1374,6 +1456,7 @@ class MapPage extends Component {
                         // icon={<Icon type="book" />}
                       >
                         <div style={{fontWeight:"bold",cursor: 'pointer'}}>
+                          <img width='20px' height='20px' src={item['property']=='movement'?movement:meeting}/>
                           {item['value']}
                         </div>
                       </VerticalTimelineElement>:
@@ -1384,7 +1467,7 @@ class MapPage extends Component {
                         date={<div onClick={(e)=>this.stopOnClick(e)} style={{textAlign:"center", width:"80%", margin:"0 auto"}}>{item.time}</div>}
                         contentStyle={{ borderTop: '7px solid  rgba(177,46,46)',textAlign:"center",color:'rgb(155, 20, 20)' }}
                         contentArrowStyle={{ borderTop: '7px solid  rgba(177,46,46)' }}
-                        iconStyle={{ background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
+                        iconStyle={{background: 'rgba(177,46,46)', color: '#fff',width:'40px', height:"40px",top:"20px",marginLeft:"-20px",paddingTop:"15px"  }}
                         dateClassName={ styles.date }
                         onTimelineElementClick={()=>(
                           item['text']=='中共一大'?
@@ -1395,11 +1478,12 @@ class MapPage extends Component {
                       >{
                         item['text']=='中共一大'?
                           <div style={{fontWeight:"bold",cursor: 'pointer'}}>
+                            <img width='24px' height='24px' src={item['property']=='movement'?movement:meeting}/>
                             {item['text']}
                             {
                               this.state.more?
                                 <Icon className={styles.icons} type="vertical-align-bottom" onClick={()=>this.moreOnClick()}/>:
-                              <Icon className={styles.icons} type="vertical-align-top" onClick={()=>this.moreOnClick()}/>
+                                <Icon className={styles.icons} type="vertical-align-top" onClick={()=>this.moreOnClick()}/>
                             }
                             <div className={styles.zhonggongyida}>
                               <Row>
@@ -1431,6 +1515,7 @@ class MapPage extends Component {
                             </div>
                           </div>:
                           <div style={{fontWeight:"bold",cursor: 'pointer'}}>
+                            <img width='24px' height='24px' src={item['property']=='movement'?movement:meeting}/>
                             {item['text']}
                           </div>
                       }
@@ -1446,156 +1531,156 @@ class MapPage extends Component {
               <div className={styles.mapContainer} id="onlineMapping">
                 <div ref={popupRef} className={styles.popupDiv}>
                   {this.state.itemNow?
-                    <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow}</div>
+                    <div style={{margin:"0 auto", color:"red", fontSize:"20px", textAlign:"center"}}>{this.state.itemNow['id']}</div>
                     :null}
                   {this.state.itemNow?
                     (this.state.pictureTag?<img style={{ height: '100%', width: '220px' ,marginTop:11}} src={this.state.pictureTag}/>:<Spin/>)
                     :null}
                   {this.state.itemNow?
                     <div className={styles.hand} style={{cursor:'pointer'}}>
-                    <Row style={{ width: "240px", top: "10px",cursor:'pointer'}} justify="space-between">
-                    <Col span={2} onClick={() => {
-                      this.setState({ startArticle: true });
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
-                    }}>
-                      <Icon className={styles.popup} type="book" />
-                    </Col>
-                    <Col span={4} onClick={() => {
-                      this.setState({ startArticle: true })
-                      this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
-                    }}>
-                      文章
-                    </Col>
-                    <Col span={2} onClick={() => {
-                      this.setState({ startPicture: true });
-                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
-                        debugger
-                        if(res.success) {
-                          let pictures=res.pictures;
-                          let picturesAll=pictures.map((item)=>{
-                            return(<div style={styles.out}>
-                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'15px',marginTop:'15px'}}>{item.pictureTitle}</h1>
-                              <img src={item.pictureContent} style={{ height: '490px',display:'block',
-                                marginLeft: 'auto',marginRight: 'auto'}} />
-                            </div>)
+                      <Row style={{ width: "240px", top: "10px",cursor:'pointer'}} justify="space-between">
+                        <Col span={2} onClick={() => {
+                          this.setState({ startArticle: true });
+                          this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                        }}>
+                          <Icon className={styles.popup} type="book" />
+                        </Col>
+                        <Col span={4} onClick={() => {
+                          this.setState({ startArticle: true })
+                          this.props.dispatch({type: 'mapPage/getKnowLedge', payload: this.state.tagName});
+                        }}>
+                          文章
+                        </Col>
+                        <Col span={2} onClick={() => {
+                          this.setState({ startPicture: true });
+                          this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                            debugger
+                            if(res.success) {
+                              let pictures=res.pictures;
+                              let picturesAll=pictures.map((item)=>{
+                                return(<div style={styles.out}>
+                                  <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'15px',marginTop:'15px'}}>{item.pictureTitle}</h1>
+                                  <img src={item.pictureContent} style={{ height: '490px',display:'block',
+                                    marginLeft: 'auto',marginRight: 'auto'}} />
+                                </div>)
+                              });
+                              this.setState({pictures:picturesAll})
+                            }
+                            console.log('res');
                           });
-                          this.setState({pictures:picturesAll})
-                        }
-                        console.log('res');
-                      });
-                    }}>
-                      <Icon className={styles.popup} type="picture" />
-                    </Col>
-                    <Col span={4} onClick={() => {
-                      this.setState({ startPicture: true });
-                      this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
-                        debugger
-                        if(res.success) {
-                          let pictures=res.pictures;
-                          let picturesAll=pictures.map((item)=>{
-                            return(<div style={styles.out}>
-                              <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'15px',marginTop:'15px'}}>{item.pictureTitle}</h1>
-                              <img src={item.pictureContent} style={{ height: '490px',display:'block',
-                                marginLeft: 'auto',marginRight: 'auto'}} />
-                            </div>)
+                        }}>
+                          <Icon className={styles.popup} type="picture" />
+                        </Col>
+                        <Col span={4} onClick={() => {
+                          this.setState({ startPicture: true });
+                          this.props.dispatch({type: 'mapPage/getPictureByTag', payload: this.state.tagName}).then(res=>{
+                            debugger
+                            if(res.success) {
+                              let pictures=res.pictures;
+                              let picturesAll=pictures.map((item)=>{
+                                return(<div style={styles.out}>
+                                  <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'15px',marginTop:'15px'}}>{item.pictureTitle}</h1>
+                                  <img src={item.pictureContent} style={{ height: '490px',display:'block',
+                                    marginLeft: 'auto',marginRight: 'auto'}} />
+                                </div>)
+                              });
+                              this.setState({pictures:picturesAll})
+                            }
+                            console.log('res');
                           });
-                          this.setState({pictures:picturesAll})
-                        }
-                        console.log('res');
-                      });
-                    }}>
-                      图片
-                    </Col>
-                    <Col span={2} onClick={() => {
-                      this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName}).then(res=>{
-                        console.log('res',res.videos);
-                        if(res.success) {
-                          let videos=res.videos;
-                          let videoAll=videos.map((item,index, arr)=>{
-                            return(<div style={styles.out1}>
-                              <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
-                              {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
-                              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
-                                      preload="none"
-                                     margin='auto'
-                                     controls="controls">
-                                {/*autoPlay="autoplay"*/}
-                                <source src={item.videoContent}
-                                />
-                                <source src={item.videoContent}
-                                />
-                              </video>
-                              <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
-                            </div>)
+                        }}>
+                          图片
+                        </Col>
+                        <Col span={2} onClick={() => {
+                          this.setState({ startVideo: true })
+                          this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName}).then(res=>{
+                            console.log('res',res.videos);
+                            if(res.success) {
+                              let videos=res.videos;
+                              let videoAll=videos.map((item,index, arr)=>{
+                                return(<div style={styles.out1}>
+                                  <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
+                                  {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
+                                  <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
+                                         preload="none"
+                                         margin='auto'
+                                         controls="controls">
+                                    {/*autoPlay="autoplay"*/}
+                                    <source src={item.videoContent}
+                                    />
+                                    <source src={item.videoContent}
+                                    />
+                                  </video>
+                                  <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
+                                </div>)
+                              });
+                              this.setState({videos:videoAll})
+                            }
                           });
-                          this.setState({videos:videoAll})
-                        }
-                      });
-                    }}>
-                      <Icon className={styles.popup} type="video-camera" />
-                    </Col>
-                    <Col span={4} onClick={() => {
-                      // this.setState({ startVideo: true })
-                      // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
-                      this.setState({ startVideo: true })
-                      this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName}).then(res=>{
-                        console.log('res',res.videos);
-                        if(res.success) {
-                          let videos=res.videos;
-                          let videoAll=videos.map((item,index, arr)=>{
-                            return(<div style={styles.out1}>
-                              <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
-                              {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
-                              <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
-                                     // autoPlay="autoplay"
-                                width='888px'
-                                     preload="none"
-                                     controls="controls">
-                                <source src={item.videoContent}
-                                />
-                                <source src={item.videoContent}
-                                />
-                              </video>
-                              <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
-                            </div>)
+                        }}>
+                          <Icon className={styles.popup} type="video-camera" />
+                        </Col>
+                        <Col span={4} onClick={() => {
+                          // this.setState({ startVideo: true })
+                          // this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName});
+                          this.setState({ startVideo: true })
+                          this.props.dispatch({type: 'mapPage/getVideoByTag', payload: this.state.tagName}).then(res=>{
+                            console.log('res',res.videos);
+                            if(res.success) {
+                              let videos=res.videos;
+                              let videoAll=videos.map((item,index, arr)=>{
+                                return(<div style={styles.out1}>
+                                  <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
+                                  {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
+                                  <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
+                                    // autoPlay="autoplay"
+                                         width='888px'
+                                         preload="none"
+                                         controls="controls">
+                                    <source src={item.videoContent}
+                                    />
+                                    <source src={item.videoContent}
+                                    />
+                                  </video>
+                                  <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
+                                </div>)
+                              });
+                              this.setState({videos:videoAll})
+                            }
                           });
-                          this.setState({videos:videoAll})
-                        }
-                      });
-                    }}>
-                      视频
-                    </Col>
-                    <Col span={2} onClick={() => {
-                      let username=getLocalData({dataName:'userName'});
-                      debugger
-                      this.props.dispatch({type: 'mapPage/getUsrStatus', payload: {tag_name:this.state.tagName,user_name:username}}).then(res=>
-                      {
-                        this.setState({ startQuestion: true });
-                        this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
-                        // debugger
-                        // console.log('res',res);
-                        // if(res.user_answer_status==1) {
-                        //   alert("该套题您已回答过");
-                        // }else{
-                        //
-                        // }
-                      })
-                    }}>
-                      <Icon className={styles.popup} type="question" />
-                    </Col>
-                    <Col span={4} onClick={() => {
-                      let username=getLocalData({dataName:'userName'});
-                      debugger
-                      this.props.dispatch({type: 'mapPage/getUsrStatus', payload: {tag_name:this.state.tagName,user_name:username}}).then(res=>
-                      {
-                        this.setState({ startQuestion: true });
-                        this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
-                      })
-                    }}>
-                      答题
-                    </Col>
-                    </Row></div>:null}
+                        }}>
+                          视频
+                        </Col>
+                        <Col span={2} onClick={() => {
+                          let username=getLocalData({dataName:'userName'});
+                          debugger
+                          this.props.dispatch({type: 'mapPage/getUsrStatus', payload: {tag_name:this.state.tagName,user_name:username}}).then(res=>
+                          {
+                            this.setState({ startQuestion: true });
+                            this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
+                            // debugger
+                            // console.log('res',res);
+                            // if(res.user_answer_status==1) {
+                            //   alert("该套题您已回答过");
+                            // }else{
+                            //
+                            // }
+                          })
+                        }}>
+                          <Icon className={styles.popup} type="question" />
+                        </Col>
+                        <Col span={4} onClick={() => {
+                          let username=getLocalData({dataName:'userName'});
+                          debugger
+                          this.props.dispatch({type: 'mapPage/getUsrStatus', payload: {tag_name:this.state.tagName,user_name:username}}).then(res=>
+                          {
+                            this.setState({ startQuestion: true });
+                            this.props.dispatch({ type: 'mapPage/getQuestion', payload: this.state.tagName })
+                          })
+                        }}>
+                          答题
+                        </Col>
+                      </Row></div>:null}
                 </div>
               </div>
               <Icon
@@ -1660,5 +1745,5 @@ class MapPage extends Component {
 }
 
 export default connect(({ mapPage }) => ({
-mapPage
+  mapPage
 }))(MapPage);
