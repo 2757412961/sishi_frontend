@@ -235,9 +235,11 @@ class Header extends Component {
           </Link>
         </Menu.Item>
         <Menu.Item onClick={()=>
-          this.props.dispatch(
+        {this.props.dispatch(
             {type:'mapPage/setModule', payload:'互动答题'}
-          )
+          );
+        router.replace('/question')
+        }
         }>
           <Link to={{pathname: '/mapPage', query: {module: '互动答题'}}}>
             {
