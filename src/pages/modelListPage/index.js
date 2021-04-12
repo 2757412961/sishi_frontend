@@ -163,8 +163,8 @@ function Mokuaiye(props) {
           党言党语
         </a>
       </Menu.Item>
-      <Menu.Item>
-        <a className={styles.menu_a}>
+      <Menu.Item onClick={()=>router.replace('/question')}>
+        <a className={styles.menu_a} >
           互动答题
         </a>
       </Menu.Item>

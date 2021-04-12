@@ -25,6 +25,7 @@
     "mapbox-gl": "^2.1.1",
     "math.gl": "^3.4.2",
     "react": "^16.14.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.14.0",
     "react-github-calendar": "^2.0.2",
     "react-grid-layout": "^1.2.4",

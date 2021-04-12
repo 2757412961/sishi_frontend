@@ -68,6 +68,7 @@ import movement from '@/assets/movements.png';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Image from 'react-mapbox-gl/src/image';
+import { Scrollbars } from 'react-custom-scrollbars';
 const RadioGroup = Radio.Group;
 var timer;
 const { TabPane } = Tabs;
@@ -1267,7 +1268,6 @@ class MapPage extends Component {
                   document.getElementsByClassName(styles.qanswer)[i].classList.remove(styles.false);
                 }
                 let state = document.getElementsByTagName("input");
-                state[0].getAttribute("checked");
                 for(let i=0;i<state.length;i++){
                   document.getElementsByTagName("input")[i].checked=false;
                 }
@@ -1295,12 +1295,10 @@ class MapPage extends Component {
                     <div className={styles.qbody}><div><h3>{question[recent]?question[recent].questionContent:''}</h3></div></div>
                     {/*<div className={styles.qanswer}>*/}
                     <form id={'choose'}
-                      //     onChange={(e)=>{
-                      // e.stopPropagation();
-                      // this.onChange()}}
                           style={{top:'3em',left:'3em'}} >
-                      <Row>
-                        <div>
+                        <Row>
+                        {question[recent]&&question[recent].hasOwnProperty('optionA')?
+                          <div>
                           <div id="1" className={styles.qanswer}
                                onClick={(event)=>{
                                  event.stopPropagation();
@@ -1312,9 +1310,9 @@ class MapPage extends Component {
                               </p></div>
 
                             {this.state.answer&&this.state.questionChoose[recent][0]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][0]} />:''}
-                          </div></div>
+                          </div></div>:'此标签下暂时没有题目'}
                       </Row>
-                      <div id="2" className={styles.qanswer}onClick={()=>{document.getElementsByTagName("input")[1].checked=!document.getElementsByTagName("input")[1].checked;this.onChange()}}>
+                      {question[recent]&&question[recent].hasOwnProperty('optionB')?<div id="2" className={styles.qanswer}onClick={()=>{document.getElementsByTagName("input")[1].checked=!document.getElementsByTagName("input")[1].checked;this.onChange()}}>
                         <div style={{pointerEvents:'none'}}>
                           <p><input type="checkbox"   value={'B'}
                                     className="answer"
@@ -1322,7 +1320,7 @@ class MapPage extends Component {
                             {'B  '+(question[recent]?question[recent].optionB:'')}
                           </p></div>
                         {this.state.answer&&this.state.questionChoose[recent][1]!=-1?<img width='24px' height='24px' src={this.state.questionChoose[recent][1]} />:''}
-                      </div>
+                      </div>:''}
                       {question[recent]&&question[recent].hasOwnProperty('optionC')?<div className={styles.qanswer} onClick={()=>{document.getElementsByTagName("input")[2].checked=!document.getElementsByTagName("input")[2].checked;this.onChange()}} >
                         <div style={{pointerEvents:'none'}}>
                           <p><input type="checkbox"   value={'C'} className="answer"/>
@@ -1427,7 +1425,7 @@ class MapPage extends Component {
             >
               <div className={styles.modalVideo}>
                 <div className={styles.topVideo}></div>
-                <div style={{padding: 30,margin:'auto'}} >
+                <div style={{padding: '20px 30px 20px 30px',margin:'auto'}} >
                   <div className="d-iframe" style={{margin:'auto'}}>
                     <Slider {...this.carousel_settings} >
                       {this.state.videos}
@@ -1438,6 +1436,7 @@ class MapPage extends Component {
               </div>
             </Modal>
             <div style={{textAlign:"center", fontSize:"20px", color:"rgba(155,20,20,1)",padding:"10px", fontWeight:"bold"}}>{mapPage.module?mapPage.module:this.state.module}</div>
+            <Scrollbars>
             <div id='verticalTimeLine' className={styles.verticalTimeLine}>
               <VerticalTimeline>
                 {this.state.listTime.map((item)=> (
@@ -1525,6 +1524,7 @@ class MapPage extends Component {
                 }
               </VerticalTimeline>
             </div>
+            </Scrollbars>
           </Sider>
           <Content>
             <div className={styles.normal}>
@@ -1559,9 +1559,10 @@ class MapPage extends Component {
                               let pictures=res.pictures;
                               let picturesAll=pictures.map((item)=>{
                                 return(<div style={styles.out}>
-                                  <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'15px',marginTop:'15px'}}>{item.pictureTitle}</h1>
+                                  <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'10px',marginTop:'5px'}}>{item.pictureTitle}</h1>
                                   <img src={item.pictureContent} style={{ height: '490px',display:'block',
                                     marginLeft: 'auto',marginRight: 'auto'}} />
+                                    <p style={{textAlign:'center',fontSize:'10px'}}>图片来源：{item.pictureSource}</p>
                                 </div>)
                               });
                               this.setState({pictures:picturesAll})
@@ -1579,9 +1580,10 @@ class MapPage extends Component {
                               let pictures=res.pictures;
                               let picturesAll=pictures.map((item)=>{
                                 return(<div style={styles.out}>
-                                  <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'15px',marginTop:'15px'}}>{item.pictureTitle}</h1>
+                                  <h1 style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'10px',marginTop:'5px'}}>{item.pictureTitle}</h1>
                                   <img src={item.pictureContent} style={{ height: '490px',display:'block',
                                     marginLeft: 'auto',marginRight: 'auto'}} />
+                                  <p style={{textAlign:'center',fontSize:'10px'}}>图片来源：{item.pictureSource}</p>
                                 </div>)
                               });
                               this.setState({pictures:picturesAll})
@@ -1611,6 +1613,7 @@ class MapPage extends Component {
                                     <source src={item.videoContent}
                                     />
                                   </video>
+                                  <p style={{fontSize:'10px',textAlign:'right',color:'black'}}>视频来源{item.videoSource}</p>
                                   <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
                                 </div>)
                               });
@@ -1630,7 +1633,7 @@ class MapPage extends Component {
                               let videos=res.videos;
                               let videoAll=videos.map((item,index, arr)=>{
                                 return(<div style={styles.out1}>
-                                  <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'14px'}}>{item.videoTitle}</h1>
+                                  <h1  style={{fontSize:'24px',textAlign:'center',color:'black',marginBottom:'10px'}}>{item.videoTitle}</h1>
                                   {/*<video src={item.videoContent} style={{ height: '100%', width: '100%' }} />*/}
                                   <video height="400" width="100%" top="3em" poster="http://www.youname.com/images/first.png"
                                     // autoPlay="autoplay"
@@ -1642,6 +1645,7 @@ class MapPage extends Component {
                                     <source src={item.videoContent}
                                     />
                                   </video>
+                                  <p style={{fontSize:'10px',color:'black',textAlign:'right'}}>视频来源{item.videoSource}</p>
                                   <p style={{fontSize:'16px',textAlign:'right',color:'black'}}>第{index+1}个视频</p>
                                 </div>)
                               });
