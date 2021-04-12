@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import styles from './index.less';
 import { Icon, Button, Menu,Avatar, Divider, Row, Col } from 'antd';
-import xueyuanlogo from '@/assets/images/xueyuan-white.png';
+import xueyuanlogo from '@/assets/images/xueyuanlogo.png';
 import logobiaoti from '@/assets/images/logobiaoti.png';
 // import foot_logo from '@images/index/logo100.gif';
 
@@ -28,17 +28,11 @@ class Footer extends Component {
     <div>
       <div className={styles.home_footer}>
         <div>
-      {/*<Row style={{width:"600px", textAlign:"center"}}>*/}
-      {/*  <Col span={3}>*/}
-          <img src={xueyuanlogo} className={styles.xueyuan_logo} style={{float:"left"}}alt="" />
-        {/*</Col>*/}
-        {/*<Col span={9}>*/}
-          <img src={logobiaoti} className={styles.logo_biaoti} alt="" />
-        {/*</Col>*/}
-        {/*<Col span={12}>*/}
-          {/*<div style={{marginTop:"5px", fontWeight:"bold",fontSize:"15px"}}>*/}
-          {/*  联&nbsp;系&nbsp;我&nbsp;们*/}
-          {/*</div>*/}
+      <Row style={{width:"600px"}}>
+        <Col span={12}>
+          <img src={xueyuanlogo} className={styles.xueyuan_logo} style={{float:"left"}} alt="" />
+        </Col>
+        <Col span={12}>
           <div style={{marginTop:"10px"}}>
             地址 : 浙大路38号，浙江大学地球科学学院
           </div>
@@ -48,8 +42,9 @@ class Footer extends Component {
           <div style={{marginTop:"5px"}}>
             电话 : +86-571-87952453
           </div>
+        </Col>
       {/*  </Col>*/}
-      {/*</Row>*/}
+        </Row>
         </div>
         <div>
       <Row>
@@ -57,7 +52,7 @@ class Footer extends Component {
         </div>
       </Row>
       <Row>
-        <div>
+        <div style={{margin:"0 auto", textAlign:"center"}}>
           版权所有Copyright © 浙江大学地球科学学院
         </div>
       </Row>

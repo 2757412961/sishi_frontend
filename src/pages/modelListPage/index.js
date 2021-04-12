@@ -205,13 +205,13 @@ function Mokuaiye(props) {
         </div>
         <div>
           <Dropdown overlay={menu1} placement="bottomCenter">
-            <Button className={styles.captcha_btn} style={{marginLeft:'100px'}}>党史学习</Button>
+            <Button className={styles.captcha_btn} style={{marginLeft:'100px', width:"150px", height:"50px"}}>党&nbsp;史&nbsp;学&nbsp;习</Button>
           </Dropdown>
           <Dropdown overlay={menu2} placement="bottomCenter">
-            <Button className={styles.captcha_btn}>专题学习</Button>
+            <Button className={styles.captcha_btn} style={{width:"150px", height:"50px"}}>专&nbsp;题&nbsp;学&nbsp;习</Button>
           </Dropdown>
           <Dropdown overlay={menu3} placement="bottomCenter">
-            <Button className={styles.captcha_btn}>互动学习</Button>
+            <Button className={styles.captcha_btn} style={{width:"150px", height:"50px"}}>互&nbsp;动&nbsp;学&nbsp;习</Button>
           </Dropdown>
           {/*<Button className={styles.captcha_btn}>西迁精神</Button>*/}
           {/*<Button className={styles.captcha_btn}>青春力量</Button>*/}
