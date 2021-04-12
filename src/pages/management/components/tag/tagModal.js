@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Form, Input, Button, Checkbox, Cascader, Col, message} from 'antd';
+import {Modal, Form, Input, Button, Checkbox, Cascader, Col, message, DatePicker} from 'antd';
 import request from "@/utils/request";
 
 class TagModal extends Component {
@@ -42,6 +42,7 @@ class TagModal extends Component {
           method: 'POST',
           data: {
             tagName: tagArr.join('@'),
+            eventTime: formData.eventTime,
           },
           autoAdd: false, //不添加v1.0
         }).then((res) => {
@@ -107,6 +108,13 @@ class TagModal extends Component {
                 <Input placeholder="请输入新建标签名称"/>
               )}
             </Form.Item>
+
+            <Form.Item label="事件发生时间" name="eventTime">
+              {getFieldDecorator('eventTime', {rules: [{required: true, message: '请输入事件发生时间!'},]})(
+                <Input placeholder="样例: 1938年5月26日至6月3日"/>
+              )}
+            </Form.Item>
+
           </Form>
         </Modal>
       </>

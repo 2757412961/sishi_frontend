@@ -38,6 +38,14 @@ export default class TagResourceTable extends Component {
           sorter: (a, b) => a.resourceType.length - b.resourceType.length,
           sortDirections: ['descend', 'ascend'],
         },
+        {
+          title: '上传用户 ID',
+          dataIndex: 'userId',
+          key: 'userId',
+          align: 'center',
+          sorter: (a, b) => a.userId.length - b.userId.length,
+          sortDirections: ['descend', 'ascend'],
+        },
       ],
 
       dataSource: [
@@ -46,6 +54,7 @@ export default class TagResourceTable extends Component {
           tagName: 'test',
           resourceId: 'test',
           resourceType: 'ggg',
+          userId: 'ggg',
         },
       ],
     };

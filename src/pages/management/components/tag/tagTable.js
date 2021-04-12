@@ -31,6 +31,20 @@ export default class TagTable extends Component {
           ),
         },
         {
+          title: '标签 类型',
+          dataIndex: 'property',
+          key: 'property',
+          // sorter: (a, b) => a.property.length - b.property.length,
+          render: text => <a>{text}</a>,
+        },
+        {
+          title: '事件发生时间',
+          dataIndex: 'eventTime',
+          key: 'eventTime',
+          // sorter: (a, b) => a.eventTime.length - b.eventTime.length,
+          render: text => <a>{text}</a>,
+        },
+        {
           title: '操作',
           key: 'action',
           align: 'center',
@@ -52,10 +66,6 @@ export default class TagTable extends Component {
         {
           tagId: '3',
           tagName: '改革开放史@建立经济特区',
-        },
-        {
-          tagId: '4',
-          tagName: '社会主义发展史@中国特色社会主义',
         },
       ],
     };

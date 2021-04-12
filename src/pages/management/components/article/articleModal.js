@@ -323,7 +323,7 @@ class ArticleModal extends Component {
 
             <Form.Item label="事件发生时间" name="eventTime">
               {getFieldDecorator('eventTime', {rules: [{required: true, message: '请输入事件发生时间!'},]})(
-                <DatePicker placeholder="请输入事件发生时间" format={'YYYY-MM-DD'}/>
+                <DatePicker placeholder="事件时间格式：xxxx.xx.xx~xxxx.xx.xx" format={'YYYY-MM-DD'}/>
               )}
             </Form.Item>
 

@@ -112,12 +112,6 @@ class MapinfoModal extends Component {
                 <Input placeholder="请输入纬度"/>
               )}
             </Form.Item>
-
-            <Form.Item label="时间信息" name="mapTime">
-              {getFieldDecorator('mapTime', {rules: [{required: true, message: '请输入时间信息!'},]})(
-                <Input placeholder="请输入时间信息"/>
-              )}
-            </Form.Item>
           </Form>
         </Modal>
       </>
