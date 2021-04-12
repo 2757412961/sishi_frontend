@@ -485,7 +485,7 @@ class MapPage extends Component {
     //遍历tagTree;
     let tree;
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2F0c29ueWh4IiwiYSI6ImNrMWticjRqYjJhOTczY212ZzVnejNzcnkifQ.-0kOdd5ZzjMZGlah6aNYNg';
-    let localhost = window.location.origin;
+   /* let localhost = window.location.origin;
     let sources = {
       "osm-tiles1": {
         "type": "raster",
@@ -508,10 +508,31 @@ class MapPage extends Component {
         "type": "raster",
         "source": "osm-tiles2",
       }
-    ];
-
+    ];*/
+    //天地图
+    // var vecUrl = "http://t0.tianditu.com/vec_w/wmts?tk=e90d56e5a09d1767899ad45846b0cefd";
+    var cvaUrl = "http://t0.tianditu.com/cva_w/wmts?tk=e90d56e5a09d1767899ad45846b0cefd";
+    //使用严格模式
+    //实例化source对象
+    var tdtVec = {
+      //类型为栅格瓦片
+      "type": "raster",
+      'tiles': [
+        //请求地址
+        this.state.mapUrl + "&SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=tiles"
+      ],
+      //分辨率
+      'tileSize': 256
+    };
+    var tdtCva = {
+      "type": "raster",
+      'tiles': [
+        cvaUrl + "&SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=tiles"
+      ],
+      'tileSize': 256
+    };
     if(document.getElementById('onlineMapping')) {
-      const map = new mapboxgl.Map({
+      /*const map = new mapboxgl.Map({
         container: 'onlineMapping',
         style: {
           "version": 8,
@@ -524,6 +545,37 @@ class MapPage extends Component {
         zoom: 3,
         // pitch: 30,
         // bearing: 10,
+      });*/
+      const map = new mapboxgl.Map({
+        container: 'onlineMapping',
+        style: {
+          //设置版本号，一定要设置
+          "version": 8,
+          "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+          //添加来源
+          "sources": {
+            "tdtVec": tdtVec,
+            "tdtCva": tdtCva
+          },
+          "layers": [
+            {
+              "id": "tdtVec",
+              "type": "raster",
+              "source": "tdtVec",
+              "minzoom": 0,
+              "maxzoom": 17
+            },
+            {
+              "id": "tdtCva",
+              "type": "raster",
+              "source": "tdtCva",
+              "minzoom": 0,
+              "maxzoom": 17
+            }
+          ],
+        },
+        center: [ 121.52, 31.04 ],  //上海经纬度坐标
+        zoom: 3
       });
       // let treeList=forTree(tagTree);
       // console.log('treeList',treeList);
@@ -546,154 +598,84 @@ class MapPage extends Component {
           })
         }
         console.log("listHere", listHere);
-        //加载中共一大（上海，嘉兴地点）的火花图标
+        let feature = []
         for (let i = 0; i < listHere.length; i++) {
-          map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
-          map.addLayer({
-            "id": listHere[ i ].id,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [ {
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": listHere[ i ].lonlat,
-                  }
-                } ]
+          feature.push(
+            {
+              'type': 'Feature',
+              'properties': {
+                'value': listHere[i].value,
+                'picture': listHere[i].picture,
+                'tagName':listHere[i].tagName,
+                'itemNow': listHere[i],
+              },
+              'geometry': {
+                'type': 'Point',
+                'coordinates': listHere[ i ].lonlat
               }
             },
-            "layout": {
-              "icon-image": listHere[ i ].id,
-              "icon-optional": false,
-              "icon-ignore-placement": true,
-              "icon-allow-overlap": true,
-              "text-size": [
-                "interpolate", [ "linear" ], [ "zoom" ],
-                3, 10,
-                10, 38
-              ],
-            },
-          });
-          map.addLayer({
-            "id": listHere[ i ].id + i,
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": [ {
-                  "type": "Feature",
-                  "geometry": {
-                    "type": "Point",
-                    "coordinates": listHere[ i ].lonlat,
-                  }
-                } ]
-              }
-            },
-            "layout": {
-              "text-field": listHere[ i ].value,
-              "text-anchor": 'left',
-              "text-offset": [ 1, 0.1 ],
-              "text-size": [
-                "interpolate", [ "linear" ], [ "zoom" ],
-                3, 10,
-                17, 38
-              ],
-            },
-            paint: {
-              "text-color": 'rgb(255,0,0)',
+          )
+          var pointSource = {
+            'type': 'geojson',
+            'data': {
+              'type': 'FeatureCollection',
+              'features': feature
             }
-          });
+          }
+          // console.log('pointSource.data.features[0].properties.id', pointSource)
         }
-        map.on('styledata', function() {
-          for (let i = 0; i < listHere.length; i++) {
-            map.addImage(listHere[ i ].id, pulsingDot, { pixelRatio: 2 });
-            map.addLayer({
-              "id": listHere[ i ].id,
-              "type": "symbol",
-              "source": {
-                "type": "geojson",
-                "data": {
-                  "type": "FeatureCollection",
-                  "features": [ {
-                    "type": "Feature",
-                    "geometry": {
-                      "type": "Point",
-                      "coordinates": listHere[ i ].lonlat,
-                    }
-                  } ]
-                }
-              },
-              "layout": {
-                "icon-image": listHere[ i ].id,
-                "icon-optional": false,
-                "icon-ignore-placement": true,
-                "icon-allow-overlap": true,
-                "text-size": [
-                  "interpolate", [ "linear" ], [ "zoom" ],
-                  3, 10,
-                  10, 38
-                ],
-              },
-            });
-            map.addLayer({
-              "id": listHere[ i ].id + i,
-              "type": "symbol",
-              "source": {
-                "type": "geojson",
-                "data": {
-                  "type": "FeatureCollection",
-                  "features": [ {
-                    "type": "Feature",
-                    "geometry": {
-                      "type": "Point",
-                      "coordinates": listHere[ i ].lonlat,
-                    }
-                  } ]
-                }
-              },
-              "layout": {
-                "text-field": listHere[ i ].value,
-                "text-anchor": 'left',
-                "text-offset": [ 1, 0.1 ],
-                "text-size": [
-                  "interpolate", [ "linear" ], [ "zoom" ],
-                  3, 10,
-                  17, 38
-                ],
-              },
-              paint: {
-                "text-color": 'rgb(255,0,0)',
-              }
-            });
+        map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+        map.addSource('places', pointSource);
+        map.addLayer({
+          'id': 'places',
+          'type': 'symbol',
+          'source': 'places',
+          'layout': {
+            "icon-image": 'pulsing-dot',
+            "icon-optional": false,
+            "icon-ignore-placement": true,
+            "icon-allow-overlap": true,
           }
         });
-        let _this = this;
+        map.addLayer({
+          'id': 'placesValue',
+          'type': 'symbol',
+          'source': 'places',
+          'layout': {
+            // "text-field": ['get','value'],
+            "text-field": "{value}",
+            "text-anchor": 'left',
+            "text-offset": [ 1, 0.1 ],
+            "text-size": [
+              "interpolate", [ "linear" ], [ "zoom" ],
+              3, 10,
+              17, 38
+            ],
+          },
+          paint: {
+            "text-color": 'rgb(255,0,0)',
+          }
+        })
         var popup = new mapboxgl.Popup({ closeOnClick: true, closeButton: true })
-        for (let i = 0; i < listHere.length; i++) {
-          map.on('mouseenter', listHere[ i ].id, function(e) {
-            map.getCanvas().style.cursor = 'pointer';
-            var coordinates = e.features[ 0 ].geometry.coordinates;
-            _this.setState({
-              itemNow: listHere[ i ],
-              tagName: listHere[ i ].tagName,
-              pictureTag:listHere[ i ].picture,
-            })
-            // let showInfo = listHere[i].showInfo;
-            popup.setLngLat(coordinates);
-            // popup.setHTML(showInfo)
-
-            popup.addTo(map);
-            popup.setDOMContent(popupRef.current);
-          });
-          map.on('mouseleave', listHere[ i ].id, function() {
-            map.getCanvas().style.cursor = '';
-            // popup.remove();
-          });
-        }
+        map.on('mouseenter', 'places', function(e) {
+          map.getCanvas().style.cursor = 'pointer';
+          var coordinates = e.features[0].geometry.coordinates;
+          _this.setState({
+            itemNow: e.features[ 0 ].properties.value,
+            tagName: e.features[0].properties.tagName,
+            pictureTag: e.features[0].properties.picture
+          })
+          // let showInfo = listHere[i].showInfo;
+          popup.setLngLat(coordinates);
+          // popup.setHTML(showInfo)
+          popup.addTo(map)
+          popup.setDOMContent(popupRef.current);
+        });
+        map.on('mouseleave', 'places', function() {
+          map.getCanvas().style.cursor = '';
+          // popup.remove();
+        });
+        let _this = this;
         // for(let i = 0;i<listHere.length;i++){
         //   map.on('click', listHere[i].id, function(e) {
         //     popup.remove();
@@ -721,7 +703,7 @@ class MapPage extends Component {
 
       let nav = new mapboxgl.NavigationControl({
         //是否显示指南针按钮，默认为true
-        "showCompass": false,
+        "showCompass": true,
         //是否显示缩放按钮，默认为true
         "showZoom": true
       });
@@ -775,7 +757,9 @@ class MapPage extends Component {
           return true;
         }
       };
-      document.getElementById('vec').style.border = ('2px solid red');
+      if(this.state.mapUrl === 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'){
+        document.getElementById('vec').style.border = ('2px solid red');
+      }
       // var el = document.createElement('div');
       // el.className = "marker";
       // el.style.backgroundSize = 'cover'
@@ -853,7 +837,7 @@ class MapPage extends Component {
     // let item = e.target.key;
     // e.stopPropagation();
     let map = this.map;
-    if(item==1){
+    if(item===1){
       let temp = this.state.checkValue1;
       if(!temp){
         this.setState({
@@ -912,7 +896,7 @@ class MapPage extends Component {
         checkValue1: !temp,
       });
     }
-    else if(item==2){
+    else if(item===2){
       map.jumpTo({'center': [130.75580305351667, 30.75747193181725], 'zoom': [4]});
       map.setPitch(25);
       map.setBearing(-3);
@@ -1169,21 +1153,28 @@ class MapPage extends Component {
       map.removeSource('lineShToJx');
       clearInterval(timer);
     }
+    // if (map.getLayer('places') && map.getLayer('placesValue')) {
+    //   map.removeLayer('places');
+    //   map.removeLayer('placesValue');
+    //   map.removeSource('places');
+    //   clearInterval(timer);
+    // }
     this.setState({
       icon1:false,
     })
+    let _this = this;
     if(id==='vec'){
-      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      _this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=vec_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
       this.setState({
         mapUrl: this.state.mapUrl,
       })
     } else if(id==='img'){
-      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      _this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
       this.setState({
         mapUrl: this.state.mapUrl
       })
     } else{
-      this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
+      _this.state.mapUrl = 'http://t0.tianditu.gov.cn/DataServer?T=ter_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'
       this.setState({
         mapUrl: this.state.mapUrl,
       })
@@ -1198,39 +1189,131 @@ class MapPage extends Component {
         document.getElementById(diTuList[i]).style.border = ('');
       }
     }
-    let localhost = window.location.origin;
-    let sources = {
-      "osm-tiles1": {
-        "type": "raster",
-        'tiles': [this.state.mapUrl],
-        'tileSize': 256
-      },
-      "osm-tiles2": {
-        "type": "raster",
-        'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
-        'tileSize': 256
-      }
-    };
-    let layers = [{
-      "id": "simple-tiles1",
+    // let localhost = window.location.origin;
+    // let sources = {
+    //   "osm-tiles1": {
+    //     "type": "raster",
+    //     'tiles': [this.state.mapUrl],
+    //     'tileSize': 256
+    //   },
+    //   "osm-tiles2": {
+    //     "type": "raster",
+    //     'tiles': ['http://t0.tianditu.gov.cn/DataServer?T=cva_w&x={x}&y={y}&l={z}&tk=7bf37aebb62ef1a2cd8e1bd276226a63'],
+    //     'tileSize': 256
+    //   }
+    // };
+    // let layers = [{
+    //   "id": "simple-tiles1",
+    //   "type": "raster",
+    //   "source": "osm-tiles1",
+    // },
+    //   {
+    //     "id": "simple-tiles2",
+    //     "type": "raster",
+    //     "source": "osm-tiles2",
+    //   }
+    // ];
+    // var style = {
+    //   "version": 8,
+    //   "sprite": localhost + "/MapBoxGL/css/sprite",
+    //   "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
+    //   "sources": sources,
+    //   "layers": layers,
+    // }
+    //天地图
+    // var vecUrl = "http://t0.tianditu.com/vec_w/wmts?tk=e90d56e5a09d1767899ad45846b0cefd";
+    var cvaUrl = "http://t0.tianditu.com/cva_w/wmts?tk=e90d56e5a09d1767899ad45846b0cefd";
+    //使用严格模式
+    //实例化source对象
+    var tdtVec = {
+      //类型为栅格瓦片
       "type": "raster",
-      "source": "osm-tiles1",
-    },
-      {
-        "id": "simple-tiles2",
-        "type": "raster",
-        "source": "osm-tiles2",
-      }
-    ];
+      'tiles': [
+        //请求地址
+        this.state.mapUrl + "&SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=tiles"
+      ],
+      //分辨率
+      'tileSize': 256
+    };
+    var tdtCva = {
+      "type": "raster",
+      'tiles': [
+        cvaUrl + "&SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=tiles"
+      ],
+      'tileSize': 256
+    };
     var style = {
+      //设置版本号，一定要设置
       "version": 8,
-      "sprite": localhost + "/MapBoxGL/css/sprite",
-      "glyphs": localhost + "/MapBoxGL/css/font/{fontstack}/{range}.pbf",
-      "sources": sources,
-      "layers": layers,
+      "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+      //添加来源
+      "sources": {
+        "tdtVec": tdtVec,
+        "tdtCva": tdtCva
+      },
+      "layers": [
+        {
+          "id": "tdtVec",
+          "type": "raster",
+          "source": "tdtVec",
+          "minzoom": 0,
+          "maxzoom": 17
+        },
+        {
+          "id": "tdtCva",
+          "type": "raster",
+          "source": "tdtCva",
+          "minzoom": 0,
+          "maxzoom": 17
+        }
+      ],
     }
     map.setStyle(style);
+    this.componentWillUnmount()
+    this.componentDidMount()
+    // map.on('styledata', function() {
+    //   map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 2 });
+    //   // map.addSource('places', pointSource);
+    //   map.addLayer({
+    //     'id': 'places',
+    //     'type': 'symbol',
+    //     'source': 'places',
+    //     'layout': {
+    //       "icon-image": 'pulsing-dot',
+    //       "icon-optional": false,
+    //       "icon-ignore-placement": true,
+    //       "icon-allow-overlap": true,
+    //     }
+    //   });
+    //   map.addLayer({
+    //     'id': 'placesValue',
+    //     'type': 'symbol',
+    //     'source': 'places',
+    //     'layout': {
+    //       // "text-field": ['get','value'],
+    //       "text-field": "{value}",
+    //       "text-anchor": 'left',
+    //       "text-offset": [ 1, 0.1 ],
+    //       "text-size": [
+    //         "interpolate", [ "linear" ], [ "zoom" ],
+    //         3, 10,
+    //         17, 38
+    //       ],
+    //     },
+    //     paint: {
+    //       "text-color": 'rgb(255,0,0)',
+    //     }
+    //   });
+    // })
     this.map = map;
+  }
+  eventRefresh = () => {
+    // this.componentWillUnmount()
+    // this.componentDidMount()
+    this.map.jumpTo({
+      center: [121.52, 31.04],
+      zoom: 3
+    })
   }
   stopOnClick=(e)=>{
     e.stopPropagation();
@@ -1727,8 +1810,8 @@ class MapPage extends Component {
                   </Col>
                 </Row>
               </div>
-              <div className={styles.review_icon} onClick={this.eventReview}>
-                <img src={reback} className={styles.layer_img}/>
+              <div className={styles.refresh_icon} onClick={this.eventRefresh} title="刷新">
+                <img src={shuaxin} className={styles.layer_img}/>
               </div>
               <div id="pause" className={styles.review_icon} onClick={() => this.eventReview(1)} title="一大至十九大地图位置串联">
                 {this.state.play ? <img src={kaishi} className={styles.layer_img}/> :
