@@ -194,6 +194,7 @@ class Management extends Component {
                     <Cascader
                       placeholder="请选择标签"
                       changeOnSelect={true}
+                      expandTrigger="hover"
                       value={this.state.cascadeValue}
                       onChange={this.onChangeCascade}
                       options={this.state.cascadeOptions}

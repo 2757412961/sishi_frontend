@@ -13,6 +13,7 @@ export default class AudioTable extends Component {
           dataIndex: 'audioId',
           key: 'audioId',
           align: 'center',
+          ellipsis: true,
           render: text => <a>{text}</a>,
         },
         {

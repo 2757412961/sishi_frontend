@@ -13,6 +13,7 @@ export default class ArticleTable extends Component {
           dataIndex: 'articleId',
           key: 'articleId',
           align: 'center',
+          ellipsis: true,
           render: text => <a>{text}</a>,
         },
         {

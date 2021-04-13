@@ -13,6 +13,7 @@ export default class PictureTable extends Component {
           dataIndex: 'pictureId',
           key: 'pictureId',
           align: 'center',
+          ellipsis: true,
           render: text => <a>{text}</a>,
         },
         {

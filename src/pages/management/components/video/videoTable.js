@@ -13,6 +13,7 @@ export default class VideoTable extends Component {
           dataIndex: 'videoId',
           key: 'videoId',
           align: 'center',
+          ellipsis: true,
           render: text => <a>{text}</a>,
         },
         {

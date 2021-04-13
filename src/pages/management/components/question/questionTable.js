@@ -13,6 +13,7 @@ export default class QuestionTable extends Component {
           dataIndex: 'questionId',
           key: 'questionId',
           align: 'center',
+          ellipsis: true,
           render: text => <a>{text}</a>,
         },
         {

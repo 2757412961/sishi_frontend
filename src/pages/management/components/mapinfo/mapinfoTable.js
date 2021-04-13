@@ -13,6 +13,7 @@ export default class MapinfoTable extends Component {
           dataIndex: 'mapId',
           key: 'mapId',
           align: 'center',
+          ellipsis: true,
           render: text => <a>{text}</a>,
         },
         {

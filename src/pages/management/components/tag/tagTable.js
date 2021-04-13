@@ -12,6 +12,7 @@ export default class TagTable extends Component {
           dataIndex: 'tagId',
           key: 'tagId',
           align: 'center',
+          ellipsis: true,
           render: text => <a>{text}</a>,
         },
         {
