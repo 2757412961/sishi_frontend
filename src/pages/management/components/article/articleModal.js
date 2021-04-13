@@ -122,11 +122,11 @@ class ArticleModal extends Component {
         <article class="post">
           <header>
             <div class="title">
-              <h2>${this.props.form.getFieldsValue().articleTitle}</h2>
+              <h2>${this.handleEmpty(this.props.form.getFieldsValue().articleTitle)}</h2>
             </div>
             <div class="meta">
-              <time class="published" >事件发生时间：${this.props.form.getFieldsValue().eventTime.format('YYYY-MM-DD')}</time>
-              <time class="published" >事件发生地点：${this.props.form.getFieldsValue().address}</time>
+              <time class="published" >事件发生时间：${this.handleEmpty(this.props.form.getFieldsValue().articleEventTime)}</time>
+              <time class="published" >事件发生地点：${this.handleEmpty(this.props.form.getFieldsValue().articleAddress)}</time>
             </div>
           </header>
           <div>
@@ -134,7 +134,8 @@ class ArticleModal extends Component {
           </div>
           <footer>
             <ul class="stats">
-<!--              <li><a href="#">返回标题</a></li>-->
+              <li  style="font-size: 10px; color: #828080; ">来源：${this.handleEmpty(this.props.form.getFieldsValue().articleSource)}</li>
+              <li  style="font-size: 10px; color: #828080; ">作者：${this.handleEmpty(this.props.form.getFieldsValue().articleAuthor)}</li>
             </ul>
           </footer>
         </article>
@@ -144,12 +145,18 @@ class ArticleModal extends Component {
       <section id="footer">
         <p class="copyright">&copy; 浙江大学 地球科学学院.</p>
       </section>
-
     </div>
 
     </body>
     </html>
     `;
+  }
+
+  handleEmpty(value) {
+    if (value === undefined) {
+      return "无";
+    }
+    return value;
   }
 
   //5.由于图片上传、视频上传项目中都是单独走的接口，需要一个上传的方法
@@ -236,9 +243,10 @@ class ArticleModal extends Component {
           data: {
             articleTitle: formData.articleTitle,
             articleAuthor: formData.articleAuthor,
+            articleSource: formData.articleSource,
             articleContent: this.buildPreviewHtml(),
-            eventTime: formData.eventTime.format('YYYY-MM-DD'),
-            address: formData.address,
+            articleEventTime: formData.articleEventTime,
+            articleAddress: formData.articleAddress,
           },
           autoAdd: false, //不添加v1.0
         }).then((res) => {
@@ -296,8 +304,10 @@ class ArticleModal extends Component {
             <Button key='reset' type="danger" htmlType="button" onClick={this.resetModal}>重置</Button>,
             <Button key='submit' type="primary" htmlType="submit" onClick={this.handleSubmit}
                     loading={this.state.confirmLoading}>提交</Button>,
-          ]}>
-          {/*destroyOnClose={true}*/}
+          ]}
+          destroyOnClose={true}
+        >
+
 
           <Form name="basic" {...layout}>
             <Form.Item label="标签名称" name="tagName" extra="请在主页面选好标签！">
@@ -321,14 +331,20 @@ class ArticleModal extends Component {
               )}
             </Form.Item>
 
-            <Form.Item label="事件发生时间" name="eventTime">
-              {getFieldDecorator('eventTime', {rules: [{required: true, message: '请输入事件发生时间!'},]})(
-                <DatePicker placeholder="事件时间格式：xxxx.xx.xx~xxxx.xx.xx" format={'YYYY-MM-DD'}/>
+            <Form.Item label="文章来源" name="articleSource">
+              {getFieldDecorator('articleSource', {rules: [{required: true, message: '请输入文章来源!'},]})(
+                <Input placeholder="请输入文章来源"/>
               )}
             </Form.Item>
 
-            <Form.Item label="事件发生地点" name="address">
-              {getFieldDecorator('address', {rules: [{required: true, message: '请输入事件发生地点!'},]})(
+            <Form.Item label="事件发生时间" name="articleEventTime">
+              {getFieldDecorator('articleEventTime', {rules: [{required: true, message: '请输入事件发生时间!'},]})(
+                <Input placeholder="时间格式：2016-09-01~2020-06-01"/>
+              )}
+            </Form.Item>
+
+            <Form.Item label="事件发生地点" name="articleAddress">
+              {getFieldDecorator('articleAddress', {rules: [{required: true, message: '请输入事件发生地点!'},]})(
                 <Input placeholder="请输入事件发生地点"/>
               )}
             </Form.Item>
