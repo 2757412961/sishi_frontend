@@ -50,7 +50,7 @@ export default class ArticleTable extends Component {
           ellipsis: true,
         },
         {
-          title: '事件发生时间',
+          title: '事件时间',
           dataIndex: 'articleEventTime',
           key: 'articleEventTime',
           align: 'center',
@@ -58,7 +58,7 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: '事件发生地点',
+          title: '事件地点',
           dataIndex: 'articleAddress',
           key: 'articleAddress',
           align: 'center',
@@ -66,7 +66,7 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: '文章发布时间',
+          title: '发布时间',
           dataIndex: 'articlePublishTime',
           key: 'articlePublishTime',
           align: 'center',
@@ -74,7 +74,7 @@ export default class ArticleTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
-          title: '文章创建时间',
+          title: '创建时间',
           dataIndex: 'articleCreateTime',
           key: 'articleCreateTime',
           align: 'center',
