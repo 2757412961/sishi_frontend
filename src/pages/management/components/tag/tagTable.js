@@ -90,7 +90,7 @@ export default class TagTable extends Component {
 
       if (res.success) {
         this.setState({dataSource: res.list})
-        message.success('更新标签表格成功');
+        // message.success('更新标签表格成功');
       } else {
         this.setState({dataSource: []})
         message.error('更新标签表格失败,' + res.message);

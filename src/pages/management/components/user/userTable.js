@@ -98,7 +98,7 @@ export default class UserTable extends Component {
 
       if (res.success) {
         this.setState({dataSource: res.list})
-        message.success('更新用户表格成功');
+        // message.success('更新用户表格成功');
       } else {
         this.setState({dataSource: []})
         message.error('更新用户表格失败,' + res.message);

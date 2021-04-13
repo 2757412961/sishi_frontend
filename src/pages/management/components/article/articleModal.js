@@ -52,7 +52,7 @@ class ArticleModal extends Component {
 
       if (res.success) {
         this.setState({mediaItems: res.list})
-        message.success('更新媒体资源成功');
+        // message.success('更新媒体资源成功');
       } else {
         this.setState({mediaItems: []})
         message.error('更新媒体资源失败,' + res.message);

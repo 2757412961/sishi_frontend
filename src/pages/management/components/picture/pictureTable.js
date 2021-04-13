@@ -147,7 +147,7 @@ export default class PictureTable extends Component {
 
       if (res.success) {
         this.setState({dataSource: res.pictures})
-        message.success('更新图片表格成功');
+        // message.success('更新图片表格成功');
       } else {
         this.setState({dataSource: []})
         message.error('更新图片表格失败,' + res.message);
@@ -188,7 +188,7 @@ export default class PictureTable extends Component {
 
       if (res.success) {
         this.updateTable();
-        message.success('更新状态成功');
+        // message.success('更新状态成功');
       } else {
         message.error('更新状态失败,' + res.message);
       }

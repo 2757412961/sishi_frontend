@@ -145,7 +145,7 @@ export default class VideoTable extends Component {
 
       if (res.success) {
         this.setState({dataSource: res.videos})
-        message.success('更新视频表格成功');
+        // message.success('更新视频表格成功');
       } else {
         this.setState({dataSource: []})
         message.error('更新视频表格失败,' + res.message);
@@ -190,7 +190,7 @@ export default class VideoTable extends Component {
 
       if (res.success) {
         this.updateTable();
-        message.success('更新状态成功');
+        // message.success('更新状态成功');
       } else {
         message.error('更新状态失败,' + res.message);
       }

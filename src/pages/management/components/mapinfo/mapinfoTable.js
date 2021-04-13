@@ -121,7 +121,7 @@ export default class MapinfoTable extends Component {
 
       if (res.success) {
         this.setState({dataSource: res.mapInfos})
-        message.success('更新地理信息表格成功');
+        // message.success('更新地理信息表格成功');
       } else {
         this.setState({dataSource: []})
         message.error('更新地理信息表格失败,' + res.message);
@@ -166,7 +166,7 @@ export default class MapinfoTable extends Component {
 
       if (res.success) {
         this.updateTable();
-        message.success('更新状态成功');
+        // message.success('更新状态成功');
       } else {
         message.error('更新状态失败,' + res.message);
       }
