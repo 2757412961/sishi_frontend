@@ -24,6 +24,14 @@ export default class AudioTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
+          title: '音频作者',
+          dataIndex: 'audioAuthor',
+          key: 'audioAuthor',
+          align: 'center',
+          sorter: (a, b) => a.audioAuthor.length - b.audioAuthor.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
           title: '音频来源',
           dataIndex: 'audioSource',
           key: 'audioSource',
@@ -39,14 +47,6 @@ export default class AudioTable extends Component {
           sorter: (a, b) => a.audioContent.length - b.audioContent.length,
           sortDirections: ['descend', 'ascend'],
           ellipsis: true,
-        },
-        {
-          title: '事件发生时间',
-          dataIndex: 'eventTime',
-          key: 'eventTime',
-          align: 'center',
-          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
-          sortDirections: ['descend', 'ascend'],
         },
         {
           title: '音频发布时间',
@@ -99,6 +99,7 @@ export default class AudioTable extends Component {
         {
           audioId: '1',
           audioTitle: 'test',
+          audioAuthor: 'zjh',
           audioSource: 'test',
           audioContent: 'ggg',
           audioPublishTime: 4894189,
@@ -107,6 +108,7 @@ export default class AudioTable extends Component {
         {
           audioId: '2',
           audioTitle: 'qwe',
+          audioAuthor: 'zjh',
           audioSource: 'test',
           audioContent: 'h d',
           audioPublishTime: 4894189,

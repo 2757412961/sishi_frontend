@@ -26,7 +26,7 @@ export default class UserTable extends Component {
         {
           title: '邮箱',
           dataIndex: 'email',
-          key: 'pictureSource',
+          key: 'email',
           align: 'center',
           sorter: (a, b) => a.email.length - b.email.length,
           sortDirections: ['descend', 'ascend'],

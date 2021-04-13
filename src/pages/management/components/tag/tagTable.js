@@ -31,7 +31,7 @@ export default class TagTable extends Component {
           ),
         },
         {
-          title: '标签 类型',
+          title: '事件类型',
           dataIndex: 'property',
           key: 'property',
           // sorter: (a, b) => a.property.length - b.property.length,

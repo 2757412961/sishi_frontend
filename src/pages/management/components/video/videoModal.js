@@ -56,13 +56,13 @@ class VideoModal extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log(this.props.form.getFieldsValue());
-        let {tagName, videoTitle, videoSource, videoFile, eventTime} = this.props.form.getFieldsValue();
+        let {tagName, videoTitle, videoAuthor, videoSource, videoFile} = this.props.form.getFieldsValue();
         let formData = new FormData();
         formData.append("tagName", tagName);
         formData.append("videoTitle", videoTitle);
+        formData.append("videoAuthor", videoAuthor);
         formData.append("videoSource", videoSource);
         formData.append("videoFile", this.state.videoFile);
-        formData.append("eventTime", eventTime.format('YYYY-MM-DD'));
 
         this.setState({confirmLoading: true});
 
@@ -133,15 +133,15 @@ class VideoModal extends Component {
               )}
             </Form.Item>
 
-            <Form.Item label="视频来源" name="videoSource">
-              {getFieldDecorator('videoSource', {rules: [{required: true, message: '请输入视频来源!'},]})(
-                <Input placeholder="请输入视频来源"/>
+            <Form.Item label="视频作者" name="videoAuthor">
+              {getFieldDecorator('videoAuthor', {rules: [{required: true, message: '请输入视频作者!'},]})(
+                <Input placeholder="请输入视频作者"/>
               )}
             </Form.Item>
 
-            <Form.Item label="事件发生时间" name="eventTime">
-              {getFieldDecorator('eventTime', {rules: [{required: true, message: '请输入事件发生时间!'},]})(
-                <DatePicker placeholder="请输入事件发生时间" format={'YYYY-MM-DD'}/>
+            <Form.Item label="视频来源" name="videoSource">
+              {getFieldDecorator('videoSource', {rules: [{required: true, message: '请输入视频来源!'},]})(
+                <Input placeholder="请输入视频来源"/>
               )}
             </Form.Item>
 

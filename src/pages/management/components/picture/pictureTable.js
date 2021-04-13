@@ -24,6 +24,14 @@ export default class PictureTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
+          title: '图片作者',
+          dataIndex: 'pictureAuthor',
+          key: 'pictureAuthor',
+          align: 'center',
+          sorter: (a, b) => a.pictureAuthor.length - b.pictureAuthor.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
           title: '图片来源',
           dataIndex: 'pictureSource',
           key: 'pictureSource',
@@ -39,14 +47,6 @@ export default class PictureTable extends Component {
           sorter: (a, b) => a.pictureContent.length - b.pictureContent.length,
           sortDirections: ['descend', 'ascend'],
           ellipsis: true,
-        },
-        {
-          title: '事件发生时间',
-          dataIndex: 'eventTime',
-          key: 'eventTime',
-          align: 'center',
-          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
-          sortDirections: ['descend', 'ascend'],
         },
         {
           title: '图片发布时间',
@@ -99,6 +99,7 @@ export default class PictureTable extends Component {
         {
           pictureId: '1',
           pictureTitle: 'test',
+          pictureAuthor: 'zjh',
           pictureSource: 'test',
           pictureContent: 'ggg',
           picturePublishTime: 4894189,
@@ -108,6 +109,7 @@ export default class PictureTable extends Component {
         {
           pictureId: '2',
           pictureTitle: 'qwe',
+          pictureAuthor: 'zjh',
           pictureSource: 'test',
           pictureContent: 'h d',
           picturePublishTime: 4894189,
@@ -137,10 +139,6 @@ export default class PictureTable extends Component {
       url: requestUrl,
       method: 'GET',
       autoAdd: false, //不添加v1.0
-      headers: {
-        userId: getLocalData({dataName: 'userId'}),
-        token: getLocalData({dataName: 'token'})
-      },
       data:{
         length: 1000
       },
@@ -184,10 +182,6 @@ export default class PictureTable extends Component {
     request({
       url: '/v1.0/api/picture/public/' + record.pictureId,
       method: 'PUT',
-      headers: {
-        userId: getLocalData({dataName: 'userId'}),
-        token: getLocalData({dataName: 'token'})
-      },
       autoAdd: false, //不添加v1.0
     }).then((res) => {
       console.log(res);

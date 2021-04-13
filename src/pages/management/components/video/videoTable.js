@@ -24,6 +24,14 @@ export default class VideoTable extends Component {
           sortDirections: ['descend', 'ascend'],
         },
         {
+          title: '视频作者',
+          dataIndex: 'videoAuthor',
+          key: 'videoAuthor',
+          align: 'center',
+          sorter: (a, b) => a.videoAuthor.length - b.videoAuthor.length,
+          sortDirections: ['descend', 'ascend'],
+        },
+        {
           title: '视频来源',
           dataIndex: 'videoSource',
           key: 'videoSource',
@@ -39,14 +47,6 @@ export default class VideoTable extends Component {
           sorter: (a, b) => a.videoContent.length - b.videoContent.length,
           sortDirections: ['descend', 'ascend'],
           ellipsis: true,
-        },
-        {
-          title: '事件发生时间',
-          dataIndex: 'eventTime',
-          key: 'eventTime',
-          align: 'center',
-          sorter: (a, b) => a.eventTime.length - b.eventTime.length,
-          sortDirections: ['descend', 'ascend'],
         },
         {
           title: '视频发布时间',
@@ -99,6 +99,7 @@ export default class VideoTable extends Component {
         {
           videoId: '1',
           videoTitle: 'test',
+          videoAuthor: 'zjh',
           videoSource: 'test',
           videoContent: 'ggg',
           videoPublishTime: 4894189,
@@ -107,6 +108,7 @@ export default class VideoTable extends Component {
         {
           videoId: '2',
           videoTitle: 'qwe',
+          videoAuthor: 'zjh',
           videoSource: 'test',
           videoContent: 'h d',
           videoPublishTime: 4894189,
