@@ -134,8 +134,8 @@ class ArticleModal extends Component {
           </div>
           <footer>
             <ul class="stats">
-              <li  style="font-size: 10px; color: #828080; ">${this.handleEmpty("来源：", this.props.form.getFieldsValue().articleSource)}</li>
               <li  style="font-size: 10px; color: #828080; ">${this.handleEmpty("作者：", this.props.form.getFieldsValue().articleAuthor)}</li>
+              <li  style="font-size: 10px; color: #828080; ">${this.handleEmpty("来源：", this.props.form.getFieldsValue().articleSource)}</li>
             </ul>
           </footer>
         </article>
@@ -153,7 +153,7 @@ class ArticleModal extends Component {
   }
 
   handleEmpty(prefix, value) {
-    if (value === undefined) {
+    if (value === undefined || value === "") {
       return "";
     }
     return prefix + value;
