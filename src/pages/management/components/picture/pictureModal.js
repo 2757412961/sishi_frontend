@@ -140,7 +140,7 @@ class PictureModal extends Component {
             </Form.Item>
 
             <Form.Item label="图片作者" name="pictureAuthor">
-              {getFieldDecorator('pictureAuthor', {rules: [{required: true, message: '请输入图片作者!'},]})(
+              {getFieldDecorator('pictureAuthor', )(
                 <Input placeholder="请输入图片作者"/>
               )}
             </Form.Item>

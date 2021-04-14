@@ -134,7 +134,7 @@ class AudioModal extends Component {
             </Form.Item>
 
             <Form.Item label="音频作者" name="audioAuthor">
-              {getFieldDecorator('audioAuthor', {rules: [{required: true, message: '请输入音频作者!'},]})(
+              {getFieldDecorator('audioAuthor', )(
                 <Input placeholder="请输入音频作者"/>
               )}
             </Form.Item>

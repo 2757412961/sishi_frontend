@@ -99,7 +99,10 @@ function Mokuaiye(props) {
     <Menu.Item key="0">
       <Link to="/userCenter">个人中心</Link>
     </Menu.Item>
-    <Menu.Item key="1" onClick={()=>resetUserData(props)}>
+    <Menu.Item key="1">
+      <Link to="/management">后台管理员</Link>
+    </Menu.Item>
+    <Menu.Item key="2" onClick={()=>resetUserData(props)}>
       <span>退出</span>
     </Menu.Item>
   </Menu>;

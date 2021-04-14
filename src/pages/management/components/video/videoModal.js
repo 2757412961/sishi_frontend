@@ -134,7 +134,7 @@ class VideoModal extends Component {
             </Form.Item>
 
             <Form.Item label="视频作者" name="videoAuthor">
-              {getFieldDecorator('videoAuthor', {rules: [{required: true, message: '请输入视频作者!'},]})(
+              {getFieldDecorator('videoAuthor', )(
                 <Input placeholder="请输入视频作者"/>
               )}
             </Form.Item>

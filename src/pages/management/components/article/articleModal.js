@@ -332,7 +332,7 @@ class ArticleModal extends Component {
             </Form.Item>
 
             <Form.Item label="文章来源" name="articleSource">
-              {getFieldDecorator('articleSource', {rules: [{required: true, message: '请输入文章来源!'},]})(
+              {getFieldDecorator('articleSource', )(
                 <Input placeholder="请输入文章来源"/>
               )}
             </Form.Item>
