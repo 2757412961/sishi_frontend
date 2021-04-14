@@ -122,11 +122,11 @@ class ArticleModal extends Component {
         <article class="post">
           <header>
             <div class="title">
-              <h2>${this.handleEmpty(this.props.form.getFieldsValue().articleTitle)}</h2>
+              <h2>${this.handleEmpty("", this.props.form.getFieldsValue().articleTitle)}</h2>
             </div>
             <div class="meta">
-              <time class="published" >事件发生时间：${this.handleEmpty(this.props.form.getFieldsValue().articleEventTime)}</time>
-              <time class="published" >事件发生地点：${this.handleEmpty(this.props.form.getFieldsValue().articleAddress)}</time>
+              <time class="published" >${this.handleEmpty("事件发生时间：", this.props.form.getFieldsValue().articleEventTime)}</time>
+              <time class="published" >${this.handleEmpty("事件发生地点：", this.props.form.getFieldsValue().articleAddress)}</time>
             </div>
           </header>
           <div>
@@ -134,8 +134,8 @@ class ArticleModal extends Component {
           </div>
           <footer>
             <ul class="stats">
-              <li  style="font-size: 10px; color: #828080; ">来源：${this.handleEmpty(this.props.form.getFieldsValue().articleSource)}</li>
-              <li  style="font-size: 10px; color: #828080; ">作者：${this.handleEmpty(this.props.form.getFieldsValue().articleAuthor)}</li>
+              <li  style="font-size: 10px; color: #828080; ">${this.handleEmpty("来源：", this.props.form.getFieldsValue().articleSource)}</li>
+              <li  style="font-size: 10px; color: #828080; ">${this.handleEmpty("作者：", this.props.form.getFieldsValue().articleAuthor)}</li>
             </ul>
           </footer>
         </article>
@@ -152,11 +152,11 @@ class ArticleModal extends Component {
     `;
   }
 
-  handleEmpty(value) {
+  handleEmpty(prefix, value) {
     if (value === undefined) {
-      return "无";
+      return "";
     }
-    return value;
+    return prefix + value;
   }
 
   //5.由于图片上传、视频上传项目中都是单独走的接口，需要一个上传的方法
